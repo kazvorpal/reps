@@ -180,6 +180,10 @@
                                                                   <td>Equipment Type 4</td>
                                                                   <td>(<?php echo htmlspecialchars($row_proj_clps['Equip4_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip4_TYPE']);?></td>
                                                                 </tr>
+								<tr>                                                               
+                                                                  <td>OA Health Summary</td>
+                                                                  <td><?php echo htmlspecialchars($row_proj_clps['CURR_STAT_SUM']); ?></td>
+                                                                </tr>
                                    
                                                               </tbody>
                                                             </table>
