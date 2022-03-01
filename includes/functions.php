@@ -1,4 +1,8 @@
 <?php
+//GET DOMIAN
+$domain = $_SERVER['SERVER_NAME'];
+$menu_root = "https://" . $domain;
+
 // FORCE HTTPS
 if($_SERVER["HTTPS"] != "on")
 {

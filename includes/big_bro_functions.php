@@ -12,7 +12,7 @@ function bigBro($uid, $ptitle, $version, $action, $actionCD) {
 	$e = $actionCD;
 	
 	$sql_log = "EXECUTE dbo.sp_InsertUserLog '$a','$b','$c','$d','$e' ";
-	$stmt_log = sqlsrv_query( $conn_COXProd, $sql_log );
+	$stmt_log = sqlsrv_query( $data_conn, $sql_log );
 	
 }
 

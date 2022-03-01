@@ -57,14 +57,14 @@ if(isset($_GET['start'])){
 					WHERE c.RowNumber >= $startRow AND c.RowNumber <= $endRow
 					ORDER BY c.CR_id Desc
 					";
-		$stmt_crs = sqlsrv_query( $conn_COX_QA, $sql_crs, array(), array("Scrollable" => 'static') );
+		$stmt_crs = sqlsrv_query( $conn_COXProd, $sql_crs, array(), array("Scrollable" => 'static') );
 		$row_count_crs = sqlsrv_num_rows( $stmt_crs );
 		//$row_crs = sqlsrv_fetch_array( $stmt_crs, SQLSRV_FETCH_ASSOC);
 		//echo $row_crs['column_name']
 
 		// LETS COUNT THE TOTAL IN THAT RESULTS
 		$sql_crs_ct = "Select* From dbo.fn_GetCR_All($year,$fundingKey) $statusK ORDER BY CR_id Desc";
-		$stmt_crs_ct = sqlsrv_query( $conn_COX_QA, $sql_crs_ct, array(), array("Scrollable" => 'static') );
+		$stmt_crs_ct = sqlsrv_query( $conn_COXProd, $sql_crs_ct, array(), array("Scrollable" => 'static') );
 		$row_count_crs_ct = sqlsrv_num_rows( $stmt_crs_ct );
 
 			// Set the number of rows to be returned on a page.

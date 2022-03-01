@@ -180,7 +180,7 @@
                                                                   <td>Equipment Type 4</td>
                                                                   <td>(<?php echo htmlspecialchars($row_proj_clps['Equip4_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip4_TYPE']);?></td>
                                                                 </tr>
-								<tr>                                                               
+                                                                <tr>                                                               
                                                                   <td>OA Health Summary</td>
                                                                   <td><?php echo htmlspecialchars($row_proj_clps['CURR_STAT_SUM']); ?></td>
                                                                 </tr>
@@ -220,11 +220,25 @@
       </tr>
       <tr>
         <td style="background-color: #337AB7; color: #FFFFFF; padding: 3px">MSProject Installation Phase Complete</td>
-        <td><?php echo convtimex($row_plan['MSP_Install_Finish_Dt']) ?></td>
+        <td><?php 
+              if($row_proj_clps['PHASE_NAME'] == "04 Execute" || $row_proj_clps['PHASE_NAME'] == "05 Closing" ){
+              echo convtimex($row_plan['MSP_Install_Finish_Dt']) ;
+              } else {
+              echo "---";
+              }
+            ?>
+        </td>
       </tr>
       <tr>
         <td style="background-color: #337AB7; color: #FFFFFF; padding: 3px">MSProject Migration Phase Complete</td>
-        <td><?php echo convtimex($row_plan['MSP_Migration_Finish_Dt']) ?></td>
+        <td><?php
+              if($row_proj_clps['PHASE_NAME'] == "04 Execute" || $row_proj_clps['PHASE_NAME'] == "05 Closing" ){ 
+              echo convtimex($row_plan['MSP_Migration_Finish_Dt']) ;
+              } else {
+              echo "---";
+              }
+            ?>
+        </td>
       </tr>
     </tbody>
   </table><br><br>

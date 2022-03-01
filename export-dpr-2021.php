@@ -5,16 +5,8 @@
 // workflow_stage
 $bmysql = $_GET['sql'];
 $sql_por = "$bmysql"; 
-$stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
+$stmt_por = sqlsrv_query( $data_conn, $sql_por );
 //$stmt_por = sqlsrv_query( $conn_COX_QA, $sql_por );
-
-
-//mysql_select_db($database_data, $data);
-//$query_program_n = "$bmysql";
-//$program_n = mysql_query($query_program_n, $data) or die(mysql_error());
-//$row_program_n = mysql_fetch_assoc($program_n);
-//$totalRows_program_n = mysql_num_rows($program_n);
-
 
  header("Content-type: application/vnd.ms-excel; name='excel'");
  header("Content-Disposition: attachment; filename=export_DPR.xls");
@@ -50,6 +42,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <!-- <th ><strong>ORACLE END</strong>< -->
       <!-- <th ><strong>WATTS MO</strong></th> -->
       <th bgcolor="#337AB7"><div align="center">STAGE</div></th>
+	  <th bgcolor="#337AB7"><div align="center">RELEASED DT</div></th>
 	  <!--<th bgcolor="#337AB7"><div align="center">POR NEED BY DATE</div></th>-->
       <!--<th bgcolor="#337AB7"><div align="center">POR ACTIVATION DATE</div></th>-->
       <!--<th bgcolor="#337AB7"><div align="center">POR MIGRATION DATE</div></th>-->
@@ -435,7 +428,6 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Facility']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['OracleProject_Cd']);?></td>
       <td style="padding:2px"><?php echo wattsRepl($row_program_n['WATTS_MO']);?></td>
-
       <td style="padding:2px" bgcolor="<?php pcntComp($row_program_n['PrjComplete_Pct'], $row_program_n['PHASE_NAME']);?>" >
           <div align="center">
           	<?php 
@@ -449,6 +441,10 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
             ?>
           </div>
       </td>
+	  <td><?php if($row_program_n['PHASE_NAME'] == "03 - Released") {
+		  	echo convtimeDPR($row_program_n['Released_Dt']) ;
+	  		}?>
+			</td>
 	  
       <!--3/1 POR Fields Added-->
 	  <!--<td style="padding:2px" align="center"><?php // echo convtimeDPR($row_program_n['POR_Needby_Dt']);?></td>-->
