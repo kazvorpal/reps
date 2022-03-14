@@ -709,7 +709,7 @@ $(function () {
     spacer.innerHTML = "&nbsp;";
     const tdp = document.createElement("td");
     tdp.id = "td" + saferi;
-    tdp.colSpan = "6"
+    tdp.colSpan = "10"
     trp.appendChild(spacer);
     trp.appendChild(tdp);
     // console.log(makesafe(programname));
@@ -742,9 +742,6 @@ $(function () {
     return trri;
   }  
 
-
-
-
   const makeptd = (value) => {
     const td = document.createElement("td");
     td.className = "p4 databox";
@@ -769,7 +766,7 @@ $(function () {
     header.innerHTML = type+"s";
     trri.appendChild(header);
     for (field of fieldlist) {
-      trri.appendChild(maketh(trri.id));
+      trri.appendChild(maketh(field));
     }
     return trri;
   }  
