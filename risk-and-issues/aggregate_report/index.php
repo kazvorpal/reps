@@ -53,10 +53,6 @@ if($riquery === false) {
     }
   }
 } else {
-  // $resultset = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC);
-  // $rijson = json_encode($resultset);
-  // print_r($resultset);
-  // print ('<pre>'.$rijson.'</pre>');
   $rows = array();
   $count = 1;
   while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
@@ -67,7 +63,6 @@ if($riquery === false) {
   foreach ($rows as $row)  {
     if($row["ProgramRI_Key"] != '') {
       $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
-      // echo $sqlstr . "<br/>";
       ini_set('mssql.charset', 'UTF-8');
       $p4pquery = sqlsrv_query($conn, $sqlstr);
       if($p4pquery === false) {
@@ -83,8 +78,6 @@ if($riquery === false) {
         $p4prows = array();
         $checker = 1;
         while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
-          // print_r('$p4prow');
-          // print_r($p4prow);
           $p4prows[] = array_map("fixutf8", $p4prow);
           $checker = 0;
         }
@@ -99,9 +92,6 @@ if($riquery === false) {
             "EPS_Location_Cd"=>rand(1, 10), 
             "EPSProject_Owner"=>"Elvis Presley"
           );
-          // print ("BAD");
-        } else {
-          // print("GOOD");
         }
       }
       $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
@@ -112,7 +102,6 @@ if($riquery === false) {
   foreach ($rows as $row)  {
     if($row["ProgramRI_Key"] != '') {
       $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
-      // echo $sqlstr . "<br/>";
       ini_set('mssql.charset', 'UTF-8');
       $mangerquery = sqlsrv_query($conn, $sqlstr);
       if($mangerquery === false) {
@@ -128,60 +117,17 @@ if($riquery === false) {
         $mangerrows = array();
           while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
             $mangerrows[] = array_map("fixutf8", $mangerrow);
-            // echo "<pre>";
-            // print_r($mangerrow);
-            // echo "</pre>";
           }
         }
         $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
       }
     }
     
-    // select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(2021,'Metro Transport')
-
-
-  // echo "<pre>";
-  // print_r($p4plist);
-  // echo "</pre>";
   $p4pout = json_encode($p4plist);
   $mangerout = json_encode($mangerlist);
   $jsonout = json_encode($rows);
-  // echo "<pre>'";
-  // foreach ($p4plist as $arr) { 
-  //   foreach($arr as $inside) {
-  //     print_r($inside);
-  //   }
-  // }
-  // // print_r($p4plist);
-  // echo "</pre>'";
-  // $utfEncodedArray = array_map('gettype', $rows);
-  // $utfEncodedArray = array_map("utf8_encode", $rows);
-  // print($rows);
-  // print json_last_error_msg() ;
-  ?>
-    <?php
-  //   <div id="body" class="toppleat">
-  //   <a href="">Program A</a> (R:3 I:3)
-  // </div>
   
-  
-  
-  // echo "'</pre>";
-  // //LOOP 2
-  // //Build inner pieces
-  // while ($row = mysql_fetch_assoc($result)) {
-    
-    // echo "<div id='accordian-".$row['id']."' class='accordion-body collapse'>";
-    // echo "<div class='accordion-inner'>";
-    
-    // echo "<td>Rank: {$rank} <br /> </td>";
-    // echo "<td>Wins: {$row['wins']} <br /> </td>";
-    // echo "<td>Losses: {$row['losses']} <br /> </td>";
-    
-    // echo "</div>";
-    // echo "</div>";  }
   }
-  // while ()
 
 ?>
 <!--<link href="jQueryAssets/jquery.ui.core.min.css" rel="stylesheet" type="text/css">
@@ -317,7 +263,8 @@ $(function () {
           float: right;
         }
         .a-proj {
-          text-decoration:underline;
+          color: #00f;
+          font-weight: 700;
         }
         .toppleat:nth-child(odd) {
           background-color: #fff;
@@ -343,12 +290,14 @@ $(function () {
           color: #fff;
           border-left: 1px solid #fff;
           padding: 4px;
+          cursor: default;
         }
         .databox {
           background-color: #d9d9d9;
           color: #00;
           border: 1px solid #888;
           padding: 4px;
+          cursor: default;
         }
         .namebox {
           background-color: #fff;
@@ -416,7 +365,7 @@ $(function () {
                     <option value="MAJ">Major Impact</option>
                     <option value="NOI">No Impact</option>
                     </select></td>
-                  <td align="center"><input type="text" class="daterange form-control" /></td>
+                  <td align="center"><input type="text" id="dateranger" class="daterange form-control" /></td>
                 </tr>
               </tbody>
             </table>
@@ -429,10 +378,10 @@ $(function () {
       <td>Status</td>
       <td>Owner</td>
       <td>Program</td>
-      <td>Subprogram</td>
-      <!-- <td>Region</td>
-      <td>Market</td> -->
-      <td>Facility</td>
+      <!-- <td>Subprogram</td> -->
+      <td>Region</td>
+      <!-- <td>Market</td>
+      <td>Facility</td> -->
     <?php // } ?>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
@@ -464,15 +413,13 @@ $(function () {
         <?php } ?>
       </select></td>
 
-      <td><select name="subprogram[]" multiple="multiple" id="subprogram" title="Move this selection back to SELECT SUBPROGRAM to clear this filter" class="form-control" <?php //fltrSet($_POST['subprogram'])?>>
-        <!--<option value="">Select Subprogram</option>-->
+      <!-- <td><select name="subprogram[]" multiple="multiple" id="subprogram" title="Move this selection back to SELECT SUBPROGRAM to clear this filter" class="form-control" <?php //fltrSet($_POST['subprogram'])?>>
         <?php while($row_subprog = sqlsrv_fetch_array( $stmt_subprogram, SQLSRV_FETCH_ASSOC)) { ?>
         <option value="<?php echo $row_subprog['Sub_Prg'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>><?php echo $row_subprog['Sub_Prg'];?> </option>
         <?php } ?>
-      </select></td>
+      </select></td> -->
 
       <td><select name="region[]" multiple="multiple" id="region" title="Move this selection back to SELECT REGION to clear this filter" class="form-control"  <?php //fltrSet($_POST['region'])?>>
-        <!--<option value="">Select Region</option>-->
         <?php while($row_region_drop = sqlsrv_fetch_array( $stmt_region_drop, SQLSRV_FETCH_ASSOC)) { ?>
         <option value="<?php echo $row_region_drop['Region'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>><?php echo $row_region_drop['Region'];?></option>
         <?php } ?>
@@ -510,21 +457,11 @@ $(function () {
 </div>
 	</form>
     
-<div id="main" class="accordion" >
-    <div class="header">
-      Program Name (Risks, Issues)
-    </div>
-    <!-- <div id="body" class="toppleat">
-      <a href="">Program A</a> (R:3 I:3)
-    </div>
-    <div id="body" class="toppleat">
-      <a href="">Program B</a> (R:22 I:11)
-    </div>
-    <div id="body" class="toppleat">
-      <a href="">Program C</a> (R:12 I:10)
-    </div> -->
-
-</div>
+        <div id="main" class="accordion" >
+            <div class="header">
+              Program Name (Risks, Issues)
+            </div>
+        </div>
       
       </div>
     </div>
@@ -579,7 +516,8 @@ $(function () {
   
   console.log(ridata);
   const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
-  const projectfields = ["Project Name", "Facility", "Owner", "Subprogram"];
+  const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
+  const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
   // console.log(ridata)
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
@@ -590,7 +528,6 @@ $(function () {
   const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
   
   const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
-  // console.log(ridata[1].RiskAndIssue_Key);
 
   const makesafe = (target) => target.replace(/\s/g,'');
 
@@ -601,7 +538,7 @@ $(function () {
     item.className = "toppleat accordion-item";
     const banner = makebanner(safename);
 
-    const program = document.createElement("a");
+    const program = document.createElement("span");
     program.id = "program" + safename;
     program.className = "a-proj";
     program.innerHTML = name;
@@ -622,6 +559,7 @@ $(function () {
     item.appendChild(banner);
     item.appendChild(collapse).appendChild(body).appendChild(table);
     document.getElementById("main").appendChild(item);
+    // document.getElementById("banner" + safename).onclick = toggler(document.getElementById("collapse" + safename));
 
     makeri(name, "Risk");
     makeri(name, "Issue");
@@ -645,13 +583,18 @@ $(function () {
     program = getprogrambyname(name);
     let lr = listri(name, type);
     for (ri of lr) {
-      // console.log(ri);
       makedata(ri, type, name);  
     }
   }    
 
   const rirow = ["Program_Nm", "Region_Cd", null, "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", 
                 function() {"ForecastedResolution_Dt"}];
+
+  const toggler = (target) => {
+    // Toggles visibility
+    (target != null)
+    target.className = (target.className.indexOf("show") == -1) ? target.className += "show" : target.className.replace("show", "");
+  }
 
   const makedata = (id, type, name) => {            
     // Make all the data inside a risk or issue
@@ -660,83 +603,59 @@ $(function () {
     const saferi = makesafe(program.RI_Nm);
 
     const trid = "tr" + type + saferi + Math.random();
-    const trdata = document.createElement("tr");
-    trdata.id = trid;
-    document.getElementById("table" + safename).appendChild(trdata);
+    document.getElementById("table" + safename).appendChild(maketr(trid));
     const header = document.createElement("th");
+    header.id = "th" + type + saferi;
     header.className = "p-4 namebox";
-    header.innerHTML = "<div class='arrows'>▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>";
-    
-    header.onclick = function() {
-      const target = document.getElementById("projects" + saferi);
-      console.log(target);
-      target.className = (target.className.indexOf("Show") == -1) ? target.className += "Show" : target.className.replace("Show", "");
-    }
-    document.getElementById(trid).appendChild(header);
-    maketd(program.Program_Nm, trid);
-    maketd(program.Region_Cd, trid);
+    header.innerHTML = "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>";
+    const tridobj = document.getElementById(trid);
+    tridobj.appendChild(header);
+    document.getElementById(header.id).onclick = function() {toggler(document.getElementById("projects" + saferi))};
+    tridobj.appendChild(maketd(program.Program_Nm, "", "p-4 databox"));
+    tridobj.appendChild(maketd(program.Region_Cd, "", "p-4 databox"));
     const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
     let mangers = [];
     for (man of manger) {
       mangers.push(man.User_Nm);
     }  
-    maketd(mangers.join().replace(",", ", "), trid);
-    maketd(program.RiskAndIssue_Key, trid);
-    maketd(program.ImpactLevel_Nm, trid);
-    maketd(program.ActionPlanStatus_Cd, trid);
-    maketd(todate(program.ForecastedResolution_Dt.date), trid);
-    maketd(program.POC_Nm, trid);
-    maketd(program.ResponseStrategy_Cd, trid);
-    maketd(Math.floor(program.RIOpen_Hours/24), trid);
-    // console.log("table" + safename);
+    tridobj.appendChild(maketd(mangers.join().replace(",", ", "), "", "p-4 databox"));
+    tridobj.appendChild(maketd(program.RiskAndIssue_Key, "", "p-4 databox"));
+    tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
+    tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
+    const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date;
+    tridobj.appendChild(maketd(todate(fr), "", "p-4 databox"));
+    tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
+    tridobj.appendChild(maketd(program.ResponseStrategy_Cd, "", "p-4 databox"));
+    tridobj.appendChild(maketd(Math.floor(program.RIOpen_Hours/24) + " days", "", "p-4 databox"));
     makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
   }    
-
-
-
 
   const makeprojects = (projects, programname, tableid, saferi) => {
 
     // Make the rows of projects inside the program
-    // console.log("projects");
-    // console.log(projects);
-    const trp = document.createElement("tr");
-    trp.className = "collapse";
-    console.log("projects" + saferi)
-    trp.id = "projects" + saferi;
-    document.getElementById(tableid).appendChild(trp);
-    const spacer = document.createElement("td");
-    spacer.innerHTML = "&nbsp;";
-    const tdp = document.createElement("td");
-    tdp.id = "td" + saferi;
-    tdp.colSpan = "10"
-    trp.appendChild(spacer);
-    trp.appendChild(tdp);
-    // console.log(makesafe(programname));
+
+    document.getElementById(tableid).appendChild(maketr("projects" + saferi, "panel-collapse collapse"));
+    document.getElementById("projects" + saferi).appendChild(maketd("&nbsp;", "", ""));
+    document.getElementById("projects" + saferi).appendChild(maketd("", "td" + saferi, "", 10));
+
     const table = document.createElement("table");
     table.id = "table" + saferi;
     table.appendChild(projectheader());
     document.getElementById("td" + saferi).appendChild(table);
     for(project of projects) {
-      // console.log(project);
       const tr = document.createElement("tr");
       tr.id = "tr" + project.PROJECT_Key;
       document.getElementById("table" + saferi).appendChild(tr);
-      const blanktd = document.createElement("td");
-      blanktd.innerHTML = "&nbsp;";
-      tr.appendChild(blanktd);
-      tr.appendChild(makeptd(project.EPSProject_Nm));
-      tr.appendChild(makeptd(project.EPS_Location_Cd));
-      tr.appendChild(makeptd(project.EPSProject_Owner));
-      tr.appendChild(makeptd(project.Subprogram_nm));
-      tr.appendChild(blanktd);
-      // const name = getprogrambykey(project.RiskAndIssue_Key, name)  
+      for (field of projectfields) {
+        tr.appendChild(makeptd(project[field]));
+      }
     }
   }  
+
   const projectheader = () => {
     // Make the header row for a project 
     const trri = document.createElement("tr");
-    for (field of projectfields) {
+    for (field of projectfieldnames) {
       trri.appendChild(maketh(field));
     }
     return trri;
@@ -749,18 +668,15 @@ $(function () {
     return td;
   }  
 
-  const todate = (date) => new Date(date).toLocaleString("en-US", {
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
-  });  
+  const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"});  
 
   const makeheader = (name, type) => {
+
     // Make the header row for a risk or issue
+
     const safename = makesafe(name);
     const trri = document.createElement("tr");
     trri.id = "tr" + type + safename;
-    // document.getElementById("table"+safename).appendChild(trri);
     const header = document.createElement("th");
     header.className = "p-4";
     header.innerHTML = type+"s";
@@ -771,20 +687,29 @@ $(function () {
     return trri;
   }  
 
-  const maketd = (value, target) => {
-    const header = document.createElement("td");
-    header.className = "p-4 databox";
-    header.innerHTML = value;
-    document.getElementById(target).appendChild(header);
-  }
 
+// Make common table elements
+
+const maketr = (id, classes) => {
+    const tr = document.createElement("tr");
+    tr.id = id;
+    tr.className = classes;
+    return tr;
+  }
+  const maketd = (text, id, classes, colspan) => {
+    const td = document.createElement("td");
+    td.id = id;
+    td.className = classes;
+    td.innerHTML = text;
+    td.colSpan = colspan;
+    return td;
+  }
   const maketh = (name) => {
     const header = document.createElement("th");
     header.className = "p-4 headbox";
     header.innerHTML = name;
     return header;
   }  
-
 
 
   function countri(target, type) {
@@ -806,51 +731,47 @@ $(function () {
     return uni;
   }
 
-  for (loop of uniques) {
-    // creates all the programs
-    if(loop != null) {
-      createrow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
-    }
+  const filtration = () => {
+    // filter the programs list using the form
+    const filtered = ridata.filter(function(o) {
+      console.log(o.RIType_Cd);
+      return (
+        o.Fiscal_Year == document.getElementById("fiscal_year").value &&
+        (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+        (document.getElementById("impact_level").value == '' || $('#impact_level').val().includes(o.ImpactLevel_Nm)) &&
+        (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
+        (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd))
+      );
+    });
+    return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   }
 
+  const ranger = (daterange) => {
+    // get start and end date from a date range set via Bootstrap date range picker
+    const dates = {};
+    dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
+    dates.end = daterange.substring(daterange.indexOf(" - ")+4);
+    return dates;
+  }
 
+  document.getElementById("Go").onclick = function() {
+    // filter form button
+    populate(filtration())
+    return false;
+  }
 
-  // const getdistinct = (target) => {
-  //   uniques = [];
-  //   for (item of target) {
-  //     if(item.Program_Nm != null) {
-  //       if(!(item.Program_Nm in uniques)) {
-  //         // console.log(item.Program_Nm)
-  //         uniques.push(item.Program_Nm)
-  //       }
-  //     }
-  //   }
-  //   return uniques;
-  // }
+  const populate = (rilist) => {
+    const main = document.getElementById("main");
+    main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
+    console.log(rilist);
+    for (loop of rilist) {
+      // creates all the programs
+      if(loop != null) {
+        createrow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
+      }
+    }
+  }
+  populate(uniques);
 
-
-
-  // console.log("MORe");
-  // console.log(countri("Metro Transport", "Risk"));
-  // console.log(listri("Metro Transport", "Risk"));
-  // console.log(countri("Metro Transport", "Issue"));
-  // console.log(listri("Metro Transport", "Issue"));
-  // select  count (distinct RIskandissue_Key) as Risk_count from RI_MGT.fn_GetListOfAllRiskAndIssue() where
-  // riLevel_cd = 'program' and fiscal_year > 2020 and RIType_Cd = 'Risk'
-  // and Program_Nm = 'Metro Transport'
-  // and fiscal_year = 2021
-
-
-  // const unique = [...new Set(ridata.map(item => item.program_Nm))]; // [ 'A', 'B']
-  // console.log(uniques);
-  // for(ri of ridata) {
-  //   if(ri.ProgramRI == null) {
-  //     // console.log(ri);
-  //   } else {
-  //     // console.log(ri);
-  //     createrow(ri);
-  //   }
-  // }
-  // ridata.every(dumper);
 </script>
 </html>
