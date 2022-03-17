@@ -11,7 +11,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Program/Project Risk & Issues</title>
+<title>Program R&I Aggregate View</title>
 <link rel="shortcut icon" href="favicon.ico"/>
 <!-- <link 
   rel="stylesheet"
@@ -343,7 +343,7 @@ $(function () {
   <div class="row" align="center">
     <div style="width:98%">
       <div class="col-xs-12 text-center">
-        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?>Risks & Issues Aggregate</h1>
+        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Aggregate View </h1>
         <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5>
 	<form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
           <div class="form-group">
@@ -390,7 +390,7 @@ $(function () {
     <td><select name="fiscal_year[]"  class="form-control" id="fiscal_year" title="Move this selection back to Fiscal Year to clear this filter" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
         <!--<option value="All">Select Fiscal Year</option>-->
         <?php while($row_fiscal_year = sqlsrv_fetch_array( $stmt_fiscal_year, SQLSRV_FETCH_ASSOC)) { ?>
-        <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>"<?php if($row_fiscal_year['FISCL_PLAN_YR'] == '2021' ) {?> selected="selected" <?php } ?>><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
+        <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>"<?php if($row_fiscal_year['FISCL_PLAN_YR'] == date('Y') ) {?> selected="selected" <?php } ?>><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
         <?php } ?>
       </select></td>
 
@@ -647,7 +647,7 @@ $(function () {
       tr.id = "tr" + project.PROJECT_Key;
       document.getElementById("table" + saferi).appendChild(tr);
       for (field of projectfields) {
-        tr.appendChild(makeptd(project[field]));
+        tr.appendChild(maketd(project[field], "", "p4 databox"));
       }
     }
   }  
@@ -656,41 +656,28 @@ $(function () {
     // Make the header row for a project 
     const trri = document.createElement("tr");
     for (field of projectfieldnames) {
-      trri.appendChild(maketh(field));
+      trri.appendChild(maketh(field, "p-4 headbox"));
     }
     return trri;
   }  
 
-  const makeptd = (value) => {
-    const td = document.createElement("td");
-    td.className = "p4 databox";
-    td.innerHTML = value;
-    return td;
-  }  
-
-  const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"});  
-
+  
   const makeheader = (name, type) => {
-
+    
     // Make the header row for a risk or issue
-
+    
     const safename = makesafe(name);
-    const trri = document.createElement("tr");
-    trri.id = "tr" + type + safename;
-    const header = document.createElement("th");
-    header.className = "p-4";
-    header.innerHTML = type+"s";
-    trri.appendChild(header);
+    const trri = maketr("tr" + type + safename, type+"s", "p-4");
+    trri.appendChild(maketh(type+"s", "p-4"));
     for (field of fieldlist) {
-      trri.appendChild(maketh(field));
+      trri.appendChild(maketh(field, "p-4 headbox"));
     }
     return trri;
   }  
 
-
-// Make common table elements
-
-const maketr = (id, classes) => {
+  
+  // Make common table elements
+  const maketr = (id, classes) => {
     const tr = document.createElement("tr");
     tr.id = id;
     tr.className = classes;
@@ -704,14 +691,17 @@ const maketr = (id, classes) => {
     td.colSpan = colspan;
     return td;
   }
-  const maketh = (name) => {
+  const maketh = (text, classes, id) => {
     const header = document.createElement("th");
-    header.className = "p-4 headbox";
-    header.innerHTML = name;
+    header.className = classes;
+    header.innerHTML = text;
     return header;
   }  
 
+  // Utility functions
 
+  const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"});  
+  
   function countri(target, type) {
     
     // returns count of risks or issues for a given program, taking program name and type (risk, issue)
@@ -730,7 +720,7 @@ const maketr = (id, classes) => {
     uni = pre.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni;
   }
-
+  
   const filtration = () => {
     // filter the programs list using the form
     const filtered = ridata.filter(function(o) {
@@ -741,10 +731,55 @@ const maketr = (id, classes) => {
         (document.getElementById("impact_level").value == '' || $('#impact_level').val().includes(o.ImpactLevel_Nm)) &&
         (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
         (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd))
-      );
+        );
     });
+    if (document.getElementById("owner") != '') {
+      const secondpass = [];
+      console.log(mangerlist)
+      for (item of filtered) {
+        console.log(item.Fiscal_Year);
+        if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
+          // console.log(document.getElementById("owner").value + ":" + mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm);
+          let n = document.getElementById("owner").value
+          let name = flipname(n);
+          console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm + ":" + name);
+          // console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(document.getElementById("owner")));
+          if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
+            console.log("inside");
+            secondpass.push(item);
+          }
+        }
+      }
+      console.log(secondpass);
+    }
+    // if (document.getElementById("daterange") != '') {
+    //   const thirdpass = [];
+    //   // console.log(mangerlist)
+    //   for (item of filtered) {
+    //     console.log(item.ForecastedResolution_Dt);
+    //     if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
+    //       // console.log(document.getElementById("owner").value + ":" + mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm);
+    //       let n = document.getElementById("owner").value
+    //       let name = flipname(n);
+    //       console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm + ":" + name);
+    //       // console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(document.getElementById("owner")));
+    //       if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
+    //         console.log("inside");
+    //         secondpass.push(item);
+    //       }
+    //     }
+    //   }
+    //   console.log(secondpass);
+    // }
     return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   }
+
+const flipname = (name) => {
+  let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
+  let ln = name.substring(0, name.indexOf(";"))
+  return(fn + ln);
+}
+
 
   const ranger = (daterange) => {
     // get start and end date from a date range set via Bootstrap date range picker
