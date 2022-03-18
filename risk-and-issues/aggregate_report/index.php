@@ -337,6 +337,10 @@ $(function () {
   //echo 'Subprogram: ' . $subprogram . '<br>';
   ?>
 </div>
+<?php
+  $planxls = 'export-dpr-2021-plan.php?fiscalYear=' . $fiscal_year . '&status=' . $pStatus . '&owner=' . $owner . '&prog=' . $program_d . '&subprogram=' . $subprogram . '&region=' . $region . '&market=' . $market . '&facility=' . $facility ;
+  $planxlsEN = $planxls;
+  ?>
 <!--menu-->
 <?php include ("../../includes/menu.php");?>
 <section>
@@ -502,7 +506,18 @@ $(function () {
   });  
 </script>
 <script type="text/javascript">
-  $('.daterange').daterangepicker();  
+  $('.daterange').daterangepicker({
+    autoUpdateInput: false,
+      locale: {
+          cancelLabel: 'Clear'
+      }
+  }); 
+  $('.daterange').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+  });
+  $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
 </script>
 
 
@@ -723,62 +738,64 @@ $(function () {
   
   const filtration = () => {
     // filter the programs list using the form
-    const filtered = ridata.filter(function(o) {
-      console.log(o.RIType_Cd);
+    let filtered = ridata.filter(function(o) {
       return (
-        o.Fiscal_Year == document.getElementById("fiscal_year").value &&
-        (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-        (document.getElementById("impact_level").value == '' || $('#impact_level').val().includes(o.ImpactLevel_Nm)) &&
-        (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
-        (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd))
+          o.Fiscal_Year == document.getElementById("fiscal_year").value &&
+          (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+          (document.getElementById("impact_level").value == '' || $('#impact_level').val().includes(o.ImpactLevel_Nm)) &&
+          (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
+          (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
+          (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
         );
-    });
+      });
     if (document.getElementById("owner") != '') {
       const secondpass = [];
-      console.log(mangerlist)
       for (item of filtered) {
-        console.log(item.Fiscal_Year);
         if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
-          // console.log(document.getElementById("owner").value + ":" + mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm);
           let n = document.getElementById("owner").value
           let name = flipname(n);
-          console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm + ":" + name);
-          // console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(document.getElementById("owner")));
           if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
-            console.log("inside");
             secondpass.push(item);
           }
         }
       }
-      console.log(secondpass);
+      filtered = secondpass;
     }
-    // if (document.getElementById("daterange") != '') {
-    //   const thirdpass = [];
-    //   // console.log(mangerlist)
-    //   for (item of filtered) {
-    //     console.log(item.ForecastedResolution_Dt);
-    //     if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
-    //       // console.log(document.getElementById("owner").value + ":" + mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm);
-    //       let n = document.getElementById("owner").value
-    //       let name = flipname(n);
-    //       console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm + ":" + name);
-    //       // console.log(mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(document.getElementById("owner")));
-    //       if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
-    //         console.log("inside");
-    //         secondpass.push(item);
-    //       }
-    //     }
-    //   }
-    //   console.log(secondpass);
-    // }
+    console.log(filtered.length)
     return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
+  }  
+  
+  const dateformat = (target)  => {
+    // console.log(target)
+    return target.getDate() + "-" + (target.getMonth()+1) + "-" + target.getFullYear();
   }
+
+  const splitdate = (datestring) => {
+    // console.log(datestring);
+    let newdate = datestring.split(" - ");
+    // console.log(typeof newdate[0])
+    return newdate;
+  }  
+
+  const betweendate = (dates, tween) => {
+    // console.log(tween.date);
+    spanner = splitdate(dates);
+    let first = new Date(spanner[0]);
+    let middle = new Date(tween);
+    let last = new Date(spanner[1]);
+    // console.log(first);
+    // console.log((first) + ">");
+    // console.log((middle));
+    // console.log(">" + (last));
+    return ((middle >= first && middle <= last))
+  }  
+
 
 const flipname = (name) => {
   let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
   let ln = name.substring(0, name.indexOf(";"))
   return(fn + ln);
-}
+}  
 
 
   const ranger = (daterange) => {
@@ -787,13 +804,13 @@ const flipname = (name) => {
     dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
     dates.end = daterange.substring(daterange.indexOf(" - ")+4);
     return dates;
-  }
+  }  
 
   document.getElementById("Go").onclick = function() {
     // filter form button
     populate(filtration())
     return false;
-  }
+  }  
 
   const populate = (rilist) => {
     const main = document.getElementById("main");
