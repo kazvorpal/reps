@@ -41,7 +41,7 @@ function fixutf8($target) {
   return ($target);
 }
 
-$sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue() where rilevel_cd = 'program'";
+$sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where rilevel_cd = 'program'";
 ini_set('mssql.charset', 'UTF-8');
 $riquery = sqlsrv_query($conn, $sqlstr);
 if($riquery === false) {
