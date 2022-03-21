@@ -269,7 +269,7 @@ $(function () {
         .toppleat:nth-child(odd) {
           background-color: #fff;
         }
-        @media (max-width:2000px){
+        @media (max-width:1000px){
     
           /* Menu BreakPoint */
           .navbar-header {float: none;}
@@ -348,7 +348,7 @@ $(function () {
     <div style="width:98%">
       <div class="col-xs-12 text-center">
         <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Aggregate View </h1>
-        <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5>
+        <!-- <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5> -->
 	<form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
           <div class="form-group">
             <table width="500" border="0" align="center">
@@ -824,6 +824,11 @@ const flipname = (name) => {
     }
   }
   populate(uniques);
+
+  $("document").ready(function() {
+    console.log(document.getElementById("myDefaultNavbar1"));
+    document.getElementById("myDefaultNavbar1").style.display = "block !important";
+  })
 
 </script>
 </html>
