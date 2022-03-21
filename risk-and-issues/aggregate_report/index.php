@@ -41,7 +41,7 @@ function fixutf8($target) {
   return ($target);
 }
 
-$sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where rilevel_cd = 'program'";
+$sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
 ini_set('mssql.charset', 'UTF-8');
 $riquery = sqlsrv_query($conn, $sqlstr);
 if($riquery === false) {
@@ -76,23 +76,23 @@ if($riquery === false) {
       } else {
         $count = 1;
         $p4prows = array();
-        $checker = 1;
+        $checker = 0;
         while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
           $p4prows[] = array_map("fixutf8", $p4prow);
-          $checker = 0;
+          $checker = 1;
         }
-        if ($checker == 1) {      
-          $p4prows[] = array(
-            "RiskAndIssue_Key" => $row["RiskAndIssue_Key"], 
-            "ProgramRI_Key" => $row["RiskAndIssue_Key"], 
-            "EPSProject_Nm"=>"EPS Project Placeholder", 
-            "PROJECT_Key"=>rand(1, 100), 
-            "Subprogram_nm"=>"Subprogram Placeholder", 
-            "Location_Key"=> 3, 
-            "EPS_Location_Cd"=>rand(1, 10), 
-            "EPSProject_Owner"=>"Elvis Presley"
-          );
-        }
+        // if ($checker == 0) {      
+        //   $p4prows[] = array(
+        //     "RiskAndIssue_Key" => $row["RiskAndIssue_Key"], 
+        //     "ProgramRI_Key" => $row["RiskAndIssue_Key"], 
+        //     "EPSProject_Nm"=>"EPS Project Placeholder", 
+        //     "PROJECT_Key"=>rand(1, 100), 
+        //     "Subprogram_nm"=>"Subprogram Placeholder", 
+        //     "Location_Key"=> 3, 
+        //     "EPS_Location_Cd"=>rand(1, 10), 
+        //     "EPSProject_Owner"=>"Elvis Presley"
+        //   );
+        // }
       }
       $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
     }
@@ -391,7 +391,7 @@ $(function () {
       <td>&nbsp;</td>
     </tr>
     <tr>
-    <td><select name="fiscal_year[]"  class="form-control" id="fiscal_year" title="Move this selection back to Fiscal Year to clear this filter" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
+    <td><select name="fiscal_year[]"  multiple="multiple" class="form-control" id="fiscal_year" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
         <!--<option value="All">Select Fiscal Year</option>-->
         <?php while($row_fiscal_year = sqlsrv_fetch_array( $stmt_fiscal_year, SQLSRV_FETCH_ASSOC)) { ?>
         <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>"<?php if($row_fiscal_year['FISCL_PLAN_YR'] == date('Y') ) {?> selected="selected" <?php } ?>><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
@@ -690,7 +690,22 @@ $(function () {
     return trri;
   }  
 
-  
+  const maketableelement = (o) => {
+
+// o is an (o)bject with these optional properties:
+// e.e is the (e)lement, like "td" or "tr"
+// e.c is the (c)lasses, separated by spaces like usual
+// e.s is the innerHTML (t)ext
+// e.s is the col(s)pan
+
+    const t = document.createElement(o.e);
+    t.id = o.e;
+    t.className = o.c;
+    t.innerHTML = o.t;
+    t.colSpan = o.s;
+    return t;
+  }
+
   // Make common table elements
   const maketr = (id, classes) => {
     const tr = document.createElement("tr");
