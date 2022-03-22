@@ -594,6 +594,7 @@ $(function () {
   }  
 
   const makeri = (name, type) => {
+    console.log(document.getElementById('risk_issue').value.includes(type));
     document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
     program = getprogrambyname(name);
     let lr = listri(name, type);
@@ -638,6 +639,7 @@ $(function () {
     tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
     tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
     const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date;
+    // console.log(fr);
     tridobj.appendChild(maketd(todate(fr), "", "p-4 databox"));
     tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
     tridobj.appendChild(maketd(program.ResponseStrategy_Cd, "", "p-4 databox"));
@@ -730,7 +732,7 @@ $(function () {
 
   // Utility functions
 
-  const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"});  
+  const todate = (date) => new Date(date.replace(/-/g, "/")).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"});  
   
   function countri(target, type) {
     
