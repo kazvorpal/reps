@@ -356,7 +356,7 @@ $(function () {
                 <tr>
                   <td align="center">Risk/Issue</td>
                   <td align="center">Impact Level</td>
-                  <td align="center">Forcasted Resolution Date Range</td>
+                  <td align="center">Forecasted Resolution Date Range</td>
                 </tr>
                 <tr>
                   <td align="center"><select name="risk_issue[]" id="risk_issue" multiple="multiple" class="form-control">
@@ -364,10 +364,10 @@ $(function () {
                     <option value="Issue">Issue</option>
                     </select></td>
                   <td align="center"><select name="impact_level[]" id="impact_level" multiple="multiple" class="form-control">
-                    <option value="MIN">Minor Impact</option>
-                    <option value="MOD">Moderate Impact</option>
-                    <option value="MAJ">Major Impact</option>
-                    <option value="NOI">No Impact</option>
+                    <option value="Minor Impact">Minor Impact</option>
+                    <option value="Moderate Impact">Moderate Impact</option>
+                    <option value="Major Impact">Major Impact</option>
+                    <option value="No">No Impact</option>
                     </select></td>
                   <td align="center"><input type="text" id="dateranger" class="daterange form-control" /></td>
                 </tr>
@@ -594,12 +594,20 @@ $(function () {
   }  
 
   const makeri = (name, type) => {
-    console.log(document.getElementById('risk_issue').value.includes(type));
-    document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
     program = getprogrambyname(name);
-    let lr = listri(name, type);
-    for (ri of lr) {
-      makedata(ri, type, name);  
+    // console.log(
+    //   document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type) &&
+    //   document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm)
+    // );
+    if (
+      document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type) &&
+      document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm)
+    ){
+      document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
+      let lr = listri(name, type);
+      for (ri of lr) {
+        makedata(ri, type, name);  
+      }
     }
   }    
 
@@ -615,36 +623,39 @@ $(function () {
   const makedata = (id, type, name) => {            
     // Make all the data inside a risk or issue
     const program = getprogrambykey(id, name);
+    // console.log(program)
     const safename = makesafe(program.Program_Nm);
     const saferi = makesafe(program.RI_Nm);
-
-    const trid = "tr" + type + saferi + Math.random();
-    document.getElementById("table" + safename).appendChild(maketr(trid));
-    const header = document.createElement("th");
-    header.id = "th" + type + saferi;
-    header.className = "p-4 namebox";
-    header.innerHTML = "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>";
-    const tridobj = document.getElementById(trid);
-    tridobj.appendChild(header);
-    document.getElementById(header.id).onclick = function() {toggler(document.getElementById("projects" + saferi))};
-    tridobj.appendChild(maketd(program.Program_Nm, "", "p-4 databox"));
-    tridobj.appendChild(maketd(program.Region_Cd, "", "p-4 databox"));
-    const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
-    let mangers = [];
-    for (man of manger) {
-      mangers.push(man.User_Nm);
-    }  
-    tridobj.appendChild(maketd(mangers.join().replace(",", ", "), "", "p-4 databox"));
-    tridobj.appendChild(maketd(program.RiskAndIssue_Key, "", "p-4 databox"));
-    tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
-    tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
-    const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date;
-    // console.log(fr);
-    tridobj.appendChild(maketd(todate(fr), "", "p-4 databox"));
-    tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
-    tridobj.appendChild(maketd(program.ResponseStrategy_Cd, "", "p-4 databox"));
-    tridobj.appendChild(maketd(Math.floor(program.RIOpen_Hours/24) + " days", "", "p-4 databox"));
-    makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
+    if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
+      const trid = "tr" + type + saferi + Math.random();
+      document.getElementById("table" + safename).appendChild(maketr(trid));
+      const header = document.createElement("th");
+      header.id = "th" + type + saferi;
+      header.className = "p-4 namebox";
+      header.innerHTML = "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>";
+      const tridobj = document.getElementById(trid);
+      tridobj.appendChild(header);
+      document.getElementById(header.id).onclick = function() {toggler(document.getElementById("projects" + saferi))};
+      tridobj.appendChild(maketd(program.Program_Nm, "", "p-4 databox"));
+      tridobj.appendChild(maketd(program.Region_Cd, "", "p-4 databox"));
+      const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
+      let mangers = [];
+      for (man of manger) {
+        mangers.push(man.User_Nm);
+      }  
+      tridobj.appendChild(maketd(mangers.join().replace(",", ", "), "", "p-4 databox"));
+      tridobj.appendChild(maketd(program.RiskAndIssue_Key, "", "p-4 databox"));
+      tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
+      tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
+      const fr = (program.ForecastedResolution_Dt == null) ? "" : todate(program.ForecastedResolution_Dt.date);
+      console.log(fr);
+      // console.log(todate(fr));
+      tridobj.appendChild(maketd(fr, "", "p-4 databox"));
+      tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
+      tridobj.appendChild(maketd(program.ResponseStrategy_Cd, "", "p-4 databox"));
+      tridobj.appendChild(maketd(Math.floor(program.RIOpen_Hours/24) + " days", "", "p-4 databox"));
+      makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
+    }
   }    
 
   const makeprojects = (projects, programname, tableid, saferi) => {
@@ -759,7 +770,7 @@ $(function () {
       return (
           o.Fiscal_Year == document.getElementById("fiscal_year").value &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-          (document.getElementById("impact_level").value == '' || $('#impact_level').val().includes(o.ImpactLevel_Nm)) &&
+          (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
           (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
           (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
           (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
@@ -769,7 +780,7 @@ $(function () {
       const secondpass = [];
       for (item of filtered) {
         if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
-          let n = document.getElementById("owner").value
+          let n = document.getElementById("owner").value;
           let name = flipname(n);
           if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
             secondpass.push(item);
