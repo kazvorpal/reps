@@ -648,7 +648,7 @@ $(function () {
       tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
       const fr = (program.ForecastedResolution_Dt == null) ? "" : todate(program.ForecastedResolution_Dt.date);
-      console.log(fr);
+      // console.log(fr);
       // console.log(todate(fr));
       tridobj.appendChild(maketd(fr, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
@@ -767,8 +767,11 @@ $(function () {
   const filtration = () => {
     // filter the programs list using the form
     let filtered = ridata.filter(function(o) {
+      // console.log($('#fiscal_year').val())
+      // console.log(o.Fiscal_Year)
+      // console.log($('#fiscal_year').val().some(s => s == o.Fiscal_Year))
       return (
-          o.Fiscal_Year == document.getElementById("fiscal_year").value &&
+          (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
           (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
           (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
@@ -853,10 +856,10 @@ const flipname = (name) => {
   }
   populate(uniques);
 
-  $("document").ready(function() {
-    console.log(document.getElementById("myDefaultNavbar1"));
-    document.getElementById("myDefaultNavbar1").style.display = "block !important";
-  })
+  // $("document").ready(function() {
+  //   console.log(document.getElementById("myDefaultNavbar1"));
+  //   document.getElementById("myDefaultNavbar1").style.display = "block !important";
+  // })
 
 </script>
 </html>
