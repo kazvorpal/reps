@@ -743,7 +743,7 @@ $(function () {
 
   // Utility functions
 
-  const todate = (date) => new Date(date.replace(/-/g, "/")).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"});  
+  const todate = (date) => new Date(date.toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/")));  
   
   function countri(target, type) {
     
@@ -767,9 +767,6 @@ $(function () {
   const filtration = () => {
     // filter the programs list using the form
     let filtered = ridata.filter(function(o) {
-      // console.log($('#fiscal_year').val())
-      // console.log(o.Fiscal_Year)
-      // console.log($('#fiscal_year').val().some(s => s == o.Fiscal_Year))
       return (
           (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
