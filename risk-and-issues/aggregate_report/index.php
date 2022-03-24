@@ -743,7 +743,7 @@ $(function () {
 
   // Utility functions
 
-  const todate = (date) => new Date(date.toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/")));  
+  const todate = (date) => new Date(date.toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/"));  
   
   function countri(target, type) {
     
