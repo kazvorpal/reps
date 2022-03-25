@@ -43,7 +43,7 @@ function fixutf8($target) {
 
 $sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
 ini_set('mssql.charset', 'UTF-8');
-$riquery = sqlsrv_query($conn, $sqlstr);
+$riquery = sqlsrv_query($data_conn, $sqlstr);
 if($riquery === false) {
   if(($error = sqlsrv_errors()) != null) {
     foreach($errors as $error) {
@@ -64,7 +64,7 @@ if($riquery === false) {
     if($row["ProgramRI_Key"] != '') {
       $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
       ini_set('mssql.charset', 'UTF-8');
-      $p4pquery = sqlsrv_query($conn, $sqlstr);
+      $p4pquery = sqlsrv_query($data_conn, $sqlstr);
       if($p4pquery === false) {
         if(($error = sqlsrv_errors()) != null) {
           foreach($errors as $error) {
@@ -103,7 +103,7 @@ if($riquery === false) {
     if($row["ProgramRI_Key"] != '') {
       $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
       ini_set('mssql.charset', 'UTF-8');
-      $mangerquery = sqlsrv_query($conn, $sqlstr);
+      $mangerquery = sqlsrv_query($data_conn, $sqlstr);
       if($mangerquery === false) {
         if(($error = sqlsrv_errors()) != null) {
           foreach($errors as $error) {
@@ -548,17 +548,13 @@ $(function () {
 
   const createrow = (name, risks, issues) => {
     const safename = makesafe(name);
-    const item = document.createElement("div");
-    item.id = "item" + safename;
-    item.className = "toppleat accordion-item";
+    const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
 
-    const program = document.createElement("span");
-    program.id = "program" + safename;
-    program.className = "a-proj";
-    program.innerHTML = name;
+    const program = makeelement({e: "span", i: "program" + safename, c: "a-proj", t: name});
     const counts = document.createTextNode(" (R:" + risks + " I:" + issues + ")");
 
+    // const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
     const collapse = document.createElement("div");
     collapse.id = "collapse" + safename;
     collapse.className = "panel-collapse collapse";
@@ -595,10 +591,6 @@ $(function () {
 
   const makeri = (name, type) => {
     program = getprogrambyname(name);
-    // console.log(
-    //   document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type) &&
-    //   document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm)
-    // );
     if (
       document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type) &&
       document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm)
@@ -629,13 +621,15 @@ $(function () {
     if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
       const trid = "tr" + type + saferi + Math.random();
       document.getElementById("table" + safename).appendChild(maketr(trid));
-      const header = document.createElement("th");
-      header.id = "th" + type + saferi;
-      header.className = "p-4 namebox";
-      header.innerHTML = "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>";
+      const header = makeelement({
+        "e": "th", 
+        "i": "th" + type + saferi, 
+        "t": "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+        "c":"p-4 namebox"
+      });
+      header.onclick = function() {toggler(document.getElementById("projects" + saferi))};
       const tridobj = document.getElementById(trid);
       tridobj.appendChild(header);
-      document.getElementById(header.id).onclick = function() {toggler(document.getElementById("projects" + saferi))};
       tridobj.appendChild(maketd(program.Program_Nm, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.Region_Cd, "", "p-4 databox"));
       const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
@@ -695,26 +689,27 @@ $(function () {
     // Make the header row for a risk or issue
     
     const safename = makesafe(name);
-    const trri = maketr("tr" + type + safename, type+"s", "p-4");
-    trri.appendChild(maketh(type+"s", "p-4"));
+    const trri = makeelement({"e": "tr", "i": type + safename, "t": type+"s", "c":"p-4"});
+    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 headbox"}))
     for (field of fieldlist) {
-      trri.appendChild(maketh(field, "p-4 headbox"));
+      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}))
     }
     return trri;
-  }  
+  }
 
-  const maketableelement = (o) => {
+  const makeelement = (o) => {
 
-// o is an (o)bject with these optional properties:
-// e.e is the (e)lement, like "td" or "tr"
-// e.c is the (c)lasses, separated by spaces like usual
-// e.s is the innerHTML (t)ext
-// e.s is the col(s)pan
+    // o is an (o)bject with these optional properties:
+    // o.e is the (e)lement, like "td" or "tr"
+    // o.c is the (i)d
+    // o.c is the (c)lasses, separated by spaces like usual
+    // o.t is the innerHTML (t)ext
+    // o.s is the col(s)pan
 
     const t = document.createElement(o.e);
     t.id = o.e;
     t.className = o.c;
-    t.innerHTML = o.t;
+    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
     t.colSpan = o.s;
     return t;
   }
@@ -743,7 +738,9 @@ $(function () {
 
   // Utility functions
 
-  const todate = (date) => new Date(date.toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/"));  
+  const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/");  
+
+  // const todate = (date) => new Date(date.replace(/-/g, "/").toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}));  
   
   function countri(target, type) {
     
