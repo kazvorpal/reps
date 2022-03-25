@@ -592,8 +592,8 @@ $(function () {
   const makeri = (name, type) => {
     program = getprogrambyname(name);
     if (
-      document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type) &&
-      document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm)
+      (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
+      (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm))
     ){
       document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
       let lr = listri(name, type);
@@ -641,7 +641,9 @@ $(function () {
       tridobj.appendChild(maketd(program.RiskAndIssue_Key, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
-      const fr = (program.ForecastedResolution_Dt == null) ? "" : todate(program.ForecastedResolution_Dt.date);
+      // console.log(typeof program.ForecastedResolution_Dt.date);
+      // const fr = (program.ForecastedResolution_Dt == null) ? "" : todate(console.log(program.ForecastedResolution_Dt.date));
+      const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
       // console.log(fr);
       // console.log(todate(fr));
       tridobj.appendChild(maketd(fr, "", "p-4 databox"));
@@ -764,6 +766,7 @@ $(function () {
   const filtration = () => {
     // filter the programs list using the form
     let filtered = ridata.filter(function(o) {
+      // console.log((document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)));
       return (
           (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
