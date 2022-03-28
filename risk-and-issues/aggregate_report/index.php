@@ -631,11 +631,7 @@ $(function () {
       tridobj.appendChild(maketd(program.RiskAndIssue_Key, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
-      // console.log(typeof program.ForecastedResolution_Dt.date);
-      // const fr = (program.ForecastedResolution_Dt == null) ? "" : todate(console.log(program.ForecastedResolution_Dt.date));
       const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
-      // console.log(fr);
-      // console.log(todate(fr));
       tridobj.appendChild(maketd(fr, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
       tridobj.appendChild(maketd(program.ResponseStrategy_Cd, "", "p-4 databox"));
