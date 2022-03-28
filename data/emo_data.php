@@ -24,6 +24,8 @@ $conn_COX_QA = sqlsrv_connect( $serverName_COX_QA, $connectionInfo_COX_QA);
 //$conn = Dev Database
 //$conn_COXProd= Prodiction Database
 //$conn_COX_QA = QA Database
+
+// list of server urls for different data connections
 $serverlist = (array) [
     "catl0dwas11209.corp.cox.com" => $conn,
     "catl0pwas10385.corp.cox.com" => $conn_ODS,

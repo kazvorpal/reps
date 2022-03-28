@@ -735,10 +735,8 @@ $(function () {
     // returns count of risks or issues for a given program, taking program name and type (risk, issue)
     
     pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.Program_Nm == target);
-    // uni = pre.filter((value, index, self) => self.indexOf(value) === index);
     uni = pre.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni.length;
-    // counter = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
   }
   function listri(target, type) {
     
