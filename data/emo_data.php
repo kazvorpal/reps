@@ -32,12 +32,4 @@ $serverlist = (array) [
 ];
 $data_conn = $serverlist[$_SERVER['HTTP_HOST']]; //<--CHANGE THIS TO SWITCH CONNECTIONS
 
-// echo "<pre>";
-// print_r($serverlist);
-// echo $_SERVER['HTTP_HOST'] . "=>" . $serverlist[$_SERVER['HTTP_HOST']];
-// echo "</pre>";
-
-
-
-
 ?>

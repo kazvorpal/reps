@@ -551,22 +551,12 @@ $(function () {
     const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
 
-    const program = makeelement({e: "span", i: "program" + safename, c: "a-proj", t: name});
-    const counts = document.createTextNode(" (R:" + risks + " I:" + issues + ")");
+    const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
+    const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
+    const table = makeelement({e: "table", i: "table" + safename, c: "table"});
 
-    // const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
-    const collapse = document.createElement("div");
-    collapse.id = "collapse" + safename;
-    collapse.className = "panel-collapse collapse";
-    const body = document.createElement("div");
-    body.id = "body" + safename;
-    body.className = "accordion-body";
-    const table = document.createElement("table");
-    table.className = "table";
-    table.id = "table" + safename;
-
-    banner.appendChild(program);
-    banner.appendChild(counts);
+    banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: name}));
+    banner.appendChild(document.createTextNode(" (R:" + risks + " I:" + issues + ")"));
     item.appendChild(banner);
     item.appendChild(collapse).appendChild(body).appendChild(table);
     document.getElementById("main").appendChild(item);
@@ -709,10 +699,10 @@ $(function () {
     // o.s is the col(s)pan
 
     const t = document.createElement(o.e);
-    t.id = o.e;
-    t.className = o.c;
+    t.id = (typeof o.i == "undefined") ? "" : o.i;
+    t.className = (typeof o.c == "undefined") ? "" : o.c;
     t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-    t.colSpan = o.s;
+    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
     return t;
   }
 
