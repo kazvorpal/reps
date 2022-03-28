@@ -1,16 +1,80 @@
 <?php include ("../includes/functions.php");?>
+<?php include ("../includes/big_bro_functions.php");?>
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
-<?php include ("../sql/project_by_id.php");?>
-<?php include ("../sql/ri_filter_vars.php");?>
-<?php include ("../sql/ri_filters.php");?>
-<?php include ("../sql/ri_filtered_data.php");?>
+<?php //include ("../sql/project_by_id.php");?>
+<?php //include ("../sql/ri_filter_vars.php");?>
+<?php //include ("../sql/ri_filters.php");?>
+<?php //include ("../sql/ri_filtered_data.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
-  $action = $_GET['action']; //new
-  $temp_id = $_GET['tempid'];
-  $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
-  $ass_project = $row_projID['PROJ_NM'];
+  //$action = $_GET['action']; //new
+  //$temp_id = $_GET['tempid'];
+$user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
+  //$ass_project = $row_projID['PROJ_NM'];
+  //$forcastDate =  date('m/d/Y');
+
+//FIND PROJECT RISK AND ISSUES
+$RiskAndIssue_Key = $_POST['rikey'];
+$fscl_year = $_POST['fscl_year'];
+$proj_name = $_POST['proj_name'];
+  
+$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
+$row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue['Risk_Issue_Name']; 
+// echo $sql_risk_issue . "<br>";		
+
+//GET DRIVERS
+$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
+// $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_driver['Driver_Nm]; 			
+//echo $sql_risk_issue_driver;
+
+//DECLARE
+$changeLogKey = 4;
+$name = trim($row_risk_issue['RI_Nm']);
+$RILevel = "";
+$RIType = $row_risk_issue['RIType_Cd'];
+$createdFrom  = "";
+$programs = "";
+$project_nm = $row_risk_issue['proj_nm'];
+$descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
+$description = $row_risk_issue['RIDescription_Txt'];
+$regionx = "";
+$Driversx = $row_risk_issue['Driver_Nm'];
+$impactArea2 = $row_risk_issue['ImpactArea_Nm'];
+$impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
+$probability = $row_risk_issue['RiskProbability_Nm'];
+$individual = $row_risk_issue['POC_Nm'];
+$internalExternal = $row_risk_issue['POC_Nm'];
+$responseStrategy2 = $row_risk_issue['ResponseStrategy_Nm'];
+$unknown = ""; // IF DATE IS EMPTY
+$date = $row_risk_issue['ForecastedResolution_Dt'];
+$transProgMan = $row_risk_issue['TransferredPM_Flg'];
+$opportunity = $row_risk_issue['Opportunity_Txt'];
+$actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+$DateClosed = $row_risk_issue['RIClosed_Dt'];
+$driverList = rtrim($_POST['drivertime'], ",");
+$driverArr = explode(",", $driverList);
+$RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
+
+if(!empty($_POST['proj_select'])) {
+$assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
+} else {
+$assocProject = $RiskAndIssue_Key;
+}
+
+//ASSOCIATED RISK AND ISSUES
+//$ri_name = $row_risk_issue['RI_Nm'];
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
+                              from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name')
+                              where RiskAndIssue_Key in($assocProject)";
+$stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
+// $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_assoc_proj['RI_Nm]; 			
+// echo "<br>" . $sql_risk_issue_assoc_proj;
 
 ?>
 <!doctype html>
@@ -23,6 +87,7 @@
     <title>RePS Reporting - Cox Communications</title>
 
   <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>-->
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
@@ -31,6 +96,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
 
+  
 
 <script language="JavaScript">
 function toggle(source) {
@@ -43,7 +109,7 @@ function toggle(source) {
 <style>
     .box {
     border: 1px solid #BCBCBC;
-	background-color: #ffffff;
+	  background-color: #ffffff;
     border-radius: 5px;
     padding: 5px;
     }
@@ -54,7 +120,7 @@ function toggle(source) {
 </style>
 
 </head>
-<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
+<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="myFunction(); date.value = frcstDt_temp.value">
 <main align="center">
   <!-- PROGRESS BAR -->
 <div class="container">       
@@ -90,21 +156,10 @@ function toggle(source) {
             </div>
   </div>
   <!-- END PROGRESS BAR -->
+
 <div align="center">
-<h2>PROJECT ISSUE</h2>
-Enter the details of your Project Risk
-	<!-- <table border="0" cellpadding="5">
-	  <tbody>
-		<tr>
-		  <td align="right" style="padding: 5px;">
-        	<a href="#" onclick="myFunction()" class="btn btn-primary">PROJECT RISK</a>
-    	  </td>
-		  <td align="left" style="padding: 5px;">
-        	<a href="#" onclick="myFunctionOff()" class="btn btn-primary">PROJECT ISSUE</a>
-      	  </td>
-		</tr>
-	  </tbody>
-	</table> -->
+  <h2>PROJECT RISK</h2>
+  Enter the details of your Project Risk
 </div>
 <div class="finePrint">
 <?php  
@@ -116,61 +171,60 @@ Enter the details of your Project Risk
 ?>
 </div>
 <div style="padding: 20px;">
-  <form action="confirm.php" method="post" id="projectRisk"  oninput="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
+  <form action="update-confirm.php" method="post" id="projectRisk">
 
-  <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
-  <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value="PRJI">
+  <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey;?>">
+  <input name="userId" type="hidden" id="userId " value="<?php echo $user_id; ?>">
+  <input name="formName" type="hidden" id="formName" value="PRJR">
   <input name="formType" type="hidden" id="formType" value="New">
-  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
-  <input name="RIType" type="hidden" id="RIType" value="Issue">
+  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $fscl_year; ?>">
+  <input name="RIType" type="hidden" id="RIType" value="Risk">
   <input name="RILevel" type="hidden" id="RILevel" value="Project">
-  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
-  <input name="RiskProbability" type="hidden" id="RiskProbability" value=""> 
-  <input name="Risk Relized" type="hidden" id="Risk Relized" value="0">
-  <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
-  <input name="RIName" type="hidden" id="RIName" value="">
-  <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
-
+  <input name="frcstDt_temp" type="hidden" id="frcstDt_temp" value="<?php if(!empty($date)){ echo convDate($date);} ?>">
+  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php //echo $assocProject; ?>">
+  <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $assocProject; ?>">
+ 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
-          <th width="50%" align="left">
-            <div id="">
+          <th colspan="3" align="left">
+            <div id="myRisk">
+              <h4 style="color: #00aaf5">PROJECT RISK</h4>
+              </div>
+            <div id="myIssue">
               <h4 style="color: #00aaf5">PROJECT ISSUE</h4>
-            </div>
-
+              </div>
+            
           </th>
-          <th colspan="2" align="left">&nbsp;</th>
-        </tr>
+          </tr>
         <tr>
           <td colspan="3" align="left">
 			<div class="box">
 			<table width="100%" border="0" cellpadding="10" cellspacing="10">
             <tbody>
-              <!--<tr>
+              <tr>
                 <td><div id="myDIV">
                   <label for="Created From">Created From</label>
                   <br>
                   <input name="CreatedFrom" type="text" class="form-control" id="Created From">
                 </div></td>
-              </tr> -->
+                </tr>
               <tr>
                 <td><label for="Created From">Name</label>
                   <br>
-                  <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >
-                  <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'] . " " . $row_projID['Sub_Prg'] . " " . $row_projID['EPSLocation_Cd'];?>">
-                  <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
+                  <input name="Namex" type="text" readonly class="form-control" id="Namex" value="<?php echo $name ?>" >
+                </td>
                 </tr>
               <tr>
-                <td><label for="Created From">Issue Descriptor<br>
+                <td><label for="Created From">Risk Descriptor<br>
                   </label>
-                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30"></td>
+                  <input name="Descriptor" type="text" class="form-control" id="Descriptor" maxlength="30" value="<?php echo $descriptor ?>" readonly>
+                </td>
                 </tr>
               <tr>
                 <td><label for="Description">Description<br>
             </label>
-            <textarea name="Description" cols="120" required="required" class="form-control" id="Description"></textarea>  </td>
+            <textarea name="Description" cols="120" required="required" class="form-control" id="Description"><?php echo $description ?></textarea>  </td>
                 </tr>
             </tbody>
           </table>
@@ -189,42 +243,42 @@ Enter the details of your Project Risk
               <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="checkbox" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
                     Budget/Funding</label></td>
                   <td width="49%"><label>
-                    <input type="checkbox" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
                     External</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
                     Communications Breakdown</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resources</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
                     Contractor</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
                     Procurement</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
                     Dependency Conflict</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
                     Schedule Impact</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
                     Equipment Integration</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
                     Other</label></td>
                   </tr>
                 </table>
@@ -235,9 +289,8 @@ Enter the details of your Project Risk
           <td colspan="3" align="left"></td>
         </tr>
         <tr>
-          <td align="left"><h4  style="color: #00aaf5">IMPACT</h4></td>
-          <td colspan="2" align="left">&nbsp;</td>
-        </tr>
+          <td colspan="3" align="left"><h4  style="color: #00aaf5">IMPACT</h4></td>
+          </tr>
         <tr>
           <td colspan="3" align="left">
 			<div class="box"> 
@@ -245,10 +298,10 @@ Enter the details of your Project Risk
             <tbody>
 
               <tr>
-                <td width="25%"></td>
-                <td width="25%"></td>
-                <td width="25%"></td>
-                <td width="25%"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
 
               <tr>
@@ -259,53 +312,79 @@ Enter the details of your Project Risk
                   </tr>
                   <tr>
                     <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
+                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
                       Scope</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
+                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){echo "checked";}?>>
                       Schedule</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required>
+                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required <?php if($impactArea2=="Budget (Cost Change)"){echo "checked";}?>>
                       Budget (Cost Change)</label></td>
                     </tr>
                   </table></td>
-                <td>
+                <td valign="top">
                   <table width="200" border="0">
                     <tr>
                       <strong>Impact Level</strong>
                     </tr>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required <?php if($impactLevel2=="Minor Impact"){echo "checked";}?>>
                         Minor Impact</label></td>
                       </tr>
                     <tr>
                       <td><label>
-                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required>
+                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required <?php if($impactLevel2=="Moderate Impact"){echo "checked";}?>>
                         Moderate Impact</label></td>
                       </tr>
                     <tr>
                       <td><label>
-                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required>
+                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required <?php if($impactLevel2=="Major Impact"){echo "checked";}?>>
                         Major Impact</label></td>
                       </tr>
                     <tr>
                       <td><label>
-                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required>
+                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required <?php if($impactLevel2=="No Impact"){echo "checked";}?>>
                         No Impact</label></td>
                       </tr>
                     
                     </table>
                   </td>
-                <td>
-        				</td>
-                <td>
-                
-				        </td>
+                <td colspan="2" valign="top">
+                  <div id="myDIV2">
+                    <table width="200" border="0">
+                      <tr>
+                        <td>
+                          <strong>Risk Probability Score</strong>
+                          </td>
+                        </tr>
+                      <!--<tr>
+                                <td><label>
+                                  <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="1" required>
+                                  0% - Risk Only</label></td>
+                              </tr>-->
+                      <tr>
+                        <td><label>
+                          <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="2" required <?php if($probability=="50% - 50/50 Chance"){echo "checked";}?>>
+                          50% 50/50 Chance</label></td>
+                        </tr>
+                      <tr>
+                        <td><label>
+                          <input type="radio" name="RiskProbability" value="3" id="ImpactLevel_1" required <?php if($probability=="75% - Highly Likely"){echo "checked";}?>>
+                          75% Highly Likely</label></td>
+                        </tr>
+                      <tr>
+                        <td><label>
+                          <input type="radio" name="RiskProbability" value="4" id="ImpactLevel_2" required <?php if($probability=="99% - Almost Certain"){echo "checked";}?>>
+                          99% Almost Certain</label></td>
+                        </tr>
+                      </table>
+                    </div>
+                </td>
                 </tr>
               </tbody>
           </table>
@@ -316,18 +395,15 @@ Enter the details of your Project Risk
           <td colspan="3" align="left"></td>
         </tr>
         <tr>
-          <td align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4></td>
-          <td colspan="2" align="left">
-			  
-		  </td>
-        </tr>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4></td>
+          </tr>
         <tr>
           <td colspan="3" align="left">
             <div class="box">
               <label for="Individual">Individual POC<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"  onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value="<?php echo $individual ?>" onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
               <datalist id="Individual">
                 <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                 <option><?php echo $row_internal['POC_Nm'] ?></option>
@@ -348,6 +424,13 @@ Enter the details of your Project Risk
           </td>
           </tr>
         <tr>
+
+          <td colspan="3" align="left">
+              
+          </td>
+
+          </tr>
+        <tr>
           <td colspan="3" align="left">&nbsp;</td>
         </tr>
         <tr>
@@ -356,43 +439,47 @@ Enter the details of your Project Risk
 			<table width="100%" border="0">
             <tbody>
               <tr>
-                <td colspan="2">
-				  <label for="date">Forecasted Resolution Date:</label>
+                <td colspan="3">
+				<label for="date">Forecasted Resolution Date</label>
 				  <div id="dateUnknown" >
-					<input name="date" 
+				  <input name="date" 
 					type="date"
 					class="form-control" 
 					id="date" 
-							value="2022-01-01"
-							onChange="forCasted()"  
+					value=""
+					onChange="forCasted()"  
 					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
 					oninput="this.setCustomValidity('')"	 
 					> 
-            	  </div>  
+              </div>  
 				</td>
                 </tr>
               <tr>
                 <td>
 				<div id="forcastedDate">
-				  <input type="checkbox" 
-					name="Unknown" 
-					id="Unknown" 
-					onChange="unKnown()"
-				  >
-				  <label for="Unknown">Unknown</label>
-				</div>  
+				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnown()" <?php if(empty($date)){ echo "checked"; } ?> >
+            <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label>
+          </div>  
 				</td>
-                <td><input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">
-          			<label for="TransfertoProgramManager">Transfer to Program Manager</label>
-				  </td>
+                <td>
+					<input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager" <?php if($transProgMan != 0){ echo "checked"; } ?>>
+					<label for="TransfertoProgramManager">Transfer to Program Manager</label>  
+				</td>
+                <td>&nbsp;</td>
               </tr>
             </tbody>
           </table>
-		  </div>
+			  </div>
 			</td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4>			  </td>
+          <td colspan="3" align="left"></hr></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left"></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left"><div class="box">
@@ -400,134 +487,102 @@ Enter the details of your Project Risk
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required>
+                  <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required <?php if($responseStrategy2=="Avoid" ) { echo "checked";} ?>>
                   Avoid</label></td>
                 </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required>
+                  <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required <?php if($responseStrategy2=="Mitigate" ) { echo "checked";} ?>>
                   Mitigate</label></td>
                 </tr>
               <tr>
                 <td width="16">&nbsp;</td>
                 <td width="195"><label>
-                  <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required>
+                  <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required <?php if($responseStrategy2=="Transfer" ) { echo "checked";} ?>>
                   Transfer</label></td>
                 </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required>
+                  <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required <?php if($responseStrategy2=="Accept" ) { echo "checked";} ?>>
                   Accept</label></td>
                 </tr>
-              <!--<tr>
-              <td>&nbsp;</td>
-              <td><label>
-                <input type="radio" name="ResponseStrategy" value="5" id="Response_Strategy_3" required>
-                Under Review</label></td>
-              </tr> -->
-              </table>
+            </table>
           </div>			</td>
         </tr>
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
           
           <div class="box">  
-
-            <!--<iframe 
-              src="includes/action-plans.php?uid=<?php //echo $_GET['uid'];?>&fiscal_year=<?php //echo $row_projID['FISCL_PLAN_YR'] ?>&tempid=<?php //echo $temp_id?>&username=<?php //echo $user_id ?>" 
-              height="200" 
-              width="1300" 
-              title="Associated Projects"  
-              frameBorder="0" 
-              scrolling="yes">
-            </iframe>		-->
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
                 
                   <tr>
                     <td width="100%">
                           
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea>  
+                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
                           <input type="hidden" name="user" value="<?php echo $user_id ?>">
-                          <input type="hidden" name="tempID"value="<?php echo $temp_id ?>">
+                          <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
                     </td>
                   </tr>
-                <!-- <tr>
-                  <td colspan="2" align="left">
-                  <strong>Action Plan Status Log</strong>  
-                    table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
-                    <tbody>
-                      <tr>
-                        <th width="24%" bgcolor="#EFEFEF">User</th>
-                        <th width="55%" bgcolor="#EFEFEF">Update</th>
-                        <th width="21%" bgcolor="#EFEFEF">Timestamp</th>
-                      </tr>
-                      <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </tbody>
-                    </table> 
-
-                  </td>
-                </tr> -->
+                
+                <tr>
+                  <td>.</td>
+                  <td></td>
+                </tr>
               </tbody>
-</table>
+            </table>
           <div>
 
           </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+            
+        </td>
         </tr>
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION</h4></td>
         </tr>
         <tr>
           <td colspan="3">
-        <div class="box">
-				<!--<iframe 
-            src="includes/associated_prj.php?uid=<?php echo $_GET['uid'];?>&fiscal_year=<?php echo $row_projID['FISCL_PLAN_YR'] ?>" 
-            height="300" 
-            width="1300" 
-            title="Associated Projects"  
-            frameBorder="0" 
-            scrolling="yes">
-        </iframe>	-->
-        <textarea name="assocProjects" cols="120" id="assocProjects" class="form-control" readonly><?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>
-          </textarea>  
+        <div class="box" align="left" style="font-size: 12px;">
+				    <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
         </div>
 		  </td>
         </tr>
 
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
-        <!-- <tr>
-          <td align="left">
-			<div class="box">
-			<table width="50%" border="0">
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td colspan="2"><strong>Risk Realized?</strong></td>
-              </tr>
-            <tr>
-              <td><label>
-                <input type="radio" name="Risk Relized" value="Yes" id="RiskRelized_0">
-                Yes</label></td>
-              <td><label>
-                <input type="radio" name="Risk Relized" value="No" id="RiskRelized_1" checked>
-                No</label></td>
-            </tr>
-          </table>
-	      </div>
-			  <br><br>
-          </td>
-          <td colspan="2" align="left">&nbsp;</td>
-          </tr> -->
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box">
+              <table width="50%" border="0">
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  </tr>
+                <tr>
+                  <td colspan="2"><strong>Risk Realized?</strong></td>
+                  </tr>
+                <tr>
+                  <td><label>
+                    <input type="radio" name="Risk Relized" value="Yes" id="RiskRelized_0">
+                    Yes</label></td>
+                  <td><label>
+                    <input type="radio" name="Risk Relized" value="No" id="RiskRelized_1" checked>
+                    No</label></td>
+                  </tr>
+                </table>
+              </div>
+			</td>
+          </tr>
+			  <tr>
+			  	<td width="50%">&nbsp;
+				</td>
+			  </tr>
         <tr>
           <td colspan="3" align="left">
             </td>
@@ -542,7 +597,7 @@ Enter the details of your Project Risk
             <tbody>
               <tr>
                 <td colspan="2">
-                  <label for="DateClosed">Closing Date:</label>
+                  <label for="DateClosed">Date Closed:</label>
                   <input type="date" name="DateClosed" id="DateClosed" class="form-control">
                   <!-- <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2"> -->
                   <!-- <label for="TransfertoProgramManager2">Transfer to Program Manager</label> -->
@@ -559,15 +614,8 @@ Enter the details of your Project Risk
           <td colspan="3" align="right" valign="middle">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="3" align="right" valign="middle"><input type="submit" name="submit" id="submit" value="Review" class="btn btn-primary">
-                  <?php if($action == "edit"){ ?>  
-                    <a href="" class="btn btn-primary">Email</a>
-                  <?php } else { ?>
-                    <a href="" class="btn btn-primary" disabled>Email</a>
-
-                  <?php } ?>
-                  
-                </td>
+          <td colspan="3" align="right" valign="middle"><input type="submit" name="submit" id="submit" value="Review >" class="btn btn-primary">                  
+          </td>
         </tr>
       </tbody>
     </table>
@@ -667,6 +715,7 @@ jQuery(function ($) {
     });
 });
 </script>
+
 <script>
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
@@ -687,6 +736,7 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   validateGrp()
 });
 </script>
+
 <script>
 var date = new Date();
 
@@ -697,14 +747,17 @@ var year = date.getFullYear();
 if (month < 10) month = "0" + month;
 if (day < 10) day = "0" + day;
 
-var today = year + "-" + month + "-" + day;
-
+var today = <?php if(is_null($date)) {echo ""; } else { echo json_encode(date_format($date,'Y-m-d'), JSON_HEX_TAG); } ?>
 
 document.getElementById('date').value = today;
 </script>
 
+<script>
+var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_encode(date_format($RIClosed_Dt,'Y-m-d'), JSON_HEX_TAG); } ?>
+
+document.getElementById('DateClosed').value = closeday;
+</script>
 
 </body>
 </html>
 	  
-  

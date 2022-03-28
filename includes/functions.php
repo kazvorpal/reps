@@ -43,6 +43,17 @@ if($_SERVER["HTTPS"] != "on")
 	
 	//convtimex("2019-09-23");
 	//convtimex("2019-09-23 08:05:06.310");
+
+// DATE FORMAT FOR RISK AND ISSUES
+
+	function  convDate($tx) {
+		if (is_null($tx)) {
+			echo '---';
+		} else { 
+			$riDate = date_format($tx, 'Y-m-d');
+			echo $riDate;
+		}
+	}
 	
 // DATE CONVERSION FOR DPR PHASE DATES
 

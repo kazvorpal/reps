@@ -1,8 +1,18 @@
 <?php 
 //DECLARE
 $windowsUser = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
-$program = $_GET['program'];
-$fsclYear = $_GET['fscl_year'];
+
+if(!empty($_GET['program'])){
+		$program = $_GET['program'];
+	} else {
+		$program = $_POST['program'];
+	}
+
+if(!empty($_GET['fscl_year'])){
+		$fsclYear = $_GET['fscl_year'];
+	} else {
+		$fsclYear = $_POST['fiscalYer'];
+	}
 
 //PROGRAM OWNERS
 $sql_winuser_prg = "SELECT *

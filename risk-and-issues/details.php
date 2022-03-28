@@ -8,27 +8,28 @@ $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
   
-$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue['Risk_Issue_Name']; 
-echo $sql_risk_issue;		
+//echo $sql_risk_issue;		
 
 //GET DRIVERS
-$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
-//$row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_driver['Driver_Nm]; 			
+// $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_driver['Driver_Nm]; 
+//echo $sql_risk_issue_driver;			
 
 //GET ASSOCIATED PROJECTS
 $ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, RI_Nm from RI_MGT.fn_GetListofassociatedProjectsForGivenRI('$ri_name')";
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, RI_Nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name')";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
-//$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_assoc_proj['RI_Nm]; 			
+// $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_assoc_proj['RI_Nm]; 		
 
 //DECLARE
-$name = $row_risk_issue['RI_Nm'];
+$name = trim($row_risk_issue['RI_Nm']);
 $RILevel = "";
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
@@ -40,6 +41,7 @@ $regionx = "";
 $Driversx = $row_risk_issue['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
+$riskProbability = $row_risk_issue['RiskProbability_Nm'];
 $individual = $row_risk_issue['POC_Nm'];
 $internalExternal = $row_risk_issue['POC_Nm'];
 $responseStrategy2 = $row_risk_issue['ResponseStrategy_Nm'];
@@ -49,7 +51,11 @@ $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = "";
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
-$dateClosed = "";
+$dateClosed = $row_risk_issue['RIClosed_Dt'];
+$driver_list = "";
+$ri_list = "";
+$uaccess = $_GET['au'];
+echo $driver_list;
 ?>
 <!doctype html>
 <html>
@@ -66,11 +72,12 @@ $dateClosed = "";
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;">
+<div id='dlist'></div> 
 	<div align="center"><h3>PROJECT RISKS & ISSUES DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
+
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
-    
 	<table class="table table-bordered table-striped table-hover" width="90%">
   <thead>
     <tr>
@@ -127,6 +134,12 @@ $dateClosed = "";
       <td>Impact Level</td>
       <td><?php echo $impactLevel2; ?></td>
     </tr>
+    <?php if(!empty($riskProbability)) {?>
+    <tr>
+      <td>Risk Probibility</td>
+      <td><?php echo $riskProbability; ?></td>
+    </tr>
+    <?php } ?>
     <tr>
       <td>POC Group/Name</td>
       <td><?php echo $individual; ?></td>
@@ -140,7 +153,7 @@ $dateClosed = "";
       <td><?php echo $responseStrategy2; ?></td>
     </tr>
     <tr>
-      <td>Task POC Date</td>
+      <td>Forecasted Resolution Date</td>
       <td>
         <?php if($unknown == "off"){
         echo $date; 
@@ -186,25 +199,41 @@ $dateClosed = "";
       <td>
         <?php 
         if($dateClosed == "NULL") {
-        echo "Open";
+          echo "Open";
         } else { 
-        echo $dateClosed;  
+          convtimex($dateClosed);  
         }
         ?>
     </td>
-    </tr>
+    </tr>   
   </tbody>
 </table>
+
 <div align="center">
-    <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
-    <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&proj_name=<?php echo $name?> &ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+      <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+      <?php if($uaccess =="true"){ ?>
+      <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+      <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
+      &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
+      %0D%0ARisk/Issue Name: <?php echo $name;?>
+      %0D%0AType: <?php echo $RIType?>
+      %0D%0AProject: <?php echo $project_nm?>
+      %0D%0AIssue Descriptor: <?php echo $descriptor ?>
+      %0D%0ADescription: <?php echo $description?>
+      %0D%0ADrivers: <?php echo $Driversx?>
+      %0D%0AImpact Area: <?php echo $impactArea2?>
+      %0D%0AImpact Level: <?php echo $impactLevel2?>
+      %0D%0APOC Group/Name: <?php echo $individual?>
+      %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
+      %0D%0AForecasted Resolution Date:: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; }?>
+      %0D%0AAssociated Projects: <?php echo $assocProject?>
+      %0D%0AAction Plan: <?php echo $actionPlan?>
+      %0D%0ADate Closed: <?php convtimex($dateClosed)?>
+      " 
+      class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+      <?php } ?>
+    </div>
+  </form>
 </div>
-</form>
-
-</div>
-<?php
-    //print_r($_POST);
-
-?>
 </body>
 </html>

@@ -9,13 +9,13 @@ $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
 $prog_name = $_GET['prg_nm'];
   
-$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue['Risk_Issue_Name']; 			
+//echo $row_risk_issue['Risk_Issue_Name']; 			
 
 //GET DRIVERS
-$sql_risk_issue_drivers = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key ";
+$sql_risk_issue_drivers = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key ";
 $stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
 //$row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue['Risk_Issue_Name']; 			
@@ -23,7 +23,7 @@ $stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
 
 //GET ASSOCIATED PROJECTS
 $ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, RI_Nm from RI_MGT.fn_GetListofassociatedProjectsForGivenRI('$ri_name')";
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, RI_Nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name')";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 //$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_assoc_proj['RI_Nm]; 			
@@ -121,9 +121,9 @@ $dateClosed = "";
       <td>Drivers</td>
       <td>
         <?php 
-        //while ($row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC)) {
-        //echo $row_risk_issue_driver['Driver_Nm'] . '<br>';
-        //}
+        while ($row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC)) {
+        echo $row_risk_issue_driver['Driver_Nm'] . '<br>';
+        }
         ?>
       </td>
     </tr>
@@ -144,7 +144,7 @@ $dateClosed = "";
       <td><?php echo $responseStrategy2; ?></td>
     </tr>
     <tr>
-      <td>Task POC Date</td>
+      <td>Forecasted Resolution Date</td>
       <td>
         <?php if($unknown == "off"){
         echo $date; 
@@ -201,6 +201,25 @@ $dateClosed = "";
 <div align="center">
     <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
     <input type="submit" name="submit2" id="submit2" value="Update" class="btn btn-primary" disabled>
+    <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
+      &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
+      %0D%0ARisk/Issue Name: <?php echo $name;?>
+      %0D%0AType: <?php echo $RIType?>
+      %0D%0AProject: <?php echo $prog_name ?>
+      %0D%0AIssue Descriptor: <?php echo $descriptor ?>
+      %0D%0ADescription: <?php echo $description?>
+      %0D%0ADrivers: <?php echo $Driversx?>
+      %0D%0AImpact Area: <?php echo $impactArea2?>
+      %0D%0AImpact Level: <?php echo $impactLevel2?>
+      %0D%0APOC Group/Name: <?php echo $individual?>
+      %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
+      %0D%0AForecasted Resolution Date: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; } ?>
+      %0D%0AAssociated Projects: <?php echo $assocProject?>
+      %0D%0AAction Plan: <?php echo $actionPlan?>
+      %0D%0ADate Closed: <?php echo $dateClosed?>
+      " 
+      class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+    </div>
 </div>
 </form>
 

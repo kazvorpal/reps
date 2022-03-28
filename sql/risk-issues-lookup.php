@@ -2,6 +2,11 @@
 // DECLARE
 
 // Entered Values
+$RiskAndIssue_Key = "";
+if(!empty($_POST['RiskAndIssue_Key'])){
+  $RiskAndIssue_Key = $_POST['RiskAndIssue_Key'];
+}
+
 $Drivers = implode(',', $_POST['Drivers']);
   $Driversx = $Drivers;
 
@@ -21,26 +26,35 @@ $formType = $_POST['formType']; // NEW OR DELETE
 $lrpYear = $_POST['fiscalYer']; // FISCAL YEAR OF THE PROJECT
 $riTypeCode = $_POST['RIType']; // RISK OR ISSUE
 $riLevel = $_POST['RILevel']; // PRJECT OR PROGRAM
-$name = trim($_POST['Namex']); // PROJECT NAME
 $createdFrom = $_POST['CreatedFrom']; // THE RISK THE ISSUE WAS CREATED FROM - FOR ISSUE ONLY
-$descriptor = $_POST['Descriptor'];  // DESCRIPTOR
+$descriptor = str_replace("'","",$_POST['Descriptor']);  // DESCRIPTOR
 $description = $_POST['Description']; 
 $impactArea = $_POST['ImpactArea']; 
 $impactLevel = $_POST['ImpactLevel']; 
 $riskProbability = $_POST['RiskProbability'];
+
+$assocProject = "";
+if(!empty($_POST['assocProjects'])){
 $assocProject = $_POST['assocProjects']; 
+}
+
 $actionPlan = $_POST['ActionPlan']; 
 $responseStrategy = $_POST['ResponseStrategy']; 
 $date = $_POST['date']; // FORCASTED RESOLUTION DATE
+
+$program = "";
+if(!empty($_POST['program'])){
+$program = $_POST['program'];
+}
 
 $programs = "";
 if(!empty($_POST['programs'])) {
 $programs = $_POST['programs'];
 }
 
-$dateClosed = 'NULL';
+$DateClosed = NULL;
 if (!empty($_POST['DateClosed'])) {
-$dateClosed = $_POST['DateClosed']; 
+$DateClosed = $_POST['DateClosed']; 
 }
 
 $unknown = 'off';
@@ -83,6 +97,20 @@ if ($individual == "") {
 } else {
   $poc = $individual;
 }
+
+$changeLogKey = $_POST['changeLogKey'];
+if(!empty($DateClosed)){
+$changeLogKey = 3;
+}
+
+//$name = $_POST['RIName'];
+//if($changeLogKey == 2){
+$name = trim(str_replace("'","",$_POST['Namex'])); // PROJECT NAME
+//}
+
+//echo $changeLogKey . " - ";
+//echo $DateClosed;
+
 
 // LOOKUP KEY VALUES 
 // IMPACT AREA

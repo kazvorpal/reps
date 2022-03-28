@@ -1,21 +1,22 @@
-<?php include ("../../includes/functions.php");?>
-<?php include ("../../db_conf.php");?>
-<?php include ("../../data/emo_data.php");?>
-<?php // include ("../sql/collapse.php");?>
-<?php include ("../../sql/project_by_id.php");?>
-<?php include ("../../sql/ri_filter_vars.php");?>
-<?php include ("../../sql/ri_filters.php");?>
-<?php include ("../../sql/ri_filtered_data.php");?>
-<?php // include ("../../sql/RI_Internal_External.php");?>
-<?php // include ("../../sql/project_by_id.php");?>
-<?php
-      $uid = $_GET['uid'];
-      $ri_type = $_GET['ri_type'];
-      $action = $_GET['action'];
-      $fiscal_year =  $_GET['fiscal_year'];
-      $tempid =  $_GET['tempid'];
-      $ri_level = $_GET['ri_level'];
-      $ri_proj_name = $row_projID['PROJ_NM'];
+<?php 
+include ("../../includes/functions.php");
+include ("../../db_conf.php");
+include ("../../data/emo_data.php");
+include ("../../sql/project_by_id.php");
+include ("../../sql/ri_filter_vars.php");
+include ("../../sql/ri_filters.php");
+include ("../../sql/ri_filtered_data.php");
+
+//DECLARE
+$uid = $_GET['uid'];
+$ri_type = $_GET['ri_type'];
+$action = $_GET['action'];
+$fiscal_year =  $_GET['fiscal_year'];
+$tempid =  $_GET['tempid'];
+$ri_level = $_GET['ri_level'];
+$ri_proj_name = $row_projID['PROJ_NM'];
+//$RiskAndIssue_Key = $_GET['rikey'];
+
 ?>
 <!doctype html>
 <html>
@@ -138,8 +139,8 @@ function toggle(source) {
       ?>
     </h3>
 </div>
-<div align="center">Using Project: <?php echo $ri_proj_name; ?></div>
-<!-- <div align="center">Select any project associated with this Risk or Issue</div> --><br>
+<!-- <div align="center">Using Project: <?php // echo $ri_proj_name; ?></div> -->
+<!-- <div align="center">Select any project associated with this Risk or Issue</div> -->
   <form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
     <table align="center" cellpadding="0" cellspacing="0">
         <tbody>
@@ -217,7 +218,7 @@ function toggle(source) {
     <?php } elseif ($ri_type == "issue" && $ri_level == "prg"){ ?> 
       <form action="../program-issue.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>&tempid=<?php echo $tempid ?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
     <?php } ?>
-
+      <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select associated projects in addtion to the originating project.</div>
         <table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
                   <tbody>
                     <tr>
@@ -227,6 +228,14 @@ function toggle(source) {
                         <th bgcolor="#EFEFEF">Region</th>
                         <th bgcolor="#EFEFEF">Market</th>
                         <th bgcolor="#EFEFEF">Facility</th>
+                    </tr>
+                    <tr>
+                            <td bgcolor="#d9edf7"></td> <!-- NO CHECKBOX -->
+                            <td bgcolor="#d9edf7"><?php echo $row_ri['PROJ_NM'] ?> [ORIGINATING PROJECT]</td>
+                            <td bgcolor="#d9edf7"><?php echo $row_ri['PRGM'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_ri['Region'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_ri['Market'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_ri['Facility'] ?></td>
                     </tr>
                     <?php while($row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC)) { ?>
                         <tr>
@@ -241,10 +250,11 @@ function toggle(source) {
                   </tbody>
         </table>
         <div align='center'> 
+          
           <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Next >" class="btn btn-primary"> 
         </div>
     </form>
-			    <?php 
+			    <?php //WHY IS THIS HERE?
           if(!empty($_POST['proj_select'])) {
           $assProjects = implode(',', $_POST['proj_select']);
           }
