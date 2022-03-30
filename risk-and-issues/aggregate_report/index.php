@@ -547,6 +547,7 @@ $(function () {
   const makesafe = (target) => target.replace(/\s/g,'');
 
   const createrow = (name, risks, issues) => {
+    // Runs once per Program
     const safename = makesafe(name);
     const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
