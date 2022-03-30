@@ -20,11 +20,6 @@ $serverName_COX_QA = "CATL0QWDB10005\EMOQA";
 $connectionInfo_COX_QA = array("Database"=>"$db_nm3", "UID"=>"$db_uid", "PWD"=>"$decrypted");
 $conn_COX_QA = sqlsrv_connect( $serverName_COX_QA, $connectionInfo_COX_QA);
 
-        // GLOBAL DATA CONNECTION
-        //$conn = Dev Database
-        //$conn_COXProd= Prodiction Database
-        //$conn_COX_QA = QA Database
-
         // list of server urls for different data connections
 $serverlist = (array) [
     "catl0dwas11209.corp.cox.com" => $conn,
@@ -32,6 +27,11 @@ $serverlist = (array) [
     "catl0dwas11208.corp.cox.com" => $conn_COXProd,
     "catl0dwas10222.corp.cox.com" => $conn_COX_QA
 ];
+
+        // GLOBAL DATA CONNECTION
+        //$conn = Dev Database
+        //$conn_COXProd= Prodiction Database
+        //$conn_COX_QA = QA Database
 
 $data_conn = $serverlist[$_SERVER['HTTP_HOST']]; //<--CHANGE THIS TO SWITCH CONNECTIONS
         //Uncomment the below line and change to a specific connection to override.

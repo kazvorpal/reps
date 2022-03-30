@@ -529,11 +529,9 @@ $(function () {
   const mangerlist = <?= $mangerout ?>;
   const p4plist = <?= $p4pout ?>;
   
-  // console.log(ridata);
   const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
   const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
-  // console.log(ridata)
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Takes a program name and returns the row object
