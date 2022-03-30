@@ -13,13 +13,16 @@
 								//FIND PROJECT RISK AND ISSUES 	
 								$sql_risk_issue = "select distinct RI_Nm, ImpactLevel_Nm, Last_Update_Ts, RIDescription_Txt, RiskAndIssue_Key, RIType_Cd
                 from
-                (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProgram] ($ri_fscl_yr,'$ri_program')
+                (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($ri_fscl_yr,'$ri_program')
                 ) a
                 ORDER BY RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
                 
                 $authUser = strtolower($windowsUser);
-                $alias = strtolower($row_winuser_prg['User_UID']);
+                $alias = "";
+                  if(!empty($row_winuser_prg['User_UID'])) {
+                  $alias = strtolower($row_winuser_prg['User_UID']);
+                  }
                 $tempID = uniqid();
 								//$row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 

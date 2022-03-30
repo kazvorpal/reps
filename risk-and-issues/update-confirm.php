@@ -2,9 +2,25 @@
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
-include("../sql/risk-issues-lookup.php");
-?>
+include("../sql/risk-issues-lookup.php"); 
 
+//ASSOCIATED RISK AND ISSUES FROM KEYS
+//$ri_name = $row_risk_issue['RI_Nm'];
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
+                              from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name')
+                              where RiskAndIssue_Key in($RiskAndIssue_Key)";
+$stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
+// $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_assoc_proj['RI_Nm]; 			
+// echo "<br>" . $sql_risk_issue_assoc_proj;
+
+//GET DRIVERS FROM ID'S
+$sql_risk_issue_driver = "SELECT * FROM [COX_Dev].[RI_MGT].[Driver] where Driver_Key in ($Driversx)";
+$stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
+// $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_driver['Driver_Nm]; 			
+//echo $sql_risk_issue_driver;
+?>
 <!doctype html>
 <html>
 <head>
@@ -58,9 +74,10 @@ include("../sql/risk-issues-lookup.php");
 	<div align="center"><h3>Confirm Risk or Issue</h3></div>
 	<div align="center">Please review your risk or issue.  If you need to make an update, use the Edit button below.</div>
 	<div style="padding: 20px" class="alert">  </div>
-  <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
-    <input name="changeLogKey" type="hidden" id="changeLogKey " value="<?php echo $changeLogKey ?>">
-    <input name="userId" type="hidden" id="userId " value="<?php echo $userId ?>">
+  <form action="update-do.php" method="post" name="confirmation" id="confirmation">
+
+    <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 4 update, 3 close, 2 create, 1 initialize -->
+    <input name="userId" type="hidden" id="userId" value="<?php echo $userId ?>">
     <input name="formName" type="hidden" id="formName" value="<?php echo $formName ?>">
     <input name="formType" type="hidden" id="formType" value="<?php echo $formType ?>">
     <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $fiscalYer ?>">
@@ -83,7 +100,7 @@ include("../sql/risk-issues-lookup.php");
     <input name="unknown" type="hidden" id="unknown" value="<?php echo $unknown ?>">
     <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?php echo $transfer2prgManager ?>">
     <input name="opportunity" type="hidden" id="opportunity" value="<?php echo $opportunity?>">
-    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
+    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $RiskAndIssue_Key ?>">
     <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo $actionPlan ?>">
     <input name="DateClosed" type="hidden" id="DateClosed" value="<?php echo $DateClosed ?>">
     <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">
@@ -113,10 +130,6 @@ include("../sql/risk-issues-lookup.php");
     </tr>
 <?php } ?>
     <tr>
-      <td>Program</td>
-      <td><?php echo $program ; ?></td>
-    </tr>
-    <tr>
     <tr>
       <td>Descriptor</td>
       <td><?php echo $descriptor ; ?></td>
@@ -134,7 +147,9 @@ include("../sql/risk-issues-lookup.php");
     <tr>
     <tr>
       <td>Drivers</td>
-      <td><?php echo $Drivers_conx; ?></td>
+      <td>
+      <?php while ($row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_driver['Driver_Nm'] . '<br>'; } ?>
+      </td>
     </tr>
     <tr>
       <td>Impact Area</td>
@@ -188,8 +203,8 @@ include("../sql/risk-issues-lookup.php");
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects</td>
-      <td><?php echo $assocProject; ?>
+      <td>Associated Risk/Issue</td>
+      <td><?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
     </td>
     </tr>
     <tr>

@@ -35,14 +35,14 @@ $stmt_por = sqlsrv_query( $data_conn, $sql_por );
       <th bgcolor="#337AB7"><div align="center">REGION</div></th>
       <th bgcolor="#337AB7"><div align="center">MARKET</div></th>
       <th bgcolor="#337AB7"><div align="center">FACILITY</div></th>
+	  <th bgcolor="#337AB7">WATTS MO</th>
       <th bgcolor="#337AB7">ORACLE CODE</th>
-      <th bgcolor="#337AB7">WATTS MO</th>
-      <!-- <th ><strong>ORACLE CODE</strong></th> -->
-      <!-- <th ><strong>ORACLE START</strong></th> -->
-      <!-- <th ><strong>ORACLE END</strong>< -->
+      <th bgcolor="#337AB7">ORACLE START</th>
+      <th bgcolor="#337AB7">ORACLE END</th>
       <!-- <th ><strong>WATTS MO</strong></th> -->
       <th bgcolor="#337AB7"><div align="center">STAGE</div></th>
 	  <th bgcolor="#337AB7"><div align="center">RELEASED DT</div></th>
+	  <th bgcolor="#337AB7"><div align="center">PROJECT % COMPLETE</div></th>
 	  <!--<th bgcolor="#337AB7"><div align="center">POR NEED BY DATE</div></th>-->
       <!--<th bgcolor="#337AB7"><div align="center">POR ACTIVATION DATE</div></th>-->
       <!--<th bgcolor="#337AB7"><div align="center">POR MIGRATION DATE</div></th>-->
@@ -426,8 +426,10 @@ $stmt_por = sqlsrv_query( $data_conn, $sql_por );
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Region']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Market']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Facility']);?></td>
+	  <td style="padding:2px"><?php echo wattsRepl($row_program_n['WATTS_MO']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['OracleProject_Cd']);?></td>
-      <td style="padding:2px"><?php echo wattsRepl($row_program_n['WATTS_MO']);?></td>
+      <td style="padding:2px"><?php convtimex($row_program_n['OracleProjectStart_Dt']);?></td>
+	  <td style="padding:2px"><?php convtimex($row_program_n['OracleProjectEnd_Dt']);?></td>
       <td style="padding:2px" bgcolor="<?php pcntComp($row_program_n['PrjComplete_Pct'], $row_program_n['PHASE_NAME']);?>" >
           <div align="center">
           	<?php 
@@ -441,11 +443,11 @@ $stmt_por = sqlsrv_query( $data_conn, $sql_por );
             ?>
           </div>
       </td>
-	  <td><?php if($row_program_n['PHASE_NAME'] == "03 - Released") {
+	  <td><?php if($row_program_n['PHASE_NAME'] == "03 Released") {
 		  	echo convtimeDPR($row_program_n['Released_Dt']) ;
 	  		}?>
-			</td>
-	  
+	  </td>
+	  <td style="padding:2px" align="center"><?php echo prcnt($row_program_n['PrjComplete_Pct']);?></td>
       <!--3/1 POR Fields Added-->
 	  <!--<td style="padding:2px" align="center"><?php // echo convtimeDPR($row_program_n['POR_Needby_Dt']);?></td>-->
       <!--<td style="padding:2px" align="center"><?php // echo convtimeDPR($row_program_n['POR_Migration_Dt']);?></td>-->

@@ -3,9 +3,6 @@
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/project_by_id.php");?>
-<?php include ("../sql/ri_filter_vars.php");?>
-<?php include ("../sql/ri_filters.php");?>
-<?php include ("../sql/ri_filtered_data.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
   $action = $_GET['action']; //new
@@ -112,12 +109,15 @@ function toggle(source) {
 <div style="padding: 20px;">
   <form action="confirm.php" method="post" id="projectRisk"  oninput="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
 
-  <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value="PRJR">
-  <input name="formType" type="hidden" id="formType" value="New">
-  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
-  <input name="RIType" type="hidden" id="RIType" value="Risk">
-  <input name="RILevel" type="hidden" id="RILevel" value="Project">
+    <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
+    <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
+    <input name="formName" type="hidden" id="formName" value="PRJR">
+    <input name="formType" type="hidden" id="formType" value="New">
+    <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
+    <input name="RIType" type="hidden" id="RIType" value="Risk">
+    <input name="RILevel" type="hidden" id="RILevel" value="Project">
+    <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
+    <input name="RIName" type="hidden" id="RIName" value="">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -377,7 +377,7 @@ function toggle(source) {
             <tbody>
               <tr>
                 <td colspan="3">
-				<label for="date">Task POC Date:</label>
+				<label for="date">Forecasted Resolution Date:</label>
 				  <div id="dateUnknown" >
 				  <input name="date" 
 					type="date"
@@ -462,15 +462,6 @@ function toggle(source) {
           <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
           
           <div class="box">  
-
-            <!--<iframe 
-              src="includes/action-plans.php?uid=<?php //echo $_GET['uid'];?>&fiscal_year=<?php //echo $row_projID['FISCL_PLAN_YR'] ?>&tempid=<?php //echo $temp_id?>&username=<?php //echo $user_id ?>" 
-              height="200" 
-              width="1300" 
-              title="Associated Projects"  
-              frameBorder="0" 
-              scrolling="yes">
-            </iframe>		-->
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
                 
@@ -487,26 +478,7 @@ function toggle(source) {
                   <td>.</td>
                   <td></td>
                 </tr>
-                <!-- <tr>
-                  <td colspan="2" align="left">
-                  <strong>Action Plan Status Log</strong>  
-                    table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
-                    <tbody>
-                      <tr>
-                        <th width="24%" bgcolor="#EFEFEF">User</th>
-                        <th width="55%" bgcolor="#EFEFEF">Update</th>
-                        <th width="21%" bgcolor="#EFEFEF">Timestamp</th>
-                      </tr>
-                      <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </tbody>
-                    </table> 
 
-                  </td>
-                </tr> -->
               </tbody>
 </table>
           <div>
@@ -524,22 +496,8 @@ function toggle(source) {
         <tr>
           <td colspan="3">
         <div class="box" align="left">
-				<!-- <iframe 
-            src="includes/associated_prj.php?uid=<?php echo $_GET['uid'];?>&fiscal_year=<?php echo $row_projID['FISCL_PLAN_YR'] ?>" 
-            height="300" 
-            width="1300" 
-            title="Associated Projects"  
-            frameBorder="0" 
-            scrolling="yes">
-        </iframe>	 -->
-
-          
-          <!-- <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >-->
-
           <textarea name="assocProjects" cols="120" id="assocProjects" class="form-control" readonly><?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>
-          </textarea> 
-          <!-- <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea>  -->
-
+          </textarea>
         </div>
 		  </td>
         </tr>
@@ -590,8 +548,6 @@ function toggle(source) {
                 <td colspan="2">
                   <label for="DateClosed">Date Closed:</label>
                   <input type="date" name="DateClosed" id="DateClosed" class="form-control">
-                  <!-- <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2"> -->
-                  <!-- <label for="TransfertoProgramManager2">Transfer to Program Manager</label> -->
                 </td>
                 </tr>
               <tr>

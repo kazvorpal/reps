@@ -1,46 +1,60 @@
-<?php include ("../../includes/functions.php");?>
-<?php include ("../../db_conf.php");?>
-<?php include ("../../data/emo_data.php");?>
-<?php // include ("../sql/collapse.php");?>
-<?php //include ("../../sql/project_by_id.php");?>
-<?php //include ("../../sql/ri_filter_vars.php");?>
-<?php //include ("../../sql/ri_filters.php");?>
-<?php //include ("../../sql/ri_filtered_data.php");?>
-<?php // include ("../../sql/RI_Internal_External.php");?>
-<?php // include ("../../sql/project_by_id.php");?>
-<?php
+<?php 
+include ("../../includes/functions.php");
+include ("../../db_conf.php");
+include ("../../data/emo_data.php");
+
       //$uid = $_GET['uid'];
       $ri_type = $_GET['ri_type'];
       //$action = $_GET['action'];
-      //$fiscal_year =  $_GET['fiscal_year'];
+      //$fiscal_year =  $_GET['fscl_year'];
       //$tempid =  $_GET['tempid'];
       $ri_level = $_GET['ri_level'];
       $ri_proj_name = $_GET['proj_name'];
+      $rikey = 
 
-      //FIND PROJECT RISK AND ISSUES 1.26.2022
+
+//FIND PROJECT RISK AND ISSUES 1.26.2022
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
+$name = $_GET['name'];
   
-$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue['Risk_Issue_Name']; 
-echo $sql_risk_issue;		
+//$row_risk_issue['columnName'];
+
+//RI ROW COUNT
+$sql_riRows = "SELECT COUNT(*) as ttlRows
+               FROM (
+                select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
+                from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name') 
+                where RI_Nm != '$name') a ";
+$stmt_riRows = sqlsrv_query( $data_conn, $sql_riRows);
+$row_riRows = sqlsrv_fetch_array($stmt_riRows, SQLSRV_FETCH_ASSOC);
+//echo $row_riRows['ttlRows'];
+//echo $sql_riRows;
+
 
 //GET DRIVERS
-$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
-//$row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+// $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 			
+
+//GET DRIVERS LIST 
+$sql_ri_driver_lst = "select Driver_Nm from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
+// $row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC);
+// echo $row_ri_driver_lst['Driver_Nm]; 			
 
 //GET ASSOCIATED PROJECTS
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = " RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListofassociatedProjectsForGivenRI('$ri_proj_name')";
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name') where RI_Nm != '$name' ";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
-//$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+// $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 			
-echo "<br>" . $sql_risk_issue_assoc_proj;
+//echo "<br>" . $sql_risk_issue_assoc_proj;
 
 //DECLARE
 $name = $row_risk_issue['RI_Nm'];
@@ -65,7 +79,12 @@ $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = "";
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $dateClosed = "";
-?>
+
+if($_GET['ri_type'] == "Risk"){
+  $gotoPage = "../project-risk-update.php";
+} else {
+  $gotoPage = "../project-issue-update.php";
+}
 ?>
 <!doctype html>
 <html>
@@ -146,7 +165,7 @@ function toggle(source) {
                   <div class="text-center bs-wizard-stepnum">STEP 1</div>
                   <div class="progress"><div class="progress-bar"></div></div>
                   <a href="#" class="bs-wizard-dot"></a>
-                  <div class="bs-wizard-info text-center">Select Related Risk/Issue</div>
+                  <div class="bs-wizard-info text-center">Select Associated Risks/Issues</div>
                 </div>
                 
                 <div class="col-xs-3 bs-wizard-step disabled"><!-- complete -->
@@ -177,39 +196,57 @@ function toggle(source) {
     <h3>
       <?php
       if($ri_type == "Risk" && $ri_level == "prj"){
-        echo "UPDATE PROJECT RISK";
-      } elseif ($ri_type == "RISK" && $ri_level == "prg"){
-        echo "UPDATE PROGRAM RISK";
+        echo "ASSOCIATED PROJECT RISKS";
+      } elseif ($ri_type == "RISKS" && $ri_level == "prg"){
+        echo "ASSOCIATED PROGRAM RISKS";
       } elseif ($ri_type == "Issue" && $ri_level == "prj"){
-        echo "UPDATE POJECT ISSUE";
+        echo "ASSOCIATED POJECT ISSUES";
       } else {
-        echo "UPDATE PROGRAM ISSUE";
+        echo "ASSOCIATED PROGRAM ISSUES";
       }
       ?>
     </h3>
 </div>
-<div align="center">Updating Project: <?php echo $ri_proj_name; ?></div>
+<div align="center"><?php echo $name; ?></div>
+
 <!-- <div align="center">Select any project associated with this Risk or Issue</div> --><br>
+<form action="<?php echo $gotoPage; ?>" method="post" class="navbar-form navbar-center" id="assProjects" title="assProjects">
+<input type="hidden" name="rikey" value="<?php echo $_GET['rikey']; ?>">
+<input type="hidden" name="fscl_year" value="<?php echo $_GET['fscl_year']; ?>">
+<input type="hidden" name="proj_name" value="<?php echo $_GET['proj_name']; ?>">
+<input type="hidden" name="name" value="<?php echo $name;?>">
+<input type="hidden" name="drivertime" value="<?php while ($row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC)) { echo $row_ri_driver_lst['Driver_Nm'] . ','; } ?>">
+
+<?php if($row_riRows['ttlRows'] > 0) { ?>
+  <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select Associated <?php echo $row_risk_issue['RIType_Cd']?>(s) in addtion to the originating project.</div>
 <table class="table table-bordered table-striped table-hover" width="90%">
   <tr>
-    <th><input type="checkbox"></th>
+    <th><input type="checkbox" name="checkbox" id="checkbox" onClick="toggle(this)"></th>
     <th>Risk/Issues Name</th>
     <th>Description</th>
-    <th>Discriptor</th>
     <th>Action Plan</th>
+  </tr>
+  <tr>
+    <td></td> <!-- NO CHECKBOX -->
+    <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RI_Nm']; ?> [ORIGINATING R/I]</td>
+    <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
+    <td bgcolor="#d9edf7"><?php echo $row_risk_issue['ActionPlanStatus_Cd']; ?></td>
   </tr>
   <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { ?>
   <tr>
-    <td><input type="checkbox"></td>
+    <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_risk_issue_assoc_proj['RiskAndIssue_Key'];?>"></td>
     <td><?php echo $row_risk_issue_assoc_proj['RI_Nm'];?></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td><?php echo $row_risk_issue_assoc_proj['RIDescription_Txt'];?></td>
+    <td><?php echo $row_risk_issue_assoc_proj['ActionPlanStatus_Cd'];?></td>
   </tr>
   <?php } ?>
 </table>
-<form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
+<?php } else { echo "<div align='center' class='alert alert-info'>There are no Associate Risks/Issues related to " . $name . "<div><br><br>"; }?>
 
+<div align='center'> 
+  <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+  <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Next >" class="btn btn-primary"> 
+</div>
 </form>
 			  
 </body>

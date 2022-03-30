@@ -11,10 +11,12 @@
 									
 								$sql_risk_issue = "select distinct RI_Nm, ImpactLevel_Nm, Last_Update_Ts, RIDescription_Txt, RiskAndIssue_Key, RIType_Cd
                 from
-                (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForProject] ($fscl_year,'$proj_name')
+                (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject] ($fscl_year,'$proj_name')
                 ) a";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
-								// echo $row_risk_issue['Risk_Issue_Name']; 			
+								// echo $row_risk_issue['Risk_Issue_Name']; 	
+                //echo $sql_risk_issue;
+                //exit();		
 								
                 // CHECK IF THE USER AND OWNER MATCH
                 $ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
@@ -30,8 +32,16 @@
 								$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
                 $row_authorize = sqlsrv_fetch_array( $stmt_authorize, SQLSRV_FETCH_ASSOC);
 
+                $authorized = "";
+                if(!is_null($row_authorize)) {
                 $authorized = $row_authorize['PROJ_OWNR_NM'];
+                }
                 
+                //ACCESS 
+                if($authorized != ''){ 
+                  $access = "true";
+                } else { 
+                  $access = "false";}
                 //PRINT USER SQL TO SCREEN FOR DEBUG
                 //echo $sql_authorize;
                 
@@ -47,7 +57,7 @@
 <body style="font-family:Mulish, serif;">
 
 <h3 align="center">PROJECT RISKS & ISSUES</h3>
-
+<h4 align="center"><?php echo  $proj_name ?></h4>
 <!--<div align="center" class="alert alert-success" style="font-size:10px;">
 <h5>FOR DEV ONLY</h5>
 CC-Alias from users table <?php echo $alias; //from users table?><br>
@@ -82,6 +92,7 @@ ProjectID: <?php echo $projID?>
 
 <br>
 <?php if($_GET['count'] == 0){ //TURNED OFF.  SHOULD BE != 0 ?>
+<div class="alert alert-success"><b>OPEN RISK & ISSUES</b></div>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
     <tr cellpadding="5px">
@@ -99,7 +110,7 @@ ProjectID: <?php echo $projID?>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
       <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
       <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
-      <td align="center"><a href="risk-and-issues/details.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>"><span class="glyphicon glyphicon-eye-open" style="font-size:12px;"></span></a></td>
+      <td align="center"><a href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>"><span class="glyphicon glyphicon-eye-open" style="font-size:12px;"></span></a></td>
     </tr>
     <?php } ?>
   </tbody>
@@ -107,6 +118,31 @@ ProjectID: <?php echo $projID?>
 <?php } else { ?>
 There are no Project Risk or Issues found
 <?php }?>
+</div>
+<!-- <div>
+<div align="center" class="alert alert-success"><b>CLOSED RISK & ISSUES</b></div>
+<table width="98%" border="0" class="table table-bordered table-striped table-hover">
+  <tbody>
+    <tr cellpadding="5px">
+      <th><strong>Project Risk or Issue Name</strong></th>
+      <th><strong>Type</strong></th>
+      <th><strong>Description</strong></th>
+      <th><strong>Impact</strong></th>
+      <th><strong>Created On</strong></th>
+      <th align="center"><strong>Details</strong></th>
+    </tr>
+    <?php //while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
+    <tr>
+      <td><?php //echo $row_risk_issue['RI_Nm']; ?></td>
+      <td><?php// echo $row_risk_issue['RIType_Cd']; ?></td>
+      <td><?php //echo $row_risk_issue['RIDescription_Txt']; ?></td>
+      <td><?php //echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
+      <td><?php //echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
+      <td align="center"><a href="risk-and-issues/details.php?au=<?php //echo $access?>&rikey=<?php //echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php //echo $fscl_year;?>&proj_name=<?php //echo $proj_name;?>"><span class="glyphicon glyphicon-eye-open" style="font-size:12px;"></span></a></td>
+    </tr>
+    <?php //} ?>
+  </tbody>
+</table>-->
 </div>
 </body>
 </html>

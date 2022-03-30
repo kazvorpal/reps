@@ -105,6 +105,7 @@ function toggle(source) {
 <div style="padding: 20px;">
   <form action="confirm.php" method="post" id="programRisk" name="programRisk"  oninput="Namex.value = NameA.value +' '+NameB.value+' '+Descriptor.value+' '+NameC.value">
 
+  <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
   <input name="programs" type="hidden" id="programs" value="<?php echo $row_projID['PRGM'] ?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
   <input name="formName" type="hidden" id="formName" value="PRGI">
@@ -113,11 +114,12 @@ function toggle(source) {
   <input name="RIType" type="hidden" id="RIType" value="Issue">
   <input name="RILevel" type="hidden" id="RILevel" value="Program">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
-  <!--<input name="Descriptor" type="hidden" id="Descriptor" value="">-->
   <input name="CreatedFrom" type="hidden" id="Created From" value=''>
   <input name="TransfertoProgramManager" type="hidden" id="Created From" value="">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value=''>
   <input name="Risk Relized" type="hidden" id="Risk Relized" value="0">
+  <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
+  <input name="RIName" type="hidden" id="RIName" value=''>
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -526,9 +528,9 @@ function toggle(source) {
         </tr>
         <tr>
           <td align="left">
-          <div class="box">
+          <div class="box"><label for="date">Forecasted Resolution Date:</label>
           <div id="dateUnknown">
-              <label for="date">Task POC Date:</label>
+              
               <input name="date" 
                   type="date"
                   class="form-control" 
