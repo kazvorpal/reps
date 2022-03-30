@@ -32,6 +32,9 @@ $serverlist = (array) [
     "catl0dwas11208.corp.cox.com" => $conn_COXProd,
     "catl0dwas10222.corp.cox.com" => $conn_COX_QA
 ];
+
 $data_conn = $serverlist[$_SERVER['HTTP_HOST']]; //<--CHANGE THIS TO SWITCH CONNECTIONS
+//Uncomment the below line and change to a specific connection to override.
+// $data_conn = $conn; 
 
 ?>
