@@ -72,8 +72,8 @@ $config = [
      * The email address will be used as the recipient address for error reports, and
      * also as the technical contact in generated metadata.
      */
-    'technicalcontact_name' => 'Administrator',
-    'technicalcontact_email' => 'na@example.org',
+    'technicalcontact_name' => 'Kaz',
+    'technicalcontact_email' => 'kaz.michael@cox.com',
 
     /*
      * (Optional) The method by which email is delivered.  Defaults to mail which utilizes the
@@ -114,7 +114,7 @@ $config = [
      *
      * See this page for a list of valid timezones: http://php.net/manual/en/timezones.php
      */
-    'timezone' => null,
+    'timezone' => "America/New_York",
 
 
 
@@ -130,7 +130,7 @@ $config = [
      * A possible way to generate a random salt is by running the following command from a unix shell:
      * LC_CTYPE=C tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
      */
-    'secretsalt' => 'defaultsecretsalt',
+    'secretsalt' => 'kYsEjtrMmW2qFEkfbAzLQOphzioUMgnIh9gUQNP5L1o=',
 
     /*
      * This password must be kept secret, and modified from the default value 123.
@@ -138,7 +138,7 @@ $config = [
      * metadata listing and diagnostics pages.
      * You can also put a hash here; run "bin/pwgen.php" to generate one.
      */
-    'auth.adminpassword' => '123',
+    'auth.adminpassword' => 'RePS',
 
     /*
      * Set this options to true if you want to require administrator password to access the web interface

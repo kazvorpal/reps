@@ -545,7 +545,9 @@ $(function () {
   const makesafe = (target) => target.replace(/\s/g,'');
 
   const createrow = (name, risks, issues) => {
+
     // Runs once per Program
+
     const safename = makesafe(name);
     const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
@@ -559,35 +561,43 @@ $(function () {
     item.appendChild(banner);
     item.appendChild(collapse).appendChild(body).appendChild(table);
     document.getElementById("main").appendChild(item);
-    // document.getElementById("banner" + safename).onclick = toggler(document.getElementById("collapse" + safename));
 
     makeri(name, "Risk");
     makeri(name, "Issue");
   }  
 
+  
+  
+  
   const makebanner = (safename) => {
+    
+    // Program Start
+    
+    const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
     const banner = document.createElement("div");
     banner.id = "banner" + safename;
     banner.className = "accordion-banner";
-    banner.setAttribute("aria-labelledby", "banner" + safename);
-    banner.setAttribute("data-bs-target", "#collapse" + safename);
-    banner.setAttribute("data-target", "#collapse" + safename);
-    banner.setAttribute("data-toggle", "collapse");
+    console.log(bannerfields);
+    Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
     banner.ariaExpanded = true;
-    banner.setAttribute("aria-controls", "collapse" + safename);
     return banner;
   }  
 
   const makeri = (name, type) => {
+
+    // Create a Risk or Issue section
+
     program = getprogrambyname(name);
     if (
       (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
       (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm))
     ){
-      document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
       let lr = listri(name, type);
-      for (ri of lr) {
-        makedata(ri, type, name);  
+      if (lr.length != 0) {
+        document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
+        for (ri of lr) {
+          makedata(ri, type, name);  
+        }
       }
     }
   }    
@@ -595,16 +605,45 @@ $(function () {
   const rirow = ["Program_Nm", "Region_Cd", null, "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", 
                 function() {"ForecastedResolution_Dt"}];
 
-  const toggler = (target) => {
-    // Toggles visibility
-    (target != null)
-    target.className = (target.className.indexOf("show") == -1) ? target.className += "show" : target.className.replace("show", "");
+  const toggler = (target, o) => {
+    // Toggles visibility of projects when a given program is clicked
+    if (target != null) {
+      if (target.className.indexOf("show") != -1) {
+        target.className = target.className.replace("show", "");
+        o.children[0].innerHTML = "►";
+      } else { 
+        target.className += "show";
+        o.children[0].innerHTML = "▼";
+       }
+    }
   }
+  
+  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
+  
+  const fieldswitch = {
+    //    Specific fields that need extra calculation
+      mangerlist: function() {
+        const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
+        let mangers = [];
+        for (man of manger) {
+          mangers.push(man.User_Nm);
+        }  
+        return mangers.join().replace(",", ", ");
+      },
+      ForecastedResolution_Dt: function() {
+        const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
+        return fr;
+      },
+      RIOpen_Hours: function() {
+        return Math.floor(program.RIOpen_Hours/24);
+      }
+  };
 
   const makedata = (id, type, name) => {            
+
     // Make all the data inside a risk or issue
+
     const program = getprogrambykey(id, name);
-    // console.log(program)
     const safename = makesafe(program.Program_Nm);
     const saferi = makesafe(program.RI_Nm);
     if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
@@ -616,25 +655,17 @@ $(function () {
         "t": "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
         "c":"p-4 namebox"
       });
-      header.onclick = function() {toggler(document.getElementById("projects" + saferi))};
       const tridobj = document.getElementById(trid);
+      tridobj.onclick = function() {
+        toggler(document.getElementById("projects" + saferi), this.children[0]);
+      };
       tridobj.appendChild(header);
-      tridobj.appendChild(maketd(program.Program_Nm, "", "p-4 databox"));
-      tridobj.appendChild(maketd(program.Region_Cd, "", "p-4 databox"));
-      const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
-      let mangers = [];
-      for (man of manger) {
-        mangers.push(man.User_Nm);
-      }  
-      tridobj.appendChild(maketd(mangers.join().replace(",", ", "), "", "p-4 databox"));
-      tridobj.appendChild(maketd(program.RiskAndIssue_Key, "", "p-4 databox"));
-      tridobj.appendChild(maketd(program.ImpactLevel_Nm, "", "p-4 databox"));
-      tridobj.appendChild(maketd(program.ActionPlanStatus_Cd, "", "p-4 databox"));
-      const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
-      tridobj.appendChild(maketd(fr, "", "p-4 databox"));
-      tridobj.appendChild(maketd(program.POC_Nm, "", "p-4 databox"));
-      tridobj.appendChild(maketd(program.ResponseStrategy_Cd, "", "p-4 databox"));
-      tridobj.appendChild(maketd(Math.floor(program.RIOpen_Hours/24) + " days", "", "p-4 databox"));
+      for (field of datafields) {
+        (function(test) {
+          const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+          tridobj.appendChild(maketd(texter, "", "p-4 databox"));
+        })(field);
+      }
       makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
     }
   }    
@@ -646,18 +677,22 @@ $(function () {
     document.getElementById(tableid).appendChild(maketr("projects" + saferi, "panel-collapse collapse"));
     document.getElementById("projects" + saferi).appendChild(maketd("&nbsp;", "", ""));
     document.getElementById("projects" + saferi).appendChild(maketd("", "td" + saferi, "", 10));
-
-    const table = document.createElement("table");
-    table.id = "table" + saferi;
-    table.appendChild(projectheader());
-    document.getElementById("td" + saferi).appendChild(table);
-    for(project of projects) {
-      const tr = document.createElement("tr");
-      tr.id = "tr" + project.PROJECT_Key;
-      document.getElementById("table" + saferi).appendChild(tr);
-      for (field of projectfields) {
-        tr.appendChild(maketd(project[field], "", "p4 databox"));
+    if (projects.length != 0) {
+      const table = document.createElement("table");
+      table.id = "table" + saferi;
+      table.appendChild(projectheader());
+      document.getElementById("td" + saferi).appendChild(table);
+      for(project of projects) {
+        const tr = document.createElement("tr");
+        tr.id = "tr" + project.PROJECT_Key;
+        document.getElementById("table" + saferi).appendChild(tr);
+        for (field of projectfields) {
+          tr.appendChild(maketd(project[field], "", "p4 databox"));
+        }
       }
+    } else {
+      let empty = document.createTextNode("No Associated Projects");
+      document.getElementById("td" + saferi).appendChild(empty);
     }
   }  
 
@@ -676,8 +711,8 @@ $(function () {
     // Make the header row for a risk or issue
     
     const safename = makesafe(name);
-    const trri = makeelement({"e": "tr", "i": type + safename, "t": type+"s", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 headbox"}))
+    const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
+    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center"}))
     for (field of fieldlist) {
       trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}))
     }
@@ -840,6 +875,29 @@ const flipname = (name) => {
   //   console.log(document.getElementById("myDefaultNavbar1"));
   //   document.getElementById("myDefaultNavbar1").style.display = "block !important";
   // })
+
+        // fieldswitch(field);
+        // switch(field) {
+        //   case "mangerlist":
+        //     const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
+        //     let mangers = [];
+        //     for (man of manger) {
+        //       mangers.push(man.User_Nm);
+        //     }  
+        //     tridobj.appendChild(maketd(mangers.join().replace(",", ", "), "", "p-4 databox"));
+        //     break;
+        //   case "ForecastedResolution_Dt":
+        //     const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
+        //     tridobj.appendChild(maketd(fr, "", "p-4 databox"));
+        //     break;
+        //   case "RIOpen_Hours":
+        //     tridobj.appendChild(maketd(Math.floor(program.RIOpen_Hours/24) + " days", "", "p-4 databox"));
+        //     break;
+        //   default:
+        //     tridobj.appendChild(maketd(program[field], "", "p-4 databox"));
+        //     console.log(field);
+        // }
+
 
 </script>
 </html>
