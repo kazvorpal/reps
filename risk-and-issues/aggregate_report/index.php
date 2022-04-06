@@ -509,15 +509,15 @@ $(function () {
   $('.daterange').daterangepicker({
     autoUpdateInput: false,
       locale: {
-          cancelLabel: 'Clear'
+        cancelLabel: 'Clear'
       }
-  }); 
-  $('.daterange').on('apply.daterangepicker', function(ev, picker) {
+    }); 
+    $('.daterange').on('apply.daterangepicker', function(ev, picker) {
       $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
   });
   $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
       $(this).val('');
-  });
+    });
 </script>
 
 
@@ -529,29 +529,34 @@ $(function () {
   const mangerlist = <?= $mangerout ?>;
   const p4plist = <?= $p4pout ?>;
   
-  const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
   const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
-  // Takes a program name and returns the row object
-  const getprogrambyname = (target) =>  mlm = ridata.find(o => o.Program_Nm == target);
+  // Names of Data for program fields
+  const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
+  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
   
-  // Takes a program key and name and returns the row object
-  const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
-  
-  const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
-
-  const makesafe = (target) => target.replace(/\s/g,'');
+  const populate = (rilist) => {
+    const main = document.getElementById("main");
+    main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
+    console.log(rilist);
+    for (loop of rilist) {
+      // creates all the programs
+      if(loop != null) {
+        createrow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
+      }
+    }
+  }
 
   const createrow = (name, risks, issues) => {
-
+    
     // Runs once per Program
-
+    
     const safename = makesafe(name);
     const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
-
+    
     const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
     const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
     const table = makeelement({e: "table", i: "table" + safename, c: "table"});
@@ -566,9 +571,6 @@ $(function () {
     makeri(name, "Issue");
   }  
 
-  
-  
-  
   const makebanner = (safename) => {
     
     // Program Start
@@ -600,25 +602,7 @@ $(function () {
         }
       }
     }
-  }    
-
-  const rirow = ["Program_Nm", "Region_Cd", null, "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", 
-                function() {"ForecastedResolution_Dt"}];
-
-  const toggler = (target, o) => {
-    // Toggles visibility of projects when a given program is clicked
-    if (target != null) {
-      if (target.className.indexOf("show") != -1) {
-        target.className = target.className.replace("show", "");
-        o.children[0].innerHTML = "►";
-      } else { 
-        target.className += "show";
-        o.children[0].innerHTML = "▼";
-       }
-    }
   }
-  
-  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
   
   const fieldswitch = {
     //    Specific fields that need extra calculation
@@ -781,10 +765,33 @@ $(function () {
     return uni;
   }
   
+  // Takes a program name and returns the row object
+  const getprogrambyname = (target) =>  mlm = ridata.find(o => o.Program_Nm == target);
+  
+  // Takes a program key and name and returns the row object
+  const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
+  
+  const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
+  
+  // Sanitize a string
+  const makesafe = (target) => target.replace(/\s/g,'');
+  
+  const toggler = (target, o) => {
+    // Toggles visibility of projects when a given program is clicked
+    if (target != null) {
+      if (target.className.indexOf("show") != -1) {
+        target.className = target.className.replace("show", "");
+        o.children[0].innerHTML = "►";
+      } else { 
+        target.className += "show";
+        o.children[0].innerHTML = "▼";
+       }
+    }
+  }
+  
   const filtration = () => {
     // filter the programs list using the form
     let filtered = ridata.filter(function(o) {
-      // console.log((document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)));
       return (
           (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
@@ -811,38 +818,24 @@ $(function () {
     return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   }  
   
-  const dateformat = (target)  => {
-    // console.log(target)
-    return target.getDate() + "-" + (target.getMonth()+1) + "-" + target.getFullYear();
-  }
-
   const splitdate = (datestring) => {
-    // console.log(datestring);
     let newdate = datestring.split(" - ");
-    // console.log(typeof newdate[0])
     return newdate;
   }  
 
   const betweendate = (dates, tween) => {
-    // console.log(tween.date);
     spanner = splitdate(dates);
     let first = new Date(spanner[0]);
     let middle = new Date(tween);
     let last = new Date(spanner[1]);
-    // console.log(first);
-    // console.log((first) + ">");
-    // console.log((middle));
-    // console.log(">" + (last));
     return ((middle >= first && middle <= last))
   }  
-
 
 const flipname = (name) => {
   let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
   let ln = name.substring(0, name.indexOf(";"))
   return(fn + ln);
 }  
-
 
   const ranger = (daterange) => {
     // get start and end date from a date range set via Bootstrap date range picker
@@ -858,46 +851,7 @@ const flipname = (name) => {
     return false;
   }  
 
-  const populate = (rilist) => {
-    const main = document.getElementById("main");
-    main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
-    console.log(rilist);
-    for (loop of rilist) {
-      // creates all the programs
-      if(loop != null) {
-        createrow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
-      }
-    }
-  }
   populate(uniques);
-
-  // $("document").ready(function() {
-  //   console.log(document.getElementById("myDefaultNavbar1"));
-  //   document.getElementById("myDefaultNavbar1").style.display = "block !important";
-  // })
-
-        // fieldswitch(field);
-        // switch(field) {
-        //   case "mangerlist":
-        //     const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
-        //     let mangers = [];
-        //     for (man of manger) {
-        //       mangers.push(man.User_Nm);
-        //     }  
-        //     tridobj.appendChild(maketd(mangers.join().replace(",", ", "), "", "p-4 databox"));
-        //     break;
-        //   case "ForecastedResolution_Dt":
-        //     const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
-        //     tridobj.appendChild(maketd(fr, "", "p-4 databox"));
-        //     break;
-        //   case "RIOpen_Hours":
-        //     tridobj.appendChild(maketd(Math.floor(program.RIOpen_Hours/24) + " days", "", "p-4 databox"));
-        //     break;
-        //   default:
-        //     tridobj.appendChild(maketd(program[field], "", "p-4 databox"));
-        //     console.log(field);
-        // }
-
 
 </script>
 </html>
