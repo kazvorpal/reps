@@ -251,7 +251,7 @@ $(function () {
           padding:8px 16px;
         }
         .toppleat {
-          color: #0;
+          color: #000;
           background-color: #eee;
           text-align: left;
           padding: 8px 8px;
@@ -294,7 +294,7 @@ $(function () {
         }
         .databox {
           background-color: #d9d9d9;
-          color: #00;
+          color: #000;
           border: 1px solid #888;
           padding: 4px;
           cursor: default;
@@ -639,6 +639,7 @@ $(function () {
         "t": "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
         "c":"p-4 namebox"
       });
+      console.log(program.RI_Nm);
       const tridobj = document.getElementById(trid);
       tridobj.onclick = function() {
         toggler(document.getElementById("projects" + saferi), this.children[0]);
@@ -650,6 +651,8 @@ $(function () {
           tridobj.appendChild(maketd(texter, "", "p-4 databox"));
         })(field);
       }
+
+      console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
       makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
     }
   }    
@@ -666,12 +669,18 @@ $(function () {
       table.id = "table" + saferi;
       table.appendChild(projectheader());
       document.getElementById("td" + saferi).appendChild(table);
+      let p = [];
       for(project of projects) {
-        const tr = document.createElement("tr");
-        tr.id = "tr" + project.PROJECT_Key;
-        document.getElementById("table" + saferi).appendChild(tr);
-        for (field of projectfields) {
-          tr.appendChild(maketd(project[field], "", "p4 databox"));
+        console.log(project);
+        console.log("project.PROJECT_Key:" + project.PROJECT_key);
+        if (!p.includes(project.PROJECT_key)){
+          const tr = document.createElement("tr");
+          tr.id = "tr" + project.PROJECT_key;
+          document.getElementById("table" + saferi).appendChild(tr);
+          for (field of projectfields) {
+            tr.appendChild(maketd(project[field], "", "p4 databox"));
+          }
+          p.push(project.PROJECT_key);
         }
       }
     } else {
