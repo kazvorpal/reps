@@ -160,7 +160,7 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
       </select></td> -->
 
       <td><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary"></td>
-      <td><a href="/risk-and-issues/aggregate_report/" title="Clear all filters"><span class="btn btn-default">Clear</span></a></td>
+      <td><a href="#" title="Clear all filters"><span class="btn btn-default">Clear</span></a></td>
     </tr>
     <tr>
       <td>&nbsp;</td>

@@ -1,0 +1,92 @@
+.headbox {
+  background-color: #00aaf5;
+  color: #fff;
+  border-left: 1px solid #fff;
+  padding: 4px;
+  cursor: default;
+}
+.databox {
+  background-color: #d9d9d9;
+  color: #000;
+  border: 1px solid #888;
+  padding: 4px;
+  cursor: default;
+}
+.popover{
+    max-width:600px;
+}
+.header {
+  background-color: #00aaf5;
+  color: #fff;
+  font-size: large;
+  text-align: left;
+  padding:8px 16px;
+}
+.toppleat {
+  color: #000;
+  background-color: #eee;
+  text-align: left;
+  padding: 8px 8px;
+  cursor: pointer;
+  /* height: 36px; */
+}
+.accordion-button {
+  width: 25%;
+  float: right;
+}
+.a-proj {
+  color: #00f;
+  font-weight: 700;
+}
+.toppleat:nth-child(odd) {
+  background-color: #fff;
+}
+@media (max-width:1000px){
+
+  /* Menu BreakPoint */
+  .navbar-header {float: none;}
+  .navbar-left,.navbar-right {    float: none !important;}
+  .navbar-toggle {    display: block;}
+  .navbar-collapse {  border-top: 1px solid transparent;  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);}
+  .navbar-fixed-top {    top: 0;    border-width: 0 0 1px;}
+  .navbar-collapse.collapse { display: none!important;}
+  .navbar-nav {float: none!important; margin-top: 7.5px;}
+  .navbar-nav>li {float: none;}
+  .navbar-nav>li>a { padding-top: 10px;padding-bottom: 10px;}
+  .collapse.in{display:block !important;}
+  .navbar-nav .open .dropdown-menu { position: static; float: none; width: auto; margin-top: 0; background-color: transparent; border: 0; -webkit-box-shadow: none; box-shadow: none;}
+
+}
+.titles {
+  background-color: #bbb;
+  color: #000;
+  border-left: 1px solid #fff;
+  padding: 4px;
+  cursor: default;
+  text-align: left;
+}
+.datarow {
+    color: #000;
+    border: 1px solid #888;
+    background-color: #fff;
+    cursor: default;
+}
+.datarow:nth-child(even) {
+    background-color: #d9d9d9;
+}
+.datacell {
+    border: 1px solid #888;
+    padding: 4px;
+}
+.namebox {
+  background-color: #fff;
+  color: #00f;
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+.arrows {
+  color:black;
+  float:left;
+  height:100%;
+  padding:4px
+}

@@ -8,257 +8,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Program R&I Aggregate View</title>
-<link rel="shortcut icon" href="favicon.ico"/>
-<!-- <link 
-  rel="stylesheet"
-  href="/css/bootstrap.css" rel="nofollow"
-  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-  crossorigin="anonymous"
->
-<script 
-  src=”https://code.jquery.com/jquery-3.2.1.slim.min.js” 
-  integrity=”sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN” 
-  crossorigin=”anonymous”>
-</script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js 
-  integrity=”sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q” 
-  crossorigin=”anonymous”>
-</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity=”sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl” 
-  crossorigin=”anonymous”>
-</script> -->
-<?php include ("../../includes/load.php");
-
-function fixutf8($target) {
-  if (gettype($target) == "string")
-  return (utf8_encode($target));
-  else 
-  return ($target);
-}
-
-$sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
-ini_set('mssql.charset', 'UTF-8');
-$riquery = sqlsrv_query($data_conn, $sqlstr);
-if($riquery === false) {
-  if(($error = sqlsrv_errors()) != null) {
-    foreach($errors as $error) {
-      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-      echo "code: ".$error[ 'code']."<br />";
-      echo "message: ".$error[ 'message']."<br />";
-    }
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Program R&I Aggregate View</title>
+  <link rel="shortcut icon" href="favicon.ico"/>
+  <?php 
+  include ("../../includes/load.php");
+  function fixutf8($target) {
+    if (gettype($target) == "string")
+    return (utf8_encode($target));
+    else 
+    return ($target);
   }
-} else {
-  $rows = array();
-  $count = 1;
-  while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
-    $rows[] = array_map("fixutf8", $row);
-  }
-  
-  $p4plist = array();
-  foreach ($rows as $row)  {
-    if($row["ProgramRI_Key"] != '') {
-      $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
-      ini_set('mssql.charset', 'UTF-8');
-      $p4pquery = sqlsrv_query($data_conn, $sqlstr);
-      if($p4pquery === false) {
-        if(($error = sqlsrv_errors()) != null) {
-          foreach($errors as $error) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-            echo "message: ".$error[ 'message']."<br />";
-          }
-        }
-      } else {
-        $count = 1;
-        $p4prows = array();
-        $checker = 0;
-        while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
-          $p4prows[] = array_map("fixutf8", $p4prow);
-          $checker = 1;
-        }
-        // if ($checker == 0) {      
-        //   $p4prows[] = array(
-        //     "RiskAndIssue_Key" => $row["RiskAndIssue_Key"], 
-        //     "ProgramRI_Key" => $row["RiskAndIssue_Key"], 
-        //     "EPSProject_Nm"=>"EPS Project Placeholder", 
-        //     "PROJECT_Key"=>rand(1, 100), 
-        //     "Subprogram_nm"=>"Subprogram Placeholder", 
-        //     "Location_Key"=> 3, 
-        //     "EPS_Location_Cd"=>rand(1, 10), 
-        //     "EPSProject_Owner"=>"Elvis Presley"
-        //   );
-        // }
+
+  $sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
+  ini_set('mssql.charset', 'UTF-8');
+  $riquery = sqlsrv_query($data_conn, $sqlstr);
+  if($riquery === false) {
+    if(($error = sqlsrv_errors()) != null) {
+      foreach($errors as $error) {
+        echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+        echo "code: ".$error[ 'code']."<br />";
+        echo "message: ".$error[ 'message']."<br />";
       }
-      $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
     }
-  }
-  
-  $mangerlist = array();
-  foreach ($rows as $row)  {
-    if($row["ProgramRI_Key"] != '') {
-      $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
-      ini_set('mssql.charset', 'UTF-8');
-      $mangerquery = sqlsrv_query($data_conn, $sqlstr);
-      if($mangerquery === false) {
-        if(($error = sqlsrv_errors()) != null) {
-          foreach($errors as $error) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-            echo "message: ".$error[ 'message']."<br />";
+  } else {
+    $rows = array();
+    $count = 1;
+    while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
+      $rows[] = array_map("fixutf8", $row);
+    }
+    
+    $p4plist = array();
+    foreach ($rows as $row)  {
+      if($row["ProgramRI_Key"] != '') {
+        $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
+        ini_set('mssql.charset', 'UTF-8');
+        $p4pquery = sqlsrv_query($data_conn, $sqlstr);
+        if($p4pquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            foreach($errors as $error) {
+              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+              echo "code: ".$error[ 'code']."<br />";
+              echo "message: ".$error[ 'message']."<br />";
+            }
+          }
+        } else {
+          $count = 1;
+          $p4prows = array();
+          $checker = 0;
+          while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
+            $p4prows[] = array_map("fixutf8", $p4prow);
+            $checker = 1;
           }
         }
-      } else {
-        $count = 1;
-        $mangerrows = array();
-          while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
-            $mangerrows[] = array_map("fixutf8", $mangerrow);
-          }
-        }
-        $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
+        $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
       }
     }
     
-  $p4pout = json_encode($p4plist);
-  $mangerout = json_encode($mangerlist);
-  $jsonout = json_encode($rows);
-  
-  }
-
-?>
-  <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
-  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-  <script src="../../colorbox-master/jquery.colorbox.js"></script>
-	
-<script>
-$(document).ready(function(){
-				//Examples of how to assign the Colorbox event to elements
-				$(".group1").colorbox({rel:'group1'});
-				$(".group2").colorbox({rel:'group2', transition:"fade"});
-				$(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-				$(".group4").colorbox({rel:'group4', slideshow:true});
-				$(".ajax").colorbox();
-				$(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-				$(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-				$(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
-				$(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
-				$(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
-				$(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
-				$(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
-				$(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
-				$(".inline").colorbox({inline:true, width:"50%"});
-				$(".callbacks").colorbox({
-					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
-				});
-
-				$('.non-retina').colorbox({rel:'group5', transition:'none'})
-				$('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
-				
-				//Example of preserving a JavaScript event for inline calls.
-				$("#click").click(function(){ 
-					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
-					return false;
-				});
-			});
-function MM_setTextOfTextfield(objId,x,newText) { //v9.0
-  with (document){ if (getElementById){
-    var obj = getElementById(objId);} if (obj) obj.value = newText;
-  }
-}
-
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-
-</script>
-	<style type="text/css">
-        .popover{
-            max-width:600px;
+    $mangerlist = array();
+    foreach ($rows as $row)  {
+      if($row["ProgramRI_Key"] != '') {
+        $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
+        ini_set('mssql.charset', 'UTF-8');
+        $mangerquery = sqlsrv_query($data_conn, $sqlstr);
+        if($mangerquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            foreach($errors as $error) {
+              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+              echo "code: ".$error[ 'code']."<br />";
+              echo "message: ".$error[ 'message']."<br />";
+            }
+          }
+        } else {
+          $count = 1;
+          $mangerrows = array();
+            while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
+              $mangerrows[] = array_map("fixutf8", $mangerrow);
+            }
+          }
+          $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
         }
-        .header {
-          background-color: #00aaf5;
-          color: #fff;
-          font-size: large;
-          text-align: left;
-          padding:8px 16px;
-        }
-        .toppleat {
-          color: #000;
-          background-color: #eee;
-          text-align: left;
-          padding: 8px 8px;
-          cursor: pointer;
-          /* height: 36px; */
-        }
-        .accordion-button {
-          width: 25%;
-          float: right;
-        }
-        .a-proj {
-          color: #00f;
-          font-weight: 700;
-        }
-        .toppleat:nth-child(odd) {
-          background-color: #fff;
-        }
-        @media (max-width:1000px){
+      }
+      
+    $p4pout = json_encode($p4plist);
+    $mangerout = json_encode($mangerlist);
+    $jsonout = json_encode($rows);
     
-          /* Menu BreakPoint */
-          .navbar-header {float: none;}
-          .navbar-left,.navbar-right {    float: none !important;}
-          .navbar-toggle {    display: block;}
-          .navbar-collapse {  border-top: 1px solid transparent;  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);}
-          .navbar-fixed-top {    top: 0;    border-width: 0 0 1px;}
-          .navbar-collapse.collapse { display: none!important;}
-          .navbar-nav {float: none!important; margin-top: 7.5px;}
-          .navbar-nav>li {float: none;}
-          .navbar-nav>li>a { padding-top: 10px;padding-bottom: 10px;}
-          .collapse.in{display:block !important;}
-          .navbar-nav .open .dropdown-menu { position: static; float: none; width: auto; margin-top: 0; background-color: transparent; border: 0; -webkit-box-shadow: none; box-shadow: none;}
+    }
 
-        }
-        .headbox {
-          background-color: #00aaf5;
-          color: #fff;
-          border-left: 1px solid #fff;
-          padding: 4px;
-          cursor: default;
-        }
-        .databox {
-          background-color: #d9d9d9;
-          color: #000;
-          border: 1px solid #888;
-          padding: 4px;
-          cursor: default;
-        }
-        .namebox {
-          background-color: #fff;
-          color: #00f;
-          border: 1px solid #ddd;
-          padding: 4px;
-        }
-        .arrows {
-          color:black;
-          float:left;
-          height:100%;
-          padding:4px
-        }
-    </style>
+  ?>
+    <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <script src="../../colorbox-master/jquery.colorbox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js"></script>
+    
+    
+  <script>
+  $(document).ready(function(){
+          //Examples of how to assign the Colorbox event to elements
+          $(".group1").colorbox({rel:'group1'});
+          $(".group2").colorbox({rel:'group2', transition:"fade"});
+          $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+          $(".group4").colorbox({rel:'group4', slideshow:true});
+          $(".ajax").colorbox();
+          $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+          $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+          $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+          $(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
+          $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+          $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+          $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+          $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
+          $(".inline").colorbox({inline:true, width:"50%"});
+          $(".callbacks").colorbox({
+            onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+            onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+            onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+            onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+            onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+          });
+
+          $('.non-retina').colorbox({rel:'group5', transition:'none'})
+          $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+          
+          //Example of preserving a JavaScript event for inline calls.
+          $("#click").click(function(){ 
+            $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+            return false;
+          });
+        });
+  function MM_setTextOfTextfield(objId,x,newText) { //v9.0
+    with (document){ if (getElementById){
+      var obj = getElementById(objId);} if (obj) obj.value = newText;
+    }
+  }
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
+  </script>
+  <link rel="stylesheet" href="../css/ri.css">
+  <style type="text/css">
+  </style>
 </head>
 
 <body onload="myFunction()" style="margin:0;">
@@ -267,19 +169,6 @@ $(function () {
 <div style="display:block;" id="myDiv" class="animate-bottom"><!--change none to block when developing-->
 <!--FOR DEV ONLY - show sql-->
 <div class="alert-danger">
-  <?php
-  // DEFAULTS
- // if(isset($_POST['fiscal_year'])) {
-  //echo 'Fiscal Year Post: ' . $list_fy . '<br>';
-  //}
-  //echo 'Fiscal Year: ' . $fiscal_year . '<br>';
-  //echo 'Status: ' . $pStatus . '<br>';
-  //echo 'Program: ' . $program_d . '<br>';
-  //echo 'Region: ' . $region . '<br>';
-  //echo 'Market: ' . $market . '<br>';
-  //echo 'Owner: ' . $owner  . '<br>';
-  //echo 'Subprogram: ' . $subprogram . '<br>';
-  ?>
 </div>
 <?php
   $planxls = 'export-dpr-2021-plan.php?fiscalYear=' . $fiscal_year . '&status=' . $pStatus . '&owner=' . $owner . '&prog=' . $program_d . '&subprogram=' . $subprogram . '&region=' . $region . '&market=' . $market . '&facility=' . $facility ;
@@ -295,6 +184,7 @@ $(function () {
     <?php 
       require '../includes/ri-selectors.php';
       ?>
+          <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/>
         <div id="main" class="accordion" >
             <div class="header">
               Program Name (Risks, Issues)
@@ -308,7 +198,6 @@ $(function () {
 <section>
 
 </section>
-
 <section></section>
 <section>
   <div class="container">
@@ -342,13 +231,17 @@ $(function () {
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Names of Data for program fields
-  const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
-  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
-  
+  const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
+  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours", "subs"];
+  const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
+
+
   const populate = (rilist) => {
+    console.log(rilist);
+    makesheet(rilist);
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
-    console.log(rilist);
+    // console.log(rilist);
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
@@ -357,14 +250,62 @@ $(function () {
     }
   }
 
+  const makearray = (rin) => {
+        // console.log("in")
+        let r = [];
+        let a = getprogrambyname(rin);
+        // console.log(a)
+        for (field in a) {
+          r.push(a[field]);
+          // console.log(field)
+        }
+        // console.log(r)
+        return a;
+  };
+
+  const makesheet = (data) => {
+    const ria = [];
+    data.forEach(function(value) {
+      ria.push(makearray(value));
+      console.log(value);
+      // console.log(ria);
+    })
+    console.log(ria);
+    const riss = XLSX.utils.book_new();
+    riss.Props = {
+      title: "Risk and Issues Aggregate",
+      Subject: "R&I",
+      Author: "Kaz",
+      CreatedDate: new Date()
+    };
+    riss.SheetNames.push("ri");
+    console.log(ria);
+    const ssd = XLSX.utils.json_to_sheet(ria);
+    riss.Sheets["ri"] = ssd;
+    // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+    // saveAs(blob, "hello world.txt");
+    document.rixl = XLSX.write(riss, {bookType: 'xlsx', type: 'binary'});
+    // console.log(document.rixl);
+  }
+
+  const exporter = () => {
+    saveAs(new Blob([makeoctet(document.rixl)], {type: "application/octet-stream"}), "riaggreate.xlsx");
+  }
+
+  function makeoctet(s) { 
+                var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+                var view = new Uint8Array(buf);  //create uint8array as viewer
+                for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+                return buf;    
+  }
+
   const createrow = (name, risks, issues) => {
-    
+
     // Runs once per Program
-    
+
     const safename = makesafe(name);
     const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
-    
     const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
     const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
     const table = makeelement({e: "table", i: "table" + safename, c: "table"});
@@ -380,14 +321,14 @@ $(function () {
   }  
 
   const makebanner = (safename) => {
-    
+
     // Program Start
-    
+
     const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
     const banner = document.createElement("div");
     banner.id = "banner" + safename;
     banner.className = "accordion-banner";
-    console.log(bannerfields);
+    //  (a c).log(bannerfields);
     Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
     banner.ariaExpanded = true;
     return banner;
@@ -412,7 +353,11 @@ $(function () {
     }
   }
   
-  const fieldswitch = {
+  const makedata = (id, type, name) => {            
+
+    // Make all the data inside a risk or issue
+
+    const fieldswitch = {
     //    Specific fields that need extra calculation
       mangerlist: function() {
         const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
@@ -428,12 +373,14 @@ $(function () {
       },
       RIOpen_Hours: function() {
         return Math.floor(program.RIOpen_Hours/24);
+      },
+      subs: function() {
+        // console.log("p4plist");
+        // console.log(program);
+        // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
+        // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
       }
   };
-
-  const makedata = (id, type, name) => {            
-
-    // Make all the data inside a risk or issue
 
     const program = getprogrambykey(id, name);
     const safename = makesafe(program.Program_Nm);
@@ -447,20 +394,22 @@ $(function () {
         "t": "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
         "c":"p-4 namebox"
       });
-      console.log(program.RI_Nm);
+      // console.log(program.RI_Nm);
       const tridobj = document.getElementById(trid);
       tridobj.onclick = function() {
         toggler(document.getElementById("projects" + saferi), this.children[0]);
       };
       tridobj.appendChild(header);
+      // console.log(program);
+      // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
       for (field of datafields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
           tridobj.appendChild(maketd(texter, "", "p-4 databox"));
         })(field);
       }
-
-      console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
+      // console.log(program);
+      // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
       makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
     }
   }    
@@ -479,8 +428,8 @@ $(function () {
       document.getElementById("td" + saferi).appendChild(table);
       let p = [];
       for(project of projects) {
-        console.log(project);
-        console.log("project.PROJECT_Key:" + project.PROJECT_key);
+        // console.log(project);
+        // console.log("project.PROJECT_Key:" + project.PROJECT_key);
         if (!p.includes(project.PROJECT_key)){
           const tr = document.createElement("tr");
           tr.id = "tr" + project.PROJECT_key;
