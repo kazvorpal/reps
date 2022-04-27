@@ -239,8 +239,6 @@
 
   const populate = (rilist) => {
     console.log(rilist);
-    makesheet(rilist);
-    makeexcel(rilist);
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
     document.workbook = new ExcelJS.Workbook();
@@ -273,180 +271,6 @@
     // console.log(r)
     return a;
   };
-
-  const makeexcel = (data) => {
-    // Excel Spreadsheet 
-
-    const makecellrange = (props) => {
-      props.worksheet.mergeCells(props.start, props.end);
-      let title = props.worksheet.getCell(props.start);
-      title.value = props.title;
-      title.font = props.font;
-      title.alignment = props.align;
-      // return props.worksheet;
-    }
-    console.log("makeexcel");
-    const ria = [];
-    const filename = "ria-ggregate.xlsx";
-    data.forEach(function(value) {
-      ria.push(makearray(value));
-      console.log(value);
-    })
-    const riwb = new ExcelJS.Workbook();
-    let riws = riwb.addWorksheet("ri");
-    makecellrange({
-      worksheet: riws, start: 'C1', end: 'G4', title: "Risk and Issues Aggregate", font: {size: 16, bold: true}, align: {vertical: 'middle', horizontal: 'center'}
-    });
-    console.log(riws);
-    // console.log(title);
-    //image placeholder
-
-  }
-
-  const test2 = () => {
-    var workbook = new ExcelJS.Workbook();
-    var worksheet = workbook.addWorksheet('ExampleWS');
-
-    let cols = []
-    for (field in rifields) {
-      cols.push({
-        header: rifields[field],
-        key: field,
-        width: field.length
-      })
-    }
-    worksheet.columns = cols;
-    worksheet.addRow(rowValues);
-    for (row in ridata) {
-      // let rowValues = [];
-      var rowValues = [];
-      for (field in rifields) {
-        rowValues.push(ridata[row][field]);
-      }
-      // rowValues[1] = 4;
-      // rowValues[9] = new Date();
-      worksheet.addRow(rowValues);
-      // worksheet.addRow();
-      // console.log(ridata[row].RI_Nm);
-      // break;
-    }
-
-
-    var rows = [
-    [5,'Bob',new Date()], // row by array
-    {id:6, name: 'Barbara', dob: new Date()}
-    ];
-    worksheet.addRows(ridata);
-
-    //write in File
-    var strFilename = "testExceljs01.xlsx";
-    workbook.xlsx.writeBuffer().then((buf) => {
-      saveAs(new Blob([buf]), `testFile.xlsx`);
-      // other stuffs
-    });
-    // workbook.xlsx.writeFile(strFilename)
-    // .then(function() {
-    // console.log("file OK");
-    // });
-  }
-
-
-  const testy = () => {
-
-
-    let workbook = new ExcelJS.Workbook();
-    let worksheet = workbook.addWorksheet("Tutorials");
-    worksheet.columns = [
-      { header: "Id", key: "id", width: 5 },
-      { header: "Title", key: "title", width: 25 },
-      { header: "Description", key: "description", width: 25 },
-      { header: "Published", key: "published", width: 10 },
-    ];
-    // Add Array Rows
-    for (row in ridata) {
-      worksheet.addRow(ridata[row]);
-      console.log(ridata[row].RI_Nm);
-    }
-    // worksheet.addRows(ridata);
-    workbook.xlsx.writeBuffer().then((buf) => {
-      saveAs(new Blob([buf]), `testFile.xlsx`);
-      // other stuffs
-    });
-    console.log(workbook);
-    // workbook.xlsx.writeFile("filename.xlsx");
-    // saveAs(new Blob([makeoctet(worksheet)], {type: "application/octet-stream"}), "riaggreate.xlsx");
-    // res is a Stream object
-    // res.setHeader(
-    //   "Content-Type",
-    //   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    // );
-    // res.setHeader(
-    //   "Content-Disposition",
-    //   "attachment; filename=" + "tutorials.xlsx"
-    // );
-    // return workbook.xlsx.write(res).then(function () {
-    //   res.status(200).end();
-    // });
-return;
-    // const options = {
-    //   filename: 'myfile.xlsx',
-    //   useStyles: true,
-    //   useSharedStrings: true
-    // };
-
-    // document.workbook = new ExcelJS.Workbook(options);
-
-    // const worksheet = document.workbook.addWorksheet('my sheet');
-
-    // worksheet.columns = [
-    //     { header: 'Id', key: 'id' },
-    //     { header: 'First Name', key: 'first name' },
-    //     { header: 'Phone', key: 'ph' }
-    // ]
-
-    // var data;
-
-    // for(let i = 1; i<= 10; i++){
-      
-    //   data = {
-    //     id: i,
-    //     'first name': "name "+i,
-    //     ph: "012014520"+i
-    //   };
-
-    //   worksheet.addRow(data).commit();
-    // }
-
-    // workbook.commit().then(function() {
-      // console.log('excel file cretaed');
-    // });
-    // console.log(document.workbook);
-    // saveAs(new Blob([makeoctet(document.workbook)], {type: "application/octet-stream"}), "riaggreate.xlsx");
-  }
-
-
-  const makesheet = (data) => {
-    const ria = [];
-    data.forEach(function(value) {
-      ria.push(makearray(value));
-      console.log(value);
-    })
-    console.log(ria);
-    const riss = XLSX.utils.book_new();
-    riss.Props = {
-      title: "Risk and Issues Aggregate",
-      Subject: "R&I",
-      Author: "Kaz",
-      CreatedDate: new Date()
-    };
-    riss.SheetNames.push("ri");
-    console.log(ria);
-    const ssd = XLSX.utils.json_to_sheet(ria);
-    riss.Sheets["ri"] = ssd;
-    // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
-    // saveAs(blob, "hello world.txt");
-    document.rixl = XLSX.write(riss, {bookType: 'xlsx', type: 'binary'});
-  }
 
   const exporter = () => {
     document.workbook.xlsx.writeBuffer().then((buf) => {
@@ -742,7 +566,8 @@ return;
           (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
         );
       });
-    if (document.getElementById("owner") != '') {
+    if (document.getElementById("owner").value != '') {
+      // console.log("owner");
       const secondpass = [];
       for (item of filtered) {
         if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
@@ -756,6 +581,7 @@ return;
       filtered = secondpass;
     }
     console.log(filtered.length)
+    console.log(filtered)
     return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   }  
   

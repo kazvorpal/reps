@@ -270,7 +270,7 @@ $(function () {
   const details = (target) => {
       const d = document.getElementById("details");
       const l = document.getElementById("lightbox");
-      console.log(target);
+    //   console.log(target);
       l.style.display = "block";
       d.style.display = "block";
       d.src = target.href;
@@ -280,16 +280,16 @@ $(function () {
     
     // Create a row in the table
     const ri = getprojectbykey(name);
-    console.log(ri);
-    console.log(ri["RI_Nm"]);
+    // console.log(ri);
+    // console.log(ri["RI_Nm"]);
     const safename = makesafe(ri["RI_Nm"]);
     const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
     const fieldswitch = {
         //    Specific fields that need extra calculation
         mangerlist: function() {
-            console.log(ri);
+            // console.log(ri);
             if (ri["MLMProgram_Key"]) {
-                console.log(ri["MLMProgram_Key"]);
+                // console.log(ri["MLMProgram_Key"]);
                 const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
                 let mangers = [ri["Fiscal_Year"]];
                 for (man of manger) {
@@ -311,10 +311,10 @@ $(function () {
             return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
         },
         subs: function() {
-            console.log("p4plist");
-            console.log(program);
-            console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
-            console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
+            // console.log("p4plist");
+            // console.log(program);
+            // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
+            // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
         }
     };
     var rowValues = [];
@@ -380,9 +380,9 @@ $(function () {
 
   const filtration = () => {
     // filter the programs list using the form
-    console.log("filter")
+    // console.log("filter")
     let filtered = ridata.filter(function(o) {
-      return (
+        return (
           (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
           (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
@@ -390,8 +390,10 @@ $(function () {
           (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
           (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
         );
-      });
-    if (document.getElementById("owner") != '') {
+    });
+    // console.log(filtered);
+    if (document.getElementById("owner").value != '') {
+        // console.log("owner");
       const secondpass = [];
       for (item of filtered) {
         if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
@@ -404,8 +406,9 @@ $(function () {
       }
       filtered = secondpass;
     }
-    console.log(filtered.length)
-    return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
+    console.log(filtered.length);
+    console.log(filtered);
+    return filtered.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
   }  
   
   const splitdate = (datestring) => {
