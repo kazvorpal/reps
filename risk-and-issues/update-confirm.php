@@ -13,6 +13,8 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 			
 // echo "<br>" . $sql_risk_issue_assoc_proj;
+//echo $sql_risk_issue_assoc_proj;
+//exit();
 
 //GET DRIVERS FROM ID'S
 $sql_risk_issue_driver = "SELECT * FROM [COX_Dev].[RI_MGT].[Driver] where Driver_Key in ($Driversx)";
@@ -100,12 +102,18 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     <input name="unknown" type="hidden" id="unknown" value="<?php echo $unknown ?>">
     <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?php echo $transfer2prgManager ?>">
     <input name="opportunity" type="hidden" id="opportunity" value="<?php echo $opportunity?>">
-    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $RiskAndIssue_Key ?>">
+    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
     <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo $actionPlan ?>">
     <input name="DateClosed" type="hidden" id="DateClosed" value="<?php echo $DateClosed ?>">
     <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">
     <input name="programs" type="hidden" id="programs" value="<?php echo $programs ?>">
     <input name="program" type="hidden" id="program" value="<?php echo $program ?>"> <!-- ESP PROGRAM -->
+    <input name="raidLog" type="hidden" id="raidLog" value="<?php echo $raidLog ?>"> 
+    <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php echo $assocProjectsKeys ?>"> 
+    <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $RiskAndIssue_Key ?>"> 
+    <input name="regionKeys" type="hidden" id="regionKey" value="<?php echo $regionKeys ?>"> 
+    <input name="programKeys" type="hidden" id="programKeys" value="<?php echo $programKeys ?>"> 
+    
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
@@ -115,7 +123,6 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     </tr>
 </thead>
   <tbody>
-    <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
     </tr>
@@ -164,10 +171,6 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
       <td><?php echo $individual; ?></td>
     </tr>
     <tr>
-      <td>Team/Group POC</td>
-      <td><?php echo $internalExternal; ?></td>
-    </tr>
-    <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
     </tr>
@@ -203,13 +206,20 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Risk/Issue</td>
-      <td><?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
-    </td>
+      <td>Associated Projects</td>
+      <td>
+        <?php  //while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
+        
+      </td>
     </tr>
     <tr>
       <td>Action Plan</td>
       <td><?php echo $actionPlan; ?>
+    </td>
+    </tr>
+    <tr>
+      <td>RAID lOG</td>
+      <td><?php echo $raidLog; ?>
     </td>
     </tr>
     <tr>

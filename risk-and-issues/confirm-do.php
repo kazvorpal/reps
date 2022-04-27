@@ -5,18 +5,19 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
-
+//print_r($_POST);
+//echo "<br><br>";
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
     if ($changeLogKey == 1){
         $changeLogName = "Initialize";
-     } else if ($changeLogKey == 2) {
+    } else if ($changeLogKey == 2) {
         $changeLogName = "Created";
-     } else if ($changeLogKey == 3) {
+    } else if ($changeLogKey == 3) {
         $changeLogName = "Closed";
-     } else if ($changeLogKey == 4) {
+    } else if ($changeLogKey == 4) {
         $changeLogName = "Updated";
-     }
+    }
     $userEmail = $row_winuser['Email'];
     $createdfrom = $_POST['createdFrom'];
     $usedButton = $_POST['submit2'];
@@ -72,6 +73,10 @@ include ("../sql/MS_Users_prg.php");
 
     $closedByDate = $_POST['DateClosed'];
     $closedByUID = NULL; // USE ONLY IF CLOSING OTHERWISE NULL // USE FOR EDIT ONLY
+    $raidLog = $_POST['raidLog'];
+
+    //print_r($_POST);
+    //exit();
 
 //LOOK UP KEY VALUES 
 // IMPACT AREA
@@ -140,7 +145,6 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
 
     // DEBUG CODE
     //echo json_encode($params);
-    //print_r($_POST);
     //exit();
 
    //EXECUTE PROCEDDURE
@@ -201,8 +205,9 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
             </div>
     </div>
     ';
-// echo $SPCode;
-    if($SPCode == 0) {
+
+//EXECUTE IF RI IS SUCCESSFULLY CREATED
+    if($SPCode == 0) { 
         echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPBatch_Id . '</div>';
         
         //EMAIL PM AND RI CREATOR
@@ -244,6 +249,48 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
                     echo 'Unable to send email. Please contact EE Solutions.';
                 }
         //END - EMAIL TO PM AND RI CREATOR
+
+        //START - EMAIL RAID ADMIN
+        if($raidLog == "Yes") {
+            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com";
+            $subject = "New Risk/Issue Flagged for RAID Log";
+            $from = 'CCI-EESolutionsTeam@cox.com';
+
+            // BUILD HEADER CONTENT
+            $headers  = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+            // BUILD HEADERS
+            $headers .= 'From: '.$from."\r\n".
+                'Reply-To: '.$from."\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+                
+
+            // BUILD EMAIL BODY
+            $message = "<p>A new " . $riLevel . " " .$riTypeCode . " has been flagged for RAID Log.</p>";
+            $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
+            $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
+            $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
+            $message .="<br><b>Description: </b>"; $message .= $description ;
+            $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
+            $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
+            $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
+            $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
+            $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
+            $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
+            $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;
+            $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
+            $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
+            
+            // SEND EMAIL USING MAIL FUNCION 
+                if(mail($to, $subject, $message, $headers)){
+                    echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';
+                } else {
+                    echo 'Unable to send email. Please contact EE Solutions.';
+                }
+            }
+
+        //END - EMAIL RIAD ADMIN
 
     } else {
         echo '<br><br><br><h2 align="center">Risk and Issue Error</h2><div align="center">' . $SPCode . ' = ' . $SPMessage . '<br>BatchID = ' . $SPBatch_Id . '</div><br><div align="center">

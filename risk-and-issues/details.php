@@ -23,10 +23,11 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 
 //GET ASSOCIATED PROJECTS
 $ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, RI_Nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name')";
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name')";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_assoc_proj['RI_Nm]; 		
+// echo $row_risk_issue_assoc_proj['RI_Nm]; 
+//echo $sql_risk_issue_assoc_proj;		
 
 //DECLARE
 $name = trim($row_risk_issue['RI_Nm']);
@@ -184,7 +185,7 @@ echo $driver_list;
       <td>
         <?php 
         while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_assoc_proj['RI_Nm'] . "<br>"; 
+        echo $row_risk_issue_assoc_proj['proj_nm'] . "<br>"; 
         }
         ?>
       </td>

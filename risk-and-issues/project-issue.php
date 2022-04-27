@@ -131,6 +131,7 @@ Enter the details of your Project Risk
   <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value="">
   <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
+  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -333,7 +334,7 @@ Enter the details of your Project Risk
                 <option><?php echo $row_internal['POC_Nm'] ?></option>
                 <?php } ?>
                 </datalist>
-              
+              <!--
               <h4 align="center">OR</h4>
               <label for="Individual3">Team/Group POC<br>
                 </label>
@@ -343,7 +344,7 @@ Enter the details of your Project Risk
                 <?php while($row_external  = sqlsrv_fetch_array( $stmt_external , SQLSRV_FETCH_ASSOC)) { ?>
                 <option><?php echo $row_external['POC_Nm'] ?></option>
                 <?php } ?>
-                </datalist>
+                </datalist>-->
               </div>
           </td>
           </tr>
@@ -499,7 +500,28 @@ Enter the details of your Project Risk
         </div>
 		  </td>
         </tr>
-
+        <tr>
+        <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
+			  </tr>
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box">
+              <table width="50%" border="0">
+                <tr>
+                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  </tr>
+                <tr>
+                  <td><label>
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0">
+                    Yes</label></td>
+                  <td><label>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" checked>
+                    No</label></td>
+                  </tr>
+                </table>
+              </div>
+			    </td>
+        </tr>
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>

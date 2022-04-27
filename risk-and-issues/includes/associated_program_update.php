@@ -9,27 +9,31 @@ include ("../../data/emo_data.php");
       //$fiscal_year =  $_GET['fscl_year'];
       //$tempid =  $_GET['tempid'];
       $ri_level = $_GET['ri_level'];
-      $ri_proj_name = $_GET['proj_name'];
-      $rikey = 
+      //$ri_proj_name = $_GET['proj_name'];
+      $rikey = $_GET['rikey'];
 
 
 //FIND PROJECT RISK AND ISSUES 1.26.2022
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
-$proj_name = $_GET['proj_name'];
+$proj_name = $_GET['projname'];
 $name = $_GET['name'];
+$prog_name = $_GET['progname'];
+$rikey = $_GET['rikey'];
+$progkey = $_GET['progkey'];
   
-$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 //$row_risk_issue['columnName'];
+echo $sql_risk_issue;
+//exit();
+
 
 //RI ROW COUNT
 $sql_riRows = "SELECT COUNT(*) as ttlRows
                FROM (
-                select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
-                from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name') 
-                where RI_Nm != '$name') a ";
+                select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($rikey,$progkey)) a ";
 $stmt_riRows = sqlsrv_query( $data_conn, $sql_riRows);
 $row_riRows = sqlsrv_fetch_array($stmt_riRows, SQLSRV_FETCH_ASSOC);
 //echo $row_riRows['ttlRows'];
@@ -37,32 +41,33 @@ $row_riRows = sqlsrv_fetch_array($stmt_riRows, SQLSRV_FETCH_ASSOC);
 
 
 //GET DRIVERS
-$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 			
 
 //GET DRIVERS LIST 
-$sql_ri_driver_lst = "select Driver_Nm from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_ri_driver_lst = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
 // $row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC);
 // echo $row_ri_driver_lst['Driver_Nm]; 			
 
 //GET ASSOCIATED PROJECTS
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, proj_nm, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name') where RI_Nm != '$name' ";
+$sql_risk_issue_assoc_proj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($rikey,$progkey) where EPSProject_Nm != '$proj_name'";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 			
 //echo "<br>" . $sql_risk_issue_assoc_proj;
-//echo $sql_risk_issue_assoc_proj;
+echo $sql_risk_issue_assoc_proj;
+
 //DECLARE
 $name = $row_risk_issue['RI_Nm'];
 $RILevel = "ri_level";
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
 $programs = "";
-$project_nm = $row_risk_issue['proj_nm'];
+$project_nm = $proj_name;
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
 $regionx = "";
@@ -213,7 +218,7 @@ function toggle(source) {
 <form action="<?php echo $gotoPage; ?>" method="post" class="navbar-form navbar-center" id="assProjects" title="assProjects">
 <input type="hidden" name="rikey" value="<?php echo $_GET['rikey']; ?>">
 <input type="hidden" name="fscl_year" value="<?php echo $_GET['fscl_year']; ?>">
-<input type="hidden" name="proj_name" value="<?php echo $_GET['proj_name']; ?>">
+<input type="hidden" name="proj_name" value="<?php echo $proj_name; ?>">
 <input type="hidden" name="name" value="<?php echo $name;?>">
 <input type="hidden" name="drivertime" value="<?php while ($row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC)) { echo $row_ri_driver_lst['Driver_Nm'] . ','; } ?>">
 
@@ -223,21 +228,21 @@ function toggle(source) {
   <tr>
     <th><input type="checkbox" name="checkbox" id="checkbox" onClick="toggle(this)"></th>
     <th>Risk/Issues Name</th>
-    <th>Project Name</th>
+    <th>Description</th>
     <th>Action Plan</th>
   </tr>
   <tr>
     <td></td> <!-- NO CHECKBOX -->
-    <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RI_Nm']; ?> [ORIGINATING R/I]</td>
-    <td bgcolor="#d9edf7"><?php echo $row_risk_issue['proj_nm']; ?></td>
-    <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
+    <td bgcolor="#d9edf7"><?php //echo $row_risk_issue['EPSProject_Nm']; ?> [ORIGINATING R/I]</td>
+    <td bgcolor="#d9edf7"><?php //echo $row_risk_issue['EPS_Location_Cd']; ?></td>
+    <td bgcolor="#d9edf7"><?php //echo $row_risk_issue['ActionPlanStatus_Cd']; ?></td>
   </tr>
   <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { ?>
   <tr>
     <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_risk_issue_assoc_proj['RiskAndIssue_Key'];?>"></td>
-    <td><?php echo $row_risk_issue_assoc_proj['RI_Nm'];?></td>
-    <td><?php echo $row_risk_issue_assoc_proj['proj_nm'];?></td>
-    <td><?php echo $row_risk_issue_assoc_proj['RIDescription_Txt'];?></td>
+    <td><?php echo $row_risk_issue_assoc_proj['EPSProject_Nm'];?></td>
+    <td><?php echo $row_risk_issue_assoc_proj['EPS_Location_Cd'];?></td>
+    <td><?php //echo $row_risk_issue_assoc_proj['ActionPlanStatus_Cd'];?></td>
   </tr>
   <?php } ?>
 </table>

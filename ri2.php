@@ -17,7 +17,12 @@
 								// echo $row_risk_issue['Risk_Issue_Name']; 	
                 //echo $sql_risk_issue;
                 //exit();		
-								
+
+                //GET CLOSED RISK AND ISSUES
+                $sql_closed_ri = "select * from [RI_MGT].[fn_GetListOfAllInactiveRiskAndIssue]('Project')  where proj_nm = '$proj_name' order by RiskAndIssue_Key desc";
+								$stmt_closed_ri = sqlsrv_query( $data_conn, $sql_closed_ri );
+                //$row_closed_ri = sqlsrv_fetch_array( $stmt_closed_ri, SQLSRV_FETCH_ASSOC);
+              
                 // CHECK IF THE USER AND OWNER MATCH
                 $ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
                 $authUser = trim($_GET['winuser']);
@@ -96,7 +101,7 @@ ProjectID: <?php echo $projID?>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
     <tr cellpadding="5px">
-      <th><strong>Project Risk or Issue Name</strong></th>
+      <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th><strong>Description</strong></th>
       <th><strong>Impact</strong></th>
@@ -119,30 +124,30 @@ ProjectID: <?php echo $projID?>
 There are no Project Risk or Issues found
 <?php }?>
 </div>
-<!-- <div>
+<div>
 <div align="center" class="alert alert-success"><b>CLOSED RISK & ISSUES</b></div>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
     <tr cellpadding="5px">
-      <th><strong>Project Risk or Issue Name</strong></th>
+      <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th><strong>Description</strong></th>
       <th><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
       <th align="center"><strong>Details</strong></th>
     </tr>
-    <?php //while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
+    <?php while ($row_closed_ri = sqlsrv_fetch_array($stmt_closed_ri, SQLSRV_FETCH_ASSOC)){ ?>
     <tr>
-      <td><?php //echo $row_risk_issue['RI_Nm']; ?></td>
-      <td><?php// echo $row_risk_issue['RIType_Cd']; ?></td>
-      <td><?php //echo $row_risk_issue['RIDescription_Txt']; ?></td>
-      <td><?php //echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
-      <td><?php //echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
-      <td align="center"><a href="risk-and-issues/details.php?au=<?php //echo $access?>&rikey=<?php //echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php //echo $fscl_year;?>&proj_name=<?php //echo $proj_name;?>"><span class="glyphicon glyphicon-eye-open" style="font-size:12px;"></span></a></td>
+      <td><?php echo $row_closed_ri['RI_Nm']; ?></td>
+      <td><?php echo $row_closed_ri['RIType_Cd']; ?></td>
+      <td><?php echo $row_closed_ri['RIDescription_Txt']; ?></td>
+      <td><?php echo $row_closed_ri['ImpactLevel_Nm']; ?></td>
+      <td><?php echo date_format($row_closed_ri['Last_Update_Ts'], 'm-d-Y'); ?></td>
+      <td align="center"><a href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_closed_ri['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>"><span class="glyphicon glyphicon-eye-open" style="font-size:12px;"></span></a></td>
     </tr>
-    <?php //} ?>
+    <?php } ?>
   </tbody>
-</table>-->
+</table>
 </div>
 </body>
 </html>

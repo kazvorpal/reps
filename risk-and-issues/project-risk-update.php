@@ -183,7 +183,10 @@ function toggle(source) {
   <input name="frcstDt_temp" type="hidden" id="frcstDt_temp" value="<?php if(!empty($date)){ echo convDate($date);} ?>">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php //echo $assocProject; ?>">
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $assocProject; ?>">
- 
+  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php $assocProject; ?>">
+  <input name="regionKeys" type="hidden" id="regionKeys" value="">
+  <input name="programKeys" type="hidden" id="programKeys" value="">
+  
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
@@ -409,7 +412,7 @@ function toggle(source) {
                 <option><?php echo $row_internal['POC_Nm'] ?></option>
                 <?php } ?>
                 </datalist>
-              
+              <!--
               <h4 align="center">OR</h4>
               <label for="Individual3">Team/Group POC<br>
                 </label>
@@ -419,7 +422,7 @@ function toggle(source) {
                 <?php while($row_external  = sqlsrv_fetch_array( $stmt_external , SQLSRV_FETCH_ASSOC)) { ?>
                 <option><?php echo $row_external['POC_Nm'] ?></option>
                 <?php } ?>
-                </datalist>
+                </datalist>-->
               </div>
           </td>
           </tr>
@@ -561,10 +564,6 @@ function toggle(source) {
             <div class="box">
               <table width="50%" border="0">
                 <tr>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  </tr>
-                <tr>
                   <td colspan="2"><strong>Risk Realized?</strong></td>
                   </tr>
                 <tr>
@@ -577,23 +576,37 @@ function toggle(source) {
                   </tr>
                 </table>
               </div>
-			</td>
-          </tr>
-			  <tr>
-			  	<td width="50%">&nbsp;
-				</td>
+			    </td>
+        </tr>
+        <tr>
+        <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
         <tr>
           <td colspan="3" align="left">
-            </td>
+            <div class="box">
+              <table width="50%" border="0">
+                <tr>
+                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  </tr>
+                <tr>
+                  <td><label>
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0">
+                    Yes</label></td>
+                  <td><label>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" checked>
+                    No</label></td>
+                  </tr>
+                </table>
+              </div>
+			    </td>
         </tr>
         <tr>
-          <td colspan="3" align="left"></td>
-        </tr>
+              <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
+            </tr>
         <tr>
           <td colspan="3" align="left">
-			  <div class="box">
-			<table width="100%" border="0">
+          <div class="box">
+            <table width="100%" border="0">
             <tbody>
               <tr>
                 <td colspan="2">

@@ -13,6 +13,7 @@
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   //$ass_project = $row_projID['PROJ_NM'];
   //$forcastDate =  date('m/d/Y');
+  print_r($_POST);
 
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_POST['rikey'];
@@ -59,6 +60,7 @@ $DateClosed = $row_risk_issue['RIClosed_Dt'];
 $driverList = rtrim($_POST['drivertime'], ",");
 $driverArr = explode(",", $driverList);
 $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
+$raid = "";
 
 if(!empty($_POST['proj_select'])) {
 $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
@@ -185,6 +187,9 @@ function toggle(source) {
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $assocProject; ?>">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $RiskProbability ?>">
   <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
+  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php $assocProject; ?>">
+  <input name="regionKeys" type="hidden" id="regionKeys" value="">
+  <input name="programKeys" type="hidden" id="programKeys" value="">
  
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -381,7 +386,7 @@ function toggle(source) {
                 <option><?php echo $row_internal['POC_Nm'] ?></option>
                 <?php } ?>
                 </datalist>
-              
+              <!--
               <h4 align="center">OR</h4>
               <label for="Individual3">Team/Group POC<br>
                 </label>
@@ -391,7 +396,7 @@ function toggle(source) {
                 <?php while($row_external  = sqlsrv_fetch_array( $stmt_external , SQLSRV_FETCH_ASSOC)) { ?>
                 <option><?php echo $row_external['POC_Nm'] ?></option>
                 <?php } ?>
-                </datalist>
+                </datalist> -->
               </div>
           </td>
           </tr>
@@ -523,17 +528,34 @@ function toggle(source) {
 				    <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
         </div>
 		  </td>
-                </tr>
+        </tr>
 			  <tr>
-			  	<td width="50%">&nbsp;
-				</td>
+        <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
         <tr>
           <td colspan="3" align="left">
-            </td>
+            <div class="box">
+              <table width="50%" border="0">
+                <tr>
+                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  </tr>
+                <tr>
+                  <td><label>
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0">
+                    Yes</label></td>
+                  <td><label>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" checked>
+                    No</label></td>
+                  </tr>
+                </table>
+              </div>
+			    </td>
         </tr>
         <tr>
           <td colspan="3" align="left"></td>
+        </tr>
+        <tr>
+              <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left">

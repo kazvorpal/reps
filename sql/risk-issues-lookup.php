@@ -1,6 +1,8 @@
 <?php 
 // DECLARE
-
+//4 update, 3 close, 2 create, 1 initialize 
+//print_r($_POST);
+//exit();
 // Entered Values
 $RiskAndIssue_Key = "";
 if(!empty($_POST['RiskAndIssue_Key'])){
@@ -14,12 +16,24 @@ $Drivers_confirm = implode('<br>', $_POST['Drivers']); // For Confirmation page
   $Drivers_conx = $Drivers_confirm;
 
 $regionx = "";
+if($_POST['changeLogKey']==3 || $_POST['changeLogKey']==4 || $_POST['changeLogKey']==2 ){
   if(!empty($_POST['Region'])) {
-$region = implode(',', $_POST['Region']);
-  $regionx = $region;
-$region_confirm = implode('<br>', $_POST['Region']);
-  $region_conx = $region_confirm;
+    $region = substr($_POST['Region'],0, -1);
+    $regionx = $region;
+    $region_confirm = substr($_POST['Region'],0, -1);
+    $region_conx = $region_confirm;
+    $region_conx_dsply = str_replace(",","<br>",$region_conx);
   }
+} else {
+  if(!empty($_POST['Region'])) {
+    $region = implode(',', $_POST['Region']);
+    $regionx = $region;
+    $region_confirm = implode(',', $_POST['Region']);
+    $region_conx = $region_confirm;
+    $region_conx_dsply = str_replace(",","<br>",$region_conx);
+  }
+}
+
 $userId = $_POST['userId']; // WINDOWS LOGIN NAME
 $formName = $_POST['formName']; // PRJR, PRJI, PRGI, PRGR
 $formType = $_POST['formType']; // NEW OR DELETE
@@ -37,6 +51,7 @@ $assocProject = "";
 if(!empty($_POST['assocProjects'])){
 $assocProject = $_POST['assocProjects']; 
 }
+$assocProject_dsply = str_replace(",","<br>",$assocProject);
 
 $actionPlan = $_POST['ActionPlan']; 
 $responseStrategy = $_POST['ResponseStrategy']; 
@@ -92,21 +107,33 @@ $fiscalYer = $_POST['fiscalYer'];
 $RIType = $_POST['RIType'];
 $RILevel = $_POST['RILevel'];
 
+$changeLogKey = $_POST['changeLogKey'];
+if(!empty($DateClosed)){
+$changeLogKey = 3;
+}
+
+if ($changeLogKey == 4 || $changeLogKey == 3){
+  $programKeys = $_POST['programKeys'];
+  $regionKeys = substr($_POST['regionKeys'],0, -1);
+  $assocProjectsKeys = substr($_POST['assocProjectsKeys'],0, -1);
+} else {
+  $programKeys = NULL;
+  $regionKeys = NULL;
+  $assocProjectsKeys = $_POST['assocProjectsKeys'];
+}
+
 if ($individual == "") {
   $poc = $internalExternal;
 } else {
   $poc = $individual;
 }
 
-$changeLogKey = $_POST['changeLogKey'];
-if(!empty($DateClosed)){
-$changeLogKey = 3;
-}
-
 //$name = $_POST['RIName'];
 //if($changeLogKey == 2){
 $name = trim(str_replace("'","",$_POST['Namex'])); // PROJECT NAME
 //}
+
+$raidLog = $_POST['raidLog'];
 
 //echo $changeLogKey . " - ";
 //echo $DateClosed;

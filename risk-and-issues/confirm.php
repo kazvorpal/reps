@@ -89,6 +89,7 @@ include("../sql/risk-issues-lookup.php");
     <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">
     <input name="programs" type="hidden" id="programs" value="<?php echo $programs ?>">
     <input name="program" type="hidden" id="program" value="<?php echo $program ?>"> <!-- ESP PROGRAM -->
+    <input name="raidLog" type="hidden" id="raidLog" value="<?php echo $raidLog ?>">
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
@@ -128,7 +129,7 @@ include("../sql/risk-issues-lookup.php");
 <?php if(!empty($region_conx)){ ?>
     <tr>
       <td>Region</td>
-      <td><?php echo $region_conx; ?></td>
+      <td><?php echo $region_conx_dsply; ?></td>
     </tr>
 <?php } ?>
     <tr>
@@ -147,10 +148,6 @@ include("../sql/risk-issues-lookup.php");
     <tr>
       <td>Individual POC</td>
       <td><?php echo $individual; ?></td>
-    </tr>
-    <tr>
-      <td>Team/Group POC</td>
-      <td><?php echo $internalExternal; ?></td>
     </tr>
     <tr>
       <td>Response Strategy</td>
@@ -189,12 +186,17 @@ include("../sql/risk-issues-lookup.php");
 <?php } ?>
     <tr>
       <td>Associated Projects</td>
-      <td><?php echo $assocProject; ?>
+      <td><?php echo $assocProject_dsply; ?>
     </td>
     </tr>
     <tr>
       <td>Action Plan</td>
       <td><?php echo $actionPlan; ?>
+    </td>
+    </tr>
+    <tr>
+      <td>RAID LOG</td>
+      <td><?php echo $raidLog; ?>
     </td>
     </tr>
     <tr>

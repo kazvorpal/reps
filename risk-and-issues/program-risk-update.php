@@ -2,81 +2,96 @@
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/project_by_id.php");?>
-<?php //include ("../sql/ri_filter_vars.php");?>
-<?php //include ("../sql/ri_filters.php");?>
-<?php //include ("../sql/ri_filtered_data.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
-  $action = $_GET['action']; //new
-  $temp_id = $_GET['tempid'];
+
+  //FIND PROJECT RISK AND ISSUES
+  $RiskAndIssue_Key = $_GET['rikey'];
+  $fscl_year = $_GET['fscl_year'];
+  $proj_name = $_GET['projname'];
+  $progkey =$_GET['progkey']; //MLMProgramkey
+  $progrikey =$_GET['progRIkey'];
+  //echo $progkey;
+    
+  $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
+  $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
+  $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
+  //echo $sql_risk_issue;
+
+  //DECLARE
+  //$action = $_GET['action']; //new
+  //$temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
-  //print_r($_POST);
 
   if(!empty($_POST['proj_select'])) { 
     $ass_project_regions = implode("','", $_POST['proj_select']); 
     $ass_project_regionsx = $ass_project_regions; 
-
     $regionIN = "'" . $ass_project_regions . "','" . $ass_project . "'"; 
       } else { 
     $regionIN = "'" . $ass_project . "'"; 
       }
+  
+  //GET ASSOCIATED PROJECTS FROM 
+  $sql_assoc_prj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey)";
+  $stmt_assoc_prj = sqlsrv_query( $data_conn, $sql_assoc_prj );
+  //$row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC);
+  //$row_assoc_prj['EPSProject_Nm'];
+  //echo $sql_assoc_prj;
 
-    $region_rplc_a = str_replace("'"," ",$regionIN);
-    $region_display = str_replace(",","<br>",$region_rplc_a);
+  $sql_assoc_prj_keys = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey)";
+  $stmt_assoc_prj_keys  = sqlsrv_query( $data_conn, $sql_assoc_prj_keys  );
+  //$_keys = sqlsrv_fetch_array($stmt_assoc_prj_keys , SQLSRV_FETCH_ASSOC);
+  //$row_assoc_prj_keys ['PROJECT_key'];
 
-  //GET REGIONS
+  //GET REGIONS FROM NAME
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [COX_Dev].[EPS].[ProjectStage]
+                  JOIN [COX_Dev].[CR_MGT].[Region] ON [COX_Dev].[EPS].[ProjectStage].[Region] = [COX_Dev].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
   //echo $sql_regions;
   
-  //GET REGIONS FOR HIDDEN FIELD
-  $sql_regions_f = "SELECT DISTINCT Region_key, Region
-  FROM [EPS].[ProjectStage]
-  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+  //GET REGIONS KEYS FOR HIDDEN FIELD
+  $sql_regions_f = "select distinct Region_key,[RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd]
+                    from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] (2022, 'CB Funding for Growth') 
+                    left join [CR_MGT].[Region] on [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd] = [CR_MGT].[Region].[Region_Cd]
+                    where RiskAndIssue_Key = $RiskAndIssue_Key
+                    order by [CR_MGT].[Region].[Region_key]";
   $stmt_regions_f = sqlsrv_query( $data_conn, $sql_regions_f );
   //$row_region_fs = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC);
   //$row_regions_f['Region'];
+  //echo $sql_regions_f;
+  //exit();
 
   //GET ALL REGIONS FOR REGIONS SELECTION
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [COX_Dev].[EPS].[ProjectStage]
+                  JOIN [COX_Dev].[CR_MGT].[Region] ON [COX_Dev].[EPS].[ProjectStage].[Region] = [COX_Dev].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
 
   //SINGLE REGION FOR NAME CONCATINATION
   $sql_region = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [COX_Dev].[EPS].[ProjectStage]
+                  JOIN [COX_Dev].[CR_MGT].[Region] ON [COX_Dev].[EPS].[ProjectStage].[Region] = [COX_Dev].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_region = sqlsrv_query( $data_conn, $sql_region );
   $row_region = sqlsrv_fetch_array( $stmt_region, SQLSRV_FETCH_ASSOC);
-  //echo $row_region['Region'];
- 
-          
-  //MULTI-REGION CONCATINATION - ROW COUNT
+  //echo $sql_region;
+
+  //MULTI-REGION CONCATINATION - COUNT
   $sql_regions_con = "SELECT Count(DISTINCT Region_key) as numRows
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
-  $stmt_regions_con  = sqlsrv_query( $data_conn, $sql_regions_con );
+                  FROM [COX_Dev].[EPS].[ProjectStage]
+                  JOIN [COX_Dev].[CR_MGT].[Region] ON [COX_Dev].[EPS].[ProjectStage].[Region] = [COX_Dev].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+  $stmt_regions_con  = sqlsrv_query( $data_conn, $sql_regions_con  );
   $row_regions_con = sqlsrv_fetch_array( $stmt_regions_con, SQLSRV_FETCH_ASSOC );
  //echo $sql_regions_con;
 
   $numRows = $row_regions_con['numRows'];
   //echo $numRows;
   //exit();
-
-  //GET SUBPROGRAMS
-  $sql_subprg_f = "SELECT DISTINCT Sub_Prg FROM [EPS].[ProjectStage] WHERE PROJ_NM IN ($regionIN)";
-  $stmt_subprg_f = sqlsrv_query( $data_conn, $sql_subprg_f );
-  //$row_subprg_f = sqlsrv_fetch_array( $stmt_subprg_f, SQLSRV_FETCH_ASSOC );
-  //$row_subprg_f['Sub_Prg'];
-
 
   if($numRows == 7){
       $regionCD = "All";
@@ -101,6 +116,48 @@
       $regionCD= "Multi";
   }
   
+  //DEFINE
+  $changeLogKey = 4;
+  $name = trim($row_risk_issue['RI_Nm']);
+  $RILevel = "";
+  $RIType = $row_risk_issue['RIType_Cd'];
+  $createdFrom  = "";
+  $programs = "";
+  $project_nm = "";
+  $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
+  $description = $row_risk_issue['RIDescription_Txt'];
+  $regionx = "";
+  $Driversx = "";
+  $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
+  $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
+  $RiskProbability = $row_risk_issue['RiskProbability_Nm'];
+  $RiskProbability_Key = $row_risk_issue['RiskProbability_Key'];
+  $individual = $row_risk_issue['POC_Nm'];
+  $internalExternal = $row_risk_issue['POC_Nm'];
+  $responseStrategy2 = $row_risk_issue['ResponseStrategy_Nm'];
+  $unknown = ""; // IF DATE IS EMPTY
+  $date = $row_risk_issue['ForecastedResolution_Dt'];
+  $transProgMan = $row_risk_issue['TransferredPM_Flg'];
+  $opportunity = $row_risk_issue['Opportunity_Txt'];
+  $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+  $DateClosed = $row_risk_issue['RIClosed_Dt'];
+  $driverList = rtrim($_GET['drivertime'], ",");
+  $driverArr = explode(",", $driverList);
+  $regionList = rtrim($_GET['regions'], ",");
+  $regionArr = explode(",", $regionList);
+  $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
+  $raid = $row_risk_issue['RaidLog_Flg'];
+  $riskRealized = $row_risk_issue['RiskRealized_Flg'];
+  $assCRID = $row_risk_issue['AssociatedCR_Key'];
+  $regions = $_GET['regions'];
+
+
+  if(!empty($_POST['proj_select'])) {
+  $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
+  } else {
+  $assocProject = $RiskAndIssue_Key;
+  }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -119,6 +176,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
+  <!--<link href='http://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>-->
 
 <script language="JavaScript">
 function toggle(source) {
@@ -142,7 +200,7 @@ function toggle(source) {
 </style>
 
 </head>
-<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+NameB.value+' '+Descriptor.value+' '+NameC.value">
+<body style="background: #F8F8F8; font-family:Mulish, serif;">
 <main align="center">
   <!-- PROGRESS BAR -->
 <div class="container">       
@@ -179,8 +237,8 @@ function toggle(source) {
   </div>
   <!-- END PROGRESS BAR -->
 <div align="center">
-  <h3>PROGRAM ISSUE</h3>
-  Enter the details of your Program Issue
+  <h3>PROGRAM RISK UPDATE</h3>
+  Enter the details of your Program Risk
 </div>
 <div class="finePrint">
 <?php  
@@ -192,35 +250,38 @@ function toggle(source) {
 ?>
 </div>
 <div style="padding: 20px;">
-  <form action="confirm.php" method="post" id="programRisk" name="programRisk"  oninput="Namex.value = NameA.value +' '+NameB.value+' '+Descriptor.value+' '+NameC.value">
+  <form action="update-confirm.php" method="post" id="programRisk">
 
-  <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
+  <input name="changeLogKey" type="hidden" id="changeLogKey" value="4"><!-- 4 update, 3 close, 2 create, 1 initialize -->
   <input name="programs" type="hidden" id="programs" value="<?php echo $row_projID['PRGM'] ?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value="PRGI">
-  <input name="formType" type="hidden" id="formType" value="New">
+  <input name="formName" type="hidden" id="formName" value="PRGR">
+  <input name="formType" type="hidden" id="formType" value="Update">
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
-  <input name="RIType" type="hidden" id="RIType" value="Issue">
+  <input name="RIType" type="hidden" id="RIType" value="Risk">
   <input name="RILevel" type="hidden" id="RILevel" value="Program">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
   <input name="CreatedFrom" type="hidden" id="Created From" value=''>
-  <input name="TransfertoProgramManager" type="hidden" id="Created From" value="">
-  <input name="RiskProbability" type="hidden" id="RiskProbability" value=''>
-  <input name="Risk Relized" type="hidden" id="Risk Relized" value="0">
+  <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
   <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value=''>
-  <input type="hidden" name="Region" id="Region" value="<?php while($row_regions_f = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region'] . "," ; } ?>">
-  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
-  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
-  
+  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value='<?php while ($row_assoc_prj_keys= sqlsrv_fetch_array($stmt_assoc_prj_keys, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj_keys['PROJECT_key'] . ',';} ?>'>
+  <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value='<?php echo $RiskAndIssue_Key ?>'>
+  <input name="programKeys" type="hidden" id="programKeys" value='<?php echo $progkey ?>'>
+  <input name="regionKeys" type="hidden" id="regionKeys" value="<?php while ($row_regions_f= sqlsrv_fetch_array($stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region_key'] . ',';} ?>">
+  <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
+
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
           <th width="50%" align="left">
             <div id="myRisk">
-              <h4 style="color: #00aaf5">PROGRAM ISSUE</h4>
+              <h4 style="color: #00aaf5">PROGRAM RISK</h4>
             </div></th>
-          <th align="left"><h4 style="color: #00aaf5; padding: 0px 0px 0px 10px">REGIONS</h4></th>
+          <th align="left">&nbsp;</th>
+        </tr>
+        <tr>
+          <td colspan="2" align="left">&nbsp;</td>
           </tr>
         <tr>
           <td colspan="2" align="left">
@@ -234,23 +295,23 @@ function toggle(source) {
             <tbody>
               <tr>
                 <td width="50%"><label for="Created From">Name</label>
-            <br>
-  <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >
-  <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'] //. " " . $row_projID['Sub_Prg'];?>">
-  <input name="NameA1" type="hidden" id="NameA1" value="<?php echo $row_projID['SCOP_DESC'];?>">
-  <input name="NameB" type="hidden" id="NameB" value=""> <!-- Region -->
-  <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
+                <br>
+                <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" value="<?php echo $name ?>">
+                <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'];?>">
+                <input name="NameA1" type="hidden" id="NameA1" value="<?php echo $row_projID['SCOP_DESC'];?>">
+                <input name="NameB" type="hidden" id="NameB" value="<?php echo $regionCD; ?>"> <!-- Region -->
+                <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
               </tr>
               <tr>
-                <td><label for="Descriptor">Issue Descriptor<br>
+                <td><label for="Descriptor">Risk Descriptor<br>
                   </label>
-                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30">  
+                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" value="<?php echo $descriptor;?>" readonly>  
                 </td>
               </tr>
               <tr>
                 <td><label for="Description">Description<br>
                   </label>
-                  <textarea name="Description" cols="120" rows="5" required="required" class="form-control" id="Description"></textarea>  </td>
+                  <textarea name="Description" cols="120" rows="5" required="required" class="form-control" id="Description"><?php echo $description; ?></textarea>  </td>
               </tr>
             </tbody>
           </table>
@@ -262,87 +323,93 @@ function toggle(source) {
             <tbody>
               <tr>
                 <td>
-                <div style="padding: 0px 0px 0px 30px">
-                    <p><strong>Regions Select
+                  <div style="padding: 0px 0px 0px 30px">
+                    <p><strong>Select Regions
                       </strong><br>
-                    <?php
-                        while($row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC)) {
-                          echo "<label><input type='checkbox' name='Region[]' value='" . $row_regions['Region'] . "' id='Region_" . $row_regions['Region_key'] . "' checked disabled> " . $row_regions['Region'] . "</label><br>";
-                        }
-                    ?>
-                    </p>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="All" id="Region" onClick="toggle(this); updatebox()" class="required_group_reg" <?php if(in_array("All", $regionArr)) { echo "checked";} ?> disabled>
+                        Select All</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Corporate" id="Region_6" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Corporate", $regionArr)) { echo "checked";} ?> disabled>
+                        Corporate (COR)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regioxn[]" value="California" id="Region_0" onClick="updatebox()" class="required_group_reg" <?php if(in_array("California", $regionArr)) { echo "checked";} ?> disabled>
+                        California (CA)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Central" id="Region_1" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Central", $regionArr)) { echo "checked";} ?> disabled>
+                        Central (CE)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Northeast" id="Region_2" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Northeast", $regionArr)) { echo "checked";} ?> disabled>
+                        Northeast (NE)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Southeast" id="Region_3" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Southeast", $regionArr)) { echo "checked";} ?> disabled>
+                        Southeast (SE)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Southwest" id="Region_4" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Southwest", $regionArr)) { echo "checked";} ?> disabled>
+                        Southwest (SW)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Virginia" id="Region_5" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Virginia", $regionArr)) { echo "checked";} ?> disabled>
+                        Virginia (VA)</label>
+                      <br>
+                      </p>
                     </div>
                 </td>
               </tr>
             </tbody>
           </table>
-          </div>
-          <br>
-          <div class="box">
-              <table width="100%" border="0" cellpadding="10px" cellspacing="10">
-                <tbody>
-                  <tr>
-                    <td>
-                    <div style="padding: 0px 0px 0px 30px">
-                        <p><strong>Associated Subprograms
-                          </strong><br>
-                        <?php
-                            while($row_subprg_f = sqlsrv_fetch_array( $stmt_subprg_f, SQLSRV_FETCH_ASSOC)) {
-                              echo $row_subprg_f['Sub_Prg'] . "<br>";
-                            }
-                        ?>
-                        </p>
-                        </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-          </div>
-          </div>
+		  </div>
+      </div>
         </td>
         </tr>
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS</h4>
             <div class="box">
-              <table width="100%" border="0">
+            <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="checkbox" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
                     Budget/Funding</label></td>
                   <td width="49%"><label>
-                    <input type="checkbox" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
                     External</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
                     Communications Breakdown</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resources</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
                     Contractor</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
                     Procurement</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
                     Dependency Conflict</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
                     Schedule Impact</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
                     Equipment Integration</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
+                    <input type="checkbox" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
                     Other</label></td>
                   </tr>
                 </table>
@@ -377,77 +444,77 @@ function toggle(source) {
                   </tr>
                   <tr>
                     <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
+                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
                       Scope</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
+                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){ echo "checked";}?>>
                       Schedule</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required>
+                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required <?php if($impactArea2=="Budget (Cost Change)"){ echo "checked";}?>>
                       Budget (Cost Change)</label></td>
                     </tr>
                   </table></td>
-                <td>
+                <td valign="top">
                   <table width="200" border="0">
                     <tr>
                       <strong>Impact Level</strong>
                     </tr>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required <?php if($impactLevel2=="Minor Impact"){echo "checked";}?>>
                         Minor Impact</label></td>
                       </tr>
                     <tr>
                       <td><label>
-                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required>
+                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required <?php if($impactLevel2=="Moderate Impact"){echo "checked";}?>>
                         Moderate Impact</label></td>
                       </tr>
                     <tr>
                       <td><label>
-                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required>
+                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required <?php if($impactLevel2=="Major Impact"){echo "checked";}?>>
                         Major Impact</label></td>
                       </tr>
                     <tr>
                       <td><label>
-                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required>
+                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required <?php if($impactLevel2=="No Impact"){echo "checked";}?>>
                         No Impact</label></td>
                       </tr>
                     
                     </table>
                   </td>
-                <td>
+                <td valign="top">
 				<div id="myDIV2">
-                    <!--<table width="200" border="0">
+                    <table width="200" border="0">
                               <tr>
                                 <td>
                                   <strong>Risk Probability Score</strong>
                                 </td>
                               </tr>
-                              <tr>
+                              <!--<tr>
                                 <td><label>
-                                  <input name="" type="radio" id="ImpactLevel_0" value="1" required>
+                                  <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="1" required>
                                   0% - Risk Only</label></td>
-                                </tr>
+                              </tr>-->
                               <tr>
                                 <td><label>
-                                  <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="2" required>
+                                  <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="2" required <?php if($RiskProbability_Key==2){echo "checked";}?>>
                                   50% 50/50 Chance</label></td>
                                 </tr>
                               <tr>
-                                <td><label>
-                                  <input type="radio" name="RiskProbability" value="3" id="ImpactLevel_1" required>
+                                <td valign="top"><label>
+                                  <input type="radio" name="RiskProbability" value="3" id="ImpactLevel_1" required <?php if($RiskProbability_Key==3){echo "checked";}?>>
                                   75% Highly Likely</label></td>
                                 </tr>
                               <tr>
                                 <td><label>
-                                  <input type="radio" name="RiskProbability" value="4" id="ImpactLevel_2" required>
+                                  <input type="radio" name="RiskProbability" value="4" id="ImpactLevel_2" required <?php if($RiskProbability_Key==4){echo "checked";}?>>
                                   99% Almost Certain</label></td>
                                 </tr>
-                    </table> -->
+                    </table>
                 </div>
 				</td>
                 <td>
@@ -463,15 +530,18 @@ function toggle(source) {
           <td colspan="2" align="left"></td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4>          </td>
-          </tr>
+          <td align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4></td>
+          <td align="left">
+			  
+		  </td>
+        </tr>
         <tr>
           <td colspan="2" align="left">
             <div class="box">
               <label for="Individual">Individual POC<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"  onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"  value="<?php echo $individual ?>" onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
               <datalist id="Individual">
                 <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                 <option><?php echo $row_internal['POC_Nm'] ?></option>
@@ -498,42 +568,64 @@ function toggle(source) {
           <td colspan="2" align="left"></td>
         </tr>
         <tr>
+          <td colspan="2" align="left">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left"><div class="box">
+              <label for="date">Forecasted Resolution Date:</label>
+			  <div id="dateUnknown">
+              <input name="date" 
+                  type="date"
+                  class="form-control" 
+                  id="date" 
+                  value=""
+                  onChange="forCasted()"  
+                  oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
+                  oninput="this.setCustomValidity('')"
+                  >
+          </div>
+          <div id="forcastedDate">
+              <input type="checkbox" 
+                  name="Unknown" 
+                  id="Unknown" 
+                  onChange="unKnown()"
+                  <?php if(empty($date)){ echo "checked";} ?>
+                  >
+              <label for="Unknown">Unknown</label>
+          </div>
+          </div></td>
+        </tr>
+        <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4>			  </td>
         </tr>
         <tr>
           <td colspan="2" align="left"><div class="box">
-            <table width="246" border="0" cellpadding="5" cellspacing="5">
+          <table width="246" border="0" cellpadding="5" cellspacing="5">
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required>
+                  <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required <?php if($responseStrategy2=="Avoid" ) { echo "checked";} ?>>
                   Avoid</label></td>
                 </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required>
+                  <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required <?php if($responseStrategy2=="Mitigate" ) { echo "checked";} ?>>
                   Mitigate</label></td>
                 </tr>
               <tr>
                 <td width="16">&nbsp;</td>
                 <td width="195"><label>
-                  <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required>
+                  <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required <?php if($responseStrategy2=="Transfer" ) { echo "checked";} ?>>
                   Transfer</label></td>
                 </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required>
+                  <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required <?php if($responseStrategy2=="Accept" ) { echo "checked";} ?>>
                   Accept</label></td>
                 </tr>
-              <!-- <tr>
-              <td>&nbsp;</td>
-              <td><label>
-                <input type="radio" name="ResponseStrategy" value="5" id="Response_Strategy_3" required>
-                Under Review</label></td>
-              </tr>  -->
-              </table>
+            </table>
           </div>			</td>
         </tr>
         <tr>
@@ -555,10 +647,13 @@ function toggle(source) {
                   <tr>
                     <td width="100%">
                           
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea>  
-                          <input type="hidden" name="user" value="<?php echo $user_id ?>">
-                          <input type="hidden" name="tempID"value="<?php echo $temp_id ?>"></td>
+                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea></td>
                   </tr>
+                
+                <tr>
+                  <td>&nbsp;</td>
+                  <td></td>
+                </tr>
                 <!-- <tr>
                   <td colspan="2" align="left">
                   <strong>Action Plan Status Log</strong>  
@@ -586,63 +681,59 @@ function toggle(source) {
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="left">
-            
-            </td>
+          <td colspan="2" align="left"></td>
         </tr>
         <tr>
         <td colspan="2" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION</h4></td>
         </tr>
         <tr>
-          <td colspan="2">
-        <div class="box">
-				<!--<iframe 
-            src="includes/associated_prj.php?uid=<?php echo $_GET['uid'];?>&fiscal_year=<?php echo $row_projID['FISCL_PLAN_YR'] ?>" 
-            height="300" 
-            width="1300" 
-            title="Associated Projects"  
-            frameBorder="0" 
-            scrolling="yes">
-        </iframe>-->
-        <textarea name="assocProjects" cols="120" id="assocProjects" class="form-control" readonly><?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?></textarea> 
+          <td colspan="2" align="left">
+        <div class="box" style="font-size: 12px;">
+				  <?php while ($row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj['EPSProject_Nm'] . '<br>';} ?>
         </div>
-		  </td>
+      </td>
         </tr>
 
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">RELATED DATES</h4></td>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
         <tr>
-          <td align="left">
-          <div class="box"><label for="date">Forecasted Resolution Date:</label>
-          <div id="dateUnknown">
-              
-              <input name="date" 
-                  type="date"
-                  class="form-control" 
-                  id="date" 
-                  value="2022-01-01"
-                  onChange="forCasted()"  
-                  oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-                  oninput="this.setCustomValidity('')">
-          </div>
-          <div id="forcastedDate">
-              <input type="checkbox" 
-                  name="Unknown" 
-                  id="Unknown" 
-                  onChange="unKnown()">
-              <label for="Unknown">Unknown</label>
-          </div>
-          </div>
+          <td colspan="2" align="left">
+            <div class="box">
+              <table width="50%" border="0">
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  </tr>
+                <tr>
+                  <td colspan="2"><strong>Risk Realized?</strong></td>
+                  </tr>
+                <tr>
+                  <td><label>
+                    <input type="radio" name="Risk Relized" value="Yes" id="RiskRelized_0" <?php if($riskRealized = 1){ echo "checked";} ?>>
+                    Yes</label></td>
+                  <td><label>
+                    <input type="radio" name="Risk Relized" value="No" id="RiskRelized_1" <?php if($riskRealized = 0){ echo "checked";} ?>>
+                    No</label></td>
+                  </tr>
+                </table>
+              </div>
+            
           </td>
-          <td align="left" valign="top" style="padding-left: 10px">
-          <div class="box">
-            <label for="Created From">Associated CR ID</label>
-            <input name="CreatedFrom" type="text" class="form-control" id="Created From">
-          </div>
-          </td>
+          </tr>
+        <tr>
+          <td colspan="2" align="left"></td>
         </tr>
         <tr>
+          <td colspan="2" align="left">
+            <br>
+            <div class="box">
+              <label for="Created From">Associated CR ID</label>
+              <input name="CreatedFrom" type="text" class="form-control" id="Created From" value="<?php echo $assCRID;?>">
+            </div>
+          </td>
+      </tr>
+      <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
         <tr>
@@ -653,10 +744,10 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="raidLog" value="Yes" id="raid_0">
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0" <?php if($raid == "Yes"){echo "checked";};?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="raidLog" value="No" id="raid_1" checked>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php if($raid == "No" || empty($raid)){echo "checked";}?>>
                     No</label></td>
                   </tr>
                 </table>
@@ -666,41 +757,21 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>
-        <tr colspan="2">
+        <tr>
           <td colspan="2" align="left">
-            <div class="box">
-              <table width="100%" border="0">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      <label for="DateClosed">Date Closed:</label>
-                      <input type="date" name="DateClosed" id="DateClosed" class="form-control">
-                      <!-- <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2"> -->
-                      <!-- <label for="TransfertoProgramManager2">Transfer to Program Manager</label> -->
-                      </td>
-                    </tr>
-                  <tr>
-                    <td width="33%">&nbsp;</td>
-                    <td width="33%" align="center" valign="bottom">&nbsp;</td>
-                    </tr>
-                  </tbody>
-              </table></div>
+			  <div class="box">
+			<label for="DateClosed">Date Closed:</label>
+            <input type="date" name="DateClosed" id="DateClosed" class="form-control">
+			</div>
+		  </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="right" valign="middle">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2" align="right" valign="middle">
+          <input type="submit" name="submit" id="submit" value="Review" class="btn btn-primary">
           </td>
-          <td align="right" valign="middle"></td>
-        </tr>
-        <tr>
-          <td colspan="2" align="right">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="2" align="right"><input type="submit" name="submit" id="submit" value="Review" class="btn btn-primary">
-                  <?php if($action == "edit"){ ?>  
-                    <a href="" class="btn btn-primary">Email</a>
-                  <?php } else { ?>
-                    <a href="" class="btn btn-primary" disabled>Email</a>
-                  <?php } ?></td>
-		  </tr>
-        <tr>
-          <td></td>
         </tr>
       </tbody>
     </table>
@@ -800,154 +871,7 @@ jQuery(function ($) {
     });
 });
 </script>
-<SCRIPT LANGUAGE="JavaScript">
-<!-- 	
-<!-- Begin
-function CheckAll(chk)
-{
-for (i = 0; i < chk.length; i++)
-	chk[i].checked = true ;
-}
 
-function UnCheckAll(chk)
-{
-for (i = 0; i < chk.length; i++)
-	chk[i].checked = false ;
-}
-//  End -->
-</script>
-<script language="JavaScript">
-function toggle(source) {
-  checkboxes = document.getElementsByName('Region[]');
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = source.checked;
-  }
-}
-
-function updatebox()
-{
-    var textbox = document.getElementById("NameB");
-    var values = [];
-
-    if(document.getElementById('Region_0').checked && 
-      document.getElementById('Region_1').checked && 
-      document.getElementById('Region_2').checked && 
-      document.getElementById('Region_3').checked && 
-      document.getElementById('Region_4').checked && 
-      document.getElementById('Region_5').checked &&
-      document.getElementById('Region_6').checked 
-      ) {
-        values.push("All");
-    } 
-
-    else if(document.getElementById('Region_1').checked && 
-    (
-      document.getElementById('Region_0').checked || 
-      document.getElementById('Region_2').checked || 
-      document.getElementById('Region_3').checked || 
-      document.getElementById('Region_4').checked || 
-      document.getElementById('Region_5').checked ||
-      document.getElementById('Region_6').checked
-    )) {
-        values.push("Multi");
-    }
-
-    else if(document.getElementById('Region_2').checked && 
-    (
-      document.getElementById('Region_1').checked || 
-      document.getElementById('Region_0').checked || 
-      document.getElementById('Region_3').checked || 
-      document.getElementById('Region_4').checked || 
-      document.getElementById('Region_5').checked ||
-      document.getElementById('Region_6').checked
-    )) {
-        values.push("Multi");
-    }
-
-    else if(document.getElementById('Region_3').checked && 
-    (
-      document.getElementById('Region_1').checked || 
-      document.getElementById('Region_2').checked || 
-      document.getElementById('Region_0').checked || 
-      document.getElementById('Region_4').checked || 
-      document.getElementById('Region_5').checked ||
-      document.getElementById('Region_6').checked
-    )) {
-        values.push("Multi");
-    }
-
-    else if(document.getElementById('Region_4').checked && 
-    (
-      document.getElementById('Region_1').checked || 
-      document.getElementById('Region_2').checked || 
-      document.getElementById('Region_3').checked || 
-      document.getElementById('Region_0').checked || 
-      document.getElementById('Region_5').checked ||
-      document.getElementById('Region_6').checked
-    )) {
-        values.push("Multi");
-    }
-
-    else if(document.getElementById('Region_5').checked && 
-    (
-      document.getElementById('Region_1').checked || 
-      document.getElementById('Region_2').checked || 
-      document.getElementById('Region_3').checked || 
-      document.getElementById('Region_4').checked || 
-      document.getElementById('Region_0').checked ||
-      document.getElementById('Region_6').checked
-    )) {
-        values.push("Multi");
-    }
-
-    else if(document.getElementById('Region_6').checked && 
-    (
-      document.getElementById('Region_1').checked || 
-      document.getElementById('Region_2').checked || 
-      document.getElementById('Region_3').checked || 
-      document.getElementById('Region_4').checked || 
-      document.getElementById('Region_5').checked ||
-      document.getElementById('Region_0').checked
-    )) {
-        values.push("Multi");
-    }
-   
-    else if(document.getElementById('Region').checked) {
-        values.push("All");
-    }
-
-    else if(document.getElementById('Region_0').checked) {
-        values.push("CA");
-    }
-
-    else if(document.getElementById('Region_1').checked) {
-        values.push("CE");
-    }
-
-    else if(document.getElementById('Region_2').checked) {
-        values.push("NE");
-    }
-
-    else if(document.getElementById('Region_3').checked) {
-        values.push("SE");
-    }
-
-    else if(document.getElementById('Region_4').checked) {
-        values.push("SW");
-    }
-
-    else if(document.getElementById('Region_5').checked) {
-        values.push("VA");
-    }
-
-    else if(document.getElementById('Region_6').checked) {
-        values.push("COR");
-    }
-
-    
-    textbox.value = values.join(" ");
-}
-</script>
 <script>
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
@@ -968,7 +892,6 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   validateGrp()
 });
 </script>
-
 <script>
 var date = new Date();
 
@@ -979,11 +902,15 @@ var year = date.getFullYear();
 if (month < 10) month = "0" + month;
 if (day < 10) day = "0" + day;
 
-var today = year + "-" + month + "-" + day;
-
+var today = <?php if(is_null($date)) {echo ""; } else { echo json_encode(date_format($date,'Y-m-d'), JSON_HEX_TAG); } ?>
 
 document.getElementById('date').value = today;
 </script>
 
+<script>
+var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_encode(date_format($RIClosed_Dt,'Y-m-d'), JSON_HEX_TAG); } ?>
+
+document.getElementById('DateClosed').value = closeday;
+</script>
 </body>
 </html>
