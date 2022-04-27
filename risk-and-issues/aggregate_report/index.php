@@ -111,6 +111,7 @@
     <script src="../../colorbox-master/jquery.colorbox.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     
     
   <script>
@@ -239,9 +240,19 @@
   const populate = (rilist) => {
     console.log(rilist);
     makesheet(rilist);
+    makeexcel(rilist);
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
-    // console.log(rilist);
+    document.workbook = new ExcelJS.Workbook();
+    document.worksheet = document.workbook.addWorksheet('ExampleWS');
+    let cols = []
+    for (field in rifields) {
+      cols.push({
+        width: (field.length*3)
+      })
+    }
+    document.worksheet.columns = cols;
+    // document.worksheet.addRow(rowValues);
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
@@ -251,24 +262,174 @@
   }
 
   const makearray = (rin) => {
-        // console.log("in")
-        let r = [];
-        let a = getprogrambyname(rin);
-        // console.log(a)
-        for (field in a) {
-          r.push(a[field]);
-          // console.log(field)
-        }
-        // console.log(r)
-        return a;
+    // console.log("in")
+    let r = [];
+    let a = getprogrambyname(rin);
+    // console.log(a)
+    for (field in a) {
+      r.push(a[field]);
+      // console.log(field)
+    }
+    // console.log(r)
+    return a;
   };
+
+  const makeexcel = (data) => {
+    // Excel Spreadsheet 
+
+    const makecellrange = (props) => {
+      props.worksheet.mergeCells(props.start, props.end);
+      let title = props.worksheet.getCell(props.start);
+      title.value = props.title;
+      title.font = props.font;
+      title.alignment = props.align;
+      // return props.worksheet;
+    }
+    console.log("makeexcel");
+    const ria = [];
+    const filename = "ria-ggregate.xlsx";
+    data.forEach(function(value) {
+      ria.push(makearray(value));
+      console.log(value);
+    })
+    const riwb = new ExcelJS.Workbook();
+    let riws = riwb.addWorksheet("ri");
+    makecellrange({
+      worksheet: riws, start: 'C1', end: 'G4', title: "Risk and Issues Aggregate", font: {size: 16, bold: true}, align: {vertical: 'middle', horizontal: 'center'}
+    });
+    console.log(riws);
+    // console.log(title);
+    //image placeholder
+
+  }
+
+  const test2 = () => {
+    var workbook = new ExcelJS.Workbook();
+    var worksheet = workbook.addWorksheet('ExampleWS');
+
+    let cols = []
+    for (field in rifields) {
+      cols.push({
+        header: rifields[field],
+        key: field,
+        width: field.length
+      })
+    }
+    worksheet.columns = cols;
+    worksheet.addRow(rowValues);
+    for (row in ridata) {
+      // let rowValues = [];
+      var rowValues = [];
+      for (field in rifields) {
+        rowValues.push(ridata[row][field]);
+      }
+      // rowValues[1] = 4;
+      // rowValues[9] = new Date();
+      worksheet.addRow(rowValues);
+      // worksheet.addRow();
+      // console.log(ridata[row].RI_Nm);
+      // break;
+    }
+
+
+    var rows = [
+    [5,'Bob',new Date()], // row by array
+    {id:6, name: 'Barbara', dob: new Date()}
+    ];
+    worksheet.addRows(ridata);
+
+    //write in File
+    var strFilename = "testExceljs01.xlsx";
+    workbook.xlsx.writeBuffer().then((buf) => {
+      saveAs(new Blob([buf]), `testFile.xlsx`);
+      // other stuffs
+    });
+    // workbook.xlsx.writeFile(strFilename)
+    // .then(function() {
+    // console.log("file OK");
+    // });
+  }
+
+
+  const testy = () => {
+
+
+    let workbook = new ExcelJS.Workbook();
+    let worksheet = workbook.addWorksheet("Tutorials");
+    worksheet.columns = [
+      { header: "Id", key: "id", width: 5 },
+      { header: "Title", key: "title", width: 25 },
+      { header: "Description", key: "description", width: 25 },
+      { header: "Published", key: "published", width: 10 },
+    ];
+    // Add Array Rows
+    for (row in ridata) {
+      worksheet.addRow(ridata[row]);
+      console.log(ridata[row].RI_Nm);
+    }
+    // worksheet.addRows(ridata);
+    workbook.xlsx.writeBuffer().then((buf) => {
+      saveAs(new Blob([buf]), `testFile.xlsx`);
+      // other stuffs
+    });
+    console.log(workbook);
+    // workbook.xlsx.writeFile("filename.xlsx");
+    // saveAs(new Blob([makeoctet(worksheet)], {type: "application/octet-stream"}), "riaggreate.xlsx");
+    // res is a Stream object
+    // res.setHeader(
+    //   "Content-Type",
+    //   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    // );
+    // res.setHeader(
+    //   "Content-Disposition",
+    //   "attachment; filename=" + "tutorials.xlsx"
+    // );
+    // return workbook.xlsx.write(res).then(function () {
+    //   res.status(200).end();
+    // });
+return;
+    // const options = {
+    //   filename: 'myfile.xlsx',
+    //   useStyles: true,
+    //   useSharedStrings: true
+    // };
+
+    // document.workbook = new ExcelJS.Workbook(options);
+
+    // const worksheet = document.workbook.addWorksheet('my sheet');
+
+    // worksheet.columns = [
+    //     { header: 'Id', key: 'id' },
+    //     { header: 'First Name', key: 'first name' },
+    //     { header: 'Phone', key: 'ph' }
+    // ]
+
+    // var data;
+
+    // for(let i = 1; i<= 10; i++){
+      
+    //   data = {
+    //     id: i,
+    //     'first name': "name "+i,
+    //     ph: "012014520"+i
+    //   };
+
+    //   worksheet.addRow(data).commit();
+    // }
+
+    // workbook.commit().then(function() {
+      // console.log('excel file cretaed');
+    // });
+    // console.log(document.workbook);
+    // saveAs(new Blob([makeoctet(document.workbook)], {type: "application/octet-stream"}), "riaggreate.xlsx");
+  }
+
 
   const makesheet = (data) => {
     const ria = [];
     data.forEach(function(value) {
       ria.push(makearray(value));
       console.log(value);
-      // console.log(ria);
     })
     console.log(ria);
     const riss = XLSX.utils.book_new();
@@ -285,11 +446,14 @@
     // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
     // saveAs(blob, "hello world.txt");
     document.rixl = XLSX.write(riss, {bookType: 'xlsx', type: 'binary'});
-    // console.log(document.rixl);
   }
 
   const exporter = () => {
-    saveAs(new Blob([makeoctet(document.rixl)], {type: "application/octet-stream"}), "riaggreate.xlsx");
+    document.workbook.xlsx.writeBuffer().then((buf) => {
+      saveAs(new Blob([buf]), 'ri-aggregate-' + makedate(new Date()) + '.xlsx');
+      // other stuffs
+    });
+    // saveAs(new Blob([makeoctet(document.rixl)], {type: "application/octet-stream"}), "riaggreate.xlsx");
   }
 
   function makeoctet(s) { 
@@ -402,11 +566,14 @@
       tridobj.appendChild(header);
       // console.log(program);
       // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
+      var rowValues = [program.RI_Nm];
       for (field of datafields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
           tridobj.appendChild(maketd(texter, "", "p-4 databox"));
+          rowValues.push(texter);
         })(field);
+        let newrow = document.worksheet.addRow(rowValues);
       }
       // console.log(program);
       // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
@@ -459,13 +626,21 @@
   const makeheader = (name, type) => {
     
     // Make the header row for a risk or issue
-    
+    // let cells = [];
+    // for (field in rifields) {
+    //   cells.push(rifields[field]);
+    // }
+    // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
     trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center"}))
+    let cells = ["Risk/Issue"];
     for (field of fieldlist) {
-      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}))
+      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}));
+      cells.push(field);
     }
+    document.worksheet.addRow(cells);
+    document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true };
     return trri;
   }
 
@@ -597,11 +772,15 @@
     return ((middle >= first && middle <= last))
   }  
 
-const flipname = (name) => {
-  let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
-  let ln = name.substring(0, name.indexOf(";"))
-  return(fn + ln);
-}  
+  const makedate = (dateobject) => {
+    return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+  }
+
+  const flipname = (name) => {
+    let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
+    let ln = name.substring(0, name.indexOf(";"))
+    return(fn + ln);
+  }  
 
   const ranger = (daterange) => {
     // get start and end date from a date range set via Bootstrap date range picker

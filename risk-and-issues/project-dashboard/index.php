@@ -108,6 +108,8 @@ if($riquery === false) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 <script src="../../colorbox-master/jquery.colorbox.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script>
 $(document).ready(function(){
 				//Examples of how to assign the Colorbox event to elements
@@ -178,6 +180,7 @@ $(function () {
     <?php 
       require '../includes/ri-selectors.php';
       ?>
+          <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/>
               <div id="main" class="accordion" >
             <!-- <div class="header">
               Program Name (Risks, Issues)
@@ -225,8 +228,17 @@ $(function () {
       console.log(rilist);
     const main = document.getElementById("main");
     main.innerHTML = '';
+    document.workbook = new ExcelJS.Workbook();
+    document.worksheet = document.workbook.addWorksheet('ExampleWS');
+    let cols = []
+    for (field in rifields) {
+      cols.push({
+        width: (rifields[field].length*3)
+      })
+    }
+    document.worksheet.columns = cols;
     main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
-    main.appendChild(makeheader())
+    main.appendChild(makeheader());
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
@@ -240,9 +252,13 @@ $(function () {
     // Make the header. Duh.
     
     const trri = makeelement({"e": "tr", "i": "headrow", "t": "", "c":"p-4"});
+    let cells = [];
     Object.entries(rifields).forEach(([key, value]) => {
-      trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}))
+      trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
+      cells.push(value);
     })
+    document.worksheet.addRow(cells);
+    document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true };
     return trri;
   }
 
@@ -301,11 +317,15 @@ $(function () {
             console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
         }
     };
+    var rowValues = [];
     for(field in rifields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
           trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" }));
+          let t = texter;
+          rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
         })(field);
+        let newrow = document.worksheet.addRow(rowValues);
     }
     return trri;
   }  
@@ -350,7 +370,14 @@ $(function () {
   // Sanitize a string
   const makesafe = (target) => target.replace(/\s/g,'');
   
-  
+  const exporter = () => {
+    document.workbook.xlsx.writeBuffer().then((buf) => {
+      saveAs(new Blob([buf]), 'ri-aggregate-' + makedate(new Date()) + '.xlsx');
+      // other stuffs
+    });
+    // saveAs(new Blob([makeoctet(document.rixl)], {type: "application/octet-stream"}), "riaggreate.xlsx");
+  }
+
   const filtration = () => {
     // filter the programs list using the form
     console.log("filter")
@@ -394,11 +421,15 @@ $(function () {
     return ((middle >= first && middle <= last))
   }  
 
-const flipname = (name) => {
-  let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
-  let ln = name.substring(0, name.indexOf(";"))
-  return(fn + ln);
-}  
+  const makedate = (dateobject) => {
+    return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+  }
+
+    const flipname = (name) => {
+    let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
+    let ln = name.substring(0, name.indexOf(";"))
+    return(fn + ln);
+    }  
 
   const ranger = (daterange) => {
     // get start and end date from a date range set via Bootstrap date range picker
