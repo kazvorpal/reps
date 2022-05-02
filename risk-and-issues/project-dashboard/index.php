@@ -232,7 +232,7 @@ $(function () {
     let cols = []
     for (field in ridata[0]) {
       console.log(ridata[0][field]);
-    //   (hiddenfields.includes(field))
+      (hiddenfields.includes(field))
       cols.push({
         header: field,
         key: field,
