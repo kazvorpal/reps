@@ -233,7 +233,7 @@
   
   // Names of Data for program fields
   const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
-  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours", "subs"];
+  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
   const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
 
 
@@ -244,9 +244,12 @@
     document.workbook = new ExcelJS.Workbook();
     document.worksheet = document.workbook.addWorksheet('ExampleWS');
     let cols = []
-    for (field in rifields) {
+    for (field in ridata[0]) {
+      console.log(ridata[0][field])
       cols.push({
-        width: (field.length*3)
+        header: field,
+        key: field,
+        width: (ridata[0][field]) ? ridata[0][field].length : 8
       })
     }
     document.worksheet.columns = cols;
@@ -368,7 +371,7 @@
         // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
         // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
       }
-  };
+    };
 
     const program = getprogrambykey(id, name);
     const safename = makesafe(program.Program_Nm);
@@ -390,15 +393,28 @@
       tridobj.appendChild(header);
       // console.log(program);
       // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
-      var rowValues = [program.RI_Nm];
       for (field of datafields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
           tridobj.appendChild(maketd(texter, "", "p-4 databox"));
+        })(field);
+      }
+      var rowValues = [];
+      for (field in program) {
+        (function(test) {
+          const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
           rowValues.push(texter);
         })(field);
-        let newrow = document.worksheet.addRow(rowValues);
+        // rowValues.push(texter);
       }
+      // for (field of datafields) {
+      //   (function(test) {
+      //     const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+      //     tridobj.appendChild(maketd(texter, "", "p-4 databox"));
+      //     rowValues.push(texter);
+      //   })(field);
+      // }
+      let newrow = document.worksheet.addRow(rowValues);
       // console.log(program);
       // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
       makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
@@ -419,8 +435,6 @@
       document.getElementById("td" + saferi).appendChild(table);
       let p = [];
       for(project of projects) {
-        // console.log(project);
-        // console.log("project.PROJECT_Key:" + project.PROJECT_key);
         if (!p.includes(project.PROJECT_key)){
           const tr = document.createElement("tr");
           tr.id = "tr" + project.PROJECT_key;
@@ -457,13 +471,13 @@
     // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center"}))
+    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center"}));
     let cells = ["Risk/Issue"];
     for (field of fieldlist) {
       trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}));
       cells.push(field);
     }
-    document.worksheet.addRow(cells);
+    // document.worksheet.addRow(cells);
     document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true };
     return trri;
   }
@@ -535,6 +549,7 @@
   
   // Takes a program key and name and returns the row object
   const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
+  const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.PROJECT_key == name);
   
   const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   

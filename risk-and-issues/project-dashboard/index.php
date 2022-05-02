@@ -90,11 +90,9 @@ if($riquery === false) {
         $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
       }
     }
-    
-  $p4pout = json_encode($p4plist);
-  $mangerout = json_encode($mangerlist);
-  $jsonout = json_encode($rows);
-  
+    $p4pout = json_encode($p4plist);
+    $mangerout = json_encode($mangerlist);
+    $jsonout = json_encode($rows);
   }
 
 ?>
@@ -112,39 +110,39 @@ if($riquery === false) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script>
 $(document).ready(function(){
-				//Examples of how to assign the Colorbox event to elements
-				$(".group1").colorbox({rel:'group1'});
-				$(".group2").colorbox({rel:'group2', transition:"fade"});
-				$(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-				$(".group4").colorbox({rel:'group4', slideshow:true});
-				$(".ajax").colorbox();
-				$(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-				$(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-				$(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
-				$(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
-				$(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
-				$(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
-				$(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
-				$(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
-				$(".inline").colorbox({inline:true, width:"50%"});
-				$(".callbacks").colorbox({
-					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
-				});
+    //Examples of how to assign the Colorbox event to elements
+    $(".group1").colorbox({rel:'group1'});
+    $(".group2").colorbox({rel:'group2', transition:"fade"});
+    $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+    $(".group4").colorbox({rel:'group4', slideshow:true});
+    $(".ajax").colorbox();
+    $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+    $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+    $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+    $(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
+    $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+    $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+    $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+    $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
+    $(".inline").colorbox({inline:true, width:"50%"});
+    $(".callbacks").colorbox({
+        onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+        onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+        onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+        onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+        onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+    });
 
-				$('.non-retina').colorbox({rel:'group5', transition:'none'})
-				$('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
-				
-				//Example of preserving a JavaScript event for inline calls.
-				$("#click").click(function(){ 
-					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
-					return false;
-				});
-			});
-function MM_setTextOfTextfield(objId,x,newText) { //v9.0
+    $('.non-retina').colorbox({rel:'group5', transition:'none'})
+    $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+    
+    //Example of preserving a JavaScript event for inline calls.
+    $("#click").click(function(){ 
+        $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+        return false;
+    });
+});
+const MM_setTextOfTextfield = (objId,x,newText) => { //v9.0
   with (document){ if (getElementById){
     var obj = getElementById(objId);} if (obj) obj.value = newText;
   }
@@ -199,11 +197,11 @@ $(function () {
 <script>
 	var myVar;
 	
-	function myFunction() {
+	const myFunction = () => {
 	  myVar = setTimeout(showPage, 1000);
 	}
 	
-	function showPage() {
+	const showPage = () => {
 	  document.getElementById("loader").style.display = "none";
 	  document.getElementById("myDiv").style.display = "block";
 	}
@@ -223,17 +221,23 @@ $(function () {
   const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
   const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
   const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Proj_Nm": "Project Name", "mangerlist": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Dt", "Current": "Current Task", "ResponseStrategy_Nm": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
-  
+  const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"]
+
   const populate = (rilist) => {
-      console.log(rilist);
+    console.log(rilist);
     const main = document.getElementById("main");
     main.innerHTML = '';
     document.workbook = new ExcelJS.Workbook();
     document.worksheet = document.workbook.addWorksheet('ExampleWS');
     let cols = []
-    for (field in rifields) {
+    for (field in ridata[0]) {
+      console.log(ridata[0][field]);
+    //   (hiddenfields.includes(field))
       cols.push({
-        width: (rifields[field].length*3)
+        header: field,
+        key: field,
+        width: (ridata[0][field]) ? ridata[0][field].length : 8,
+        hidden: hiddenfields.includes(field)
       })
     }
     document.worksheet.columns = cols;
@@ -317,16 +321,26 @@ $(function () {
             // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
         }
     };
-    var rowValues = [];
+    const rowValues = [];
+    // const sheetdata = ridata[r]
+    console.log("ri");
+    console.log(ri);
+    for (field in ri) {
+        (function(test) {
+            const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+            rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+            // rowValues.push(texter);
+        })(field);
+    }
+    let newrow = document.worksheet.addRow(rowValues);
+    // var rowValues = [];
     for(field in rifields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
           trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" }));
-          let t = texter;
-          rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
         })(field);
-        let newrow = document.worksheet.addRow(rowValues);
     }
+    // let newrow = document.worksheet.addRow(rowValues);
     return trri;
   }  
 
@@ -372,7 +386,7 @@ $(function () {
   
   const exporter = () => {
     document.workbook.xlsx.writeBuffer().then((buf) => {
-      saveAs(new Blob([buf]), 'ri-aggregate-' + makedate(new Date()) + '.xlsx');
+      saveAs(new Blob([buf]), 'ri-project-dashboard-' + makedate(new Date()) + '.xlsx');
       // other stuffs
     });
     // saveAs(new Blob([makeoctet(document.rixl)], {type: "application/octet-stream"}), "riaggreate.xlsx");
