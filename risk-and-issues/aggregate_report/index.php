@@ -232,20 +232,19 @@
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Names of Data for program fields
-  const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
-  const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
+  const fieldlist = ["Program", "Region", "R/I Creator", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
+  const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
   const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
 
 
   const populate = (rilist) => {
-    console.log(rilist);
+    console.log(ridata);
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
     document.workbook = new ExcelJS.Workbook();
     document.worksheet = document.workbook.addWorksheet('ExampleWS');
-    let cols = []
+    let cols = [];
     for (field in ridata[0]) {
-      console.log(ridata[0][field])
       cols.push({
         header: field,
         key: field,
@@ -257,21 +256,17 @@
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
-        createrow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
+        makerow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
       }
     }
   }
 
   const makearray = (rin) => {
-    // console.log("in")
     let r = [];
     let a = getprogrambyname(rin);
-    // console.log(a)
     for (field in a) {
       r.push(a[field]);
-      // console.log(field)
     }
-    // console.log(r)
     return a;
   };
 
@@ -290,7 +285,7 @@
                 return buf;    
   }
 
-  const createrow = (name, risks, issues) => {
+  const makerow = (name, risks, issues) => {
 
     // Runs once per Program
 
@@ -378,18 +373,21 @@
     const saferi = makesafe(program.RI_Nm);
     if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
       const trid = "tr" + type + saferi + Math.random();
-      document.getElementById("table" + safename).appendChild(maketr(trid));
+      document.getElementById("table" + safename).appendChild(maketr(trid, "ptr"));
+      const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key].length != 0) ? "▶" : "";
       const header = makeelement({
         "e": "th", 
         "i": "th" + type + saferi, 
-        "t": "<div class='arrows'> ▶ </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+        "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
         "c":"p-4 namebox"
       });
       // console.log(program.RI_Nm);
       const tridobj = document.getElementById(trid);
-      tridobj.onclick = function() {
-        toggler(document.getElementById("projects" + saferi), this.children[0]);
-      };
+      if (arrow != "") {
+        tridobj.onclick = function() {
+          toggler(document.getElementById("projects" + saferi), this.children[0]);
+        };
+      }
       tridobj.appendChild(header);
       // console.log(program);
       // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
@@ -417,7 +415,10 @@
       let newrow = document.worksheet.addRow(rowValues);
       // console.log(program);
       // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
-      makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
+      // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
+      if(arrow != "") {
+        makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
+      }
     }
   }    
 
@@ -428,6 +429,7 @@
     document.getElementById(tableid).appendChild(maketr("projects" + saferi, "panel-collapse collapse"));
     document.getElementById("projects" + saferi).appendChild(maketd("&nbsp;", "", ""));
     document.getElementById("projects" + saferi).appendChild(maketd("", "td" + saferi, "", 10));
+    console.log(projects)
     if (projects.length != 0) {
       const table = document.createElement("table");
       table.id = "table" + saferi;
@@ -446,6 +448,8 @@
         }
       }
     } else {
+
+      // document.getElementById("arrow" + saferi).innerHTML = "";
       let empty = document.createTextNode("No Associated Projects");
       document.getElementById("td" + saferi).appendChild(empty);
     }
@@ -471,7 +475,7 @@
     // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center"}));
+    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center headbox"}));
     let cells = ["Risk/Issue"];
     for (field of fieldlist) {
       trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}));
@@ -503,7 +507,7 @@
   const maketr = (id, classes) => {
     const tr = document.createElement("tr");
     tr.id = id;
-    tr.className = classes;
+    tr.className = (typeof classes != "undefined") ? classes: "";
     return tr;
   }
   const maketd = (text, id, classes, colspan) => {
@@ -556,6 +560,10 @@
   // Sanitize a string
   const makesafe = (target) => target.replace(/\s/g,'');
   
+  const empty = (o) => {
+    o.children[0].innerHTML = "";
+  }
+
   const toggler = (target, o) => {
     // Toggles visibility of projects when a given program is clicked
     if (target != null) {

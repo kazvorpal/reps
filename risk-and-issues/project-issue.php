@@ -11,7 +11,7 @@
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
-
+  
 ?>
 <!doctype html>
 <html lang="en">
@@ -41,17 +41,18 @@ function toggle(source) {
 }
 </script>
 <style>
-    .box {
+  .box {
     border: 1px solid #BCBCBC;
-	background-color: #ffffff;
+    background-color: #ffffff;
     border-radius: 5px;
     padding: 5px;
-    }
+  }
     .finePrint {
     font-size: 9px;  
     color: red;
     }
 </style>
+<script>alert("moo")</script>
 
 </head>
 <body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
@@ -324,7 +325,7 @@ Enter the details of your Project Risk
         <tr>
           <td colspan="3" align="left">
             <div class="box">
-              <label for="Individual">Individual POC<br>
+              <label for="Individual">Individual POC?<br>
                 </label>
               
               <input type="text" list="Individual" name="Individual" class="form-control" id="indy"  onblur="document.getElementById('intern').disabled = (''!=this.value);"/>

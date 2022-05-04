@@ -1,12 +1,18 @@
 .headbox {
-  background-color: #00aaf5;
+  background-color: rgb(51, 122, 183);
   color: #fff;
   border-left: 1px solid #fff;
   padding: 4px;
   cursor: default;
 }
+.ptr:nth-of-type(odd) {
+    background-color: rgb(233, 233, 233);
+}
+.ptr:nth-of-type(even) {
+    background-color: rgb(255, 255, 255);
+}
 .databox {
-  background-color: #d9d9d9;
+  /* background-color: #d9d9d9; */
   color: #000;
   border: 1px solid #888;
   padding: 4px;
@@ -16,7 +22,7 @@
     max-width:600px;
 }
 .header {
-  background-color: #00aaf5;
+  background-color: rgb(51, 122, 183);
   color: #fff;
   font-size: large;
   text-align: left;
@@ -79,7 +85,7 @@
     padding: 4px;
 }
 .namebox {
-  background-color: #fff;
+  /* background-color: #fff; */
   color: #00f;
   border: 1px solid #ddd;
   padding: 4px;
