@@ -252,7 +252,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
 
         //START - EMAIL RAID ADMIN
         if($raidLog == "Yes") {
-            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com";
+            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com,Briana.Baynham@cox.com";
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 

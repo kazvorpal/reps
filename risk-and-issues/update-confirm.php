@@ -7,7 +7,7 @@ include("../sql/risk-issues-lookup.php");
 //ASSOCIATED RISK AND ISSUES FROM KEYS
 //$ri_name = $row_risk_issue['RI_Nm'];
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
-                              from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name')
+                              from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',$status)
                               where RiskAndIssue_Key in($RiskAndIssue_Key)";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
@@ -206,9 +206,9 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects</td>
+      <td>Associated Risk/Issue</td>
       <td>
-        <?php  //while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
+        <?php  while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
         
       </td>
     </tr>

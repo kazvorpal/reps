@@ -277,7 +277,7 @@ include ("../sql/MS_Users_prg.php");
 
         //START - EMAIL RAID ADMIN
         if($raidLog == "Yes") {
-            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com";
+            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com,Briana.Baynham@cox.com";
             $subject = "Updated Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 

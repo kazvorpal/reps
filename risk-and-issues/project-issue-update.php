@@ -13,12 +13,13 @@
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   //$ass_project = $row_projID['PROJ_NM'];
   //$forcastDate =  date('m/d/Y');
-  print_r($_POST);
+  //print_r($_POST);
 
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_POST['rikey'];
 $fscl_year = $_POST['fscl_year'];
 $proj_name = $_POST['proj_name'];
+$status = $_POST['status'];
   
 $sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
@@ -71,7 +72,7 @@ $assocProject = $RiskAndIssue_Key;
 //ASSOCIATED RISK AND ISSUES
 //$ri_name = $row_risk_issue['RI_Nm'];
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
-                              from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name')
+                              from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',$status)
                               where RiskAndIssue_Key in($assocProject)";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
@@ -190,6 +191,8 @@ function toggle(source) {
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php $assocProject; ?>">
   <input name="regionKeys" type="hidden" id="regionKeys" value="">
   <input name="programKeys" type="hidden" id="programKeys" value="">
+  <input name="status" type="hidden" id="status" value="<?php echo $status;?>">
+
  
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -317,13 +320,13 @@ function toggle(source) {
                   </tr>
                   <tr>
                     <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
-                      Scope</label></td>
+                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){echo "checked";}?>>
+                      Schedule</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){echo "checked";}?>>
-                      Schedule</label></td>
+                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
+                      Scope</label></td>
                     </tr>
                   <tr>
                     <td><label>
@@ -351,12 +354,6 @@ function toggle(source) {
                         <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required <?php if($impactLevel2=="Major Impact"){echo "checked";}?>>
                         Major Impact</label></td>
                       </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required <?php if($impactLevel2=="No Impact"){echo "checked";}?>>
-                        No Impact</label></td>
-                      </tr>
-                    
                     </table>
                   </td>
                 <td colspan="2" valign="top">
@@ -537,7 +534,7 @@ function toggle(source) {
             <div class="box">
               <table width="50%" border="0">
                 <tr>
-                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
                   </tr>
                 <tr>
                   <td><label>

@@ -7,27 +7,27 @@ include ("../data/emo_data.php");
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
+$status = $_GET['status']; //0=closed , 1=open
+$popup = $_GET['popup'];
   
-$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue['Risk_Issue_Name']; 
-//echo $sql_risk_issue;		
+$ri_name = $row_risk_issue['RI_Nm'];
+$riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 
 //GET DRIVERS
-$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status)";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 
-//echo $sql_risk_issue_driver;			
 
 //GET ASSOCIATED PROJECTS
-$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name')";
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 
-//echo $sql_risk_issue_assoc_proj;		
 
 //DECLARE
 $name = trim($row_risk_issue['RI_Nm']);
@@ -35,11 +35,11 @@ $RILevel = "";
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
 $programs = "";
-$project_nm = $row_risk_issue['proj_nm'];
+$project_nm = $row_risk_issue['Proj_Nm'];
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
 $regionx = "";
-$Driversx = $row_risk_issue['Driver_Nm'];
+$Driversx = ""; //$row_risk_issue_driver['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
 $riskProbability = $row_risk_issue['RiskProbability_Nm'];
@@ -56,7 +56,8 @@ $dateClosed = $row_risk_issue['RIClosed_Dt'];
 $driver_list = "";
 $ri_list = "";
 $uaccess = $_GET['au'];
-echo $driver_list;
+$status = $_GET['status']
+
 ?>
 <!doctype html>
 <html>
@@ -211,9 +212,12 @@ echo $driver_list;
 </table>
 
 <div align="center">
-      <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
-      <?php if($uaccess =="true"){ ?>
-      <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+      <?php if($popup=="false"){?>
+        <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+      <?php } ?>
+
+      <?php if($status == 1){ ?>
+      <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
       <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
       %0D%0ARisk/Issue Name: <?php echo $name;?>

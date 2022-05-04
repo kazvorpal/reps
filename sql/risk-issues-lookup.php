@@ -4,6 +4,11 @@
 //print_r($_POST);
 //exit();
 // Entered Values
+if(!empty($_POST['status'])){
+  $status = $_POST['status'];
+} else {
+  $status = 2; //
+}
 $RiskAndIssue_Key = "";
 if(!empty($_POST['RiskAndIssue_Key'])){
   $RiskAndIssue_Key = $_POST['RiskAndIssue_Key'];

@@ -2,12 +2,9 @@
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/project_by_id.php");?>
-<?php //include ("../sql/ri_filter_vars.php");?>
-<?php //include ("../sql/ri_filters.php");?>
-<?php //include ("../sql/ri_filtered_data.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
-  $action = $_GET['action']; //new
+  $action = $_GET['action']; 
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
@@ -363,10 +360,10 @@ function toggle(source) {
             <tbody>
 
               <tr>
-                <td width="25%"></td>
-                <td width="25%"></td>
-                <td width="25%"></td>
-                <td width="25%"></td>
+                <td width="50%"></td>
+                <td width="50%"></td>
+                <td width="0%"></td>
+                <td width="0%"></td>
               </tr>
 
               <tr>
@@ -377,13 +374,13 @@ function toggle(source) {
                   </tr>
                   <tr>
                     <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
-                      Scope</label></td>
+                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
+                      Schedule</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
-                      Schedule</label></td>
+                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
+                      Scope</label></td>
                     </tr>
                   <tr>
                     <td><label>
@@ -411,12 +408,6 @@ function toggle(source) {
                         <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required>
                         Major Impact</label></td>
                       </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required>
-                        No Impact</label></td>
-                      </tr>
-                    
                     </table>
                   </td>
                 <td>
@@ -467,28 +458,22 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="2" align="left">
-            <div class="box">
+          <div class="box">
               <label for="Individual">Individual POC<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"  onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
-              <datalist id="Individual">
-                <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                <option><?php echo $row_internal['POC_Nm'] ?></option>
-                <?php } ?>
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"/>
+              
+                <datalist id="Individual">
+                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
+                  <?php } ?>
                 </datalist>
-              <!--
-              <h4 align="center">OR</h4>
+
               <label for="Individual3">Team/Group POC<br>
                 </label>
-              
-              <input type="text" list="InternalExternal" name="InternalExternal" class="form-control" id="intern" onblur="document.getElementById('indy').disabled = (''!=this.value);"/>
-              <datalist id="InternalExternal">
-                <?php while($row_external  = sqlsrv_fetch_array( $stmt_external , SQLSRV_FETCH_ASSOC)) { ?>
-                <option><?php echo $row_external['POC_Nm'] ?></option>
-                <?php } ?>
-                </datalist> -->
-              </div>
+              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()"/>
+          </div>
           </td>
           </tr>
         <tr>
@@ -649,7 +634,7 @@ function toggle(source) {
           <td colspan="3" align="left">
             <div class="box">
               <table width="50%" border="0">
-                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
                   </tr>
                 <tr>
                   <td><label>
@@ -981,9 +966,14 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-
 document.getElementById('date').value = today;
 </script>
-
+<script>
+  document.getElementById("indy").addEventListener("change", function(){
+  const v = this.value.split(" : ");
+  this.value = v[0];
+  document.getElementById("InternalExternal").value = v[1];
+  });
+</script>
 </body>
 </html>

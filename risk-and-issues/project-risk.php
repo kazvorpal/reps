@@ -252,14 +252,14 @@ function toggle(source) {
                   </tr>
                   <tr>
                     <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
-                      Scope</label></td>
-                    </tr>
-                  <tr>
-                    <td><label>
                       <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
                       Schedule</label></td>
                     </tr>
+                  <tr>
+                    <td><label>
+                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
+                      Scope</label></td>
+                  </tr>
                   <tr>
                     <td><label>
                       <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required>
@@ -286,11 +286,11 @@ function toggle(source) {
                         <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required>
                         Major Impact</label></td>
                       </tr>
-                    <tr>
+                   <!-- <tr>
                       <td><label>
                         <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required>
                         No Impact</label></td>
-                      </tr>
+                      </tr> -->
                     
                     </table>
                   </td>
@@ -343,24 +343,18 @@ function toggle(source) {
               <label for="Individual">Individual POC<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"  onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
-              <datalist id="Individual">
-                <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                <option><?php echo $row_internal['POC_Nm'] //. " - " . $row_internal['POC_Email'] ?></option>
-                <?php } ?>
-                </datalist>
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"/>
               
-              <!--<h4 align="center">OR</h4>
+                <datalist id="Individual">
+                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
+                  <?php } ?>
+                </datalist>
+
               <label for="Individual3">Team/Group POC<br>
                 </label>
-              
-              <input type="text" list="InternalExternal" name="InternalExternal" class="form-control" id="intern" onblur="document.getElementById('indy').disabled = (''!=this.value);"/>
-              <datalist id="InternalExternal">
-                <?php while($row_external  = sqlsrv_fetch_array( $stmt_external , SQLSRV_FETCH_ASSOC)) { ?>
-                <option><?php echo $row_external['POC_Nm'] ?></option>
-                <?php } ?>
-                </datalist>-->
-              </div>
+              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()"/>
+            </div>
           </td>
           </tr>
         <tr>
@@ -543,7 +537,7 @@ function toggle(source) {
                   <td>&nbsp;</td>
                   </tr>
                 <tr>
-                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
                   </tr>
                 <tr>
                   <td><label>
@@ -716,8 +710,15 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-
 document.getElementById('date').value = today;
+</script>
+
+<script>
+  document.getElementById("indy").addEventListener("change", function(){
+  const v = this.value.split(" : ");
+  this.value = v[0];
+  document.getElementById("InternalExternal").value = v[1];
+  });
 </script>
 
 </body>

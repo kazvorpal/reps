@@ -445,13 +445,13 @@ function toggle(source) {
                   </tr>
                   <tr>
                     <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
-                      Scope</label></td>
+                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){ echo "checked";}?>>
+                      Schedule</label></td>
                     </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){ echo "checked";}?>>
-                      Schedule</label></td>
+                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
+                      Scope</label></td>
                     </tr>
                   <tr>
                     <td><label>
@@ -479,12 +479,6 @@ function toggle(source) {
                         <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required <?php if($impactLevel2=="Major Impact"){echo "checked";}?>>
                         Major Impact</label></td>
                       </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="4" id="ImpactLevel_2" required <?php if($impactLevel2=="No Impact"){echo "checked";}?>>
-                        No Impact</label></td>
-                      </tr>
-                    
                     </table>
                   </td>
                 <td valign="top">
@@ -655,7 +649,7 @@ function toggle(source) {
           <td colspan="3" align="left">
             <div class="box">
               <table width="50%" border="0">
-                  <td colspan="2"><strong>Add to RAID Log?</strong></td>
+                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
                   </tr>
                 <tr>
                   <td><label>

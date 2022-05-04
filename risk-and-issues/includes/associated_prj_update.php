@@ -10,7 +10,7 @@ include ("../../data/emo_data.php");
       //$tempid =  $_GET['tempid'];
       $ri_level = $_GET['ri_level'];
       $ri_proj_name = $_GET['proj_name'];
-      $rikey = 
+      $rikey = $_GET['rikey'];
 
 
 //FIND PROJECT RISK AND ISSUES 1.26.2022
@@ -18,6 +18,7 @@ $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
 $name = $_GET['name'];
+$status = $_GET['status'];
   
 $sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
@@ -28,13 +29,13 @@ $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 $sql_riRows = "SELECT COUNT(*) as ttlRows
                FROM (
                 select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
-                from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name') 
+                from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',1) 
                 where RI_Nm != '$name') a ";
 $stmt_riRows = sqlsrv_query( $data_conn, $sql_riRows);
 $row_riRows = sqlsrv_fetch_array($stmt_riRows, SQLSRV_FETCH_ASSOC);
 //echo $row_riRows['ttlRows'];
 //echo $sql_riRows;
-
+//exit();
 
 //GET DRIVERS
 $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -50,12 +51,11 @@ $stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
 
 //GET ASSOCIATED PROJECTS
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, proj_nm, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name') where RI_Nm != '$name' ";
+$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, proj_nm, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',$status) where RI_Nm != '$name' ";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 			
-//echo "<br>" . $sql_risk_issue_assoc_proj;
-//echo $sql_risk_issue_assoc_proj;
+
 //DECLARE
 $name = $row_risk_issue['RI_Nm'];
 $RILevel = "ri_level";
@@ -216,6 +216,7 @@ function toggle(source) {
 <input type="hidden" name="proj_name" value="<?php echo $_GET['proj_name']; ?>">
 <input type="hidden" name="name" value="<?php echo $name;?>">
 <input type="hidden" name="drivertime" value="<?php while ($row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC)) { echo $row_ri_driver_lst['Driver_Nm'] . ','; } ?>">
+<input type="hidden" name="status" value="<?php echo $status;?>">
 
 <?php if($row_riRows['ttlRows'] > 0) { ?>
   <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select Associated <?php echo $row_risk_issue['RIType_Cd']?>(s) in addtion to the originating project.</div>
@@ -227,7 +228,7 @@ function toggle(source) {
     <th>Action Plan</th>
   </tr>
   <tr>
-    <td></td> <!-- NO CHECKBOX -->
+    <td><input type="checkbox" name="dummy" id="dummy" value="" disabled checked></td> <!-- DUMMY CHECKBOX -->
     <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RI_Nm']; ?> [ORIGINATING R/I]</td>
     <td bgcolor="#d9edf7"><?php echo $row_risk_issue['proj_nm']; ?></td>
     <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
