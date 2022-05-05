@@ -30,10 +30,11 @@
                 $tempID = uniqid();
                 $projectOwner = $row_projID['PROJ_OWNR_NM'];
 
-                $sql_authorize = "SELECT [CCI_Alias], [PROJ_OWNR_NM], [PROJ_NM], [PROJ_ID],[EPS].[RiskandIssues_Users].[Username]
-                from [EPS].[RiskandIssues_Users]
+                $sql_authorize = "SELECT [CCI_Alias], [PROJ_OWNR_NM], [PROJ_NM], [PROJ_ID],[RI_MGT].[RiskandIssues_Users].[Username]
+                from [RI_MGT].[RiskandIssues_Users]
                 left join [EPS].[ProjectStage] on [PROJ_OWNR_NM] = [CCI_Alias]
-                Where [RiskandIssues_Users].[Username] = '$windowsUser'and [PROJ_ID] = '$projID'";
+                Where [RI_MGT].[RiskandIssues_Users].[Username] = '$windowsUser'and [PROJ_ID] = '$projID'";
+
 								$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
                 $row_authorize = sqlsrv_fetch_array( $stmt_authorize, SQLSRV_FETCH_ASSOC);
 

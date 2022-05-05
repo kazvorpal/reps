@@ -9,39 +9,25 @@ $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
 $prog_name = $_GET['prg_nm'];
 $uid = $_GET['uid'];
+$status = $_GET['status']; //0=closed , 1=open
+$popup = $_GET['popup'];
   
-$sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue['Risk_Issue_Name']; 	
-//echo $sql_risk_issue;
+//echo $sql_risk_issue . "<br><br>";
 //exit();		
 
-//GET DISTINCT DRIVERS
-$sql_risk_issue_drivers = "select distinct Driver_Nm from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key ";
-$stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
-//$row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
-//echo $row_risk_issue['Risk_Issue_Name']; 			
-//echo $sql_risk_issue_drivers;
-//exit();
-
-//GET DISTINCT DRIVERS FOR UPDATE 
-$sql_risk_issue_drivers_up = "select distinct Driver_Nm from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key ";
-$stmt_risk_issue_drivers_up  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers_up);
-//$row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC);
-//echo $row_risk_issue_up['Risk_Issue_Name']; 			
-//echo $sql_risk_issue_drivers_up;
-//exit();
-
 //GET DISTINCT REGIONS FOR UPDATE
-$sql_risk_issue_regions_up = "select distinct Region_Cd from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key ";
+$sql_risk_issue_regions_up = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue_regions_up = sqlsrv_query( $data_conn, $sql_risk_issue_regions_up);
 //$row_risk_issue_regions_up  = sqlsrv_fetch_array($stmt_risk_issue_regions_up , SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_regions_up['Risk_Issue_Name']; 			
 //echo $sql_risk_issue_regions_up;
 
 //GET DISTINCT REGIONS
-$sql_risk_issue_regions = "select distinct Region_Cd from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($fscl_year, '$prog_name') where RiskAndIssue_Key = $RiskAndIssue_Key ";
+$sql_risk_issue_regions = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue_regions  = sqlsrv_query( $data_conn, $sql_risk_issue_regions);
 //$row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_regions['Risk_Issue_Name']; 			
@@ -50,13 +36,30 @@ $stmt_risk_issue_regions  = sqlsrv_query( $data_conn, $sql_risk_issue_regions);
 //GET ASSOCIATED PROJECTS
 //FIRST GET THE PROGRAM RI KEY
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_progRIkey = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_progRIkey = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_progRIkey  = sqlsrv_query( $data_conn, $sql_progRIkey  );
 $row_progRIkey  = sqlsrv_fetch_array($stmt_progRIkey , SQLSRV_FETCH_ASSOC);
 $progRIkey = $row_progRIkey ['ProgramRI_Key']; 
-$programKey = $row_progRIkey ['MLMProgram_Key']; 
+$programKey = $row_progRIkey ['MLMProgram_Key'];
+$riLog_Key =  $row_progRIkey ['RiskAndIssueLog_Key'];
 
-//echo $sql_progRIkey;
+//echo $sql_progRIkey . "<br><br>";
+
+//GET DISTINCT DRIVERS FOR UPDATE 
+$sql_risk_issue_drivers_up = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status) ";
+$stmt_risk_issue_drivers_up  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers_up);
+//$row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC);
+//echo $row_risk_issue_up['Risk_Issue_Name']; 			
+//echo $sql_risk_issue_drivers_up;
+//exit();
+
+//GET DISTINCT DRIVERS
+$sql_risk_issue_drivers = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status) ";
+$stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
+//$row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
+//echo $row_risk_issue['Risk_Issue_Name']; 			
+//echo $sql_risk_issue_drivers  . "<br><br>";
+//exit();
 
 //GET THE ASSOCIATED PROJECTS USING THE PROGRAMRI_KEY
 $sql_risk_issue_assoc_proj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey)";
@@ -76,7 +79,7 @@ $prject_nm = "";
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
 $regionx = "";
-$Driversx = $row_risk_issue['Driver_Nm'];
+$Driversx = "<div id='driversx'></div>";//$row_risk_issue['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
 $individual = $row_risk_issue['POC_Nm'];
@@ -88,7 +91,12 @@ $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = "";
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+
+if(!empty($row_risk_issue['RIClosed_Dt'])){
+$dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
+} else {
 $dateClosed = "";
+}
 ?>
 <!doctype html>
 <html>
@@ -104,7 +112,7 @@ $dateClosed = "";
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
-<body style="font-family:Mulish, serif;">
+<body style="font-family:Mulish, serif;" onload="copyDiv()">
 	<div align="center"><h3>PROGRAM RISKS & ISSUES DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
@@ -156,12 +164,12 @@ $dateClosed = "";
     </tr>
     <tr>
       <td>Drivers</td>
-      <td>
+      <td><div id="drivers">
         <?php 
         while ($row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC)) {
         echo $row_risk_issue_drivers['Driver_Nm'] . '<br>';
         }
-        ?>
+        ?></div>
       </td>
     </tr>
     <tr>
@@ -224,20 +232,16 @@ $dateClosed = "";
     <tr>
       <td>Date Closed</td>
       <td>
-        <?php 
-        if($dateClosed == "NULL") {
-        echo "Open";
-        } else { 
-        echo $dateClosed;  
-        }
-        ?>
+        <?php echo $dateClosed; ?>
     </td>
     </tr>
   </tbody>
 </table>
 <div align="center">
+  
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
     <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+<?php if($status == 1){ ?>
     <a href="<?php echo $formType ?>?ri_level=prg&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
         echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
@@ -254,7 +258,7 @@ $dateClosed = "";
       %0D%0AProject: <?php echo $prog_name ?>
       %0D%0AIssue Descriptor: <?php echo $descriptor ?>
       %0D%0ADescription: <?php echo $description?>
-      %0D%0ADrivers: <?php echo $Driversx?>
+      %0D%0ADrivers: <?php //echo $Driversx?>
       %0D%0AImpact Area: <?php echo $impactArea2?>
       %0D%0AImpact Level: <?php echo $impactLevel2?>
       %0D%0APOC Group/Name: <?php echo $individual?>
@@ -266,6 +270,7 @@ $dateClosed = "";
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
     </div>
+    <?php } ?>
 </div>
 </form>
 
@@ -275,4 +280,11 @@ $dateClosed = "";
 
 ?>
 </body>
+<script>
+function copyDiv() {
+    var firstDivContent = document.getElementById('drivers');
+    var secondDivContent = document.getElementById('driversx');
+    secondDivContent.innerHTML = firstDivContent.innerHTML;
+}
+  </script>
 </html>
