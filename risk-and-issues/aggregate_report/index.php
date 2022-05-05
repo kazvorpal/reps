@@ -373,7 +373,7 @@
     const saferi = makesafe(program.RI_Nm);
     if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
       const trid = "tr" + type + saferi + Math.random();
-      document.getElementById("table" + safename).appendChild(maketr(trid, "ptr"));
+      document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: "ptr"}));
       const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key].length != 0) ? "▶" : "";
       const header = makeelement({
         "e": "th", 
@@ -394,7 +394,7 @@
       for (field of datafields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-          tridobj.appendChild(maketd(texter, "", "p-4 databox"));
+          tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 databox"}));
         })(field);
       }
       var rowValues = [];
@@ -403,19 +403,8 @@
           const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
           rowValues.push(texter);
         })(field);
-        // rowValues.push(texter);
       }
-      // for (field of datafields) {
-      //   (function(test) {
-      //     const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-      //     tridobj.appendChild(maketd(texter, "", "p-4 databox"));
-      //     rowValues.push(texter);
-      //   })(field);
-      // }
       let newrow = document.worksheet.addRow(rowValues);
-      // console.log(program);
-      // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
-      // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
       if(arrow != "") {
         makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key], program.Program_Nm, "table" + safename, saferi);
       }
@@ -426,9 +415,9 @@
 
     // Make the rows of projects inside the program
 
-    document.getElementById(tableid).appendChild(maketr("projects" + saferi, "panel-collapse collapse"));
-    document.getElementById("projects" + saferi).appendChild(maketd("&nbsp;", "", ""));
-    document.getElementById("projects" + saferi).appendChild(maketd("", "td" + saferi, "", 10));
+    document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
+    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
+    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 10}));
     console.log(projects)
     if (projects.length != 0) {
       const table = document.createElement("table");
@@ -442,7 +431,7 @@
           tr.id = "tr" + project.PROJECT_key;
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
-            tr.appendChild(maketd(project[field], "", "p4 databox"));
+            tr.appendChild(makeelement({e: "td", t: project[field], c: "p4 databox"}));
           }
           p.push(project.PROJECT_key);
         }
@@ -459,7 +448,7 @@
     // Make the header row for a project 
     const trri = document.createElement("tr");
     for (field of projectfieldnames) {
-      trri.appendChild(maketh(field, "p-4 headbox"));
+      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 headbox"}));
     }
     return trri;
   }  
@@ -503,34 +492,10 @@
     return t;
   }
 
-  // Make common table elements
-  const maketr = (id, classes) => {
-    const tr = document.createElement("tr");
-    tr.id = id;
-    tr.className = (typeof classes != "undefined") ? classes: "";
-    return tr;
-  }
-  const maketd = (text, id, classes, colspan) => {
-    const td = document.createElement("td");
-    td.id = id;
-    td.className = classes;
-    td.innerHTML = text;
-    td.colSpan = colspan;
-    return td;
-  }
-  const maketh = (text, classes, id) => {
-    const header = document.createElement("th");
-    header.className = classes;
-    header.innerHTML = text;
-    return header;
-  }  
-
   // Utility functions
 
   const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/");  
 
-  // const todate = (date) => new Date(date.replace(/-/g, "/").toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}));  
-  
   function countri(target, type) {
     
     // returns count of risks or issues for a given program, taking program name and type (risk, issue)
