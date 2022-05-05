@@ -56,8 +56,10 @@ $dateClosed = $row_risk_issue['RIClosed_Dt'];
 $driver_list = "";
 $ri_list = "";
 $uaccess = $_GET['au'];
-$status = $_GET['status']
+$status = $_GET['status'];
 
+$popup = $_GET['popup'];
+echo $driver_list;
 ?>
 <!doctype html>
 <html>

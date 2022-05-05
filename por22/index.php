@@ -29,8 +29,13 @@ function MM_goToURL() { //v3.0
       <!-- Title  -->
       <div align="center"><h2>Plan of Record 2022</h2></div>
       <div align="center">
-<?php // PORDate(); ?>
-POR Version 02/14/2022 (Includes approved CR's as of 02/11/2022) 
+<?php 
+// PORDate(); 
+   $lastmonday = new DateTime("last monday -1 week");
+   $lastfriday = new DateTime("last friday -1 week");
+   // print ($lastmonday->format('d/m/Y'));
+?>
+POR Version <?= $lastmonday->format('m/d/Y') ?> (Includes approved CR's as of <?= $lastfriday->format('m/d/Y') ?>):
 </div>
 
       <!-- Master Container -->

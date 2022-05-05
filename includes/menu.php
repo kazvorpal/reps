@@ -45,8 +45,8 @@
 
       <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Risks and Issues<span class="caret"></span><span class="sr-only">(current)</span></a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/proj_prog_report">Program/Project</a></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/aggregate_report">Aggregate</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/aggregate_report">Aggregate Dashboard</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/project-dashboard">Project Dashboard</a></li>
         </ul>
       </li>
 
