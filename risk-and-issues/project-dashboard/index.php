@@ -311,7 +311,7 @@ $(function () {
             return Math.floor(ri["RIOpen_Hours"]/24);
         },
         RI_Nm: function() {
-            const url = "/risk-and-issues/details.php?au=false&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
+            const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
             return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
         },
         subs: function() {

@@ -8,88 +8,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Program R&I Aggregate View</title>
-<link rel="shortcut icon" href="favicon.ico"/>
-<!-- <link 
-  rel="stylesheet"
-  href="/css/bootstrap.css" rel="nofollow"
-  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
-  crossorigin="anonymous"
->
-<script 
-  src=”https://code.jquery.com/jquery-3.2.1.slim.min.js” 
-  integrity=”sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN” 
-  crossorigin=”anonymous”>
-</script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js 
-  integrity=”sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q” 
-  crossorigin=”anonymous”>
-</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-  integrity=”sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl” 
-  crossorigin=”anonymous”>
-</script> -->
-<?php include ("../../includes/load.php");
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Program R&I Aggregate View</title>
+  <link rel="shortcut icon" href="favicon.ico"/>
+  <?php 
+  include ("../../includes/load.php");
+  function fixutf8($target) {
+    if (gettype($target) == "string")
+    return (utf8_encode($target));
+    else 
+    return ($target);
+  }
 
-function fixutf8($target) {
-  if (gettype($target) == "string")
-  return (utf8_encode($target));
-  else 
-  return ($target);
-}
-
-$sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
-ini_set('mssql.charset', 'UTF-8');
-$riquery = sqlsrv_query($conn, $sqlstr);
-if($riquery === false) {
-  if(($error = sqlsrv_errors()) != null) {
-    foreach($errors as $error) {
-      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-      echo "code: ".$error[ 'code']."<br />";
-      echo "message: ".$error[ 'message']."<br />";
+  $sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
+  ini_set('mssql.charset', 'UTF-8');
+  $riquery = sqlsrv_query($data_conn, $sqlstr);
+  if($riquery === false) {
+    if(($error = sqlsrv_errors()) != null) {
+      foreach($errors as $error) {
+        echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+        echo "code: ".$error[ 'code']."<br />";
+        echo "message: ".$error[ 'message']."<br />";
+      }
     }
-  }
-} else {
-  $rows = array();
-  $count = 1;
-  while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
-    $rows[] = array_map("fixutf8", $row);
-  }
-  
-  $p4plist = array();
-  foreach ($rows as $row)  {
-    if($row["ProgramRI_Key"] != '') {
-      $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
-      ini_set('mssql.charset', 'UTF-8');
-      $p4pquery = sqlsrv_query($conn, $sqlstr);
-      if($p4pquery === false) {
-        if(($error = sqlsrv_errors()) != null) {
-          foreach($errors as $error) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-            echo "message: ".$error[ 'message']."<br />";
+  } else {
+    $rows = array();
+    $count = 1;
+    while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
+      $rows[] = array_map("fixutf8", $row);
+    }
+    
+    $p4plist = array();
+    foreach ($rows as $row)  {
+      if($row["ProgramRI_Key"] != '') {
+        $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
+        ini_set('mssql.charset', 'UTF-8');
+        $p4pquery = sqlsrv_query($data_conn, $sqlstr);
+        if($p4pquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            foreach($errors as $error) {
+              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+              echo "code: ".$error[ 'code']."<br />";
+              echo "message: ".$error[ 'message']."<br />";
+            }
+          }
+        } else {
+          $count = 1;
+          $p4prows = array();
+          $checker = 0;
+          while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
+            $p4prows[] = array_map("fixutf8", $p4prow);
+            $checker = 1;
           }
         }
         $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
       }
     }
-  }
-  
-  $mangerlist = array();
-  foreach ($rows as $row)  {
-    if($row["ProgramRI_Key"] != '') {
-      $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
-      ini_set('mssql.charset', 'UTF-8');
-      $mangerquery = sqlsrv_query($conn, $sqlstr);
-      if($mangerquery === false) {
-        if(($error = sqlsrv_errors()) != null) {
-          foreach($errors as $error) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-            echo "message: ".$error[ 'message']."<br />";
+    
+    $mangerlist = array();
+    foreach ($rows as $row)  {
+      if($row["ProgramRI_Key"] != '') {
+        $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
+        ini_set('mssql.charset', 'UTF-8');
+        $mangerquery = sqlsrv_query($data_conn, $sqlstr);
+        if($mangerquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            foreach($errors as $error) {
+              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+              echo "code: ".$error[ 'code']."<br />";
+              echo "message: ".$error[ 'message']."<br />";
+            }
           }
         } else {
           $count = 1;
@@ -237,11 +227,8 @@ if($riquery === false) {
   const mangerlist = <?= $mangerout ?>;
   const p4plist = <?= $p4pout ?>;
   
-  console.log(ridata);
-  const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
   const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
-  // console.log(ridata)
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Names of Data for program fields
@@ -303,36 +290,17 @@ if($riquery === false) {
     // Runs once per Program
 
     const safename = makesafe(name);
-    const item = document.createElement("div");
-    item.id = "item" + safename;
-    item.className = "toppleat accordion-item";
+    const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
     const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
     const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
     const table = makeelement({e: "table", i: "table" + safename, c: "table"});
 
-    const program = document.createElement("span");
-    program.id = "program" + safename;
-    program.className = "a-proj";
-    program.innerHTML = name;
-    const counts = document.createTextNode(" (R:" + risks + " I:" + issues + ")");
-
-    const collapse = document.createElement("div");
-    collapse.id = "collapse" + safename;
-    collapse.className = "panel-collapse collapse";
-    const body = document.createElement("div");
-    body.id = "body" + safename;
-    body.className = "accordion-body";
-    const table = document.createElement("table");
-    table.className = "table";
-    table.id = "table" + safename;
-
-    banner.appendChild(program);
-    banner.appendChild(counts);
+    banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: name}));
+    banner.appendChild(document.createTextNode(" (R:" + risks + " I:" + issues + ")"));
     item.appendChild(banner);
     item.appendChild(collapse).appendChild(body).appendChild(table);
     document.getElementById("main").appendChild(item);
-    // document.getElementById("banner" + safename).onclick = toggler(document.getElementById("collapse" + safename));
 
     makeri(name, "Risk");
     makeri(name, "Issue");
@@ -349,26 +317,26 @@ if($riquery === false) {
     //  (a c).log(bannerfields);
     Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
     banner.ariaExpanded = true;
-    banner.setAttribute("aria-controls", "collapse" + safename);
     return banner;
   }  
 
   const makeri = (name, type) => {
-    document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
+
+    // Create a Risk or Issue section
+
     program = getprogrambyname(name);
-    let lr = listri(name, type);
-    for (ri of lr) {
-      makedata(ri, type, name);  
+    if (
+      (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
+      (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm))
+    ){
+      let lr = listri(name, type);
+      if (lr.length != 0) {
+        document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
+        for (ri of lr) {
+          makedata(ri, type, name);  
+        }
+      }
     }
-  }    
-
-  const rirow = ["Program_Nm", "Region_Cd", null, "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", 
-                function() {"ForecastedResolution_Dt"}];
-
-  const toggler = (target) => {
-    // Toggles visibility
-    (target != null)
-    target.className = (target.className.indexOf("show") == -1) ? target.className += "show" : target.className.replace("show", "");
   }
   
   const makedata = (id, type, name) => {            
@@ -505,21 +473,22 @@ if($riquery === false) {
     // document.worksheet.addRow(cells);
     document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true };
     return trri;
-  }  
+  }
 
-  const maketableelement = (o) => {
+  const makeelement = (o) => {
 
-// o is an (o)bject with these optional properties:
-// e.e is the (e)lement, like "td" or "tr"
-// e.c is the (c)lasses, separated by spaces like usual
-// e.s is the innerHTML (t)ext
-// e.s is the col(s)pan
+    // o is an (o)bject with these optional properties:
+    // o.e is the (e)lement, like "td" or "tr"
+    // o.c is the (i)d
+    // o.c is the (c)lasses, separated by spaces like usual
+    // o.t is the innerHTML (t)ext
+    // o.s is the col(s)pan
 
     const t = document.createElement(o.e);
-    t.id = o.e;
-    t.className = o.c;
-    t.innerHTML = o.t;
-    t.colSpan = o.s;
+    t.id = (typeof o.i == "undefined") ? "" : o.i;
+    t.className = (typeof o.c == "undefined") ? "" : o.c;
+    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
+    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
     return t;
   }
 
@@ -532,10 +501,8 @@ if($riquery === false) {
     // returns count of risks or issues for a given program, taking program name and type (risk, issue)
     
     pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.Program_Nm == target);
-    // uni = pre.filter((value, index, self) => self.indexOf(value) === index);
     uni = pre.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni.length;
-    // counter = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
   }
   function listri(target, type) {
     
@@ -579,9 +546,9 @@ if($riquery === false) {
     // filter the programs list using the form
     let filtered = ridata.filter(function(o) {
       return (
-          o.Fiscal_Year == document.getElementById("fiscal_year").value &&
+          (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-          (document.getElementById("impact_level").value == '' || $('#impact_level').val().includes(o.ImpactLevel_Nm)) &&
+          (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
           (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
           (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
           (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
@@ -592,7 +559,7 @@ if($riquery === false) {
       const secondpass = [];
       for (item of filtered) {
         if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
-          let n = document.getElementById("owner").value
+          let n = document.getElementById("owner").value;
           let name = flipname(n);
           if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
             secondpass.push(item);
@@ -606,28 +573,16 @@ if($riquery === false) {
     return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   }  
   
-  const dateformat = (target)  => {
-    // console.log(target)
-    return target.getDate() + "-" + (target.getMonth()+1) + "-" + target.getFullYear();
-  }
-
   const splitdate = (datestring) => {
-    // console.log(datestring);
     let newdate = datestring.split(" - ");
-    // console.log(typeof newdate[0])
     return newdate;
   }  
 
   const betweendate = (dates, tween) => {
-    // console.log(tween.date);
     spanner = splitdate(dates);
     let first = new Date(spanner[0]);
     let middle = new Date(tween);
     let last = new Date(spanner[1]);
-    // console.log(first);
-    // console.log((first) + ">");
-    // console.log((middle));
-    // console.log(">" + (last));
     return ((middle >= first && middle <= last))
   }  
 
@@ -640,7 +595,6 @@ if($riquery === false) {
     let ln = name.substring(0, name.indexOf(";"))
     return(fn + ln);
   }  
-
 
   const ranger = (daterange) => {
     // get start and end date from a date range set via Bootstrap date range picker
@@ -656,23 +610,7 @@ if($riquery === false) {
     return false;
   }  
 
-  const populate = (rilist) => {
-    const main = document.getElementById("main");
-    main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
-    console.log(rilist);
-    for (loop of rilist) {
-      // creates all the programs
-      if(loop != null) {
-        createrow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
-      }
-    }
-  }
   populate(uniques);
-
-  $("document").ready(function() {
-    console.log(document.getElementById("myDefaultNavbar1"));
-    document.getElementById("myDefaultNavbar1").style.display = "block !important";
-  })
 
 </script>
 </html>
