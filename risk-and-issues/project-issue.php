@@ -11,7 +11,7 @@
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
-  
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -30,6 +30,44 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
+  <!--<script src="bootstrap/js/jquery-1.11.2.min.js"></script>-->
+  <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
+  <script src="../colorbox-master/jquery.colorbox.js"></script>
+  <script>
+  $(document).ready(function(){
+          //Examples of how to assign the Colorbox event to elements
+          $(".group1").colorbox({rel:'group1'});
+          $(".group2").colorbox({rel:'group2', transition:"fade"});
+          $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+          $(".group4").colorbox({rel:'group4', slideshow:true});
+          $(".ajax").colorbox();
+          $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+          $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+          $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+          $(".dno").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+          $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+          $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+          $(".ocdframe").colorbox({iframe:true, width:"60%", height:"90%", scrolling:true, escKey: false, overlayClose: false});
+          $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
+          $(".inline").colorbox({inline:true, width:"50%"});
+          $(".callbacks").colorbox({
+            onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+            onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+            onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+            onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+            onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+          });
+
+          $('.non-retina').colorbox({rel:'group5', transition:'none'})
+          $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+          
+          //Example of preserving a JavaScript event for inline calls.
+          $("#click").click(function(){ 
+            $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+            return false;
+          });
+        });
+  </script>
 
 
 <script language="JavaScript">
@@ -41,18 +79,17 @@ function toggle(source) {
 }
 </script>
 <style>
-  .box {
+    .box {
     border: 1px solid #BCBCBC;
-    background-color: #ffffff;
+	background-color: #ffffff;
     border-radius: 5px;
     padding: 5px;
-  }
+    }
     .finePrint {
     font-size: 9px;  
     color: red;
     }
 </style>
-<script>alert("moo")</script>
 
 </head>
 <body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
@@ -93,7 +130,7 @@ function toggle(source) {
   <!-- END PROGRESS BAR -->
 <div align="center">
 <h2>PROJECT ISSUE</h2>
-Enter the details of your Project Risk
+Enter the details of your Project Issue
 	<!-- <table border="0" cellpadding="5">
 	  <tbody>
 		<tr>
@@ -186,8 +223,11 @@ Enter the details of your Project Risk
         </tr>
 
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS</h4>
-            <div class="box">
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+</svg></a></h4>
+            <div class="box subscriber">
               <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
@@ -257,44 +297,36 @@ Enter the details of your Project Risk
                 <td valign="top">
                   <table width="200" border="0">
                   <tr>
-                  <strong>Impacted Area</strong>
+                  <strong>Impacted Area </strong>
+                  <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                  </svg></a>
                   </tr>
-                  <tr>
+                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
+                    <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
-                      Schedule</label></td>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
+                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
-                  <tr>
-                    <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
-                      Scope</label></td>
-                    </tr>
-                  <tr>
-                    <td><label>
-                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required>
-                      Budget (Cost Change)</label></td>
-                    </tr>
+                  <?php } ?>
                   </table></td>
                 <td>
                   <table width="200" border="0">
                     <tr>
-                      <strong>Impact Level</strong>
+                      <strong>Impact Level </strong>
+                      <a href="includes/instructions-impact-level.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                      </svg></a>
                     </tr>
+                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required>
-                        Minor Impact</label></td>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
+                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required>
-                        Moderate Impact</label></td>
-                      </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required>
-                        Major Impact</label></td>
-                      </tr>
+                    <?php } ?>  
                     </table>
                   </td>
                 <td>
@@ -475,17 +507,9 @@ Enter the details of your Project Risk
         </tr>
         <tr>
           <td colspan="3">
-        <div class="box">
-				<!--<iframe 
-            src="includes/associated_prj.php?uid=<?php echo $_GET['uid'];?>&fiscal_year=<?php echo $row_projID['FISCL_PLAN_YR'] ?>" 
-            height="300" 
-            width="1300" 
-            title="Associated Projects"  
-            frameBorder="0" 
-            scrolling="yes">
-        </iframe>	-->
-        <textarea name="assocProjects" cols="120" id="assocProjects" class="form-control" readonly><?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>
-          </textarea>  
+          <div class="box" align="left">
+          <input type="hidden" name="assocProjects" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
+          <?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "<br>" . $proj_selectx; } else { echo $ass_project; }?>
         </div>
 		  </td>
         </tr>
@@ -718,7 +742,14 @@ document.getElementById('date').value = today;
   document.getElementById("InternalExternal").value = v[1];
   });
 </script>
-
+<script>
+$('.subscriber :checkbox').change(function () {
+    var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
+    if ($cs.length > 3) {
+        this.checked = false;
+    }
+});
+</script> 
 </body>
 </html>
 	  

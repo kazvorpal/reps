@@ -39,8 +39,8 @@ include ("../sql/MS_Users_prg.php");
         $emailAssocProj = str_replace(", ", ",",$drivers);//ASSOCIATED PROJECTS LIST FOR EMAIL
     $assocProgram = $_POST['program']; // USE ONLY FOR PROGRAM RISK OR ISSUE OTHERWISE EMPTY // MULTI AS OF 4/19
     $individual = $_POST['individual']; 
-    $internalExternal = 1; //THIS IS NOT FLOWING THROUGH
-    $poc = $_POST['poc']; // POC FROM INDIVIDUAL OR INTERNAL/EXTERNAL
+    $internalExternal = $_POST['internalExternal']; 
+    $poc = $_POST['poc']; // POC Individual
     $pocFlag = (int)$_POST['pocFlag'];
     $descriptor = $_POST['descriptor']; 
     $description = $_POST['description'];
@@ -85,7 +85,15 @@ include ("../sql/MS_Users_prg.php");
     if($changeLogKey == 3){
         $closedByUID = $userId;
     }
-    $raidLog = $_POST['raidLog'];
+
+    $raidLogx = $_POST['raidLog'];
+    if($raidLogx == "No"){
+        $raidLog = 0;
+    } 
+    if($raidLogx == "Yes"){
+        $raidLog = 1;
+    } 
+
     $assocProjectsKeys = $_POST['assocProjectsKeys']; //mutiple keys DONE
     $regionKeys = $_POST['regionKeys']; //multiple keys
     
@@ -143,7 +151,8 @@ include ("../sql/MS_Users_prg.php");
         array($impactLevel, SQLSRV_PARAM_IN),
         array($responseStrategy, SQLSRV_PARAM_IN),
         array($riskProbability, SQLSRV_PARAM_IN),
-        array($poc, SQLSRV_PARAM_IN),
+        array($individual, SQLSRV_PARAM_IN),
+        array($internalExternal, SQLSRV_PARAM_IN),
         array($pocFlag, SQLSRV_PARAM_IN),
         array($changeLogKey, SQLSRV_PARAM_IN),
         array($asscCRKey, SQLSRV_PARAM_IN),
@@ -156,6 +165,7 @@ include ("../sql/MS_Users_prg.php");
         array($transfer2prgManager, SQLSRV_PARAM_IN),
         array($riskRealized, SQLSRV_PARAM_IN),
         array($riOpenFlg, SQLSRV_PARAM_IN),// 0 for closed
+        array($raidLog, SQLSRV_PARAM_IN),
         array($date, SQLSRV_PARAM_IN), //forcasted resolution date
         array($DateClosed, SQLSRV_PARAM_IN), //date closed
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
@@ -171,7 +181,7 @@ include ("../sql/MS_Users_prg.php");
             //exit();
 
         //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
       //EXECUTE PROCEDDURE
     $stmt3 = sqlsrv_query( $data_conn, $tsql_callSP, $params);

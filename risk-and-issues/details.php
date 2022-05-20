@@ -7,7 +7,7 @@ include ("../data/emo_data.php");
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
-$status = isset($_GET['status']) ? $_GET['status'] : 1; //0=closed , 1=open
+$status = $_GET['status']; //0=closed , 1=open
 $popup = $_GET['popup'];
   
 $sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -56,9 +56,8 @@ $dateClosed = $row_risk_issue['RIClosed_Dt'];
 $driver_list = "";
 $ri_list = "";
 $uaccess = $_GET['au'];
-
-$popup = $_GET['popup'];
-echo $driver_list;
+$status = $_GET['status'];
+$department = $row_risk_issue['POC_Department'];
 ?>
 <!doctype html>
 <html>
@@ -144,13 +143,13 @@ echo $driver_list;
     </tr>
     <?php } ?>
     <tr>
-      <td>POC Group/Name</td>
+      <td>POC Name</td>
       <td><?php echo $individual; ?></td>
     </tr>
-    <!--<tr>
+    <tr>
       <td>Team/Group POC</td>
-      <td><?php //echo $internalExternal; ?></td>
-    </tr>-->
+      <td><?php echo $department; ?></td>
+    </tr>
     <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
@@ -198,6 +197,11 @@ echo $driver_list;
     </td>
     </tr>
     <tr>
+      <td>Notify Porfolio Team</td>
+      <td><?php echo $department; ?>
+    </td>
+    </tr>
+    <tr>
       <td>Date Closed</td>
       <td>
         <?php 
@@ -217,7 +221,7 @@ echo $driver_list;
         <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
       <?php } ?>
 
-      <?php if($popup == "false"){ ?>
+      <?php if($status == 1){ ?>
       <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
       <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------

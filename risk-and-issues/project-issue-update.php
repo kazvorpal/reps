@@ -25,7 +25,7 @@ $sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProjec
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue['Risk_Issue_Name']; 
-// echo $sql_risk_issue . "<br>";		
+ echo $sql_risk_issue . "<br>";		
 
 //GET DRIVERS
 $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -61,7 +61,8 @@ $DateClosed = $row_risk_issue['RIClosed_Dt'];
 $driverList = rtrim($_POST['drivertime'], ",");
 $driverArr = explode(",", $driverList);
 $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
-$raid = "";
+$raidLog = $row_risk_issue['RaidLog_Flg'];
+$department = $row_risk_issue['POC_Department'];
 
 if(!empty($_POST['proj_select'])) {
 $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
@@ -251,42 +252,42 @@ function toggle(source) {
               <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="checkbox" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
                     Budget/Funding</label></td>
                   <td width="49%"><label>
-                    <input type="checkbox" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
                     External</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
                     Communications Breakdown</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resources</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
                     Contractor</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
                     Procurement</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
                     Dependency Conflict</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
                     Schedule Impact</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
                     Equipment Integration</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
                     Other</label></td>
                   </tr>
                 </table>
@@ -318,42 +319,26 @@ function toggle(source) {
                   <tr>
                   <strong>Impacted Area</strong>
                   </tr>
-                  <tr>
+                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
+                    <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required <?php if($impactArea2=="Schedule"){echo "checked";}?>>
-                      Schedule</label></td>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?>>
+                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
-                  <tr>
-                    <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required <?php if($impactArea2=="Scope"){ echo "checked";}?>>
-                      Scope</label></td>
-                    </tr>
-                  <tr>
-                    <td><label>
-                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required <?php if($impactArea2=="Budget (Cost Change)"){echo "checked";}?>>
-                      Budget (Cost Change)</label></td>
-                    </tr>
+                  <?php } ?>
                   </table></td>
                 <td valign="top">
                   <table width="200" border="0">
                     <tr>
                       <strong>Impact Level</strong>
                     </tr>
+                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required <?php if($impactLevel2=="Minor Impact"){echo "checked";}?>>
-                        Minor Impact</label></td>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required <?php if($impactLevel2==$row_imLevel['ImpactLevel_Nm']){echo "checked";}?>>
+                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required <?php if($impactLevel2=="Moderate Impact"){echo "checked";}?>>
-                        Moderate Impact</label></td>
-                      </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required <?php if($impactLevel2=="Major Impact"){echo "checked";}?>>
-                        Major Impact</label></td>
-                      </tr>
+                    <?php } ?>  
                     </table>
                   </td>
                 <td colspan="2" valign="top">
@@ -373,30 +358,31 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box">
+          <div class="box">
               <label for="Individual">Individual POC<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value="<?php echo $individual ?>" onblur="document.getElementById('intern').disabled = (''!=this.value);"/>
-              <datalist id="Individual">
-                <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                <option><?php echo $row_internal['POC_Nm'] ?></option>
-                <?php } ?>
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value = "<?php echo $individual; ?>" />
+              
+                <datalist id="Individual">
+                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
+                  <?php } ?>
                 </datalist>
-              <!--
-              <h4 align="center">OR</h4>
+
               <label for="Individual3">Team/Group POC<br>
                 </label>
-              
-              <input type="text" list="InternalExternal" name="InternalExternal" class="form-control" id="intern" onblur="document.getElementById('indy').disabled = (''!=this.value);"/>
-              <datalist id="InternalExternal">
-                <?php while($row_external  = sqlsrv_fetch_array( $stmt_external , SQLSRV_FETCH_ASSOC)) { ?>
-                <option><?php echo $row_external['POC_Nm'] ?></option>
-                <?php } ?>
-                </datalist> -->
-              </div>
+              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" value = "<?php echo $department; ?>"/>
+          </div>
           </td>
           </tr>
+          <script>
+            document.getElementById("indy").addEventListener("change", function(){
+            const v = this.value.split(" : ");
+            this.value = v[0];
+            document.getElementById("InternalExternal").value = v[1];
+            });
+          </script>
         <tr>
 
           <td colspan="3" align="left">
@@ -536,12 +522,12 @@ function toggle(source) {
                 <tr>
                   <td colspan="2"><strong>Notify Portfolio Team</strong></td>
                   </tr>
-                <tr>
+                  <tr>
                   <td><label>
-                    <input type="radio" name="raidLog" value="Yes" id="raid_0">
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php if($raidLog == 1) {echo "checked";}?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="raidLog" value="No" id="raid_1" checked>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php if($raidLog == 0) {echo "checked";}?>>
                     No</label></td>
                   </tr>
                 </table>
