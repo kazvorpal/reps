@@ -62,7 +62,7 @@ $stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
 //exit();
 
 //GET THE ASSOCIATED PROJECTS USING THE PROGRAMRI_KEY
-$sql_risk_issue_assoc_proj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey)";
+$sql_risk_issue_assoc_proj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status)";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 //$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_assoc_proj['ProgramRI_Key'];
@@ -83,7 +83,7 @@ $Driversx = "<div id='driversx'></div>";//$row_risk_issue['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
 $individual = $row_risk_issue['POC_Nm'];
-$internalExternal = $row_risk_issue['POC_Nm'];
+$internalExternal = $row_risk_issue['POC_Department'];
 $responseStrategy2 = $row_risk_issue['ResponseStrategy_Nm'];
 $unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];
@@ -91,6 +91,12 @@ $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = "";
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+
+$raidLogx = $row_risk_issue['RaidLog_Flg'];
+if($raidLogx == 1) {$raidLog =  "Yes";}
+if($raidLogx == 0) {$raidLog = "No";}
+
+$department = $row_risk_issue['POC_Department'];
 
 if(!empty($row_risk_issue['RIClosed_Dt'])){
 $dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
@@ -181,12 +187,20 @@ $dateClosed = "";
       <td><?php echo $impactLevel2; ?></td>
     </tr>
     <tr>
-      <td>Individual/Team POC</td>
+      <td>Individua POC</td>
       <td><?php echo $individual; ?></td>
+    </tr>
+    <tr>
+      <td>Team POC</td>
+      <td><?php echo $department; ?></td>
     </tr>
       <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
+    </tr>
+    <tr>
+      <td>Notify Portfolio Team</td>
+      <td><?php echo $raidLog; ?></td>
     </tr>
     <tr>
       <td>Forecasted Resolution Date</td>
@@ -242,7 +256,7 @@ $dateClosed = "";
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
     <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
 <?php if($status == 1){ ?>
-    <a href="<?php echo $formType ?>?ri_level=prg&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
+    <a href="<?php echo $formType ?>?status=1&ri_level=prg&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
         echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
         }

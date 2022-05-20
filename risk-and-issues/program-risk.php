@@ -115,7 +115,44 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
-  <!--<link href='http://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>-->
+
+  <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
+  <script src="../colorbox-master/jquery.colorbox.js"></script>
+  <script>
+  $(document).ready(function(){
+          //Examples of how to assign the Colorbox event to elements
+          $(".group1").colorbox({rel:'group1'});
+          $(".group2").colorbox({rel:'group2', transition:"fade"});
+          $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+          $(".group4").colorbox({rel:'group4', slideshow:true});
+          $(".ajax").colorbox();
+          $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+          $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+          $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+          $(".dno").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+          $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+          $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+          $(".ocdframe").colorbox({iframe:true, width:"60%", height:"90%", scrolling:true, escKey: false, overlayClose: false});
+          $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
+          $(".inline").colorbox({inline:true, width:"50%"});
+          $(".callbacks").colorbox({
+            onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+            onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+            onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+            onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+            onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+          });
+
+          $('.non-retina').colorbox({rel:'group5', transition:'none'})
+          $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+          
+          //Example of preserving a JavaScript event for inline calls.
+          $("#click").click(function(){ 
+            $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+            return false;
+          });
+        });
+  </script> 
 
 <script language="JavaScript">
 function toggle(source) {
@@ -313,8 +350,11 @@ function toggle(source) {
         </td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS</h4>
-            <div class="box">
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+          </svg></a></h4>
+            <div class="box subscriber">
               <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
@@ -384,74 +424,52 @@ function toggle(source) {
                 <td  valign="top">
                   <table width="200" border="0">
                   <tr>
-                  <strong>Impacted Area</strong>
+                  <strong>Impacted Area </strong>
+                  <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                  </svg></a>
                   </tr>
-                  <tr>
+                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
+                    <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="2" id="ImpactArea_1" required>
-                      Schedule</label></td>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
+                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
-                  <tr>
-                    <td><label>
-                      <input name="ImpactArea" type="radio"  id="ImpactArea_0" value="1" required>
-                      Scope</label></td>
-                    </tr>
-                  <tr>
-                    <td><label>
-                      <input type="radio" name="ImpactArea" value="3" id="ImpactArea_2" required>
-                      Budget (Cost Change)</label></td>
-                    </tr>
+                  <?php } ?>
                   </table></td>
                 <td valign="top">
                   <table width="200" border="0">
                     <tr>
-                      <strong>Impact Level</strong>
+                      <strong>Impact Level </strong>
+                      <a href="includes/instructions-impact-level.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                      </svg></a>
                     </tr>
+                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_0" value="1" required>
-                        Minor Impact</label></td>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
+                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="2" id="ImpactLevel_1" required>
-                        Moderate Impact</label></td>
-                      </tr>
-                    <tr>
-                      <td><label>
-                        <input type="radio" name="ImpactLevel" value="3" id="ImpactLevel_2" required>
-                        Major Impact</label></td>
-                      </tr>                    
+                    <?php } ?>                    
                     </table>
                   </td>
                 <td valign="top">
 				<div id="myDIV2">
                     <table width="200" border="0">
-                              <tr>
-                                <td>
-                                  <strong>Risk Probability Score</strong>
-                                </td>
-                              </tr>
-                              <!--<tr>
-                                <td><label>
-                                  <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="1" required>
-                                  0% - Risk Only</label></td>
-                              </tr>-->
-                              <tr>
-                                <td><label>
-                                  <input name="RiskProbability" type="radio" id="ImpactLevel_0" value="2" required>
-                                  50% 50/50 Chance</label></td>
-                                </tr>
-                              <tr>
-                                <td valign="top"><label>
-                                  <input type="radio" name="RiskProbability" value="3" id="ImpactLevel_1" required>
-                                  75% Highly Likely</label></td>
-                                </tr>
-                              <tr>
-                                <td><label>
-                                  <input type="radio" name="RiskProbability" value="4" id="ImpactLevel_2" required>
-                                  99% Almost Certain</label></td>
-                                </tr>
+                        <tr>
+                          <td>
+                            <strong>Risk Probability Score</strong>
+                          </td>
+                        <?php while($row_probability= sqlsrv_fetch_array( $stmt_probability , SQLSRV_FETCH_ASSOC)) { ?>
+                        <tr>
+                        <td><label>
+                          <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required>
+                          <?php echo $row_probability['RiskProbability_Nm'] ?></label></td>
+                        </tr>
+                        <?php } ?>
                     </table>
                 </div>
 				</td>
@@ -567,50 +585,20 @@ function toggle(source) {
           <td colspan="2" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
           
           <div class="box">  
-
-            <!--<iframe 
-              src="includes/action-plans.php?uid=<?php //echo $_GET['uid'];?>&fiscal_year=<?php //echo $row_projID['FISCL_PLAN_YR'] ?>&tempid=<?php //echo $temp_id?>&username=<?php //echo $user_id ?>" 
-              height="200" 
-              width="1300" 
-              title="Associated Projects"  
-              frameBorder="0" 
-              scrolling="yes">
-            </iframe>		-->
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
                 
                   <tr>
                     <td width="100%">
-                          
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea></td>
+                       <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea></td>
                   </tr>
                 
                 <tr>
                   <td>&nbsp;</td>
                   <td></td>
                 </tr>
-                <!-- <tr>
-                  <td colspan="2" align="left">
-                  <strong>Action Plan Status Log</strong>  
-                    table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
-                    <tbody>
-                      <tr>
-                        <th width="24%" bgcolor="#EFEFEF">User</th>
-                        <th width="55%" bgcolor="#EFEFEF">Update</th>
-                        <th width="21%" bgcolor="#EFEFEF">Timestamp</th>
-                      </tr>
-                      <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </tbody>
-                    </table> 
-
-                  </td>
-                </tr> -->
               </tbody>
-</table>
+            </table>
           <div>
 
           </td>
@@ -628,7 +616,6 @@ function toggle(source) {
             </div>
           </td>
         </tr>
-
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
@@ -852,5 +839,13 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   document.getElementById("InternalExternal").value = v[1];
   });
 </script>
+<script>
+$('.subscriber :checkbox').change(function () {
+    var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
+    if ($cs.length > 3) {
+        this.checked = false;
+    }
+});
+</script> 
 </body>
 </html>

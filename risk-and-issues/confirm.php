@@ -150,6 +150,10 @@ include("../sql/risk-issues-lookup.php");
       <td><?php echo $individual; ?></td>
     </tr>
     <tr>
+      <td>POC Team</td>
+      <td><?php echo $internalExternal; ?></td>
+    </tr>
+    <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
     </tr>

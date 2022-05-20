@@ -171,6 +171,10 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
       <td><?php echo $individual; ?></td>
     </tr>
     <tr>
+      <td>Team POC</td>
+      <td><?php echo $internalExternal; ?></td>
+    </tr>
+    <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
     </tr>
@@ -218,7 +222,7 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     </td>
     </tr>
     <tr>
-      <td>RAID lOG</td>
+      <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?>
     </td>
     </tr>

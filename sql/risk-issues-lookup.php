@@ -82,6 +82,7 @@ $unknown = 'off';
   $unknown = $_POST['Unknown'];
   }
 
+//LOGIC FOR CURRENT POC
 $individual = ""; 
   if(isset($_POST['Individual'])) {
     $individual = $_POST['Individual']; 
@@ -93,6 +94,7 @@ $internalExternal = "";
     $internalExternal = $_POST['InternalExternal']; 
     $pocFlag = 0;
   }
+//END
 
 $opportunity = "";
   if (!empty($_POST['opportunity'])){

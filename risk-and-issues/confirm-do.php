@@ -1,4 +1,3 @@
-
 <?php 
 include ("../includes/functions.php");
 include ("../db_conf.php");
@@ -7,6 +6,7 @@ include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
 //print_r($_POST);
 //echo "<br><br>";
+//exit();
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
     if ($changeLogKey == 1){
@@ -37,7 +37,7 @@ include ("../sql/MS_Users_prg.php");
     $assocProgram = $_POST['program']; // USE ONLY FOR PROGRAM RISK OR ISSUE OTHERWISE EMPTY
         $emailAssocProj = str_replace(",", ", ",$drivers);//ASSOCIATED PROJECTS LIST FOR EMAIL
     $individual = $_POST['individual']; 
-    $internalExternal = 1;
+    $internalExternal = $_POST['internalExternal'];
     $poc = $_POST['poc']; // POC FROM INDIVIDUAL OR INTERNAL/EXTERNAL
     $pocFlag = (int)$_POST['pocFlag'];
     $descriptor = $_POST['descriptor']; 
@@ -73,7 +73,13 @@ include ("../sql/MS_Users_prg.php");
 
     $closedByDate = $_POST['DateClosed'];
     $closedByUID = NULL; // USE ONLY IF CLOSING OTHERWISE NULL // USE FOR EDIT ONLY
+    
     $raidLog = $_POST['raidLog'];
+    if($raidLog == "No"){
+        $raidLog = 0;
+    } else {
+        $raidLog = 1;
+    }
 
     //print_r($_POST);
     //exit();
@@ -125,7 +131,8 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
         array($responseStrategy, SQLSRV_PARAM_IN),
         array($assocProject, SQLSRV_PARAM_IN),
         array($assocProgram, SQLSRV_PARAM_IN),
-        array($poc, SQLSRV_PARAM_IN),
+        array($individual, SQLSRV_PARAM_IN),
+        array($internalExternal, SQLSRV_PARAM_IN),
         array($pocFlag, SQLSRV_PARAM_IN),
         array($descriptor, SQLSRV_PARAM_IN),
         array($description, SQLSRV_PARAM_IN),
@@ -135,13 +142,14 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
         array($DateClosed, SQLSRV_PARAM_IN),
         array($closedByUID, SQLSRV_PARAM_IN),
         array($riskRealized, SQLSRV_PARAM_IN),
+        array($raidLog, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
         );
 
     //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
     //echo json_encode($params);
@@ -235,7 +243,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
             $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
-            $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
+            $message .="<br><b>POC Name & Group: </b>"; $message .= $individual . " : ". $internalExternal ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
             $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;
@@ -251,7 +259,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
         //END - EMAIL TO PM AND RI CREATOR
 
         //START - EMAIL RAID ADMIN
-        if($raidLog == "Yes") {
+        if($raidLog == 1) {
             $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com,Briana.Baynham@cox.com";
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
@@ -275,7 +283,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
             $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
-            $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
+            $message .="<br><b>POC Name & Group: </b>"; $message .= $individual . ":" . $internalExternal ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
             $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;

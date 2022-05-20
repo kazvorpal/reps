@@ -10,9 +10,10 @@
                 $fscl_year = $_GET['fscl_year'];
 									
 								$sql_risk_issue = "select distinct RI_Nm, ImpactLevel_Nm, Last_Update_Ts, RIDescription_Txt, RiskAndIssue_Key, RIType_Cd
-                from
-                (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject] ($fscl_year,'$proj_name')
-                ) a";
+                                  from
+                                  (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject] ($fscl_year,'$proj_name')
+                                  ) a
+                                  order by RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 								// echo $row_risk_issue['Risk_Issue_Name']; 	
                 //echo $sql_risk_issue;
@@ -97,7 +98,7 @@ ProjectID: <?php echo $projID?>
 <?php } ?>
 
 <br>
-<?php if($_GET['count'] == 0){ //TURNED OFF.  SHOULD BE != 0 ?>
+<?php if($_GET['count'] != 0){ //TURNED OFF.  SHOULD BE != 0 ?>
 <div class="alert alert-success"><b>OPEN RISK & ISSUES</b></div>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
