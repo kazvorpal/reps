@@ -7,96 +7,98 @@
 <?php include ("../../sql/update-time.php");?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Program R&I Aggregate View</title>
-  <link rel="shortcut icon" href="favicon.ico"/>
-  <?php 
-  include ("../../includes/load.php");
-  function fixutf8($target) {
-    if (gettype($target) == "string")
-    return (utf8_encode($target));
-    else 
-    return ($target);
-  }
-
-  $sqlstr = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(1) where rilevel_cd = 'program'";
-  ini_set('mssql.charset', 'UTF-8');
-  $riquery = sqlsrv_query($data_conn, $sqlstr);
-  if($riquery === false) {
-    if(($error = sqlsrv_errors()) != null) {
-      foreach($errors as $error) {
-        echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-        echo "code: ".$error[ 'code']."<br />";
-        echo "message: ".$error[ 'message']."<br />";
-      }
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Program R&I Aggregate View</title>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <?php 
+    include ("../../includes/load.php");
+    function fixutf8($target) {
+      if (gettype($target) == "string")
+      return (utf8_encode($target));
+      else 
+      return ($target);
     }
-  } else {
-    $rows = array();
-    $count = 1;
-    while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
-      $rows[] = array_map("fixutf8", $row);
-    }
-    
-    $p4plist = array();
-    foreach ($rows as $row)  {
-      if($row["ProgramRI_Key"] != '') {
-        $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
-        ini_set('mssql.charset', 'UTF-8');
-        $p4pquery = sqlsrv_query($data_conn, $sqlstr);
-        if($p4pquery === false) {
-          if(($error = sqlsrv_errors()) != null) {
-            foreach($errors as $error) {
-              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-              echo "code: ".$error[ 'code']."<br />";
-              echo "message: ".$error[ 'message']."<br />";
-            }
-          }
-        } else {
-          $count = 1;
-          $p4prows = array();
-          $checker = 0;
-          while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
-            $p4prows[] = array_map("fixutf8", $p4prow);
-            $checker = 1;
-          }
+    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
+    ini_set('mssql.charset', 'UTF-8');
+    $riquery = sqlsrv_query($data_conn, $sqlstr);
+    if($riquery === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($error as $errors) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
         }
-        $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
       }
-    }
-    
-    $mangerlist = array();
-    foreach ($rows as $row)  {
-      if($row["ProgramRI_Key"] != '') {
-        $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
-        ini_set('mssql.charset', 'UTF-8');
-        $mangerquery = sqlsrv_query($data_conn, $sqlstr);
-        if($mangerquery === false) {
-          if(($error = sqlsrv_errors()) != null) {
-            foreach($errors as $error) {
-              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-              echo "code: ".$error[ 'code']."<br />";
-              echo "message: ".$error[ 'message']."<br />";
+    } else {
+      $rows = array();
+      $count = 1;
+      while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
+        $rows[] = array_map("fixutf8", $row);
+      }
+      
+      $p4plist = array();
+      foreach ($rows as $row)  {
+        if($row["ProgramRI_Key"] != '') {
+          $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .", 1)";
+          // echo $sqlstr;
+          ini_set('mssql.charset', 'UTF-8');
+          $p4pquery = sqlsrv_query($data_conn, $sqlstr);
+          if($p4pquery === false) {
+            if(($error = sqlsrv_errors()) != null) {
+              // echo("MOOOOOO");
+              print_r($error);
+              foreach($error as $errors) {
+                echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
+                echo "code: ".$errors[ 'code']."<br />";
+                echo "message: ".$errors[ 'message']."<br />";
+              }
+            }
+          } else {
+            $count = 1;
+            $p4prows = array();
+            $checker = 0;
+            while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
+              $p4prows[] = array_map("fixutf8", $p4prow);
+              $checker = 1;
             }
           }
-        } else {
-          $count = 1;
-          $mangerrows = array();
-            while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
-              $mangerrows[] = array_map("fixutf8", $mangerrow);
-            }
-          }
-          $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
+          $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
         }
       }
       
-    $p4pout = json_encode($p4plist);
-    $mangerout = json_encode($mangerlist);
-    $jsonout = json_encode($rows);
-    
-    }
+      $mangerlist = array();
+      foreach ($rows as $row)  {
+        if($row["ProgramRI_Key"] != '') {
+          $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
+          ini_set('mssql.charset', 'UTF-8');
+          $mangerquery = sqlsrv_query($data_conn, $sqlstr);
+          if($mangerquery === false) {
+            if(($error = sqlsrv_errors()) != null) {
+              foreach($errors as $error) {
+                echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+                echo "code: ".$error[ 'code']."<br />";
+                echo "message: ".$error[ 'message']."<br />";
+              }
+            }
+          } else {
+            $count = 1;
+            $mangerrows = array();
+              while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
+                $mangerrows[] = array_map("fixutf8", $mangerrow);
+              }
+            }
+            $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
+          }
+        }
+        
+      $p4pout = json_encode($p4plist);
+      $mangerout = json_encode($mangerlist);
+      $jsonout = json_encode($rows);
+      
+      }
 
   ?>
     <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
@@ -115,54 +117,54 @@
     
     
   <script>
-  $(document).ready(function(){
-          //Examples of how to assign the Colorbox event to elements
-          $(".group1").colorbox({rel:'group1'});
-          $(".group2").colorbox({rel:'group2', transition:"fade"});
-          $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-          $(".group4").colorbox({rel:'group4', slideshow:true});
-          $(".ajax").colorbox();
-          $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-          $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-          $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
-          $(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
-          $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
-          $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
-          $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
-          $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
-          $(".inline").colorbox({inline:true, width:"50%"});
-          $(".callbacks").colorbox({
-            onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-            onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-            onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-            onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-            onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
-          });
+    $(document).ready(function(){
+            //Examples of how to assign the Colorbox event to elements
+            $(".group1").colorbox({rel:'group1'});
+            $(".group2").colorbox({rel:'group2', transition:"fade"});
+            $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+            $(".group4").colorbox({rel:'group4', slideshow:true});
+            $(".ajax").colorbox();
+            $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+            $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+            $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+            $(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
+            $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+            $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+            $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+            $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
+            $(".inline").colorbox({inline:true, width:"50%"});
+            $(".callbacks").colorbox({
+              onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+              onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+              onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+              onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+              onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+            });
 
-          $('.non-retina').colorbox({rel:'group5', transition:'none'})
-          $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
-          
-          //Example of preserving a JavaScript event for inline calls.
-          $("#click").click(function(){ 
-            $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
-            return false;
+            $('.non-retina').colorbox({rel:'group5', transition:'none'})
+            $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+            
+            //Example of preserving a JavaScript event for inline calls.
+            $("#click").click(function(){ 
+              $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+              return false;
+            });
           });
-        });
-  function MM_setTextOfTextfield(objId,x,newText) { //v9.0
-    with (document){ if (getElementById){
-      var obj = getElementById(objId);} if (obj) obj.value = newText;
+    function MM_setTextOfTextfield(objId,x,newText) { //v9.0
+      with (document){ if (getElementById){
+        var obj = getElementById(objId);} if (obj) obj.value = newText;
+      }
     }
-  }
 
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
 
-  </script>
-  <link rel="stylesheet" href="../css/ri.css">
-  <style type="text/css">
-  </style>
-</head>
+    </script>
+    <link rel="stylesheet" href="../css/ri.css">
+    <style type="text/css">
+    </style>
+  </head>
 
 <body onload="myFunction()" style="margin:0;">
 <!--LOADER-->
@@ -235,23 +237,36 @@
   const fieldlist = ["Program", "Region", "R/I Creator", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
   const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
   const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
-
+  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "mangerlist": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "CategorY", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date"};
 
   const populate = (rilist) => {
-    console.log(ridata);
+    // The main function that creates everything
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
     document.workbook = new ExcelJS.Workbook();
-    document.worksheet = document.workbook.addWorksheet('ExampleWS');
+    document.workbook.creator = "RePS Website";
+    document.workbook.lastModifiedBy = "Kaz";
+    document.workbook.created = new Date();
+    document.worksheet = document.workbook.addWorksheet('Program Report',  {properties:{tabColor:{argb:'3355bb'}, headerFooter: "Program Report Spreadsheet", firstFooter: "RePS"}});
+
     let cols = [];
-    for (field in ridata[0]) {
+    for (field in excelfields) {
       cols.push({
-        header: field,
+        header: excelfields[field],
         key: field,
-        width: (ridata[0][field]) ? ridata[0][field].length : 8
+        width: 16
       })
     }
     document.worksheet.columns = cols;
+    // for (field in ridata[0]) {
+    //   cols.push({
+    //     header: field,
+    //     key: field,
+    //     width: (ridata[0][field]) ? ridata[0][field].length : 8
+    //   })
+    // }
+    // document.worksheet.columns = cols;
+
     // document.worksheet.addRow(rowValues);
     for (loop of rilist) {
       // creates all the programs
@@ -273,16 +288,14 @@
   const exporter = () => {
     document.workbook.xlsx.writeBuffer().then((buf) => {
       saveAs(new Blob([buf]), 'ri-aggregate-' + makedate(new Date()) + '.xlsx');
-      // other stuffs
     });
-    // saveAs(new Blob([makeoctet(document.rixl)], {type: "application/octet-stream"}), "riaggreate.xlsx");
   }
 
   function makeoctet(s) { 
-                var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
-                var view = new Uint8Array(buf);  //create uint8array as viewer
-                for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
-                return buf;    
+    var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+    var view = new Uint8Array(buf);  //create uint8array as viewer
+    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+    return buf;    
   }
 
   const makerow = (name, risks, issues) => {
@@ -360,11 +373,19 @@
       RIOpen_Hours: function() {
         return Math.floor(program.RIOpen_Hours/24);
       },
-      subs: function() {
-        // console.log("p4plist");
+      projectcount: function() {
         // console.log(program);
         // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
-        // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
+        console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
+        let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
+        return (projects.length>0) ? projects.length : "";
+      }, 
+      category: function() {
+        // console.log(program);
+        // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
+        console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
+        let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
+        return (projects.length>0) ? "Projects" : "Global";
       }
     };
 
@@ -381,7 +402,6 @@
         "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
         "c":"p-4 namebox"
       });
-      // console.log(program.RI_Nm);
       const tridobj = document.getElementById(trid);
       if (arrow != "") {
         tridobj.onclick = function() {
@@ -389,8 +409,6 @@
         };
       }
       tridobj.appendChild(header);
-      // console.log(program);
-      // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key)
       for (field of datafields) {
         (function(test) {
           const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
@@ -398,10 +416,17 @@
         })(field);
       }
       var rowValues = [];
-      for (field in program) {
+      // for (field in program) {
+      //   (function(test) {
+      //     const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+      //     rowValues.push(texter);
+      //   })(field);
+      // }
+      for (field in excelfields) {
+        // console.log(program[field]);
         (function(test) {
-          const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-          rowValues.push(texter);
+            const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+            rowValues.push(texter);
         })(field);
       }
       let newrow = document.worksheet.addRow(rowValues);
@@ -418,7 +443,6 @@
     document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
     document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
     document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 10}));
-    console.log(projects)
     if (projects.length != 0) {
       const table = document.createElement("table");
       table.id = "table" + saferi;
@@ -437,8 +461,6 @@
         }
       }
     } else {
-
-      // document.getElementById("arrow" + saferi).innerHTML = "";
       let empty = document.createTextNode("No Associated Projects");
       document.getElementById("td" + saferi).appendChild(empty);
     }
@@ -471,7 +493,31 @@
       cells.push(field);
     }
     // document.worksheet.addRow(cells);
-    document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true };
+    document.worksheet.getRow(1).eachCell( function(cell, colNumber){
+      if(cell.value){
+        document.worksheet.getRow(1).height = 42;
+        document.worksheet.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: true, color: {argb: 'FFFFFFFF'}};
+        document.worksheet.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
+        document.worksheet.getRow(1).getCell(colNumber).fill = {
+                        type: 'pattern',
+                        pattern:'solid',
+                        bgColor:{argb:'FF5588FF'},
+                        fgColor:{argb: "FF3377AA"},
+                        width: "256",
+                        height: "256"
+                      };
+      }
+    });
+    const borderstyle = "medium";
+    document.worksheet.columns.forEach(column => {
+      column.border = {
+        top: { style: borderstyle },
+        left: { style: borderstyle },
+        bottom: { style: borderstyle },
+        right: { style: borderstyle }
+      };
+    });
+    // document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true};
     return trri;
   }
 
@@ -568,8 +614,8 @@
       }
       filtered = secondpass;
     }
-    console.log(filtered.length)
-    console.log(filtered)
+    // console.log(filtered.length)
+    // console.log(filtered)
     return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   }  
   
