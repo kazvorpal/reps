@@ -77,7 +77,7 @@ Program Manager is: <?php echo $alias; ?>
   </div>
 <?php } ?>
 <br>
-<?php if($_GET['count'] == 0){ //TURNED OFF.  SHOULD BE != 0 ?>
+<?php //if($_GET['count'] == 0){ //TURNED OFF.  SHOULD BE != 0 ?>
   <div align="center" class="alert alert-success"><b>OPEN RISK & ISSUES</b></div>
   <table width="98%" border="0" cellpadding="5" class="table table-bordered table-striped table-hover">
     <tbody>
@@ -101,9 +101,9 @@ Program Manager is: <?php echo $alias; ?>
     <?php } ?>
   </tbody>
 </table>
-<?php } else { ?>
-There are no Program Risk or Issues found
-<?php }?>
+<?php //} else { ?>
+<!--There are no Program Risk or Issues found -->
+<?php //}?>
 </div>
 <div align="center" class="alert alert-success"><b>CLOSED RISK & ISSUES</b></div>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
