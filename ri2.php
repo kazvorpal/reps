@@ -98,7 +98,7 @@ ProjectID: <?php echo $projID?>
 <?php } ?>
 
 <br>
-<?php if($_GET['count'] != 0){ //TURNED OFF.  SHOULD BE != 0 ?>
+<?php //if($_GET['count'] != 0){ //TURNED OFF.  SHOULD BE != 0 ?>
 <div class="alert alert-success"><b>OPEN RISK & ISSUES</b></div>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
@@ -122,9 +122,9 @@ ProjectID: <?php echo $projID?>
     <?php } ?>
   </tbody>
 </table>
-<?php } else { ?>
-There are no Project Risk or Issues found
-<?php }?>
+<?php //} else { ?>
+<!--There are no Project Risk or Issues found -->
+<?php //}?>
 </div>
 <div>
 <div align="center" class="alert alert-success"><b>CLOSED RISK & ISSUES</b></div>
