@@ -345,11 +345,19 @@
               return "";
           },
           ForecastedResolution_Dt: function() {
-              const fr = (ri["ForecastedResolution_Dt"] == null) ? "" : ri["ForecastedResolution_Dt"].date.substring(0,10);
-              return fr;
+            return makestringdate(ri.ForecastedResolution_Dt);
+          },
+          Created_Ts: function() {
+            return  makestringdate(ri.Created_Ts);
+          },
+          Last_Update_Ts: function() {
+            return  makestringdate(ri.Last_Update_Ts);
+          },
+          RiskRealized_Flg: function() {
+            return  (ri.RiskRealized_Flg) ? "Y" : "N";
           },
           RIOpen_Hours: function() {
-              return Math.floor(ri["RIOpen_Hours"]/24);
+            return Math.floor(ri.RIOpen_Hours/24);
           },
           RI_Nm: function() {
               const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
@@ -375,7 +383,7 @@
 
       for (field in excelfields) {
         (function(test) {
-            const t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+            const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
             rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
         })(field);
       }
@@ -480,6 +488,10 @@
 
     const makedate = (dateobject) => {
       return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+    }
+
+    const makestringdate = (dateobject) => {
+      return (dateobject == null) ? "" : dateobject.date.substring(0,10);
     }
 
       const flipname = (name) => {

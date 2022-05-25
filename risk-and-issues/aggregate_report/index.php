@@ -21,6 +21,7 @@
       else 
       return ($target);
     }
+    // Get ALL //
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
     ini_set('mssql.charset', 'UTF-8');
     $riquery = sqlsrv_query($data_conn, $sqlstr);
@@ -39,16 +40,21 @@
         $rows[] = array_map("fixutf8", $row);
       }
       
+      // print ("<code>");
+      // print_r($rows);
+      // print ("</code>");
+
+
+
       $p4plist = array();
       foreach ($rows as $row)  {
         if($row["ProgramRI_Key"] != '') {
+          // Get PROJECTS //
           $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .", 1)";
-          // echo $sqlstr;
           ini_set('mssql.charset', 'UTF-8');
           $p4pquery = sqlsrv_query($data_conn, $sqlstr);
           if($p4pquery === false) {
             if(($error = sqlsrv_errors()) != null) {
-              // echo("MOOOOOO");
               print_r($error);
               foreach($error as $errors) {
                 echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
@@ -72,6 +78,7 @@
       $mangerlist = array();
       foreach ($rows as $row)  {
         if($row["ProgramRI_Key"] != '') {
+          // Get OWNERS //
           $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
           ini_set('mssql.charset', 'UTF-8');
           $mangerquery = sqlsrv_query($data_conn, $sqlstr);
@@ -86,16 +93,43 @@
           } else {
             $count = 1;
             $mangerrows = array();
-              while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
-                $mangerrows[] = array_map("fixutf8", $mangerrow);
+            while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
+              $mangerrows[] = array_map("fixutf8", $mangerrow);
+            }
+          }
+          $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
+        }
+      }
+        
+      $driverlist = array();
+      foreach ($rows as $row)  {
+        if($row["ProgramRI_Key"] != '') {
+          // Get OWNERS //
+          $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(". $row["RiskAndIssueLog_Key"] ." , 1)";
+          ini_set('mssql.charset', 'UTF-8');
+          $driverquery = sqlsrv_query($data_conn, $sqlstr);
+          if($driverquery === false) {
+            if(($error = sqlsrv_errors()) != null) {
+              foreach($errors as $error) {
+                echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+                echo "code: ".$error[ 'code']."<br />";
+                echo "message: ".$error[ 'message']."<br />";
               }
             }
-            $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
+          } else {
+            $count = 1;
+            $driverrows = array();
+            while($driverrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
+              $driverrows[] = array_map("fixutf8", $mangerrow);
+            }
           }
+          $driverlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
         }
+      }
         
       $p4pout = json_encode($p4plist);
       $mangerout = json_encode($mangerlist);
+      $driverout = json_encode($driverlist);
       $jsonout = json_encode($rows);
       
       }
@@ -227,6 +261,7 @@
   
   const ridata = <?= $jsonout ?>;  
   const mangerlist = <?= $mangerout ?>;
+  const driverlist = <?= $driverout ?>;
   const p4plist = <?= $p4pout ?>;
   
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
@@ -237,7 +272,7 @@
   const fieldlist = ["Program", "Region", "R/I Creator", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
   const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
   const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
-  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "mangerlist": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "CategorY", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date"};
+  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "mangerlist": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
     // The main function that creates everything
@@ -367,23 +402,52 @@
         return mangers.join().replace(",", ", ");
       },
       ForecastedResolution_Dt: function() {
-        const fr = (program.ForecastedResolution_Dt == null) ? "" : program.ForecastedResolution_Dt.date.substring(0,10);
-        return fr;
+        return makestringdate(program.ForecastedResolution_Dt);
+      },
+      Created_Ts: function() {
+        return  makestringdate(program.Created_Ts);
+      },
+      quartercreated: function() {
+        const m = new Date(program.Created_Ts.date).getMonth();
+        return  (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+      },
+      quarterclosed: function() {
+        const m = new Date(program.Last_Update_Ts).getMonth();
+        return  (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+      },
+      duration: function() {
+        const d = Math.floor((new Date(program.Last_Update_Ts.date) - new Date(program.Created_Ts.date))/(1000 * 60 * 60 * 24));
+        console.log(d);
+        return  d + " days";
+      },
+      Last_Update_Ts: function() {
+        return  makestringdate(program.Last_Update_Ts);
+      },
+      AssociatedCR_Key: function() {
+        return  (program.RiskRealized_Flg) ? "Y" : "";
+      },
+      RaidLog_Flg: function() {
+        return  (program.RiskRealized_Flg) ? "Y" : "";
+      },
+      RiskRealized_Flg: function() {
+        return  (program.RiskRealized_Flg) ? "Y" : "";
       },
       RIOpen_Hours: function() {
-        return Math.floor(program.RIOpen_Hours/24);
+        return Math.floor(program.RIOpen_Hours/24) + " days";
       },
+      // RI_Nm: function() {
+      //   const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
+      //   return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
+      // },
+      // RI_Nm_Excel: function() {
+      //   const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
+      //   return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
+      // },
       projectcount: function() {
-        // console.log(program);
-        // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
-        console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
         let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
         return (projects.length>0) ? projects.length : "";
       }, 
       category: function() {
-        // console.log(program);
-        // console.log(program.RiskAndIssue_Key + "-" + program.ProgramRI_Key);
-        console.log(p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key]);
         let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
         return (projects.length>0) ? "Projects" : "Global";
       }
@@ -426,6 +490,7 @@
         // console.log(program[field]);
         (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+            // console.log(texter)
             rowValues.push(texter);
         })(field);
       }
@@ -634,6 +699,10 @@
 
   const makedate = (dateobject) => {
     return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+  }
+
+  const makestringdate = (dateobject) => {
+    return (dateobject == null) ? "" : dateobject.date.substring(0,10);
   }
 
   const flipname = (name) => {
