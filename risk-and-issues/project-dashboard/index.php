@@ -192,7 +192,7 @@
     </div>
   </section>
   <div id="lightbox" style="position:fixed;left:0;top:0;width:100%;height:100%;background-color:rgba(0, 0, 0, .3);display:none;cursor:pointer" onclick="hider();"></div>
-  <iframe id="details" onclick="this.style.display= 'none'" onblur="this.style.display= 'none'" style="position:fixed;top:10%;left:10%;width:80vw;height:70vw;background-color:#000;display:none;"></iframe>
+  <iframe id="details" onclick="this.style.display= 'none'" onblur="this.style.display= 'none'" style="position:fixed;top:10%;left:10%;width:80vw;height:70vh;background-color:#000;display:none;"></iframe>
   <section>
 
   </section>

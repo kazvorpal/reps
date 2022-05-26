@@ -217,7 +217,7 @@
   <div class="row" align="center">
     <div style="width:98%">
       <div class="col-xs-12 text-center">
-        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Dashboard </h1>
+        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Aggregate View </h1>
     <?php 
       require '../includes/ri-selectors.php';
       ?>
