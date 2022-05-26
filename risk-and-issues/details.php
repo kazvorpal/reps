@@ -223,7 +223,9 @@ $department = $row_risk_issue['POC_Department'];
       <?php } ?>
 
       <?php if($status == 1){ ?>
-      <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+        <?php if($popup=="false"){?>
+          <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+        <?php } ?>
       <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
       %0D%0ARisk/Issue Name: <?php echo $name;?>
