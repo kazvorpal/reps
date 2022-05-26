@@ -241,12 +241,13 @@ function toggle(source) {
   <input name="CreatedFrom" type="hidden" id="Created From" value=''>
   <input name="TransfertoProgramManager" type="hidden" id="Created From" value="">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value=''>
-  <input name="Risk Relized" type="hidden" id="Risk Relized" value="0">
+  <input name="riskRealized" type="hidden" id="riskRealized" value="0">
   <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value=''>
   <input type="hidden" name="Region" id="Region" value="<?php while($row_regions_f = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region'] . "," ; } ?>">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
+  <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -625,10 +626,11 @@ function toggle(source) {
           </div>
           </td>
           <td align="left" valign="top" style="padding-left: 10px">
+          <!--
           <div class="box">
             <label for="Created From">Associated CR ID</label>
             <input name="CreatedFrom" type="text" class="form-control" id="Created From">
-          </div>
+          </div>-->
           </td>
         </tr>
         <tr>
@@ -681,12 +683,8 @@ function toggle(source) {
           <td colspan="2" align="right">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="2" align="right"><input type="submit" name="submit" id="submit" value="Review" class="btn btn-primary">
-                  <?php if($action == "edit"){ ?>  
-                    <a href="" class="btn btn-primary">Email</a>
-                  <?php } else { ?>
-                    <a href="" class="btn btn-primary" disabled>Email</a>
-                  <?php } ?></td>
+          <td colspan="2" align="right"><input type="submit" name="submit" id="submit" value="Review >" class="btn btn-primary">
+                  </td>
 		  </tr>
         <tr>
           <td></td>

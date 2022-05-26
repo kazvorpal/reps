@@ -257,6 +257,8 @@ function toggle(source) {
   <input type="hidden" name="Region" id="Region" value="<?php while($row_regions_f = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region'] . "," ; } ?>">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
+  <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
+  <input name="riskRealized" type="hidden" class="form-control" id="riskRealized" value="0">
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -616,7 +618,7 @@ function toggle(source) {
             </div>
           </td>
         </tr>
-        <tr>
+        <!--<tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
         <tr>
@@ -632,17 +634,17 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Risk Relized" value="Yes" id="RiskRelized_0">
+                    <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0">
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="Risk Relized" value="No" id="RiskRelized_1" checked>
+                    <input type="radio" name="riskRealized" value="No" id="RiskRelized_1" checked>
                     No</label></td>
                   </tr>
                 </table>
               </div>
             
           </td>
-          </tr>
+        </tr>
         <tr>
           <td colspan="2" align="left"></td>
         </tr>
@@ -654,7 +656,7 @@ function toggle(source) {
               <input name="CreatedFrom" type="text" class="form-control" id="Created From">
             </div>
           </td>
-      </tr>
+      </tr>-->
       <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -692,12 +694,8 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="2" align="right" valign="middle">
-          <input type="submit" name="submit" id="submit" value="Review" class="btn btn-primary">
-                  <?php if($action == "edit"){ ?>  
-                    <a href="" class="btn btn-primary">Email</a>
-                  <?php } else { ?>
-                    <a href="" class="btn btn-primary" disabled>Email</a>
-                  <?php } ?>
+
+            <input type="submit" name="submit" id="submit" value="Review >" class="btn btn-primary">
           </td>
         </tr>
       </tbody>

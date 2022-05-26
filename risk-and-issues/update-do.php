@@ -72,7 +72,8 @@ include ("../sql/MS_Users_prg.php");
     if (empty($_POST['DateClosed'])) {
         $DateClosed = NULL;
     }
-    $riskRealized = 1;
+
+    $riskRealized = $_POST['riskRealized'];
 
     $region = NULL; // ONLY FOR PROGRAM
     if (!empty($_POST['assocRegions'])){

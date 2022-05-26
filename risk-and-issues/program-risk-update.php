@@ -182,6 +182,51 @@
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
   <!--<link href='http://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>-->
 
+  <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
+  <script src="../colorbox-master/jquery.colorbox.js"></script>
+<script>
+$(document).ready(function(){
+				//Examples of how to assign the Colorbox event to elements
+				$(".group1").colorbox({rel:'group1'});
+				$(".group2").colorbox({rel:'group2', transition:"fade"});
+				$(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+				$(".group4").colorbox({rel:'group4', slideshow:true});
+				$(".ajax").colorbox();
+				$(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+				$(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+				$(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+				$(".dno").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+				$(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+				$(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+				$(".ocdframe").colorbox({iframe:true, width:"60%", height:"90%", scrolling:true, escKey: false, overlayClose: false});
+				$(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
+				$(".inline").colorbox({inline:true, width:"50%"});
+				$(".callbacks").colorbox({
+					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+				});
+
+				$('.non-retina').colorbox({rel:'group5', transition:'none'})
+				$('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+				
+				//Example of preserving a JavaScript event for inline calls.
+				$("#click").click(function(){ 
+					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+					return false;
+				});
+			});
+</script>      
+<script language="JavaScript">
+function toggle(source) {
+  checkboxes = document.getElementsByName('proj_select');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+</script>
 <script language="JavaScript">
 function toggle(source) {
   checkboxes = document.getElementsByName('proj_select');
@@ -322,7 +367,7 @@ function toggle(source) {
 		</div></td>
           <td align="left" valign="top">
           <div style="padding-left: 10px">  
-          <div class="box">
+          <div class="box subscriber">
           <table width="100%" border="0" cellpadding="10px" cellspacing="10">
             <tbody>
               <tr>
@@ -373,47 +418,50 @@ function toggle(source) {
         </td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS</h4>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+</svg></a></h4>
             <div class="box">
             <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
                     Budget/Funding</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
                     External</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
                     Communications Breakdown</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resources</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
                     Contractor</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
                     Procurement</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
                     Dependency Conflict</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
                     Schedule Impact</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
                     Equipment Integration</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
+                    <input type="checkbox" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
                     Other</label></td>
                   </tr>
                 </table>
@@ -444,7 +492,11 @@ function toggle(source) {
                 <td  valign="top">
                   <table width="200" border="0">
                   <tr>
-                  <strong>Impacted Area</strong>
+                  <strong>Impacted Area </strong>
+                  <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                  </svg></a>
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
@@ -675,10 +727,10 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Risk Relized" value="Yes" id="RiskRelized_0" <?php if($riskRealized = 1){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php if($riskRealized == 1){ echo "checked";} ?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="Risk Relized" value="No" id="RiskRelized_1" <?php if($riskRealized = 0){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php if($riskRealized == 0){ echo "checked";} ?>>
                     No</label></td>
                   </tr>
                 </table>
@@ -884,5 +936,13 @@ document.getElementById('DateClosed').value = closeday;
   document.getElementById("InternalExternal").value = v[1];
   });
 </script>
+<script>
+$('.subscriber :checkbox').change(function () {
+    var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
+    if ($cs.length > 3) {
+        this.checked = false;
+    }
+});
+</script> 
 </body>
 </html>

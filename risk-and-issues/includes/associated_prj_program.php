@@ -193,6 +193,7 @@ function toggle(source) {
                   </tbody>
         </table>
         <div align='center'> 
+          <a href="javascript:history.back()"  class="btn btn-primary">< Back </a> 
           <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Add Selected Projects" class="btn btn-primary"> 
         </div>
     </form>

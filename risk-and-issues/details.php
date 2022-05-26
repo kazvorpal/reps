@@ -21,7 +21,8 @@ $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status)";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_driver['Driver_Nm]; 
+//echo $row_risk_issue_driver['Driver_Nm']; 
+//echo $sql_risk_issue_driver;
 
 //GET ASSOCIATED PROJECTS
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";

@@ -90,6 +90,8 @@ include("../sql/risk-issues-lookup.php");
     <input name="programs" type="hidden" id="programs" value="<?php echo $programs ?>">
     <input name="program" type="hidden" id="program" value="<?php echo $program ?>"> <!-- ESP PROGRAM -->
     <input name="raidLog" type="hidden" id="raidLog" value="<?php echo $raidLog ?>">
+    <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>">
+
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
