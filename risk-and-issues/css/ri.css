@@ -64,9 +64,9 @@
 
 }
 .titles {
-  background-color: #bbb;
-  color: #000;
-  border-left: 1px solid #fff;
+  background-color: #337AB7;
+  color: #fff;
+  border-left: 1px solid #000;
   padding: 4px;
   cursor: default;
   text-align: left;
