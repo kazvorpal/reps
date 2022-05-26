@@ -140,11 +140,11 @@ if ($individual == "") {
 $name = trim(str_replace("'","",$_POST['Namex'])); // PROJECT NAME
 //}
 
+$riskRealized = $_POST['riskRealized'];
 $raidLog = $_POST['raidLog'];
 
 //echo $changeLogKey . " - ";
 //echo $DateClosed;
-
 
 // LOOKUP KEY VALUES 
 // IMPACT AREA

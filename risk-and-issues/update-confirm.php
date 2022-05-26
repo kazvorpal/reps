@@ -113,6 +113,8 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $RiskAndIssue_Key ?>"> 
     <input name="regionKeys" type="hidden" id="regionKey" value="<?php echo $regionKeys ?>"> 
     <input name="programKeys" type="hidden" id="programKeys" value="<?php echo $programKeys ?>"> 
+    <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>"> 
+
     
     
 	<table class="table table-bordered table-striped" width="90%">
@@ -130,12 +132,12 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
       <td width="20%">Type</td>
       <td><?php echo $RILevel . " " . $RIType; ?></td>
     </tr>
-<?php if(isset($_POST['CreatedFrom'])) { ?>
+<!--<?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
       <td><?php echo $createdFrom ; ?></td>
     </tr>
-<?php } ?>
+<?php } ?>-->
     <tr>
     <tr>
       <td>Descriptor</td>
@@ -226,6 +228,14 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
       <td><?php echo $raidLog; ?>
     </td>
     </tr>
+<!--<?php if($RIType == "Risk") { ?>
+    <tr>
+      <td>Risk Realized</td>
+      <td><?php if($riskRealized == 0) { echo "No";} else { echo "Yes";} ?>
+    </td>
+    </tr>
+<?php } ?> -->
+
     <tr>
       <td>Date Closed</td>
       <td>

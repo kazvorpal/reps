@@ -22,20 +22,17 @@ $forcastDate =  date('m/d/Y');
     <meta name="author" content="Carolino, Gil">
     <title>RePS Reporting - Cox Communications</title>
 
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>-->
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-  <link rel="stylesheet" href="steps/style.css" type='text/css'> 
-
-  <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
-  <script src="../colorbox-master/jquery.colorbox.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdn.rawgit.com/crlcu/multiselect/v2.5.1/dist/js/multiselect.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="steps/style.css" type='text/css'> 
+    <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
+    <script src="../colorbox-master/jquery.colorbox.js"></script>
 <script>
-$(document).ready(function(){
+    $(document).ready(function(){
 				//Examples of how to assign the Colorbox event to elements
 				$(".group1").colorbox({rel:'group1'});
 				$(".group2").colorbox({rel:'group2', transition:"fade"});
@@ -154,8 +151,7 @@ function toggle(source) {
     <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
     <input name="RIName" type="hidden" id="RIName" value="">
     <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
-
-
+    <input name="riskRealized" type="hidden" id="riskRealized" value="No">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -261,7 +257,37 @@ function toggle(source) {
                     Other</label></td>
                   </tr>
                 </table>
-                <input type="hidden" name="driver8" id="driver8">
+<!--
+                <div class="row">
+                <div class="col-xs-5">
+                  <select name="from[]" id="multiselect" class="form-control" size="8" multiple="multiple" data-maximum-selection-length="3">
+                  <?php while($row_drivers = sqlsrv_fetch_array( $stmt_drivers , SQLSRV_FETCH_ASSOC)){ ?>  
+                  <option value="<?php echo $row_drivers['Driver_Nm']; ?>"><?php echo $row_drivers['Driver_Nm']; ?></option>
+                  <?php } ?>
+                  </select>
+                </div>
+
+                <div class="col-xs-2">
+                  <button type="button" id="multiselect_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+                  <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                  <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                  <button type="button" id="multiselect_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                </div>
+
+                <div class="col-xs-5">
+                  <select name="Drivers[]" id="multiselect_to" class="form-control" size="6" multiple="multiple" data-maximum-selection-length="3"></select>
+
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <button type="button" id="multiselect_move_up" class="btn btn-block"><i class="glyphicon glyphicon-arrow-up"></i></button>
+                    </div>
+                    <div class="col-xs-6">
+                      <button type="button" id="multiselect_move_down" class="btn btn-block col-sm-6"><i class="glyphicon glyphicon-arrow-down"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                  -->
               </div>
           </td>
           </tr>
@@ -512,7 +538,7 @@ function toggle(source) {
 		  </td>
         </tr>
 
-        <tr>
+        <!--<tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
         <tr>
@@ -528,16 +554,16 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Risk Relized" value="Yes" id="RiskRelized_0">
+                    <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0">
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="Risk Relized" value="No" id="RiskRelized_1" checked>
+                    <input type="radio" name="riskRealized" value="No" id="RiskRelized_1" checked>
                     No</label></td>
                   </tr>
-                </table>
               </div>
 			    </td>
-        </tr>
+          </table>
+        </tr>-->
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -741,6 +767,36 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script>  
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $('#multiselect').multiselect();
+    preselect = {};
+    document.getElementById("multiselect").addEventListener('click', function(event) {
+        if (this.selectedOptions.length <= 3) {
+            preselect = $(this).val();
+        } else {
+            alert("You can't select more than three");
+            $(this).val(preselect);
+            $("option:selected").removeAttr("selected"); //solution 1
+            return false;
+        }
+    });
+    document.getElementById("multiselect_rightSelected").addEventListener("click", function(event) {
+        to = document.getElementById("multiselect_to");
+        ms = document.getElementById("multiselect");
+        if (to.options.length <= 3) {
+            postselect = to.innerHTML;
+            loadselect = ms.innerHTML;
+        }
+        else {
+            alert("You can't add more than three to this list")
+            ms.innerHTML = loadselect;
+            to.innerHTML = postselect;
+        }
+    });
+});
+</script>
+
 </body>
 </html>
 	  

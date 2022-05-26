@@ -14,8 +14,8 @@ $stmt_external  = sqlsrv_query( $data_conn, $sql_external  );
 //DRIVERS
 $sql_drivers = "SELECT *  FROM [COX_Dev].[RI_MGT].[Driver]";
 $stmt_drivers  = sqlsrv_query( $data_conn, $sql_drivers ); 
-//$row_ = sqlsrv_fetch_array( $stmt_ , SQLSRV_FETCH_ASSOC);
-//$row_['columnname']
+//$row_drivers = sqlsrv_fetch_array( $stmt_drivers , SQLSRV_FETCH_ASSOC);
+//$row_drivers['columnname']
 
 //IMPACTED AREA
 $sql_impArea= "SELECT *  
