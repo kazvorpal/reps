@@ -1,6 +1,7 @@
 ﻿<?php include ("includes/functions.php");?>
 <?php include ("db_conf.php");?>
 <?php include ("data/emo_data.php");?>
+<?php include ("sql/MS_Users.php");?>
 <?php include ("sql/filter_vars.php");?>
 <?php include ("sql/filtered_data.php");?>
 <?php include ("sql/filters.php");?>

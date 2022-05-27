@@ -109,12 +109,12 @@ include("../sql/risk-issues-lookup.php");
       <td width="20%">Type</td>
       <td><?php echo $RILevel . " " . $RIType; ?></td>
     </tr>
-<?php if(isset($_POST['CreatedFrom'])) { ?>
+<!--<?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
       <td><?php echo $createdFrom ; ?></td>
     </tr>
-<?php } ?>
+<?php } ?>-->
     <tr>
       <td>Program</td>
       <td><?php echo $program ; ?></td>

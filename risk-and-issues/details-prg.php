@@ -11,6 +11,7 @@ $prog_name = $_GET['prg_nm'];
 $uid = $_GET['uid'];
 $status = $_GET['status']; //0=closed , 1=open
 $popup = $_GET['popup'];
+$au = $_GET['au'];
   
 $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
@@ -254,7 +255,8 @@ $dateClosed = "";
 <div align="center">
   
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
-    <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+    <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+<?php if($au == "true")  {?>  
 <?php if($status == 1){ ?>
     <a href="<?php echo $formType ?>?status=1&ri_level=prg&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
@@ -284,6 +286,7 @@ $dateClosed = "";
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
     </div>
+    <?php } ?>
     <?php } ?>
 </div>
 </form>

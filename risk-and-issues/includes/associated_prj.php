@@ -132,7 +132,7 @@ function toggle(source) {
       } elseif ($ri_type == "risk" && $ri_level == "prg"){
         echo "CREATE PROGRAM RISK";
       } elseif ($ri_type == "issue" && $ri_level == "prj"){
-        echo "CREATE POJECT ISSUE";
+        echo "CREATE PROJECT ISSUE";
       } else {
         echo "CREATE PROGRAM ISSUE";
       }
@@ -250,7 +250,7 @@ function toggle(source) {
                   </tbody>
         </table>
         <div align='center'> 
-          <a href="javascript:history.back()"  class="btn btn-primary">< Back </a>
+          <a href="javascript:void(0);" onclick="javascript:history.go(-1)"class="btn btn-primary">< Back </a>
           <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Next >" class="btn btn-primary"> 
         </div>
     </form>

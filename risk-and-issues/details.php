@@ -219,9 +219,9 @@ $department = $row_risk_issue['POC_Department'];
 
 <div align="center">
       <?php if($popup=="false"){?>
-        <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+        <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
       <?php } ?>
-
+      <?php if($uaccess=="true"){?>  
       <?php if($status == 1){ ?>
       <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
       <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
@@ -242,6 +242,7 @@ $department = $row_risk_issue['POC_Department'];
       %0D%0ADate Closed: <?php convtimex($dateClosed)?>
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+      <?php } ?>
       <?php } ?>
     </div>
   </form>

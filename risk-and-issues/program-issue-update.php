@@ -13,6 +13,7 @@
   $progkey = $_GET['progkey'];
   $progrikey = $_GET['progRIkey'];
   $status = $_GET['status'];
+  $progName = $_GET['progname'];
     
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
   $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
@@ -55,7 +56,7 @@
   
   //GET REGIONS KEYS FOR HIDDEN FIELD
   $sql_regions_f = "select distinct Region_key,[RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd]
-                    from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] (2022, 'CB Funding for Growth') 
+                    from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] (2022, '$progName') 
                     left join [CR_MGT].[Region] on [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd] = [CR_MGT].[Region].[Region_Cd]
                     where RiskAndIssue_Key = $RiskAndIssue_Key
                     order by [CR_MGT].[Region].[Region_key]";
