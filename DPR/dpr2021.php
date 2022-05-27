@@ -436,14 +436,16 @@
 									$prog_clr = '';
 								}
 								?>
+                          
+                          <?php if(!empty($row_winuser['Username'])) { //REMOVE THIS ON HARD LANCH OF RISK AND ISSUES?>
+
                           <td align="center" bgcolor="<?php echo $proj_clr ?>">
-								<?php if($row_por['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-                                <a href="ri2.php?prj_name=<?php echo htmlspecialchars($row_por['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?>&uid=<?php echo $uid_x; ?>&winuser=<?php echo $row_por['PROJ_OWNR_NM']; ?>&fscl_year=<?php echo $row_por['FISCL_PLAN_YR']; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?></a>
+								                <?php if($row_por['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
+                                  <a href="ri2.php?prj_name=<?php echo htmlspecialchars($row_por['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?>&uid=<?php echo $uid_x; ?>&winuser=<?php echo $row_por['PROJ_OWNR_NM']; ?>&fscl_year=<?php echo $row_por['FISCL_PLAN_YR']; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?></a>
                                 <?php } else { ?>
-                                <a href="ri2.php?prj_name=<?php echo htmlspecialchars($row_por['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?>&uid=<?php echo $uid_x; ?>&winuser=<?php echo $row_por['PROJ_OWNR_NM']; ?>&fscl_year=<?php echo $row_por['FISCL_PLAN_YR']; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?></a>
+                                  <a href="ri2.php?prj_name=<?php echo htmlspecialchars($row_por['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?>&uid=<?php echo $uid_x; ?>&winuser=<?php echo $row_por['PROJ_OWNR_NM']; ?>&fscl_year=<?php echo $row_por['FISCL_PLAN_YR']; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?></a>
                                 <?php } ?>
                           </td>
-
                           <td align="center" bgcolor="<?php echo $prog_clr ?>">
                           	    <?php if($row_por['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
                                   <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
@@ -451,6 +453,13 @@
                                   <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
                                 <?php } ?>
                           </td>
+
+                          <?php } else { ?>
+
+                          <td align="center" >0</td>
+                          <td align="center" >0</td>
+
+                          <?php } ?>
                                                            
                 <td style="padding:2px" align="center">
                   <a href="../regional/details.php?fiscal_yr=<?php echo $row_por['FISCL_PLAN_YR']?>&uid=<?php echo htmlspecialchars($uid_x)?>" class="miframe"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a>

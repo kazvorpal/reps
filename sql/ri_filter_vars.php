@@ -38,11 +38,13 @@ $program_n = $list_program_n;
 }
 // PROGRAM 
 $program_d = '-1';
-if (!empty($_POST['program'])) {
-$program_d = $_POST['program'];
+if (!empty($_GET['program'])){
+	$program_d = $row_projID['PRGM'];
+} else if (!empty($_POST['program'])) {
+	$program_d = $_POST['program'];
 
-$list_program_d = implode('|', $program_d);
-$program_d = $list_program_d;
+	$list_program_d = implode('|', $program_d);
+	$program_d = $list_program_d;
 }
 // SUBPRGRAM
 $subprogram = '-1';
