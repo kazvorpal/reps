@@ -82,9 +82,9 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
                     <option value="Issue">Issue</option>
                     </select></td>
                   <td align="center"><select name="impact_level[]" id="impact_level" multiple="multiple" class="form-control">
-                    <option value="Minor Impact">Minor Impact</option>
-                    <option value="Moderate Impact">Moderate Impact</option>
-                    <option value="Major Impact">Major Impact</option>
+                    <option value="Minor">Minor Impact</option>
+                    <option value="Moderate">Moderate Impact</option>
+                    <option value="Major">Major Impact</option>
                     <option value="No">No Impact</option>
                     </select></td>
                   <td align="center"><input type="text" id="dateranger" class="daterange form-control" /></td>
