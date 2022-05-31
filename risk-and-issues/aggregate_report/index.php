@@ -410,6 +410,9 @@
       ForecastedResolution_Dt: function() {
         return makestringdate(program.ForecastedResolution_Dt);
       },
+      Active_Flg: function() {
+        return (program.Active_Flg) ? "Open" : "Closed";
+      },
       Created_Ts: function() {
         return  makestringdate(program.Created_Ts);
       },
