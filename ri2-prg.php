@@ -15,6 +15,7 @@
                                     from
                                     (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($ri_fscl_yr,'$ri_program')
                                     ) a
+                                    Where Region_Cd='$ri_region'
                                     ORDER BY RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 //echo $sql_risk_issue . "<br><br>";
@@ -25,6 +26,7 @@
                                       select * from RI_MGT.fn_GetListOfAllInactiveRiskAndIssue ('Program') 
                                       where Program_Nm = '$ri_program' and RIOpen_Flg = 0
                                       ) a
+                                      Where Region_Cd='$ri_region'
                                       order by RiskAndIssue_Key desc";
 								$stmt_risk_issue_cls = sqlsrv_query( $data_conn, $sql_risk_issue_cls );
 //echo $sql_risk_issue_cls;
