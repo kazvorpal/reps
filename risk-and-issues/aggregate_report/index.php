@@ -278,7 +278,7 @@
   const fieldlist = ["Program", "Region", "R/I Creator", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration", "Subprograms"];
   const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
   const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
-  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "mangerlist": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "duration": "Duration"};
+  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
     console.log(rilist);
@@ -407,6 +407,9 @@
         }  
         return mangers.join().replace(",", ", ");
       },
+      owner: function() {
+        return program.LastUpdateBy_Nm;
+      },
       ForecastedResolution_Dt: function() {
         return makestringdate(program.ForecastedResolution_Dt);
       },
@@ -414,14 +417,21 @@
         return (program.Active_Flg) ? "Open" : "Closed";
       },
       Created_Ts: function() {
-        return  makestringdate(program.Created_Ts);
+        return makestringdate(program.Created_Ts);
+      },
+      monthcreated: function() {
+        return new Date(program.Created_Ts.date).toLocaleString('default', { month: 'long' });
+      },
+      monthclosed: function() {
+        return new Date(program.Last_Update_Ts.date).toLocaleString('default', { month: 'long' });
       },
       quartercreated: function() {
         const m = new Date(program.Created_Ts.date).getMonth();
         return  (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
       },
       quarterclosed: function() {
-        const m = new Date(program.Last_Update_Ts).getMonth();
+        const m = new Date(program.Last_Update_Ts.date).getMonth();
+        console.log(m)
         return  (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
       },
       duration: function() {
@@ -470,9 +480,9 @@
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
         if (document.getElementById('impact_level').value != "") {
-          console.log($('#impact_level').val());
-          console.log(program.ImpactLevel_Nm);
-          console.log($('#impact_level').val().includes(program.ImpactLevel_Nm));
+          // console.log($('#impact_level').val());
+          // console.log(program.ImpactLevel_Nm);
+          // console.log($('#impact_level').val().includes(program.ImpactLevel_Nm));
           // console.log(program.ImpactLevel_Nm);
           // console.log(document.getElementById('impact_level').selectedOptions);
           // console.log(document.getElementById('impact_level').selectedOptions.namedItem(program.ImpactLevel_Nm));
@@ -490,11 +500,12 @@
           const trid = "tr" + type + saferi + Math.random();
           document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: "ptr"}));
           const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key].length != 0) ? "▶" : "";
+          const c = (arrow == "") ? "plainbox" : "namebox";
           const header = makeelement({
             "e": "th", 
             "i": "th" + type + saferi, 
             "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-            "c":"p-4 namebox"
+            "c":"p-4 " + c
           });
           const tridobj = document.getElementById(trid);
           if (arrow != "") {

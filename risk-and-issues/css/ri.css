@@ -90,6 +90,12 @@
   border: 1px solid #ddd;
   padding: 4px;
 }
+.plainbox {
+  /* background-color: #fff; */
+  color: #000;
+  border: 1px solid #ddd;
+  padding: 4px;
+}
 .arrows {
   color:black;
   float:left;
