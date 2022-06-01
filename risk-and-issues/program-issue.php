@@ -21,7 +21,7 @@
 
     $region_rplc_a = str_replace("'"," ",$regionIN);
     $region_display = str_replace(",","<br>",$region_rplc_a);
-
+echo $region_rplc_a;
   //GET REGIONS
   $sql_regions = "SELECT DISTINCT Region_key, Region
                   FROM [EPS].[ProjectStage]
@@ -586,16 +586,7 @@ function toggle(source) {
         <tr>
           <td colspan="2">
         <div class="box">
-				<!--<iframe 
-            src="includes/associated_prj.php?uid=<?php echo $_GET['uid'];?>&fiscal_year=<?php echo $row_projID['FISCL_PLAN_YR'] ?>" 
-            height="300" 
-            width="1300" 
-            title="Associated Projects"  
-            frameBorder="0" 
-            scrolling="yes">
-        </iframe>-->
-        <textarea name="assocProjects" cols="120" id="assocProjects" class="form-control" readonly><?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?></textarea> 
-        </div>
+				<?php echo $region_display ?> </div>
 		  </td>
         </tr>
 
