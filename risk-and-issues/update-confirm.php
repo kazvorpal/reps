@@ -17,11 +17,12 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 //exit();
 
 //GET DRIVERS FROM ID'S
-$sql_risk_issue_driver = "SELECT * FROM [COX_Dev].[RI_MGT].[Driver] where Driver_Key in ($Driversx)";
+$sql_risk_issue_driver = "SELECT * FROM [RI_MGT].[Driver] where Driver_Key in ($Driversx)";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 			
 //echo $sql_risk_issue_driver;
+//exit();
 ?>
 <!doctype html>
 <html>
