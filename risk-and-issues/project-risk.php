@@ -218,76 +218,45 @@ function toggle(source) {
               <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label title="Additional funding provided or needed, acceleration, reduction, favorability">
-                    <input type="checkbox" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
                     Budget/Funding</label></td>
                   <td width="49%"><label title="Unexpected blackouts, weather, unforeseeable conditions, uncommon one-off problems (not related to mfg.)">
-                    <input type="checkbox" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
+                    <input type="radio" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
                     External</label></td>
                   </tr>
                 <tr>
                   <td><label title="">
-                    <input type="checkbox" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
                     Communications Breakdown</label></td>
                   <td><label title="Due to blackout dates, resource availability and/or, stakeholder priority, the project was not able to complete on time">
-                    <input type="checkbox" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
+                    <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
                     People Resources</label></td>
                   </tr>
                 <tr>
                   <td><label title="3PL contractor, procurement issues, delays, people resource">
-                    <input type="checkbox" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
                     Contractor</label></td>
                   <td><label title="Inaccurate items requested, processing error, missed items, duplicated orders">
-                    <input type="checkbox" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
                     Procurement</label></td>
                   </tr>
                 <tr>
                   <td><label title="Imposed constraint from a dependent program/project and/or dependent task/milestone">
-                    <input type="checkbox" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
                     Dependency Conflict</label></td>
                   <td><label title="">
-                    <input type="checkbox" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
                     Schedule Impact</label></td>
                   </tr>
                 <tr>
                   <td><label title="">
-                    <input type="checkbox" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
                     Equipment Integration</label></td>
                   <td><label title="">
-                    <input type="checkbox" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
                     Other</label></td>
                   </tr>
                 </table>
-<!--
-                <div class="row">
-                <div class="col-xs-5">
-                  <select name="from[]" id="multiselect" class="form-control" size="8" multiple="multiple" data-maximum-selection-length="3">
-                  <?php while($row_drivers = sqlsrv_fetch_array( $stmt_drivers , SQLSRV_FETCH_ASSOC)){ ?>  
-                  <option value="<?php echo $row_drivers['Driver_Nm']; ?>"><?php echo $row_drivers['Driver_Nm']; ?></option>
-                  <?php } ?>
-                  </select>
-                </div>
-
-                <div class="col-xs-2">
-                  <button type="button" id="multiselect_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
-                  <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
-                  <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                  <button type="button" id="multiselect_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
-                </div>
-
-                <div class="col-xs-5">
-                  <select name="Drivers[]" id="multiselect_to" class="form-control" size="6" multiple="multiple" data-maximum-selection-length="3"></select>
-
-                  <div class="row">
-                    <div class="col-xs-6">
-                      <button type="button" id="multiselect_move_up" class="btn btn-block"><i class="glyphicon glyphicon-arrow-up"></i></button>
-                    </div>
-                    <div class="col-xs-6">
-                      <button type="button" id="multiselect_move_down" class="btn btn-block col-sm-6"><i class="glyphicon glyphicon-arrow-down"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                  -->
               </div>
           </td>
           </tr>
@@ -397,12 +366,8 @@ function toggle(source) {
           </td>
           </tr>
         <tr>
-
           <td colspan="3" align="left">
-              
-          </td>
-
-          </tr>
+          </td></tr>
         <tr>
           <td colspan="3" align="left">&nbsp;</td>
         </tr>
@@ -727,7 +692,7 @@ function validateGrp() {
     things[things.length - 1].setCustomValidity("");
     document.getElementById('checkGroup').submit();
   } else {
-    things[things.length - 1].setCustomValidity("You must check at least one checkbox");
+    things[things.length - 1].setCustomValidity("You must select at least one Driver");
     things[things.length - 1].reportValidity();
   }
 }

@@ -21,7 +21,7 @@
 
     $region_rplc_a = str_replace("'"," ",$regionIN);
     $region_display = str_replace(",","<br>",$region_rplc_a);
-echo $region_rplc_a;
+
   //GET REGIONS
   $sql_regions = "SELECT DISTINCT Region_key, Region
                   FROM [EPS].[ProjectStage]
@@ -346,42 +346,42 @@ function toggle(source) {
               <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="checkbox" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
                     Budget/Funding</label></td>
                   <td width="49%"><label>
-                    <input type="checkbox" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
+                    <input type="radio" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
                     External</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
                     Communications Breakdown</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
+                    <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
                     People Resources</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
                     Contractor</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
                     Procurement</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
                     Dependency Conflict</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
                     Schedule Impact</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
                     Equipment Integration</label></td>
                   <td><label>
-                    <input type="checkbox" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
                     Other</label></td>
                   </tr>
                 </table>
@@ -585,7 +585,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="2">
-        <div class="box">
+        <div class="box" align="left">
 				<?php echo $region_display ?> </div>
 		  </td>
         </tr>
@@ -937,7 +937,7 @@ function validateGrp() {
     things[things.length - 1].setCustomValidity("");
     document.getElementById('checkGroup').submit();
   } else {
-    things[things.length - 1].setCustomValidity("You must check at least one checkbox");
+    things[things.length - 1].setCustomValidity("You must select at least one Driver");
     things[things.length - 1].reportValidity();
   }
 }

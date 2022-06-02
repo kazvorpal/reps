@@ -13,7 +13,7 @@ $popup = $_GET['popup'];
 $sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue['Risk_Issue_Name']; 
+//$sql_risk_issue;
 $ri_name = $row_risk_issue['RI_Nm'];
 $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 
@@ -59,6 +59,7 @@ $ri_list = "";
 $uaccess = $_GET['au'];
 $status = $_GET['status'];
 $department = $row_risk_issue['POC_Department'];
+$raidLog = $row_risk_issue['RaidLog_Flg'];
 ?>
 <!doctype html>
 <html>
@@ -199,7 +200,13 @@ $department = $row_risk_issue['POC_Department'];
     </tr>
     <tr>
       <td>Notify Porfolio Team</td>
-      <td><?php echo $department; ?>
+      <td><?php 
+      
+      if($raidLog = 0){
+        echo "No"; 
+      } else {
+        echo "Yes";
+      }?>
     </td>
     </tr>
     <tr>
