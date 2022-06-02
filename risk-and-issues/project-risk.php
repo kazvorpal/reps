@@ -257,37 +257,6 @@ function toggle(source) {
                     Other</label></td>
                   </tr>
                 </table>
-<!--
-                <div class="row">
-                <div class="col-xs-5">
-                  <select name="from[]" id="multiselect" class="form-control" size="8" multiple="multiple" data-maximum-selection-length="3">
-                  <?php while($row_drivers = sqlsrv_fetch_array( $stmt_drivers , SQLSRV_FETCH_ASSOC)){ ?>  
-                  <option value="<?php echo $row_drivers['Driver_Nm']; ?>"><?php echo $row_drivers['Driver_Nm']; ?></option>
-                  <?php } ?>
-                  </select>
-                </div>
-
-                <div class="col-xs-2">
-                  <button type="button" id="multiselect_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
-                  <button type="button" id="multiselect_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
-                  <button type="button" id="multiselect_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                  <button type="button" id="multiselect_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
-                </div>
-
-                <div class="col-xs-5">
-                  <select name="Drivers[]" id="multiselect_to" class="form-control" size="6" multiple="multiple" data-maximum-selection-length="3"></select>
-
-                  <div class="row">
-                    <div class="col-xs-6">
-                      <button type="button" id="multiselect_move_up" class="btn btn-block"><i class="glyphicon glyphicon-arrow-up"></i></button>
-                    </div>
-                    <div class="col-xs-6">
-                      <button type="button" id="multiselect_move_down" class="btn btn-block col-sm-6"><i class="glyphicon glyphicon-arrow-down"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                  -->
               </div>
           </td>
           </tr>
