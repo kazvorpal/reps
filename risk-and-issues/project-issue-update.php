@@ -25,7 +25,7 @@ $sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProjec
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue['Risk_Issue_Name']; 
- echo $sql_risk_issue . "<br>";		
+// echo $sql_risk_issue . "<br>";		
 
 //GET DRIVERS
 $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";

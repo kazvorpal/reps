@@ -397,12 +397,8 @@ function toggle(source) {
           </td>
           </tr>
         <tr>
-
           <td colspan="3" align="left">
-              
-          </td>
-
-          </tr>
+          </td></tr>
         <tr>
           <td colspan="3" align="left">&nbsp;</td>
         </tr>
