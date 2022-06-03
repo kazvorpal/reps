@@ -124,7 +124,7 @@ include ("../sql/MS_Users_prg.php");
     $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
 
     //GET DRIVERS FROM ID'S
-    $sql_risk_issue_driver = "SELECT Driver_Nm FROM [COX_Dev].[RI_MGT].[Driver] where Driver_Key in ($drivers)";
+    $sql_risk_issue_driver = "SELECT Driver_Nm FROM [RI_MGT].[Driver] where Driver_Key in ($drivers)";
     $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     $json_array =  array();
     while($row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC)) {

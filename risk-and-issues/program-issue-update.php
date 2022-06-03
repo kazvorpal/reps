@@ -47,8 +47,8 @@
 
   //GET REGIONS FROM NAME
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [RI_MGT].[EPS].[ProjectStage]
-                  JOIN [RI_MGT].[CR_MGT].[Region] ON [RI_MGT].[EPS].[ProjectStage].[Region] = [RI_MGT].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [EPS].[ProjectStage]
+                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
@@ -68,24 +68,24 @@
 
   //GET ALL REGIONS FOR REGIONS SELECTION
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [RI_MGT].[EPS].[ProjectStage]
-                  JOIN [RI_MGT].[CR_MGT].[Region] ON [RI_MGT].[EPS].[ProjectStage].[Region] = [RI_MGT].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [EPS].[ProjectStage]
+                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
 
   //SINGLE REGION FOR NAME CONCATINATION
   $sql_region = "SELECT DISTINCT Region_key, Region
-                  FROM [RI_MGT].[EPS].[ProjectStage]
-                  JOIN [RI_MGT].[CR_MGT].[Region] ON [RI_MGT].[EPS].[ProjectStage].[Region] = [RI_MGT].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [EPS].[ProjectStage]
+                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_region = sqlsrv_query( $data_conn, $sql_region );
   $row_region = sqlsrv_fetch_array( $stmt_region, SQLSRV_FETCH_ASSOC);
   //echo $sql_region;
 
   //MULTI-REGION CONCATINATION - COUNT
   $sql_regions_con = "SELECT Count(DISTINCT Region_key) as numRows
-                  FROM [RI_MGT].[EPS].[ProjectStage]
-                  JOIN [RI_MGT].[CR_MGT].[Region] ON [RI_MGT].[EPS].[ProjectStage].[Region] = [RI_MGT].[CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [EPS].[ProjectStage]
+                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions_con  = sqlsrv_query( $data_conn, $sql_regions_con  );
   $row_regions_con = sqlsrv_fetch_array( $stmt_regions_con, SQLSRV_FETCH_ASSOC );
  //echo $sql_regions_con;
