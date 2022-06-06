@@ -114,7 +114,7 @@
 		<td colspan="2">
 			<img src="images/UP_15.jpg" width="136" height="92" alt=""></td>
 		<td colspan="3">
-			<a href="/risk-and-issues/aggregate_report/" >
+			<a href="https://coxcomminc.sharepoint.com/sites/pwaeng/Lists/Risk%20and%20Issues/AllItems.aspx" >
 			<img src="images/UP_16.jpg" width="222" height="92" alt=""
 				onmouseover="this.src='images/DOWN_16.jpg'" 
 				onmouseout="this.src='images/UP_16.jpg'" 
