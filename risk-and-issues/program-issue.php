@@ -116,9 +116,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
-
+  <link rel="stylesheet" href="includes/ri-styles.css" />
   <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
   <script src="../colorbox-master/jquery.colorbox.js"></script>
+  
   <script>
   $(document).ready(function(){
           //Examples of how to assign the Colorbox event to elements
@@ -163,19 +164,6 @@ function toggle(source) {
   }
 }
 </script>
-<style>
-    .box {
-    border: 1px solid #BCBCBC;
-	  background-color: #ffffff;
-    border-radius: 5px;
-    padding: 5px;
-    }
-    .finePrint {
-    font-size: 9px;  
-    color: red;
-    }
-</style>
-
 </head>
 <body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+NameB.value+' '+Descriptor.value+' '+NameC.value">
 <main align="center">

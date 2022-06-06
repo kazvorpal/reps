@@ -23,21 +23,21 @@
       <th width="182">Driver</td>
       <th width="1216">Definition</td>
     </tr>
-    <tr>
+    <tr bgcolor="#34AEE8">
       <td>Selection</td>
-      <td>Multi-select    function up to 3 items (but with a caveat)
+      <td>
         <ul type="disc">
-          <li>The         primary/critical path reason is required and must be         identified.&nbsp;&nbsp; </li>
+          <li>Single select function </li>
         </ul>
         
         <ul type="disc">
-          <li>There may be         situations where a supporting driver is important to communicate.&nbsp;         In these cases, you may select a secondary and tertiary reason.&nbsp;         Note:&nbsp; these are completely optional.&nbsp;&nbsp;&nbsp; </li>
-        </ul>
+          <li>The primary/critical path reason is required and must be identified.</li>
+          </ul>
         </td>
     </tr>
     <tr>
       <td>Material Delay</td>
-      <td>Vendor equipment    delay due to raw component pipeline issues (Manufacturer, WWT, etc.)&nbsp;    This is NOT related to shipping.&nbsp; 
+      <td>Vendor equipment delay due to raw component pipeline issues (Manufacturer, WWT, etc.)&nbsp;    This is NOT related to shipping.&nbsp; 
         </td>
     </tr>
     <tr>

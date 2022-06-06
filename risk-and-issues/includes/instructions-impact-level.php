@@ -25,7 +25,7 @@
     <th width="255" valign="top"><strong>POR Schedule    Change</strong></td>
     <th width="446" valign="top"><strong>Project Code    End Date Change</strong></td>
   </tr>
-  <tr>
+  <tr bgcolor="#34AEE8">
     <td width="193" valign="top">Selection 
       <ul type="disc">
         <li>Thresholds based on Budget <u>and/or</u> POR change <u>and/or</u> End date change </li>
