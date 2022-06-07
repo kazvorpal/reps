@@ -112,7 +112,7 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
     <td><select name="fiscal_year[]"  multiple="multiple" class="form-control" id="fiscal_year" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
         <!--<option value="All">Select Fiscal Year</option>-->
         <?php while($row_fiscal_year = sqlsrv_fetch_array( $stmt_fiscal_year, SQLSRV_FETCH_ASSOC)) { ?>
-        <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>" selected="selected"><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
+        <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>" ><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
         <?php } ?>
       </select></td>
 

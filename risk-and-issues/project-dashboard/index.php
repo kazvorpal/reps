@@ -22,6 +22,7 @@
         return ($target);
     }  
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'project'";
+    print '<!--' . $sqlstr . "<br/>-->";
     ini_set('mssql.charset', 'UTF-8');
     $riquery = sqlsrv_query($data_conn, $sqlstr);
     if($riquery === false) {
@@ -176,11 +177,13 @@
     <div class="row" align="center">
       <div style="width:98%">
         <div class="col-xs-12 text-center">
-          <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Project R&I Dashboard</h1>
+        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Project R&I Dashboard</h1>
+        <div style="display:inline-block;width:28%;text-align:right;font-size:larger" id="resultcount"></div><div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span><p/></div>
+
       <?php 
         require '../includes/ri-selectors.php';
         ?>
-            <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/>
+            
                 <div id="main" class="accordion" >
               <!-- <div class="header">
                 Program Name (Risks, Issues)
@@ -220,15 +223,16 @@
     const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
     
     // Names of Data for program fields
-    const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
+    const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
     const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
-    const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Dt", "POC_Nm": "Current Task", "ResponseStrategy_Nm": "Response Strategy", "RaidLog_Flg": "Raid L", "RIOpen_Hours": "Open Duration"};
+    const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region", "mar": "Market", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
     const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
     const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "RI_Nm": "Name", "Proj_Nm": "Project Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date"};
-
+    console.log(ridata);
 
     const populate = (rilist) => {
-      // console.log(rilist);
+      console.log(ridata);
+      document.getElementById("resultcount").innerHTML = ridata.length + " Results Found"
       const main = document.getElementById("main");
       main.innerHTML = '';
       document.workbook = new ExcelJS.Workbook();

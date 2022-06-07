@@ -23,7 +23,7 @@
     }
     // Get ALL //
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
-    // print $sqlstr . "<br/>";
+    print '<!--' . $sqlstr . "<br/> -->";
     ini_set('mssql.charset', 'UTF-8');
     $riquery = sqlsrv_query($data_conn, $sqlstr);
     // print($data_conn);
@@ -269,6 +269,7 @@
   const mangerlist = <?= $mangerout ?>;
   const driverlist = <?= $driverout ?>;
   const p4plist = <?= $p4pout ?>;
+  console.log(ridata)
   
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
   const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
@@ -277,11 +278,11 @@
   // Names of Data for program fields
   const fieldlist = ["Program", "Region", "R/I Creator", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
   const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
-  const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "owner": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
+  const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
   const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
-    // console.log(rilist);
+    console.log(rilist);
     // The main function that creates everything
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
@@ -386,7 +387,7 @@
         let lr = listri(name, type);
         if (lr.length != 0) {
           document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
-          console.log(ridata)
+          // console.log(ridata)
           for (ri of lr) {
             makedata(ri, type, name);  
           }
@@ -412,7 +413,7 @@
           return program.LastUpdateBy_Nm;
         },
         ForecastedResolution_Dt: function() {
-          return (program.ForecastedResolution_Dt == null) ? "multiple" : makestringdate(program.ForecastedResolution_Dt);
+          return (program.ForecastedResolution_Dt == null) ? "Multiple" : makestringdate(program.ForecastedResolution_Dt);
         },
         Active_Flg: function() {
           return (program.Active_Flg) ? "Open" : "Closed";
@@ -447,17 +448,19 @@
         Region_Cd: function() {
           let counter = 0;
           console.log("in region")
-          console.log(ridata)
+          console.log(program.RI_Nm);
+          console.log(program.Region_Cd);
           for(r of ridata) {
               // console.log("r");
               // console.log(r);
               if (r.RI_Nm == program.RI_Nm) {
+                console.log(r.Region_Cd);
                 counter++;
               }
             }
           console.log("counter");
           console.log(counter);
-          return (counter < 2) ? program.Region_Cd : "multiple";
+          return (counter < 2) ? program.Region_Cd : "Multiple";
         },
         RaidLog_Flg: function() {
           return  (program.RiskRealized_Flg) ? "Y" : "";
@@ -588,7 +591,7 @@
     // Make the header row for a project 
     const trri = document.createElement("tr");
     for (field of projectfieldnames) {
-      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 headbox"}));
+      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 titles"}));
     }
     return trri;
   }  
@@ -604,10 +607,10 @@
     // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center headbox"}));
+    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles"}));
     let cells = ["Risk/Issue"];
     for (field of fieldlist) {
-      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}));
+      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 titles"}));
       cells.push(field);
     }
     // document.worksheet.addRow(cells);
