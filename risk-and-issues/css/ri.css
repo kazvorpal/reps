@@ -67,9 +67,13 @@
   background-color: #337AB7;
   color: #fff;
   border-left: 1px solid #000;
-  padding: 4px;
+  padding: 2px;
   cursor: default;
-  text-align: left;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: x-small;
+  text-transform:uppercase;
 }
 .datarow {
     color: #000;
@@ -82,7 +86,8 @@
 }
 .datacell {
     border: 1px solid #888;
-    padding: 4px;
+    padding: 2px;
+    font-size: x-small;
 }
 .namebox {
   /* background-color: #fff; */
