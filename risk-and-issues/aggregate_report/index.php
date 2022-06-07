@@ -460,7 +460,7 @@
             }
           console.log("counter");
           console.log(counter);
-          return (counter < 2) ? program.Region_Cd : "multiple";
+          return (counter < 2) ? program.Region_Cd : "Multiple";
         },
         RaidLog_Flg: function() {
           return  (program.RiskRealized_Flg) ? "Y" : "";
@@ -591,7 +591,7 @@
     // Make the header row for a project 
     const trri = document.createElement("tr");
     for (field of projectfieldnames) {
-      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 headbox"}));
+      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 titles"}));
     }
     return trri;
   }  

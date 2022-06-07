@@ -178,7 +178,7 @@
       <div style="width:98%">
         <div class="col-xs-12 text-center">
         <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Project R&I Dashboard</h1>
-        <div style="display:inline-block;width:20%;text-align:center;font-size:larger" id="resultcount"></div><div style="display:inline-block;width:20%;text-align:center"><span class="btn btn-primary" onclick="exporter()">Export Results</span><p/></div>
+        <div style="display:inline-block;width:28%;text-align:right;font-size:larger" id="resultcount"></div><div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span><p/></div>
 
       <?php 
         require '../includes/ri-selectors.php';
