@@ -88,6 +88,7 @@
     border: 1px solid #888;
     padding: 2px;
     font-size: x-small;
+    cursor: default;
 }
 .namebox {
   /* background-color: #fff; */
@@ -100,6 +101,8 @@
   color: #000;
   border: 1px solid #ddd;
   padding: 4px;
+  font-size: smaller;
+  cursor: default;
 }
 .arrows {
   color:black;
