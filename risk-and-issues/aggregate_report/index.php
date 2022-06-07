@@ -23,7 +23,7 @@
     }
     // Get ALL //
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
-    print $sqlstr . "<br/>";
+    print '<!--' . $sqlstr . "<br/> -->";
     ini_set('mssql.charset', 'UTF-8');
     $riquery = sqlsrv_query($data_conn, $sqlstr);
     // print($data_conn);
