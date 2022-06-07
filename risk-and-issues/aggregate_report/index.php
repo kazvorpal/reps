@@ -607,10 +607,10 @@
     // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center headbox"}));
+    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles"}));
     let cells = ["Risk/Issue"];
     for (field of fieldlist) {
-      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 headbox"}));
+      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 titles"}));
       cells.push(field);
     }
     // document.worksheet.addRow(cells);
