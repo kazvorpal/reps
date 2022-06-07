@@ -2,10 +2,6 @@
 <?php include ("../includes/big_bro_functions.php");?>
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
-<?php //include ("../sql/project_by_id.php");?>
-<?php //include ("../sql/ri_filter_vars.php");?>
-<?php //include ("../sql/ri_filters.php");?>
-<?php //include ("../sql/ri_filtered_data.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
   //$action = $_GET['action']; //new
@@ -100,7 +96,7 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
-
+  <link rel="stylesheet" href="includes/ri-styles.css" />
   <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
   <script src="../colorbox-master/jquery.colorbox.js"></script>
 <script>
@@ -155,19 +151,6 @@ function toggle(source) {
   }
 }
 </script>
-<style>
-    .box {
-    border: 1px solid #BCBCBC;
-	  background-color: #ffffff;
-    border-radius: 5px;
-    padding: 5px;
-    }
-    .finePrint {
-    font-size: 9px;  
-    color: red;
-    }
-</style>
-
 </head>
 <body style="background: #F8F8F8; font-family:Mulish, serif;" onload="myFunction(); date.value = frcstDt_temp.value">
 <main align="center">

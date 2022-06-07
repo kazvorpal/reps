@@ -24,7 +24,7 @@
       <th>Description</td>
       <th>Frequency</td>
     </tr>
-    <tr>
+    <tr bgcolor="#34AEE8">
       <td>Selection</td>
       <td><ul type="disc">
         <li>Single         selection consistent with the CR generator requirement  </li>
