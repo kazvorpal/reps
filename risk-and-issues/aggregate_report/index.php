@@ -49,18 +49,19 @@
       // print_r($rows);
       // print ("</code>");
 $locationrows = [];
-      // $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
+
+      $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
       // print '<!--' . $sqlstr . "<br/> -->";
-      // $locationquery = sqlsrv_query($data_conn, $sqlstr);
-      // if($locationquery === false) {
-      //   if(($error = sqlsrv_errors()) != null) {
-      //     foreach($error as $errors) {
-      //       echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-      //       echo "code: ".$error[ 'code']."<br />";
-      //       echo "message: ".$error[ 'message']."<br />";
-      //     }
-      //   }
-      // } else {
+      $locationquery = sqlsrv_query($data_conn, $sqlstr);
+      if($locationquery === false) {
+        if(($error = sqlsrv_errors()) != null) {
+          foreach($error as $errors) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".$error[ 'message']."<br />";
+          }
+        }
+      } else {
       //   $rows = array();
       //   $count = 1;
       //   while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
@@ -69,8 +70,8 @@ $locationrows = [];
       //     // print($row["RiskAndIssueLog_Key"]);
       //     // print("<br/>");
       //   }
-      // }
-    
+      }
+
 
       $p4plist = array();
       foreach ($rows as $row)  {
@@ -180,7 +181,9 @@ $locationrows = [];
       //     $locationlist[$row["RiskAndIssueLog_Key"]] = $locationrows;
       //   }
       // }
-        
+
+      
+
       $p4pout = json_encode($p4plist);
       $mangerout = json_encode($mangerlist);
       $driverout = json_encode($driverlist);
@@ -272,11 +275,12 @@ $locationrows = [];
   <div class="row" align="center">
     <div style="width:98%">
       <div class="col-xs-12 text-center">
-        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program Dashboard</h1>
+        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Dashboard</h1>
+        <div style="display:inline-block;width:28%;text-align:right;font-size:larger" id="resultcount"></div><div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span><p/></div>
     <?php 
       require '../includes/ri-selectors.php';
       ?>
-          <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/>
+          <!-- <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/> -->
         <div id="main" class="accordion" >
             <div class="header">
               Program Name (Risks, Issues)
@@ -326,13 +330,14 @@ $locationrows = [];
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Names of Data for program fields
-  const fieldlist = ["FY", "Program", "Region", "Owner", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
-  const datafields = ["Fiscal_Year", "Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "ResponseStrategy_Nm", "RIOpen_Hours"];
-  const rifields = {"Fiscal_Year": "FY", "RiskAndIssue_Key": "ID #", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
-  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
+  const fieldlist = ["ID #", "FY", "Program", "Region", "Owner", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
+  const datafields = ["RiskAndIssue_Key", "Fiscal_Year", "Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "ResponseStrategy_Nm", "RIOpen_Hours"];
+  const rifields = {"RiskAndIssue_Key": "ID #", "Fiscal_Year": "FY", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
+  const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
     console.log(rilist);
+    document.getElementById("resultcount").innerHTML = ridata.length + " Results Found"
     // The main function that creates everything
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
@@ -497,19 +502,19 @@ $locationrows = [];
         },
         Region_Cd: function() {
           let counter = 0;
-          console.log("in region")
-          console.log(program.RI_Nm);
-          console.log(program.Region_Cd);
+          // console.log("in region")
+          // console.log(program.RI_Nm);
+          // console.log(program.Region_Cd);
           for(r of ridata) {
               // console.log("r");
               // console.log(r);
               if (r.RI_Nm == program.RI_Nm) {
-                console.log(r.Region_Cd);
+                // console.log(r.Region_Cd);
                 counter++;
               }
             }
-          console.log("counter");
-          console.log(counter);
+          // console.log("counter");
+          // console.log(counter);
           return (counter < 2) ? program.Region_Cd : "Multiple";
         },
         RaidLog_Flg: function() {
@@ -660,6 +665,7 @@ $locationrows = [];
     trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles"}));
     let cells = ["Risk/Issue"];
     for (field of fieldlist) {
+      // classes = (field == "Action Status") ? 
       trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 titles"}));
       cells.push(field);
     }
@@ -805,7 +811,14 @@ $locationrows = [];
   }
 
   const makestringdate = (dateobject) => {
-    return (dateobject == null) ? "" : dateobject.date.substring(0,10);
+    if (dateobject != null) {
+      const m = new Date(dateobject.date).getMonth();
+      const d = new Date(dateobject.date).getDay();
+      const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
+      // console.log(m + "/" + d + "/" + y)
+      return (dateobject == null) ? "" : m + "/" + d + "/" + y;
+    } else 
+      return "";
   }
 
   const flipname = (name) => {

@@ -496,7 +496,14 @@ include ("../../includes/load.php");
     }
 
     const makestringdate = (dateobject) => {
-      return (dateobject == null) ? "" : dateobject.date.substring(0,10);
+      if (dateobject != null) {
+        const m = new Date(dateobject.date).getMonth();
+        const d = new Date(dateobject.date).getDay();
+        const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
+        // console.log(m + "/" + d + "/" + y)
+        return (dateobject == null) ? "" : m + "/" + d + "/" + y;
+      } else 
+        return "";
     }
 
       const flipname = (name) => {
