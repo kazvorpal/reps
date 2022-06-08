@@ -5,6 +5,15 @@
 <?php include_once ("../../sql/filtered_data.php");?>
 <?php include_once ("../../sql/filters.php");?>
 <?php include_once ("../../sql/update-time.php");?>
+<?php 
+// Any variables/settings
+
+$project = (strpos($_SERVER["REQUEST_URI"], "project"))
+
+
+?>
+
+
 
 <script>
     //This detects whether various JavaScript libraries are already loaded, or if this include needs to do it
@@ -67,7 +76,7 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
   });
 </script>
         <!-- <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5> -->
-        <form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
+        <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
           <div class="form-group">
             <table width="500" border="0" align="center">
               <tbody>
@@ -96,8 +105,11 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
   <tbody>
     <tr>
       <td>*Fiscal Year</td>
-    <?php  //if($fiscal_year !=0) { ?>
+    <?php  //if($fiscal_year !=0) { 
+       if (!$project) {
+      ?>
       <td>Status</td>
+      <?php } ?>
       <td>Owner</td>
       <td>Program</td>
       <!-- <td>Subprogram</td> -->
@@ -115,12 +127,12 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
         <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>" ><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
         <?php } ?>
       </select></td>
-
+<?php if (!$project) { ?>
       <td><select name="pStatus[]" multiple="multiple" class="form-control" id="pStatus" style="background-color:#ededed">
         <option value="Active" <?php if($pStatus == -1 || $pStatus == 'Active' || $pStatus == 'Active|Closed') { echo 'selected="selected"';} ?>>Open</option>
         <option value="Closed" <?php if($pStatus == 'Closed' || $pStatus == 'Active|Closed') { echo 'selected="selected"';} ?>>Closed</option>
       </select></td>
-
+<?php } ?>
       <td><select name="owner[]" multiple="multiple" class="form-control" id="owner" title="Move this selection back to SELECT OWNER to clear this filter" <?php //fltrSet($_POST['owner'])?>>
         <!--<option value="">Select Owner</option>-->
         <?php while($row_owner_drop = sqlsrv_fetch_array( $stmt_owner_drop, SQLSRV_FETCH_ASSOC)) { ?>

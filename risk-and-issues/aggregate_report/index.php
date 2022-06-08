@@ -48,8 +48,29 @@
       // print ("<code>");
       // print_r($rows);
       // print ("</code>");
-
-
+$locationrows = [];
+      // $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
+      // print '<!--' . $sqlstr . "<br/> -->";
+      // $locationquery = sqlsrv_query($data_conn, $sqlstr);
+      // if($locationquery === false) {
+      //   if(($error = sqlsrv_errors()) != null) {
+      //     foreach($error as $errors) {
+      //       echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+      //       echo "code: ".$error[ 'code']."<br />";
+      //       echo "message: ".$error[ 'message']."<br />";
+      //     }
+      //   }
+      // } else {
+      //   $rows = array();
+      //   $count = 1;
+      //   while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
+      //     $locationrows[] = array_map("fixutf8", $locationrow);
+      //     // print_r($row);
+      //     // print($row["RiskAndIssueLog_Key"]);
+      //     // print("<br/>");
+      //   }
+      // }
+    
 
       $p4plist = array();
       foreach ($rows as $row)  {
@@ -133,9 +154,37 @@
         }
       }
         
+      // $locations = array();
+      // foreach ($rows as $row)  {
+      //   if($row["ProgramRI_Key"] != '') {
+      //     // Get OWNERS //
+      //     $sqlstr = "select * from RI_Mgt.fn_GetListOfLocationsForEPSProject(1) where EPSProgram_Nm = 'Metro Transport'";
+      //     // print $sqlstr . "<br>";
+      //     ini_set('mssql.charset', 'UTF-8');
+      //     $locationquery = sqlsrv_query($data_conn, $sqlstr);
+      //     if($locationquery === false) {
+      //       if(($error = sqlsrv_errors()) != null) {
+      //         foreach($errors as $error) {
+      //           echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+      //           echo "code: ".$error[ 'code']."<br />";
+      //           echo "message: ".$error[ 'message']."<br />";
+      //         }
+      //       }
+      //     } else {
+      //       $count = 1;
+      //       $locationrows = array();
+      //       while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
+      //         $locationrows[] = array_map("fixutf8", $locationrow);
+      //       }
+      //     }
+      //     $locationlist[$row["RiskAndIssueLog_Key"]] = $locationrows;
+      //   }
+      // }
+        
       $p4pout = json_encode($p4plist);
       $mangerout = json_encode($mangerlist);
       $driverout = json_encode($driverlist);
+      $locationout = json_encode($locationrows);
       $jsonout = json_encode($rows);
       
       }
@@ -223,7 +272,7 @@
   <div class="row" align="center">
     <div style="width:98%">
       <div class="col-xs-12 text-center">
-        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Aggregate View </h1>
+        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program Dashboard</h1>
     <?php 
       require '../includes/ri-selectors.php';
       ?>
@@ -268,6 +317,7 @@
   const ridata = <?= $jsonout ?>;  
   const mangerlist = <?= $mangerout ?>;
   const driverlist = <?= $driverout ?>;
+  const locationlist = <?= $locationout ?>;
   const p4plist = <?= $p4pout ?>;
   console.log(ridata)
   
@@ -276,9 +326,9 @@
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Names of Data for program fields
-  const fieldlist = ["Program", "Region", "Owner", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
-  const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
-  const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
+  const fieldlist = ["FY", "Program", "Region", "Owner", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
+  const datafields = ["Fiscal_Year", "Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "ResponseStrategy_Nm", "RIOpen_Hours"];
+  const rifields = {"Fiscal_Year": "FY", "RiskAndIssue_Key": "ID #", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
   const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
