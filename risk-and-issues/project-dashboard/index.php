@@ -41,6 +41,29 @@ include ("../../includes/load.php");
         $rows[] = array_map("fixutf8", $row);
       }
       
+      $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
+      // print '<!--' . $sqlstr . "<br/> -->";
+      $locationquery = sqlsrv_query($data_conn, $sqlstr);
+      if($locationquery === false) {
+        if(($error = sqlsrv_errors()) != null) {
+          foreach($error as $errors) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".$error[ 'message']."<br />";
+          }
+        }
+      } else {
+        $locationrows = array();
+        $count = 1;
+        while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
+          $locationrows[] = array_map("fixutf8", $locationrow);
+          // print_r($row);
+          // print($row["RiskAndIssueLog_Key"]);
+          // print("<br/>");
+        }
+      }
+
+
       $p4plist = array();
       foreach ($rows as $row)  {
         if($row["ProgramRI_Key"] != '') {
@@ -95,6 +118,7 @@ include ("../../includes/load.php");
         }
         $p4pout = json_encode($p4plist);
         $mangerout = json_encode($mangerlist);
+        $locationout = json_encode($locationrows);
         $jsonout = json_encode($rows);
       }
 
@@ -217,6 +241,7 @@ include ("../../includes/load.php");
     
     const ridata = <?= $jsonout ?>;  
     const mangerlist = <?= $mangerout ?>;
+    const locationlist = <?= $locationout ?>;
     const p4plist = <?= $p4pout ?>;
     
     const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
@@ -226,7 +251,7 @@ include ("../../includes/load.php");
     // Names of Data for program fields
     const fieldlist = ["Program", "Region", "Program Manager", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
     const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
-    const rifields = {"RiskAndIssue_Key": "ID #", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region", "mar": "Market", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
+    const rifields = {"RiskAndIssue_Key": "ID #", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region", "market": "Market", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
     const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
     const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "RiskAndIssue_Key": "ID #", "RIType_Cd": "Type", "Region_Cd": "Region", "RI_Nm": "Name", "Proj_Nm": "Project Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date"};
     console.log(ridata);
@@ -334,6 +359,7 @@ include ("../../includes/load.php");
       
       // Create a row in the table
       const ri = getprojectbykey(name);
+      // console.log(ri)
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
       const fieldswitch = {
@@ -363,6 +389,18 @@ include ("../../includes/load.php");
           },
           RIOpen_Hours: function() {
             return Math.floor(ri.RIOpen_Hours/24);
+          },
+          market: function() {
+            const m = getlocationbykey(ri.Project_Key);
+            return (m != undefined) ? m.Market_Cd : "";
+          },
+          facility: function() {
+            const f = getlocationbykey(ri.Project_Key);
+            return (f != undefined) ? f.Facility_Cd : "";
+          },
+          Region_Cd: function() {
+            const r = getlocationbykey(ri.Project_Key);
+            return (r != undefined) ? r.Region_Cd : "";
           },
           RI_Nm: function() {
               const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
@@ -437,6 +475,7 @@ include ("../../includes/load.php");
     const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
     
     const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
+    const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
 
     const uniques = ridata.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
     

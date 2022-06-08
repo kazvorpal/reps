@@ -747,6 +747,7 @@
   // Takes a program key and name and returns the row object
   const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
   const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.PROJECT_key == name);
+  const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
   
   const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   
