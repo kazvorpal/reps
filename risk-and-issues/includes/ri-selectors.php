@@ -81,10 +81,10 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
             <table width="500" border="0" align="center">
               <tbody>
                 <tr>
+                  <td>Fiscal Year</td>
                   <td align="center">Risk/Issue</td>
                   <td align="center">Impact Level</td>
-                  <td align="center">Forecasted Resolution Date Range</td>
-                  <td>Fiscal Year</td>
+                  <td align="center">Forecast Resolution Date</td>
                   <?php  //if($fiscal_year !=0) { 
                     if (!$project) {
                     ?>
@@ -101,23 +101,29 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                  <td align="center"><select name="risk_issue[]" id="risk_issue" multiple="multiple" class="form-control">
-                    <option value="Risk">Risk</option>
-                    <option value="Issue">Issue</option>
-                    </select></td>
-                  <td align="center"><select name="impact_level[]" id="impact_level" multiple="multiple" class="form-control">
-                    <option value="Minor">Minor Impact</option>
-                    <option value="Moderate">Moderate Impact</option>
-                    <option value="Major">Major Impact</option>
-                    <option value="No">No Impact</option>
-                    </select></td>
+                  <td>
+                    <select name="fiscal_year[]"  multiple="multiple" class="form-control" id="fiscal_year" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
+                      <!--<option value="All">Select Fiscal Year</option>-->
+                      <?php while($row_fiscal_year = sqlsrv_fetch_array( $stmt_fiscal_year, SQLSRV_FETCH_ASSOC)) { ?>
+                      <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>" ><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
+                      <?php } ?>
+                    </select>
+                  </td>
+                  <td align="center">
+                    <select name="risk_issue[]" id="risk_issue" multiple="multiple" class="form-control">
+                      <option value="Risk">Risk</option>
+                      <option value="Issue">Issue</option>
+                    </select>
+                  </td>
+                  <td align="center">
+                    <select name="impact_level[]" id="impact_level" multiple="multiple" class="form-control">
+                      <option value="Minor">Minor Impact</option>
+                      <option value="Moderate">Moderate Impact</option>
+                      <option value="Major">Major Impact</option>
+                      <option value="No">No Impact</option>
+                    </select>
+                  </td>
                   <td align="center"><input type="text" id="dateranger" class="daterange form-control" /></td>
-                  <td><select name="fiscal_year[]"  multiple="multiple" class="form-control" id="fiscal_year" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
-                  <!--<option value="All">Select Fiscal Year</option>-->
-                  <?php while($row_fiscal_year = sqlsrv_fetch_array( $stmt_fiscal_year, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>" ><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
-                  <?php } ?>
-                </select></td>
           <?php if (!$project) { ?>
                 <td><select name="pStatus[]" multiple="multiple" class="form-control" id="pStatus" style="background-color:#ededed">
                   <option value="Active" <?php if($pStatus == -1 || $pStatus == 'Active' || $pStatus == 'Active|Closed') { echo 'selected="selected"';} ?>>Open</option>

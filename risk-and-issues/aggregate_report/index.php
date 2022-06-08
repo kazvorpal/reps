@@ -48,7 +48,6 @@
       // print ("<code>");
       // print_r($rows);
       // print ("</code>");
-$locationrows = [];
 
       $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
       // print '<!--' . $sqlstr . "<br/> -->";
@@ -62,14 +61,14 @@ $locationrows = [];
           }
         }
       } else {
-      //   $rows = array();
-      //   $count = 1;
-      //   while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
-      //     $locationrows[] = array_map("fixutf8", $locationrow);
-      //     // print_r($row);
-      //     // print($row["RiskAndIssueLog_Key"]);
-      //     // print("<br/>");
-      //   }
+        $locationrows = array();
+        $count = 1;
+        while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
+          $locationrows[] = array_map("fixutf8", $locationrow);
+          // print_r($row);
+          // print($row["RiskAndIssueLog_Key"]);
+          // print("<br/>");
+        }
       }
 
 
@@ -330,9 +329,10 @@ $locationrows = [];
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
   // Names of Data for program fields
-  const fieldlist = ["ID #", "FY", "Program", "Region", "Owner", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
-  const datafields = ["RiskAndIssue_Key", "Fiscal_Year", "Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "ResponseStrategy_Nm", "RIOpen_Hours"];
-  const rifields = {"RiskAndIssue_Key": "ID #", "Fiscal_Year": "FY", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
+  // const fieldlist = ["ID #", "FY", "Program", "Region", "Owner", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
+  // const datafields = ["RiskAndIssue_Key", "Fiscal_Year", "Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "ResponseStrategy_Nm", "RIOpen_Hours"];
+  // const rifields = {"RiskAndIssue_Key": "ID #", "Fiscal_Year": "FY", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
+  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "3"}, "Program_Nm": {name: "Program", width: "10"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "imp": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
   const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
@@ -585,12 +585,14 @@ $locationrows = [];
               toggler(document.getElementById("projects" + saferi), this.children[0]);
             };
           }
-          tridobj.appendChild(header);
-          for (field of datafields) {
+          for (field of Object.keys(rifields)) {
             (function(test) {
               const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
               tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell"}));
             })(field);
+            if (rifields[field].name == "ID") {
+              tridobj.appendChild(header);
+            }
           }
           var rowValues = [];
           // for (field in program) {
@@ -662,12 +664,14 @@ $locationrows = [];
     // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles"}));
     let cells = ["Risk/Issue"];
-    for (field of fieldlist) {
+    for (field of Object.keys(rifields)) {
       // classes = (field == "Action Status") ? 
-      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 titles"}));
-      cells.push(field);
+      trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
+      cells.push(rifields[field].name);
+      if (rifields[field].name == "ID") {
+        trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
+      }
     }
     // document.worksheet.addRow(cells);
     document.worksheet.getRow(1).eachCell( function(cell, colNumber){
@@ -712,6 +716,7 @@ $locationrows = [];
     t.className = (typeof o.c == "undefined") ? "" : o.c;
     t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
     t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
+    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
     return t;
   }
 
@@ -812,13 +817,19 @@ $locationrows = [];
 
   const makestringdate = (dateobject) => {
     if (dateobject != null) {
-      const m = new Date(dateobject.date).getMonth()+1;
-      const d = new Date(dateobject.date).getDay()+1;
+      const m = padder(new Date(dateobject.date).getMonth()+1, "0", 2);
+      const d = padder(new Date(dateobject.date).getDay()+1, "0", 2);
       const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
-      // console.log(m + "/" + d + "/" + y)
+      console.log(m + "/" + d + "/" + y)
       return (dateobject == null) ? "" : m + "/" + d + "/" + y;
     } else 
       return "";
+  }
+
+  const padder = (target, character, size) => {
+    tl = target.toString();
+    console.log(typeof tl)
+    return character.repeat(size-tl.length) + target.toString();
   }
 
   const flipname = (name) => {
