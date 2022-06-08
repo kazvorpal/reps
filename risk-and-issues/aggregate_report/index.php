@@ -812,8 +812,8 @@ $locationrows = [];
 
   const makestringdate = (dateobject) => {
     if (dateobject != null) {
-      const m = new Date(dateobject.date).getMonth();
-      const d = new Date(dateobject.date).getDay();
+      const m = new Date(dateobject.date).getMonth()+1;
+      const d = new Date(dateobject.date).getDay()+1;
       const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
       // console.log(m + "/" + d + "/" + y)
       return (dateobject == null) ? "" : m + "/" + d + "/" + y;
