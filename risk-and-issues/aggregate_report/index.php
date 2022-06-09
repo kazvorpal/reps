@@ -301,7 +301,7 @@
   const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
-  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "3"}, "Program_Nm": {name: "Program", width: "10"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "imp": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
+  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "3"}, "Program_Nm": {name: "Program", width: "10"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
   const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
@@ -500,14 +500,6 @@
           ? (driverlist[program.RiskAndIssueLog_Key][0]) 
           ? driverlist[program.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
         },
-        // RI_Nm: function() {
-          //   const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
-          //   return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
-        // },
-        // RI_Nm_Excel: function() {
-          //   const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
-          //   return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
-          // },
           projectcount: function() {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
             return (projects.length>0) ? projects.length : "";
@@ -521,6 +513,7 @@
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
+        console.log(program.ImpactLevel_Nm);
         if (document.getElementById('impact_level').value != "") {
           // console.log($('#impact_level').val());
           // console.log(program.ImpactLevel_Nm);
@@ -528,14 +521,14 @@
           // console.log(program.ImpactLevel_Nm);
           // console.log(document.getElementById('impact_level').selectedOptions);
           // console.log(document.getElementById('impact_level').selectedOptions.namedItem(program.ImpactLevel_Nm));
-          // for (let option of document.getElementById('impact_level').options) {
-          //   if(option.selected) {
-          //     if(option.value == program.ImpactLevel_Nm)
-          //       console.log("match")
-          //     else
-          //       console.log("fail")
-          //   }
-          // }
+          for (let option of document.getElementById('impact_level').options) {
+            if(option.selected) {
+              if(option.value == program.ImpactLevel_Nm)
+                console.log("match")
+              else
+                console.log("fail")
+            }
+          }
         }
         if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
           const trid = "tr" + type + saferi + Math.random();
