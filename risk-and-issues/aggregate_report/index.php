@@ -306,7 +306,7 @@
 
   const populate = (rilist) => {
     console.log(rilist);
-    document.getElementById("resultcount").innerHTML = rilist.length + " Results Found"
+    document.getElementById("resultcount").innerHTML = (rilist.length-1) + " Results Found"
     // The main function that creates everything
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
@@ -437,7 +437,7 @@
           return program.LastUpdateBy_Nm;
         },
         ForecastedResolution_Dt: function() {
-          return (program.ForecastedResolution_Dt == null) ? "Multiple" : makestringdate(program.ForecastedResolution_Dt);
+          return (program.ForecastedResolution_Dt == null) ? "" : makestringdate(program.ForecastedResolution_Dt);
         },
         Active_Flg: function() {
           return (program.Active_Flg) ? "Open" : "Closed";
@@ -706,7 +706,11 @@
   
   const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.PROJECT_key == name);
   
-  
+  const getuniques = (list, field) => {
+
+  }
+
+
   const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   
 
