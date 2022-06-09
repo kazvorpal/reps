@@ -96,14 +96,14 @@
   color: #00f;
   border: 1px solid #888;
   padding: 4px;
-  font-size: smaller;
+  font-size: x-small;
 }
 .plainbox {
   /* background-color: #fff; */
   color: #000;
   border: 1px solid rgb(128, 128, 128);
   padding: 4px;
-  font-size: smaller;
+  font-size: x-small;
   cursor: default;
 }
 .arrows {
@@ -112,3 +112,5 @@
   height:100%;
   padding:4px
 }
+
+

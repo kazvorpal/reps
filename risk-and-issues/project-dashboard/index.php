@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project R&I Aggregate View</title>
+    <title>Project R&I Dashboard</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <?php 
     // print phpinfo();
@@ -258,7 +258,7 @@ include ("../../includes/load.php");
     console.log(ridata);
 
     const populate = (rilist) => {
-      console.log(ridata);
+      console.log(rilist);
       document.getElementById("resultcount").innerHTML = rilist.length + " Results Found"
       const main = document.getElementById("main");
       main.innerHTML = '';
