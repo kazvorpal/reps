@@ -293,11 +293,12 @@ include ("../../includes/load.php");
       document.worksheet.columns = cols;
 
       main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
-      main.appendChild(makeheader());
+      const mt = document.getElementById("maintable");
+      mt.appendChild(makeheader());
       for (loop of rilist) {
         // creates all the programs
         if(loop != null) {
-          main.appendChild(createrow(loop));
+          mt.appendChild(createrow(loop));
         }
       }
     }
