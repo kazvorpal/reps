@@ -27,13 +27,13 @@ $serverlist = (array) [
         "catl0dwas10222.corp.cox.com" => $conn
 ];
 
-print '<!-- DATABASE: ' . $db_nm3 . '-->';
-        // GLOBAL DATA CONNECTION
-        //$conn = Dev Database
-        //$conn_COXProd= Prodiction Database
-        //$conn_COX_QA = QA Database
+// GLOBAL DATA CONNECTION
+//$conn = Dev Database
+//$conn_COXProd= Prodiction Database
+//$conn_COX_QA = QA Database
 
 $data_conn = $serverlist[$_SERVER['HTTP_HOST']]; //<--CHANGE THIS TO SWITCH CONNECTIONS
+print '<!-- DATABASE: ' . $data_conn . '-->';
         //Uncomment the below line and change to a specific connection to override.
 // $data_conn = $conn; 
 
