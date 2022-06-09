@@ -306,7 +306,7 @@
 
   const populate = (rilist) => {
     console.log(rilist);
-    document.getElementById("resultcount").innerHTML = ridata.length + " Results Found"
+    document.getElementById("resultcount").innerHTML = rilist.length + " Results Found"
     // The main function that creates everything
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';

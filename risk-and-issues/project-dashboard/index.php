@@ -259,7 +259,7 @@ include ("../../includes/load.php");
 
     const populate = (rilist) => {
       console.log(ridata);
-      document.getElementById("resultcount").innerHTML = ridata.length + " Results Found"
+      document.getElementById("resultcount").innerHTML = rilist.length + " Results Found"
       const main = document.getElementById("main");
       main.innerHTML = '';
       document.workbook = new ExcelJS.Workbook();
