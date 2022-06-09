@@ -444,23 +444,6 @@ include ("../../includes/load.php");
     }  
 
 
-    const makeelement = (o) => {
-
-      // o is an (o)bject with these optional properties:
-      // o.e is the (e)lement, like "td" or "tr"
-      // o.c is the (i)d
-      // o.c is the (c)lasses, separated by spaces like usual
-      // o.t is the innerHTML (t)ext
-      // o.s is the col(s)pan
-
-      const t = document.createElement(o.e);
-      t.id = (typeof o.i == "undefined") ? "" : o.i;
-      t.className = (typeof o.c == "undefined") ? "" : o.c;
-      t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-      t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-      return t;
-    }
-
     function listri(target, type) {
       
       // returns a list of risks or issues for a given program, taking program name and type (risk, issue)

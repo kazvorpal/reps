@@ -298,10 +298,10 @@
   console.log(ridata)
   
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
-  const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
+  const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Facility", width: "9"}, {name: "Owner", width: "28"}, {name: "Subprogram", width: "5"}];
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
   
-  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "3"}, "Program_Nm": {name: "Program", width: "10"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
+  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "Program_Nm": {name: "Program", width: "9"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
   const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
@@ -583,7 +583,7 @@
 
     document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
     document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
-    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 10}));
+    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 4}));
     if (projects.length != 0) {
       const table = document.createElement("table");
       table.id = "table" + saferi;
@@ -610,9 +610,10 @@
   const projectheader = () => {
     // Make the header row for a project 
     const trri = document.createElement("tr");
-    for (field of projectfieldnames) {
-      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 titles"}));
+    for (field of Object.keys(projectfieldnames)) {
+      trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-4 titles", w: projectfieldnames[field].width}));
     }
+    // trri.appendChild(makeelement({e: "th", w: "69"}));
     return trri;
   }  
 
@@ -663,24 +664,6 @@
     });
     // document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true};
     return trri;
-  }
-
-  const makeelement = (o) => {
-
-    // o is an (o)bject with these optional properties:
-    // o.e is the (e)lement, like "td" or "tr"
-    // o.c is the (i)d
-    // o.c is the (c)lasses, separated by spaces like usual
-    // o.t is the innerHTML (t)ext
-    // o.s is the col(s)pan
-
-    const t = document.createElement(o.e);
-    t.id = (typeof o.i == "undefined") ? "" : o.i;
-    t.className = (typeof o.c == "undefined") ? "" : o.c;
-    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
-    return t;
   }
 
   // Utility functions
