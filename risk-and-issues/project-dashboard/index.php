@@ -472,6 +472,7 @@ include ("../../includes/load.php");
     
     const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
     const uniques = ridata.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
+    const projectlist = ridata.map(item => item.Project_Key);
     
     
     const exporter = () => {
@@ -519,7 +520,7 @@ include ("../../includes/load.php");
       return false;
     }  
 
-    populate(uniques);
+    populate(projectlist);
   </script>
   </body>
 </html>

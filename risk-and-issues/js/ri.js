@@ -54,7 +54,8 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
       }
       filtered = secondpass;
     }
-    return filtered.map(item => item[key]).filter((value, index, self) => self.indexOf(value) === index)
+    const results = (mode == "program") ? filtered.map(item => item[key]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.Project_Key);
+    return results;
   }  
 
 
