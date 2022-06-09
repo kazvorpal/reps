@@ -538,7 +538,8 @@
           const header = makeelement({
             "e": "th", 
             "i": "th" + type + saferi, 
-            "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+            // "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+            "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
             "c":"p-4 " + c
           });
           const tridobj = document.getElementById(trid);
