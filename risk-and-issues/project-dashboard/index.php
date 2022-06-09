@@ -237,6 +237,7 @@ include ("../../includes/load.php");
     }
   </script>
   </body>
+  <script src="../js/ri.js"></script>
   <script>
     
     const ridata = <?= $jsonout ?>;  
@@ -468,19 +469,9 @@ include ("../../includes/load.php");
       return uni;
     }
     
-    // Takes a program name and returns the row object
-    const getprogrambyname = (target) =>  mlm = ridata.find(o => o.Program_Nm == target);
-    
-    // Takes a program key and name and returns the row object
-    const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
-    
     const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
-    const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
-
     const uniques = ridata.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
     
-    // Sanitize a string
-    const makesafe = (target) => target.replace(/\s/g,'');
     
     const exporter = () => {
       document.workbook.xlsx.writeBuffer().then((buf) => {
@@ -489,33 +480,6 @@ include ("../../includes/load.php");
       });
     }
 
-    const filtration = () => {
-      // filter the programs list using the form
-      let filtered = ridata.filter(function(o) {
-          return (
-            (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
-            (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-            (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
-            (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
-            (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
-            (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
-          );
-      });
-      if (document.getElementById("owner").value != '') {
-        const secondpass = [];
-        for (item of filtered) {
-          if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
-            let n = document.getElementById("owner").value;
-            let name = flipname(n);
-            if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
-              secondpass.push(item);
-            }
-          }
-        }
-        filtered = secondpass;
-      }
-      return filtered.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
-    }  
     
     const splitdate = (datestring) => {
       let newdate = datestring.split(" - ");
@@ -532,17 +496,6 @@ include ("../../includes/load.php");
 
     const makedate = (dateobject) => {
       return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
-    }
-
-    const makestringdate = (dateobject) => {
-      if (dateobject != null) {
-        const m = new Date(dateobject.date).getMonth();
-        const d = new Date(dateobject.date).getDay();
-        const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
-        // console.log(m + "/" + d + "/" + y)
-        return (dateobject == null) ? "" : m + "/" + d + "/" + y;
-      } else 
-        return "";
     }
 
       const flipname = (name) => {
