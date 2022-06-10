@@ -350,7 +350,7 @@ include ("../../includes/load.php");
     const createrow = (name) => {
       
       // Create a row in the table
-      const ri = getprojectbykey(name);
+      const ri = getribykey(name);
       // console.log(ri)
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
@@ -444,8 +444,11 @@ include ("../../includes/load.php");
     }
     
     const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
-    const uniques = ridata.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
+    const getribykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
+    const uniques = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index)
     const projectlist = ridata.map(item => item.Project_Key);
+    console.log(ridata);
+    const fulllist = ridata.map(item => item.RiskAndIssue_Key);
     
     
     const exporter = () => {
@@ -492,8 +495,8 @@ include ("../../includes/load.php");
       populate(filtration())
       return false;
     }  
-
-    populate(projectlist);
+    console.log(fulllist)
+    populate(fulllist);
   </script>
   </body>
 </html>

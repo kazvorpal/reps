@@ -30,7 +30,8 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   }
 
   const resultcounter = (results) => {
-    const s = (results.length > 1) ? "s" : "";
+    console.log(results);
+    const s = (results.length == 1) ? "" : "s";
     document.getElementById("resultcount").innerHTML = `${results.length} Result${s} Found`
   }
 
