@@ -29,6 +29,11 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     return t;
   }
 
+  const resultcounter = (results) => {
+    const s = (results.length > 1) ? "s" : "";
+    document.getElementById("resultcount").innerHTML = `${results.length} Result${s} Found`
+  }
+
   const makestringdate = (dateobject) => {
     if (dateobject != null) {
       const m = padder(new Date(dateobject.date).getMonth()+1, "0", 2);
@@ -74,3 +79,27 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     const results = (mode == "program") ? filtered.map(item => item[key]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.Project_Key);
     return results;
   }  
+
+
+    const getuniques = (list, field) => {
+
+    }
+
+
+
+
+
+    const initexcel = () => {
+        let cols = [];
+        for (field in excelfields) {
+            (hiddenfields.includes(field))
+            cols.push({
+                header: excelfields[field],
+                key: field,
+                width: 16,
+                hidden: hiddenfields.includes(field)
+            })
+        }
+        document.worksheet.columns = cols;
+
+    }

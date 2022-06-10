@@ -259,7 +259,7 @@ include ("../../includes/load.php");
 
     const populate = (rilist) => {
       console.log(rilist);
-      document.getElementById("resultcount").innerHTML = rilist.length + " Results Found"
+      resultcounter(rilist);
       const main = document.getElementById("main");
       main.innerHTML = '';
       document.workbook = new ExcelJS.Workbook();
@@ -280,17 +280,7 @@ include ("../../includes/load.php");
       // }
       // document.worksheet.columns = cols;
 
-      let cols = [];
-      for (field in excelfields) {
-        (hiddenfields.includes(field))
-        cols.push({
-          header: excelfields[field],
-          key: field,
-          width: 16,
-          hidden: hiddenfields.includes(field)
-        })
-      }
-      document.worksheet.columns = cols;
+      initexcel();
 
       main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
       const mt = document.getElementById("maintable");
