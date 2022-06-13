@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Program R&I Aggregate View</title>
+    <title>Program R&I Dashboard</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <?php 
     include ("../../includes/load.php");
@@ -49,6 +49,27 @@
       // print_r($rows);
       // print ("</code>");
 
+      $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
+      // print '<!--' . $sqlstr . "<br/> -->";
+      $locationquery = sqlsrv_query($data_conn, $sqlstr);
+      if($locationquery === false) {
+        if(($error = sqlsrv_errors()) != null) {
+          foreach($error as $errors) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".$error[ 'message']."<br />";
+          }
+        }
+      } else {
+        $locationrows = array();
+        $count = 1;
+        while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
+          $locationrows[] = array_map("fixutf8", $locationrow);
+          // print_r($row);
+          // print($row["RiskAndIssueLog_Key"]);
+          // print("<br/>");
+        }
+      }
 
 
       $p4plist = array();
@@ -133,9 +154,11 @@
         }
       }
         
+
       $p4pout = json_encode($p4plist);
       $mangerout = json_encode($mangerlist);
       $driverout = json_encode($driverlist);
+      $locationout = json_encode($locationrows);
       $jsonout = json_encode($rows);
       
       }
@@ -223,11 +246,12 @@
   <div class="row" align="center">
     <div style="width:98%">
       <div class="col-xs-12 text-center">
-        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Aggregate View </h1>
+        <h1><?php if($fiscal_year !=0) {echo $fiscal_year;}?> Program R&I Dashboard</h1>
+        <div style="display:inline-block;width:28%;text-align:right;font-size:larger" id="resultcount"></div><div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span><p/></div>
     <?php 
       require '../includes/ri-selectors.php';
       ?>
-          <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/>
+          <!-- <span class="btn btn-primary" onclick="exporter()">Export Results</span><p/> -->
         <div id="main" class="accordion" >
             <div class="header">
               Program Name (Risks, Issues)
@@ -263,26 +287,26 @@
 
 </div>
 </body>
+<script src="../js/ri.js"></script>
 <script>
   
   const ridata = <?= $jsonout ?>;  
   const mangerlist = <?= $mangerout ?>;
   const driverlist = <?= $driverout ?>;
+  const locationlist = <?= $locationout ?>;
   const p4plist = <?= $p4pout ?>;
   console.log(ridata)
   
   const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
-  const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
+  const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Facility", width: "9"}, {name: "Owner", width: "28"}, {name: "Subprogram", width: "5"}];
   const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
-  
-  // Names of Data for program fields
-  const fieldlist = ["Program", "Region", "R/I Creator", "ID #", "Impact Level", "Action Status", "Forecast Resol. Date", "Current Task POC", "Response Strat", "Open Duration"];
-  const datafields = ["Program_Nm", "Region_Cd", "LastUpdateBy_Nm", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Nm", "RIOpen_Hours", "subs"];
-  const rifields = {"RiskAndIssue_Key": "Key", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Program_Nm": "Program", "subprogram": "Sub-Pro", "Project": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region Code", "mar": "Mar", "facility": "Facility", "imp": "Imp", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "FRD", "Current": "Current Toe?", "ResponseStrategy_Cd": "Response Strategy", "Raid": "Raid L", "RIOpen_Hours": "Open Duration"}
-  const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
+  const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
+  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "Program_Nm": {name: "Program", width: "9"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
+  const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
     console.log(rilist);
+    resultcounter(rilist);
     // The main function that creates everything
     const main = document.getElementById("main");
     main.innerHTML = '<div class="header">Program Name (Risks, Issues)</div>';
@@ -292,25 +316,8 @@
     document.workbook.created = new Date();
     document.worksheet = document.workbook.addWorksheet('Program Report',  {properties:{tabColor:{argb:'3355bb'}, headerFooter: "Program Report Spreadsheet", firstFooter: "RePS"}});
 
-    let cols = [];
-    for (field in excelfields) {
-      cols.push({
-        header: excelfields[field],
-        key: field,
-        width: 16
-      })
-    }
-    document.worksheet.columns = cols;
-    // for (field in ridata[0]) {
-    //   cols.push({
-    //     header: field,
-    //     key: field,
-    //     width: (ridata[0][field]) ? ridata[0][field].length : 8
-    //   })
-    // }
-    // document.worksheet.columns = cols;
+    initexcel();
 
-    // document.worksheet.addRow(rowValues);
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
@@ -413,7 +420,7 @@
           return program.LastUpdateBy_Nm;
         },
         ForecastedResolution_Dt: function() {
-          return (program.ForecastedResolution_Dt == null) ? "Multiple" : makestringdate(program.ForecastedResolution_Dt);
+          return (program.ForecastedResolution_Dt == null) ? "" : makestringdate(program.ForecastedResolution_Dt);
         },
         Active_Flg: function() {
           return (program.Active_Flg) ? "Open" : "Closed";
@@ -447,19 +454,19 @@
         },
         Region_Cd: function() {
           let counter = 0;
-          console.log("in region")
-          console.log(program.RI_Nm);
-          console.log(program.Region_Cd);
+          // console.log("in region")
+          // console.log(program.RI_Nm);
+          // console.log(program.Region_Cd);
           for(r of ridata) {
               // console.log("r");
               // console.log(r);
               if (r.RI_Nm == program.RI_Nm) {
-                console.log(r.Region_Cd);
+                // console.log(r.Region_Cd);
                 counter++;
               }
             }
-          console.log("counter");
-          console.log(counter);
+          // console.log("counter");
+          // console.log(counter);
           return (counter < 2) ? program.Region_Cd : "Multiple";
         },
         RaidLog_Flg: function() {
@@ -476,14 +483,6 @@
           ? (driverlist[program.RiskAndIssueLog_Key][0]) 
           ? driverlist[program.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
         },
-        // RI_Nm: function() {
-          //   const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
-          //   return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
-        // },
-        // RI_Nm_Excel: function() {
-          //   const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
-          //   return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
-          // },
           projectcount: function() {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
             return (projects.length>0) ? projects.length : "";
@@ -497,6 +496,7 @@
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
+        console.log(program.ImpactLevel_Nm);
         if (document.getElementById('impact_level').value != "") {
           // console.log($('#impact_level').val());
           // console.log(program.ImpactLevel_Nm);
@@ -504,14 +504,14 @@
           // console.log(program.ImpactLevel_Nm);
           // console.log(document.getElementById('impact_level').selectedOptions);
           // console.log(document.getElementById('impact_level').selectedOptions.namedItem(program.ImpactLevel_Nm));
-          // for (let option of document.getElementById('impact_level').options) {
-          //   if(option.selected) {
-          //     if(option.value == program.ImpactLevel_Nm)
-          //       console.log("match")
-          //     else
-          //       console.log("fail")
-          //   }
-          // }
+          for (let option of document.getElementById('impact_level').options) {
+            if(option.selected) {
+              if(option.value == program.ImpactLevel_Nm)
+                console.log("match")
+              else
+                console.log("fail")
+            }
+          }
         }
         if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
           const trid = "tr" + type + saferi + Math.random();
@@ -521,7 +521,8 @@
           const header = makeelement({
             "e": "th", 
             "i": "th" + type + saferi, 
-            "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+            // "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+            "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
             "c":"p-4 " + c
           });
           const tridobj = document.getElementById(trid);
@@ -530,12 +531,14 @@
               toggler(document.getElementById("projects" + saferi), this.children[0]);
             };
           }
-          tridobj.appendChild(header);
-          for (field of datafields) {
+          for (field of Object.keys(rifields)) {
             (function(test) {
               const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 databox"}));
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell"}));
             })(field);
+            if (rifields[field].name == "ID") {
+              tridobj.appendChild(header);
+            }
           }
           var rowValues = [];
           // for (field in program) {
@@ -563,7 +566,7 @@
 
     document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
     document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
-    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 10}));
+    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 4}));
     if (projects.length != 0) {
       const table = document.createElement("table");
       table.id = "table" + saferi;
@@ -576,7 +579,7 @@
           tr.id = "tr" + project.PROJECT_key;
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
-            tr.appendChild(makeelement({e: "td", t: project[field], c: "p4 databox"}));
+            tr.appendChild(makeelement({e: "td", t: project[field], c: "p4 datacell"}));
           }
           p.push(project.PROJECT_key);
         }
@@ -590,9 +593,10 @@
   const projectheader = () => {
     // Make the header row for a project 
     const trri = document.createElement("tr");
-    for (field of projectfieldnames) {
-      trri.appendChild(makeelement({e: "th", t: field, c: "p-4 titles"}));
+    for (field of Object.keys(projectfieldnames)) {
+      trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-4 titles", w: projectfieldnames[field].width}));
     }
+    // trri.appendChild(makeelement({e: "th", w: "69"}));
     return trri;
   }  
 
@@ -607,11 +611,14 @@
     // document.worksheet.addRow(cells);
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
-    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles"}));
     let cells = ["Risk/Issue"];
-    for (field of fieldlist) {
-      trri.appendChild(makeelement({"e": "th", "t": field, "c": "p-4 titles"}));
-      cells.push(field);
+    for (field of Object.keys(rifields)) {
+      // classes = (field == "Action Status") ? 
+      trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
+      cells.push(rifields[field].name);
+      if (rifields[field].name == "ID") {
+        trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
+      }
     }
     // document.worksheet.addRow(cells);
     document.worksheet.getRow(1).eachCell( function(cell, colNumber){
@@ -642,23 +649,6 @@
     return trri;
   }
 
-  const makeelement = (o) => {
-
-    // o is an (o)bject with these optional properties:
-    // o.e is the (e)lement, like "td" or "tr"
-    // o.c is the (i)d
-    // o.c is the (c)lasses, separated by spaces like usual
-    // o.t is the innerHTML (t)ext
-    // o.s is the col(s)pan
-
-    const t = document.createElement(o.e);
-    t.id = (typeof o.i == "undefined") ? "" : o.i;
-    t.className = (typeof o.c == "undefined") ? "" : o.c;
-    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-    return t;
-  }
-
   // Utility functions
 
   const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/");  
@@ -680,21 +670,11 @@
     return uni;
   }
   
-  // Takes a program name and returns the row object
-  const getprogrambyname = (target) =>  mlm = ridata.find(o => o.Program_Nm == target);
-  
-  // Takes a program key and name and returns the row object
-  const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.Program_Nm == name);
   const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.PROJECT_key == name);
+  
   
   const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
   
-  // Sanitize a string
-  const makesafe = (target) => target.replace(/\s/g,'');
-  
-  const empty = (o) => {
-    o.children[0].innerHTML = "";
-  }
 
   const toggler = (target, o) => {
     // Toggles visibility of projects when a given program is clicked
@@ -709,33 +689,6 @@
     }
   }
   
-  const filtration = () => {
-    // filter the programs list using the form
-    let filtered = ridata.filter(function(o) {
-      return (
-          (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
-          (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-          (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
-          (document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm)) &&
-          (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
-          (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
-        );
-      });
-    if (document.getElementById("owner").value != '') {
-      const secondpass = [];
-      for (item of filtered) {
-        if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
-          let n = document.getElementById("owner").value;
-          let name = flipname(n);
-          if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
-            secondpass.push(item);
-          }
-        }
-      }
-      filtered = secondpass;
-    }
-    return filtered.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
-  }  
   
   const splitdate = (datestring) => {
     let newdate = datestring.split(" - ");
@@ -752,10 +705,6 @@
 
   const makedate = (dateobject) => {
     return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
-  }
-
-  const makestringdate = (dateobject) => {
-    return (dateobject == null) ? "" : dateobject.date.substring(0,10);
   }
 
   const flipname = (name) => {
