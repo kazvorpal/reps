@@ -130,7 +130,7 @@ Program Manager is: <?php echo $alias; ?>
       <td><?php echo $row_risk_issue_cls['RIDescription_Txt']; ?></td>
       <td><?php echo date_format($row_risk_issue_cls['RIClosed_Dt'], 'm-d-Y'); ?></td>
       <td><?php echo date_format($row_risk_issue_cls['Last_Update_Ts'], 'm-d-Y'); ?></td>
-      <td align="center"><a href="risk-and-issues/details-prg.php?rikey=<?php echo $row_risk_issue_cls['RiskAndIssue_Key'];?>&prg_nm=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=0&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
+      <td align="center"><a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue_cls['RiskAndIssue_Key'];?>&prg_nm=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=0&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
     </tr>
     <?php } ?>
   </tbody>
