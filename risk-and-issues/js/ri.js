@@ -54,27 +54,30 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
 
 
 
-  const key = (mode == "project") ? "Project_Key" : "Program_Nm";
+  const mapper = (mode == "project") ? "Project_Key" : "Program_Nm";
+  const key = (mode == "project") ? "Project_Key" : "PROJECT_Key";
   const filtration = () => {
     let filtered = ridata.filter(function(o) {
-        // console.log(o);
-        // console.log(o.Active_Flg);
-        // console.log($('#pStatus').val());
+        console.log(o);
+        // console.log(o[LastUpdateBy_Nm]);
+        // console.log(getlocationbykey(o[key]));
+        // console.log($('#owner').val());
         // console.log(($('#pStatus').val()).includes(toString(o.Active_Flg)));
         return (
           (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
           (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
+          (o.LastUpdateBy_Nm != null ||document.getElementById("owner").value == '' || ($('#owner').val()).includes(o.LastUpdateBy_Nm)) &&
           (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1) &&
           (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm) || key == "Project_Key") &&
           (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
-          (getlocationbykey(o.Project_Key) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o.Project_Key).Market_Cd))) &&
-          (getlocationbykey(o.Project_Key) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o.Project_Key).Facility_Cd))) &&
+          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
+          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
           (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
         );
     });
-    console.log(filtered);
-    const results = (mode == "program") ? filtered.map(item => item[key]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.RiskAndIssue_Key);
+    // console.log(filtered);
+    const results = (mode == "program") ? filtered.map(item => item[mapper]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.RiskAndIssue_Key);
     // console.log(results);
     return results;
   }  

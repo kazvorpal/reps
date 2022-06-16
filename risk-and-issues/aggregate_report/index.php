@@ -483,20 +483,20 @@
           ? (driverlist[program.RiskAndIssueLog_Key][0]) 
           ? driverlist[program.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
         },
-          projectcount: function() {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
-            return (projects.length>0) ? projects.length : "";
-          }, 
-          category: function() {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
-            return (projects.length>0) ? "Projects" : "Global";
-          }
-        };
+        projectcount: function() {
+          let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
+          return (projects.length>0) ? projects.length : "";
+        }, 
+        category: function() {
+          let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
+          return (projects.length>0) ? "Projects" : "Global";
+        }
+      };
         
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
-        console.log(program.ImpactLevel_Nm);
+        // console.log(program.ImpactLevel_Nm);
         if (document.getElementById('impact_level').value != "") {
           // console.log($('#impact_level').val());
           // console.log(program.ImpactLevel_Nm);
