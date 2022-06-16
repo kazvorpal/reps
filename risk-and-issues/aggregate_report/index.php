@@ -496,7 +496,7 @@
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
-        // console.log(program.ImpactLevel_Nm);
+        console.log(program.ImpactLevel_Nm);
         if (document.getElementById('impact_level').value != "") {
           // console.log($('#impact_level').val());
           // console.log(program.ImpactLevel_Nm);

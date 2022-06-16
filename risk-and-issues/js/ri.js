@@ -54,12 +54,13 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
 
 
 
+//   const mapper = (mode == "project") ? "Project_Key" : "Program_Nm";
   const mapper = (mode == "project") ? "Project_Key" : "Program_Nm";
   const key = (mode == "project") ? "Project_Key" : "PROJECT_Key";
   const filtration = () => {
     let filtered = ridata.filter(function(o) {
         console.log(o);
-        // console.log(o[LastUpdateBy_Nm]);
+        console.log(o.ForecastedResolution_Dt);
         // console.log(getlocationbykey(o[key]));
         // console.log($('#owner').val());
         // console.log(($('#pStatus').val()).includes(toString(o.Active_Flg)));
@@ -73,10 +74,23 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
           (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
           (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
           (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
-          (document.getElementById("dateranger").value == '' || betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))
+          (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
         );
     });
-    // console.log(filtered);
+    // if (document.getElementById("owner").value != '') {
+    //     const secondpass = [];
+    //     for (item of filtered) {
+    //       if (item.Fiscal_Year + "-" + item.MLMProgram_Key in mangerlist && mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key].length > 0) {
+    //         let n = document.getElementById("owner").value;
+    //         let name = flipname(n);
+    //         if (mangerlist[item.Fiscal_Year + "-" + item.MLMProgram_Key][0].User_Nm.indexOf(name) != -1) {
+    //           secondpass.push(item);
+    //         }
+    //       }
+    //     }
+    //     filtered = secondpass;
+    // }
+      console.log(document.f = filtered);
     const results = (mode == "program") ? filtered.map(item => item[mapper]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.RiskAndIssue_Key);
     // console.log(results);
     return results;
