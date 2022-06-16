@@ -174,29 +174,47 @@ include ("../../includes/load.php");
           var obj = getElementById(objId);} if (obj) obj.value = newText;
         }
       }
-
+      
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
       })
+      
+      const ridata = <?= $jsonout ?>;  
+      const mangerlist = <?= $mangerout ?>;
+      const locationlist = <?= $locationout ?>;
+      const p4plist = <?= $p4pout ?>;
+      
+      const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
+      const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
+      const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
+      
+      // Names of Data for program fields
+      const fieldlist = ["Program", "Region", "Program Manager", "ID", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
+      const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
+      const rifields = {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region", "market": "Market", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
+      const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
+      const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "RI_Nm": "Name", "Proj_Nm": "Project Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date"};
+      console.log(ridata);
 
-    </script>
+      </script>
 
-    <link rel="stylesheet" href="../css/ri.css">
-    <style type="text/css">
-        </style>
+<link rel="stylesheet" href="../css/ri.css">
+<style type="text/css">
+  </style>
   </head>
   <body onload="myFunction()" style="margin:0;">
-  <!--LOADER-->
-  <div id="loader"></div>
-  <div style="display:block;" id="myDiv" class="animate-bottom"><!--change none to block when developing-->
-  <!--FOR DEV ONLY - show sql-->
-  <div class="alert-danger">
-  </div>
-  <?php
+    <!--LOADER-->
+    <div id="loader"></div>
+    <div style="display:block;" id="myDiv" class="animate-bottom"><!--change none to block when developing-->
+    <!--FOR DEV ONLY - show sql-->
+    <div class="alert-danger">
+      </div>
+      <?php
     $planxls = 'export-dpr-2021-plan.php?fiscalYear=' . $fiscal_year . '&status=' . $pStatus . '&owner=' . $owner . '&prog=' . $program_d . '&subprogram=' . $subprogram . '&region=' . $region . '&market=' . $market . '&facility=' . $facility ;
     $planxlsEN = $planxls;
     ?>
   <!--menu-->
+  <script src="../js/ri.js"></script>
   <?php include ("../../includes/menu.php");?>
   <section>
     <div class="row" align="center">
@@ -237,26 +255,7 @@ include ("../../includes/load.php");
     }
   </script>
   </body>
-  <script src="../js/ri.js"></script>
   <script>
-    
-    const ridata = <?= $jsonout ?>;  
-    const mangerlist = <?= $mangerout ?>;
-    const locationlist = <?= $locationout ?>;
-    const p4plist = <?= $p4pout ?>;
-    
-    const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
-    const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
-    const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
-    
-    // Names of Data for program fields
-    const fieldlist = ["Program", "Region", "Program Manager", "ID", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
-    const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
-    const rifields = {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region", "market": "Market", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
-    const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
-    const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "RI_Nm": "Name", "Proj_Nm": "Project Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date"};
-    console.log(ridata);
-
     const populate = (rilist) => {
       console.log(rilist);
       resultcounter(rilist);
@@ -351,7 +350,7 @@ include ("../../includes/load.php");
       
       // Create a row in the table
       const ri = getribykey(name);
-      // console.log(ri)
+      // console.log(ri);
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
       const fieldswitch = {
@@ -445,12 +444,12 @@ include ("../../includes/load.php");
     
     const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
     const getribykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
-    const uniques = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index)
     const projectlist = ridata.map(item => item.Project_Key);
-    console.log(ridata);
     const fulllist = ridata.map(item => item.RiskAndIssue_Key);
     
-    
+    // const uniques = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index)
+    const uniques = getuniques(ridata, "RiskAndIssue_Key");
+
     const exporter = () => {
       document.workbook.xlsx.writeBuffer().then((buf) => {
         saveAs(new Blob([buf]), 'ri-project-dashboard-' + makedate(new Date()) + '.xlsx');
@@ -476,11 +475,11 @@ include ("../../includes/load.php");
       return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
     }
 
-      const flipname = (name) => {
+    const flipname = (name) => {
       let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
       let ln = name.substring(0, name.indexOf(";"))
       return(fn + ln);
-      }  
+    }  
 
     const ranger = (daterange) => {
       // get start and end date from a date range set via Bootstrap date range picker
@@ -488,14 +487,16 @@ include ("../../includes/load.php");
       dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
       dates.end = daterange.substring(daterange.indexOf(" - ")+4);
       return dates;
-    }  
+    } 
+
+
 
     document.getElementById("Go").onclick = function() {
       // filter form button
       populate(filtration())
       return false;
     }  
-    console.log(fulllist)
+    // console.log(fulllist)
     populate(fulllist);
   </script>
   </body>
