@@ -496,7 +496,7 @@
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
-        console.log(program.ImpactLevel_Nm);
+        // console.log(program.ImpactLevel_Nm);
         if (document.getElementById('impact_level').value != "") {
           // console.log($('#impact_level').val());
           // console.log(program.ImpactLevel_Nm);
@@ -580,8 +580,14 @@
           tr.id = "tr" + project.PROJECT_key;
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
-            console.log(project)
-            tr.appendChild(makeelement({e: "td", t: project[field], c: "p4 datacell"}));
+            console.log(project);
+            locale = getlocationbykey(project.PROJECT_key);
+            console.log(locale);
+            txt = (field == "Region_Cd") ? locale.Region_Cd 
+              : (field == "Market_Cd") ? locale.Market_Cd 
+              : (field == "EPS_Location_Cd")  ? locale.Facility_Cd 
+              : project[field];
+            tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
           }
           p.push(project.PROJECT_key);
         }
