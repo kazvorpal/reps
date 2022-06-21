@@ -251,13 +251,13 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     </tr>
   </tbody>
 </table>
-<div align="center">
-    <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Edit </a>
-    <input type="submit" name="submit2" id="submit2" value="Submit" class="btn btn-primary">
-</div>
+  <div align="right">
+  <button type="submit" class="btn btn-primary" name="submit2">Submit <span class="glyphicon glyphicon-step-forward"></span></button> 
+  </div>
 </form>
-
-</div>
+  <div align="left" style="margin-top:-33px;">
+  <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Edit </a>
+  </div>
 <?php
     //print_r($_POST);
 

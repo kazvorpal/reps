@@ -427,43 +427,43 @@ function toggle(source) {
             <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
-                    Budget/Funding</label></td>
+                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?>>
+                    Material Delay</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("External", $driverArr)) { echo "checked";} ?>>
-                    External</label></td>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
+                    Project Dependency</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Communication BreakDown", $driverArr)) { echo "checked";} ?>>
-                    Communications Breakdown</label></td>
+                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
+                    Shipping/Receiving Delay</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
-                    People Resources</label></td>
+                    <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
+                    Budget/Funding</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Contractor", $driverArr)) { echo "checked";} ?>>
-                    Contractor</label></td>
+                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
+                    Ordering Error</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Procurement", $driverArr)) { echo "checked";} ?>>
-                    Procurement</label></td>
+                    <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Design/Scope Change", $driverArr)) { echo "checked";} ?>>
+                    Design/Scope Change</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("Dependency Conflict", $driverArr)) { echo "checked";} ?>>
-                    Dependency Conflict</label></td>
+                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    People Resource</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Schedule Impact", $driverArr)) { echo "checked";} ?>>
-                    Schedule Impact</label></td>
+                    <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Admin Error", $driverArr)) { echo "checked";} ?>>
+                    Admin Error</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("Equipment Integration", $driverArr)) { echo "checked";} ?>>
-                    Equipment Integration</label></td>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
+                    3PL Resource</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("Other", $driverArr)) { echo "checked";} ?>>
-                    Other</label></td>
+                    <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("External Forces", $driverArr)) { echo "checked";} ?>>
+                    External Forces</label></td>
                   </tr>
                 </table>
               </div>
@@ -564,7 +564,7 @@ function toggle(source) {
               <label for="Individual">Individual POC<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value = "<?php echo $individual; ?>" />
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value = "<?php echo $individual; ?>" required/>
               
                 <datalist id="Individual">
                   <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
@@ -574,7 +574,7 @@ function toggle(source) {
 
               <label for="Individual3">Team/Group POC<br>
                 </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" value = "<?php echo $department; ?>"/>
+              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" value = "<?php echo $department; ?>" required/>
           </div>
               </div>
           </td>
@@ -786,13 +786,14 @@ function toggle(source) {
         <tr>
           <td colspan="2" align="right" valign="middle">&nbsp;</td>
         </tr>
-        <tr>
-          <td colspan="2" align="right" valign="middle">
-          <input type="submit" name="submit" id="submit" value="Review" class="btn btn-primary">
-          </td>
-        </tr>
       </tbody>
-    </table>
+    </table><div align="right">
+    <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
+    </div>
+  </form>
+    <div align="left" style="margin-top:-33px;">  
+    <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+    </div>
   </form>
 </div>
 </main>
@@ -945,5 +946,6 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script> 
+<script src="includes/ri-functions.js"></script>
 </body>
 </html>
