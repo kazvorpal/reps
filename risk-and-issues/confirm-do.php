@@ -84,6 +84,10 @@ include ("../sql/MS_Users_prg.php");
     //print_r($_POST);
     //exit();
 
+//GET POC EMAIL 
+
+
+
 //LOOK UP KEY VALUES 
 // IMPACT AREA
 $sql_imp_area = "SELECT* FROM RI_MGT.Impact_Area WHERE ImpactArea_Key = $impactArea";

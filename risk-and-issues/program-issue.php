@@ -226,7 +226,7 @@ function toggle(source) {
   <input name="RIType" type="hidden" id="RIType" value="Issue">
   <input name="RILevel" type="hidden" id="RILevel" value="Program">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
-  <input name="CreatedFrom" type="hidden" id="Created From" value=''>
+  <input name="CreatedFrom" type="hidden" id="Created From" value=''> <!-- CREATED FROM A RISK-->
   <input name="TransfertoProgramManager" type="hidden" id="Created From" value="">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value=''>
   <input name="riskRealized" type="hidden" id="riskRealized" value="0">
@@ -235,7 +235,7 @@ function toggle(source) {
   <input type="hidden" name="Region" id="Region" value="<?php while($row_regions_f = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region'] . "," ; } ?>">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
-  <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
+  <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -266,13 +266,13 @@ function toggle(source) {
   <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
               </tr>
               <tr>
-                <td><label for="Descriptor">Issue Descriptor<br>
+                <td><label for="Descriptor">Issue Descriptor *<br>
                   </label>
                   <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30">  
                 </td>
               </tr>
               <tr>
-                <td><label for="Description">Description<br>
+                <td><label for="Description">Description *<br>
                   </label>
                   <textarea name="Description" cols="120" rows="5" required="required" class="form-control" id="Description"></textarea>  </td>
               </tr>
@@ -326,52 +326,52 @@ function toggle(source) {
         </td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS  <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS * <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a></h4>
             <div class="box subscriber">
-              <table width="100%" border="0">
+            <table width="100%" border="0">
                 <tr>
-                  <td width="51%"><label>
-                    <input type="radio" name="Drivers[]" value="Budget/Funding"  id="Drivers_0" class="required_group">
+                  <td width="50%"><label>
+                    <input type="radio" name="Drivers[]" value="Material Delay"  id="Drivers_0" class="required_group">
+                    Material Delay</label></td>
+                    <td><label>
+                    <input type="radio" name="Drivers[]" value="Project Dependency" id="Drivers_1" class="required_group">
+                    Project Dependency</label></td>
+                </tr>
+                <tr>
+                    <td width="49%"><label>
+                    <input type="radio" name="Drivers[]" value="Shipping/Receiving Delay" id="Drivers_10" class="required_group">
+                    Shipping/Receiving Delay</label></td>
+                  <td><label>
+                    <input type="radio" name="Drivers[]" value="Budget/Funding" id="Drivers_6" class="required_group">
                     Budget/Funding</label></td>
-                  <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="External" id="Drivers_10" class="required_group">
-                    External</label></td>
-                  </tr>
+                </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="Communication BreakDown" id="Drivers_1" class="required_group">
-                    Communications Breakdown</label></td>
-                  <td><label>
-                    <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_6" class="required_group">
-                    People Resources</label></td>
-                  </tr>
+                    <input type="radio" name="Drivers[]" value="Ordering Error" id="Drivers_2" class="required_group">
+                    Ordering Error</label></td>
+                    <td><label>
+                    <input type="radio" name="Drivers[]" value="Design/Scope Change" id="Drivers_7" class="required_group">
+                    Design/Scope Change</label></td>
+                </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="Contractor" id="Drivers_2" class="required_group">
-                    Contractor</label></td>
-                  <td><label>
-                    <input type="radio" name="Drivers[]" value="Procurement" id="Drivers_7" class="required_group">
-                    Procurement</label></td>
+                    <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_3" class="required_group">
+                    People Resource</label></td>
+                  <td><label title="">
+                    <input type="radio" name="Drivers[]" value="Admin Error" id="Drivers_8" class="required_group">
+                    Admin Error</label></td>
                   </tr>
                 <tr>
-                  <td><label>
-                    <input type="radio" name="Drivers[]" value="Dependency Conflict" id="Drivers_3" class="required_group">
-                    Dependency Conflict</label></td>
-                  <td><label>
-                    <input type="radio" name="Drivers[]" value="Schedule Impact" id="Drivers_8" class="required_group">
-                    Schedule Impact</label></td>
-                  </tr>
-                <tr>
-                  <td><label>
-                    <input type="radio" name="Drivers[]" value="Equipment Integration" id="Drivers_4" class="required_group">
-                    Equipment Integration</label></td>
-                  <td><label>
-                    <input type="radio" name="Drivers[]" value="Other" id="Drivers_9" class="required_group">
-                    Other</label></td>
-                  </tr>
+                  <td><label title="">
+                    <input type="radio" name="Drivers[]" value="3PL Resource" id="Drivers_4" class="required_group">
+                    3PL Resource</label></td>
+                  <td><label title="">
+                    <input type="radio" name="Drivers[]" value="External Forces" id="Drivers_9" class="required_group">
+                    External Forces</label></td>
+                </tr>
                 </table>
               </div>
           </td>
@@ -400,7 +400,7 @@ function toggle(source) {
                 <td  valign="top">
                   <table width="200" border="0">
                   <tr>
-                  <strong>Impacted Area </strong>
+                  <strong>Impacted Area * </strong>
                   <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                     <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
@@ -417,7 +417,7 @@ function toggle(source) {
                 <td>
                   <table width="200" border="0">
                     <tr>
-                      <strong>Impact Level </strong>
+                      <strong>Impact Level * </strong>
                       <a href="includes/instructions-impact-level.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
@@ -452,10 +452,10 @@ function toggle(source) {
         <tr>
           <td colspan="2" align="left">
           <div class="box">
-              <label for="Individual">Individual POC<br>
+              <label for="Individual">Individual POC *<br>
                 </label>
               
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy"/>
+              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required/>
               
                 <datalist id="Individual">
                   <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
@@ -463,9 +463,9 @@ function toggle(source) {
                   <?php } ?>
                 </datalist>
 
-              <label for="Individual3">Team/Group POC<br>
+              <label for="Individual3">Team/Group POC *<br>
                 </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()"/>
+              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required/>
           </div>
           </td>
           </tr>
@@ -476,7 +476,7 @@ function toggle(source) {
           <td colspan="2" align="left"></td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4>			  </td>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY *</h4>			  </td>
         </tr>
         <tr>
           <td colspan="2" align="left"><div class="box">
@@ -515,7 +515,7 @@ function toggle(source) {
           </div>			</td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">ACTION PLAN *</h4>
           
           <div class="box">  
 
@@ -579,7 +579,7 @@ function toggle(source) {
         </tr>
 
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">RELATED DATES</h4></td>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">RELATED DATES *</h4></td>
         </tr>
         <tr>
           <td align="left">
@@ -619,7 +619,7 @@ function toggle(source) {
           <td colspan="3" align="left">
             <div class="box">
               <table width="50%" border="0">
-                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
+                  <td colspan="2"><strong>Notify Portfolio Team *</strong></td>
                   </tr>
                 <tr>
                   <td><label>
@@ -662,8 +662,10 @@ function toggle(source) {
           <td colspan="2" align="right">&nbsp;</td>
         </tr>
         <tr>
-          <td colspan="2" align="right"><input type="submit" name="submit" id="submit" value="Review >" class="btn btn-primary">
-                  </td>
+          <td colspan="2" align="right">
+            <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+            <button type="submit" class="btn btn-primary" onmouseover="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+          </td>
 		  </tr>
         <tr>
           <td></td>
@@ -964,5 +966,6 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script>
+<script src="includes/ri-functions.js"></script>
 </body>
 </html>
