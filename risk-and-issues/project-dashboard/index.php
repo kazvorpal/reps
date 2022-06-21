@@ -150,7 +150,7 @@ include ("../../includes/load.php");
           $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
           $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
           $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
-          $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
+          $(".miframe").colorbox({iframe:true, width:"80%", height:"70%", scrolling:true});
           $(".inline").colorbox({inline:true, width:"50%"});
           $(".callbacks").colorbox({
               onOpen:function(){ alert('onOpen: colorbox is about to open'); },
@@ -237,8 +237,8 @@ include ("../../includes/load.php");
       </div>
     </div>
   </section>
-  <div id="lightbox" style="position:fixed;left:0;top:0;width:100%;height:100%;background-color:rgba(0, 0, 0, .3);display:none;cursor:pointer" onclick="hider();"></div>
-  <iframe id="details" onclick="this.style.display= 'none'" onblur="this.style.display= 'none'" style="position:fixed;top:10%;left:10%;width:80vw;height:70vh;background-color:#000;display:none;"></iframe>
+  <div id="cboxOverlay" class="lightbox" styleD="" onclick="hider();"></div>
+  <iframe id="details" onclick="this.style.display= 'none'" onblur="this.style.display= 'none'" style="position:fixed;top:10%;left:10%;width:80vw;height:70vh;background-color:#000;display:none;z-index:100000"></iframe>
   <section>
 
   </section>
@@ -334,13 +334,13 @@ include ("../../includes/load.php");
     }
 
     const hider = () => {
-      document.getElementById('lightbox').style.display = 'none';
+      document.getElementById('cboxOverlay').style.display = 'none';
       document.getElementById('details').style.display='none';
     }
 
     const details = (target) => {
         const d = document.getElementById("details");
-        const l = document.getElementById("lightbox");
+        const l = document.getElementById("cboxOverlay");
         l.style.display = "block";
         d.style.display = "block";
         d.src = target.href;
@@ -395,7 +395,7 @@ include ("../../includes/load.php");
           },
           RI_Nm: function() {
               const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
-              return "<a href='" + url + "' onclick='details(this);return(false)'>" + ri["RI_Nm"] + "</a>";
+              return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
           },
           subprogram: function() {
               console.log("p4plist");
