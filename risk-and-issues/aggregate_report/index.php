@@ -223,18 +223,32 @@
       $('[data-toggle="tooltip"]').tooltip()
     })
 
+      const ridata = <?= $jsonout ?>;  
+      const mangerlist = <?= $mangerout ?>;
+      const driverlist = <?= $driverout ?>;
+      const locationlist = <?= $locationout ?>;
+      const p4plist = <?= $p4pout ?>;
+      console.log(ridata)
+      
+      const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
+      const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Facility", width: "9"}, {name: "Owner", width: "28"}, {name: "Subprogram", width: "5"}];
+      const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
+      const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
+      const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "Program_Nm": {name: "Program", width: "9"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
+      const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
     </script>
     <link rel="stylesheet" href="../css/ri.css">
     <style type="text/css">
-    </style>
+      </style>
+  <script src="../js/ri.js"></script>
   </head>
-
-<body onload="myFunction()" style="margin:0;">
-<!--LOADER-->
-<div id="loader"></div>
-<div style="display:block;" id="myDiv" class="animate-bottom"><!--change none to block when developing-->
-<!--FOR DEV ONLY - show sql-->
-<div class="alert-danger">
+  
+  <body onload="myFunction()" style="margin:0;">
+    <!--LOADER-->
+    <div id="loader"></div>
+    <div style="display:block;" id="myDiv" class="animate-bottom"><!--change none to block when developing-->
+    <!--FOR DEV ONLY - show sql-->
+    <div class="alert-danger">
 </div>
 <?php
   $planxls = 'export-dpr-2021-plan.php?fiscalYear=' . $fiscal_year . '&status=' . $pStatus . '&owner=' . $owner . '&prog=' . $program_d . '&subprogram=' . $subprogram . '&region=' . $region . '&market=' . $market . '&facility=' . $facility ;
@@ -287,22 +301,8 @@
 
 </div>
 </body>
-<script src="../js/ri.js"></script>
 <script>
   
-  const ridata = <?= $jsonout ?>;  
-  const mangerlist = <?= $mangerout ?>;
-  const driverlist = <?= $driverout ?>;
-  const locationlist = <?= $locationout ?>;
-  const p4plist = <?= $p4pout ?>;
-  console.log(ridata)
-  
-  const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
-  const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Facility", width: "9"}, {name: "Owner", width: "28"}, {name: "Subprogram", width: "5"}];
-  const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
-  const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
-  const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "Program_Nm": {name: "Program", width: "9"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
-  const excelfields = {"RiskAndIssue_Key": "ID", "Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "owner": "Owner", "RIType_Cd": "Type", "Region_Cd": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver (primary)", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
 
   const populate = (rilist) => {
     console.log(rilist);
@@ -483,15 +483,15 @@
           ? (driverlist[program.RiskAndIssueLog_Key][0]) 
           ? driverlist[program.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
         },
-          projectcount: function() {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
-            return (projects.length>0) ? projects.length : "";
-          }, 
-          category: function() {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
-            return (projects.length>0) ? "Projects" : "Global";
-          }
-        };
+        projectcount: function() {
+          let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
+          return (projects.length>0) ? projects.length : "";
+        }, 
+        category: function() {
+          let projects = p4plist[program.RiskAndIssue_Key + "-" + program.ProgramRI_Key];
+          return (projects.length>0) ? "Projects" : "Global";
+        }
+      };
         
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
@@ -673,18 +673,20 @@
   const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.PROJECT_key == name);
   
   
-  const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
-  
+  // const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
+  const uniques = getuniques(ridata, "Program_Nm");
+
+
 
   const toggler = (target, o) => {
     // Toggles visibility of projects when a given program is clicked
     if (target != null) {
       if (target.className.indexOf("show") != -1) {
         target.className = target.className.replace("show", "");
-        o.children[0].innerHTML = "►";
+        // o.children[0].innerHTML = "►";
       } else { 
         target.className += "show";
-        o.children[0].innerHTML = "▼";
+        // o.children[0].innerHTML = "▼";
        }
     }
   }

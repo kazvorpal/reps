@@ -19,8 +19,8 @@ $project = (strpos($_SERVER["REQUEST_URI"], "project"))
     //This detects whether various JavaScript libraries are already loaded, or if this include needs to do it
 const bs = `
     <!-- Emergency loading of bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"><\/script> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"> 
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"><\/script> 
 `;
 
 const jq = `
@@ -32,14 +32,111 @@ const jq = `
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 `;
 
-window.jQuery || document.write(jq);
+// window.jQuery || document.write(jq);
 
 
-typeof $().emulateTransitionEnd == 'function' || document.write(bs);
+// typeof $().emulateTransitionEnd == 'function' || document.write(bs);
 
 </script>
 
 
+        <!-- <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5> -->
+        <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
+          <div class="form-group">
+            <div id="filterpanel" class="container-fluid"><div class="row" id="row"></div></div>
+            <br>
+ <table cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+	</form>
+
+    <script>
+  $(function(){
+    $('[data-toggle="popover"]').popover({ 
+      html : true, 
+      content: function() {
+        return $('#popover_content').html();
+      }  
+    });  
+  });  
+</script>
+<style>
+</style>
+<script type="text/javascript">
+  const makeselect = (o) => {
+    const td = makeelement({e: "div", c: "filtercol", t: o.t});
+    const select = makeelement(o);
+    if (o.i == "pStatus") {
+      select.appendChild(makeelement({e: "option", v: 1, t: "Open"}));
+      select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
+    } else if (o.i == "program") {
+      console.log(o.l)
+      for (option in o.l) 
+        if(o.l[option] != ""&& o.l[option] != null)
+          select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
+    } else {
+      const list = getuniques(o.l, o.f);
+      for (option in list) 
+        if(list[option] != ""&& list[option] != null)
+          select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+    }
+    td.appendChild(select);
+    document.getElementById("row").appendChild(td);
+  }
+
+    const programnames = getuniques(ridata, "Program_Nm");
+
+    const menuitems = {}
+
+
+    makeselect({l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", e: "select", c: "form-control", m: "multiple"});
+    makeselect({l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", e: "select", c: "form-control", m: "multiple"});
+    document.getElementById("row").appendChild(makeelement({e: "div", t: "Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
+    makeselect({l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", e: "select", c: "form-control", m: "multiple"});
+    if (mode == "program") {
+      makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", e: "select", c: "form-control", m: "multiple"});
+      makeselect({l: ridata, f: "Active_Flg", i: "pStatus", n: "pStatus", t: "Status<br/>", e: "select", c: "form-control", m: "multiple"});
+    }
+    makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", e: "select", c: "form-control", m: "multiple"});
+    makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
+    if (mode == "project") {
+      makeselect({l: locationlist, f: "Facility_Cd", i: "facility", n: "facility", t: "Facility<br/>", e: "select", c: "form-control", m: "multiple"});
+      makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", e: "select", c: "form-control", m: "multiple"})
+    }
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary">', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="reload()" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
+    
+    $('.daterange').daterangepicker({
+      autoUpdateInput: false,
+        locale: {
+          cancelLabel: 'Clear'
+        }
+      }); 
+      $('.daterange').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+    $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+      });
+  
+  
+</script>
 <script language="javascript">
 	$(document).ready(function() {
     $('#fiscal_year').multiselect({
@@ -74,148 +171,4 @@ typeof $().emulateTransitionEnd == 'function' || document.write(bs);
         });
 		
   });
-</script>
-        <!-- <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5> -->
-        <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
-          <div class="form-group">
-            <table width="500" border="0" align="center">
-              <tbody>
-                <tr>
-                  <td>Fiscal Year</td>
-                  <td align="center">Risk/Issue</td>
-                  <td align="center">Impact Level</td>
-                  <td align="center">Forecast Resolution Date</td>
-                  <?php  //if($fiscal_year !=0) { 
-                    if (!$project) {
-                    ?>
-                    <td>Status</td>
-                    <?php } ?>
-                    <td>Owner</td>
-                    <td>Program</td>
-                    <!-- <td>Subprogram</td> -->
-                    <td>Region</td>
-                    <!-- <td>Market</td>
-                    <td>Facility</td> -->
-                  <?php // } ?>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>
-                    <select name="fiscal_year[]"  multiple="multiple" class="form-control" id="fiscal_year" require <?php //if(isset($_POST['fiscal_year'])) { fltrSet($_POST['fiscal_year']); }?>>
-                      <!--<option value="All">Select Fiscal Year</option>-->
-                      <?php while($row_fiscal_year = sqlsrv_fetch_array( $stmt_fiscal_year, SQLSRV_FETCH_ASSOC)) { ?>
-                      <option value="<?php echo $row_fiscal_year['FISCL_PLAN_YR'];?>" ><?php echo $row_fiscal_year['FISCL_PLAN_YR'];?></option>
-                      <?php } ?>
-                    </select>
-                  </td>
-                  <td align="center">
-                    <select name="risk_issue[]" id="risk_issue" multiple="multiple" class="form-control">
-                      <option value="Risk">Risk</option>
-                      <option value="Issue">Issue</option>
-                    </select>
-                  </td>
-                  <td align="center">
-                    <select name="impact_level[]" id="impact_level" multiple="multiple" class="form-control">
-                      <option value="Minor">Minor Impact</option>
-                      <option value="Moderate">Moderate Impact</option>
-                      <option value="Major">Major Impact</option>
-                      <option value="No">No Impact</option>
-                    </select>
-                  </td>
-                  <td align="center"><input type="text" id="dateranger" class="daterange form-control" /></td>
-          <?php if (!$project) { ?>
-                <td><select name="pStatus[]" multiple="multiple" class="form-control" id="pStatus" style="background-color:#ededed">
-                  <option value="Active" <?php if($pStatus == -1 || $pStatus == 'Active' || $pStatus == 'Active|Closed') { echo 'selected="selected"';} ?>>Open</option>
-                  <option value="Closed" <?php if($pStatus == 'Closed' || $pStatus == 'Active|Closed') { echo 'selected="selected"';} ?>>Closed</option>
-                </select></td>
-          <?php } ?>
-                <td><select name="owner[]" multiple="multiple" class="form-control" id="owner" title="Move this selection back to SELECT OWNER to clear this filter" <?php //fltrSet($_POST['owner'])?>>
-                  <!--<option value="">Select Owner</option>-->
-                  <?php while($row_owner_drop = sqlsrv_fetch_array( $stmt_owner_drop, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_owner_drop['PROJ_OWNR_NM']?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>><?php echo $row_owner_drop['PROJ_OWNR_NM'];?></option>
-                  <?php } ?>
-                </select></td>
-
-                <td><select name="program[]" multiple="multiple" class="form-control" id="program" title="Move this selection back to SELECT PROGRAM to clear this filter" <?php //fltrSet($_POST['program'])?>>
-                  <!--<option value="">Select Program</option>-->
-                  <?php while($row_program_n = sqlsrv_fetch_array( $stmt_program_n, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_program_n['PRGM'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>><?php echo $row_program_n['PRGM'];?></option>
-                  <?php } ?>
-                </select></td>
-
-                <!-- <td><select name="subprogram[]" multiple="multiple" id="subprogram" title="Move this selection back to SELECT SUBPROGRAM to clear this filter" class="form-control" <?php //fltrSet($_POST['subprogram'])?>>
-                  <?php while($row_subprog = sqlsrv_fetch_array( $stmt_subprogram, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_subprog['Sub_Prg'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>><?php echo $row_subprog['Sub_Prg'];?> </option>
-                  <?php } ?>
-                </select></td> -->
-
-                <td><select name="region[]" multiple="multiple" id="region" title="Move this selection back to SELECT REGION to clear this filter" class="form-control"  <?php //fltrSet($_POST['region'])?>>
-                  <?php while($row_region_drop = sqlsrv_fetch_array( $stmt_region_drop, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_region_drop['Region'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>><?php echo $row_region_drop['Region'];?></option>
-                  <?php } ?>
-                </select></td>
-
-                <!-- <td><select name="market[]" multiple="multiple" class="form-control" id="market" title="Move this selection back to SELECT MARKET to clear this filter" <?php //fltrSet($_POST['market'])?>>
-                  <?php while($row_market_drop = sqlsrv_fetch_array( $stmt_market_drop, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_market_drop['Market'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>> <?php echo $row_market_drop['Market'];?></option>
-                  <?php } ?>
-                </select></td>
-
-                <td><select name="facility[]" multiple="multiple" class="form-control" id="facility" title="Move this selection back to SELECT MARKET to clear this filter" <?php //fltrSet($_POST['facility'])?>>
-                  <?php while($row_facility_drop = sqlsrv_fetch_array( $stmt_facility_drop, SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_facility_drop['Facility'];?>" <?php if($fiscal_year != 0) {echo 'selected="selected"';} ?>> <?php echo $row_facility_drop['Facility'];?></option>
-                  <?php } ?>
-                </select></td> -->
-
-                <td><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary"></td>
-                <td><a href="." onclick="reload()" title="Clear all filters"><span class="btn btn-default">Clear</span></a></td>
-                </tr>
-              </tbody>
-            </table>
-            <br>
- <table cellspacing="0" cellpadding="0">
-  <tbody>
-    <tr>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-  </tbody>
-</table>
-
-</div>
-	</form>
-
-    <script>
-  $(function(){
-    $('[data-toggle="popover"]').popover({ 
-      html : true, 
-      content: function() {
-        return $('#popover_content').html();
-      }  
-    });  
-  });  
-</script>
-<script type="text/javascript">
-  $('.daterange').daterangepicker({
-    autoUpdateInput: false,
-      locale: {
-        cancelLabel: 'Clear'
-      }
-    }); 
-    $('.daterange').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-  });
-  $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-    });
 </script>
