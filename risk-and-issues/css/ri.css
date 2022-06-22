@@ -78,7 +78,9 @@
 .subtitles {
   background-color: #34AEE8;
   color: #fff;
+  border-top: 1px solid #000;
   border-left: 1px solid #000;
+  border-right: 1px solid #000;
   padding: 10px;
   cursor: default;
   text-align: center;
