@@ -29,7 +29,7 @@
                                       Where Region_Cd='$ri_region'
                                       order by RiskAndIssue_Key desc";
 								$stmt_risk_issue_cls = sqlsrv_query( $data_conn, $sql_risk_issue_cls );
-//echo $sql_risk_issue_cls;
+///echo $sql_risk_issue_cls;
 
                 //USER AUTHORIZATION
                 $authUser = strtolower($windowsUser);

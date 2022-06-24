@@ -106,7 +106,13 @@ $sql_resp_strg = "SELECT* FROM RI_MGT.Response_Strategy WHERE ResponseStrategy_K
 $stmt_resp_strg = sqlsrv_query( $data_conn, $sql_resp_strg );  
 $row_resp_strg = sqlsrv_fetch_array( $stmt_resp_strg, SQLSRV_FETCH_ASSOC);
 $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
-    
+
+//GET POC EMAIL
+$sql_poc = "SELECT TOP(1) * FROM [RI_MGT].[fn_GetListOfCurrentTaskPOC] (1) WHERE POC_Nm = '$individual'";
+$stmt_poc  = sqlsrv_query( $data_conn, $sql_poc  );  
+$row_poc  = sqlsrv_fetch_array( $stmt_poc , SQLSRV_FETCH_ASSOC);
+$pocEmail = $row_poc ['POC_Email'];
+
     //$unknown = $_POST['Unknown']; // IF UNKNOWN IS CHECKED SEND NULL TO FORCASTED RESOLUTION DATE
     //$createdFrom = $_POST['CreatedFrom']; // THE RISK THE ISSUE WAS CREATED FROM - FOR ISSUE ONLY
     //$SPCode = '@SPCode' ;
@@ -224,7 +230,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
         
         //EMAIL PM AND RI CREATOR
             //DISTRO
-            $to = $userEmail .",Kirsten.DeWitty@cox.com,alec.flores@cox.com";
+            $to = $userEmail . "," . $pocEmail;
             $subject = $riLevel . " " .$riTypeCode . ' Created';
             $from = 'CCI-EESolutionsTeam@cox.com';
 
@@ -250,7 +256,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
             $message .="<br><b>POC Name & Group: </b>"; $message .= $individual . " : ". $internalExternal ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
-            $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;
+            $message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             
@@ -264,7 +270,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
 
         //START - EMAIL RAID ADMIN
         if($raidLog == 1) {
-            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com,Briana.Baynham@cox.com";
+            $to = "Briana.Baynham@cox.com";
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 
@@ -290,7 +296,7 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
             $message .="<br><b>POC Name & Group: </b>"; $message .= $individual . ":" . $internalExternal ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
-            $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;
+            $message .="<br><b>Associated Projects: </b>"; $message .= $assocProject ;
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             

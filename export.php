@@ -85,7 +85,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       </td>
       <td><?php echo $row_program_n['PHASE_NAME'];?></td>
       <td><?php echo $row_program_n['WATTS_MO'];?></td>
-      <td><?php echo $row_program_n['Sub_Prg'];?></td>
+      <td><?php echo $row_program_n['SCOP_DESC'];?></td>
       <td><?php echo $row_program_n['PPM_PROJ'];?></td>
       <td><?php echo $row_program_n['ENTRPRS_PROJ_TYPE_NM'];?></td>
       <td><?php echo convtimex($row_program_n['Plan_Start_Dt'], 'Y-m-d');?></td>

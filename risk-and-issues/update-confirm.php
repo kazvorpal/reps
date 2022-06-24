@@ -23,6 +23,13 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // echo $row_risk_issue_driver['Driver_Nm]; 			
 //echo $sql_risk_issue_driver;
 //exit();
+
+//GET ASSOCIATED PROJECTS 
+$sql_ri_assoc_prj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',1)";
+$stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
+//$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+//$Projassoc = $row_risk_issue_assoc_proj['proj_nm']; //NEED TO SHOW ALL DRIVER LOOP
+
 ?>
 <!doctype html>
 <html>
@@ -103,7 +110,7 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
     <input name="unknown" type="hidden" id="unknown" value="<?php echo $unknown ?>">
     <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?php echo $transfer2prgManager ?>">
     <input name="opportunity" type="hidden" id="opportunity" value="<?php echo $opportunity?>">
-    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
+    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php while ($row_ri_assoc_prj = sqlsrv_fetch_array($stmt_ri_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_ri_assoc_prj['proj_nm'] . '<br>'; } ?>">
     <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo $actionPlan ?>">
     <input name="DateClosed" type="hidden" id="DateClosed" value="<?php echo $DateClosed ?>">
     <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">

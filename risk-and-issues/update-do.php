@@ -25,9 +25,9 @@ include ("../sql/MS_Users_prg.php");
     $createdfrom = $_POST['createdFrom'];
     $usedButton = $_POST['submit2'];
     $userId = $_POST['userId']; // WINDOWS LOGIN NAME
-    $formName = $_POST['formName']; // PRJR, PRJI, PRGI, PRGR
-    $formType = $_POST['formType']; // NEW 
-    $lrpYear = (int)$_POST['fiscalYer']; // FISCAL YEAR OF THE PROJECT
+    $formName = $_POST['formName']; // PRJR, PRJI, PRGI, PRGR 
+    $formType = $_POST['formType']; // CREATE/UPDATE
+    $lrpYear = (int)$_POST['fiscalYer']; // FISCAL YEAR OF THE PROJECT/PROGRAM
     $riTypeCode = $_POST['RIType']; // RISK OR ISSUE
     $name = $_POST['name']; // PROJECT NAME
     $drivers = $_POST['drivers'];
@@ -35,8 +35,8 @@ include ("../sql/MS_Users_prg.php");
     $impactArea = (int)$_POST['impactArea']; 
     $impactLevel = (int)$_POST['impactLevel'];
     $responseStrategy = $_POST['responseStrategy'];
-    $assocProject = $_POST['assocProjects']; // MULTI AS OF 4/19
-        $emailAssocProj = str_replace(", ", ",",$drivers);//ASSOCIATED PROJECTS LIST FOR EMAIL
+    $assocProject = substr_replace($_POST['assocProjects'],"",-4); // MULTI 
+        $emailAssocProj = str_replace(", ", ",",$drivers);//ASSOCIATED PROJECTS LIST FOR EMAIL // THIS IS DEAD
     $assocProgram = $_POST['program']; // USE ONLY FOR PROGRAM RISK OR ISSUE OTHERWISE EMPTY // MULTI AS OF 4/19
     $individual = $_POST['individual']; 
     $internalExternal = $_POST['internalExternal']; 
@@ -126,15 +126,23 @@ include ("../sql/MS_Users_prg.php");
     //GET DRIVERS FROM ID'S
     $sql_risk_issue_driver = "SELECT Driver_Nm FROM [RI_MGT].[Driver] where Driver_Key in ($drivers)";
     $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
-    $json_array =  array();
-    while($row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC)) {
-        $json_array[] = $row_risk_issue_driver;
-    }
-        //print(json_encode($json_array));
-        $emailDrivers = json_encode($json_array) ; // you left off here 3.16.22 still not done
-        $jd = json_decode($emailDrivers);
+    $row_risk_issue_driver = sqlsrv_fetch_array( $stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+    $emailDrivers = $row_risk_issue_driver['Driver_Nm'];
 
-    //GET PROGRAM OWNERS
+        //CREATES JSON ARRAY FOR MULTIPLE DRIVER - NOT IN USE
+        //$json_array =  array();
+        //while($row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC)) {
+        //    $json_array[] = $row_risk_issue_driver;
+        //}
+            //print(json_encode($json_array));
+        //    $emailDrivers = json_encode($json_array) ; // you left off here 3.16.22 still not done
+        //   $jd = json_decode($emailDrivers);
+
+    //GET POC EMAIL
+    $sql_poc = "SELECT TOP(1) * FROM [RI_MGT].[fn_GetListOfCurrentTaskPOC] (1) WHERE POC_Nm = '$individual'";
+    $stmt_poc  = sqlsrv_query( $data_conn, $sql_poc  );  
+    $row_poc  = sqlsrv_fetch_array( $stmt_poc , SQLSRV_FETCH_ASSOC);
+    $pocEmail = $row_poc ['POC_Email'];
 
     $SPCode = NULL ;
     $SPMessage = NULL ;
@@ -246,10 +254,10 @@ include ("../sql/MS_Users_prg.php");
     if($SPCode == 0) {
         echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>ID: ' . $SPBatch_Id . '</div>';
         //EMAIL PM AND RI CREATOR
-        if($changeLogKey == 3){
+        if($changeLogKey == 3 || $changeLogKey == 4){
             //DISTRO
-            $to = $userEmail .",Kirsten.DeWitty@cox.com,alec.flores@cox.com";
-            $subject = 'Risk and Issue CLOSED';
+            $to = $userEmail . ",". $pocEmail;
+            $subject = 'Risk and Issue ' . $changeLogName;
             $from = 'CCI-EESolutionsTeam@cox.com';
 
             // BUILD HEADER CONTENT
@@ -262,7 +270,7 @@ include ("../sql/MS_Users_prg.php");
                 'X-Mailer: PHP/' . phpversion();
 
             // BUILD EMAIL BODY
-            $message = "<p>A " . $riLevel . " " .$riTypeCode . "  has been CLOSED.  Below are the details.</p>";
+            $message = "<p>A " . $riLevel . " " .$riTypeCode . "  has been " . $changeLogName . ".  Below are the details.</p>";
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -273,7 +281,7 @@ include ("../sql/MS_Users_prg.php");
             $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
-            $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;
+            if($formName == "PRJR" || $formName == "PRJI"){$message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;}
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
 
@@ -287,8 +295,8 @@ include ("../sql/MS_Users_prg.php");
         //END - EMAIL TO PM AND RI CREATOR
 
         //START - EMAIL RAID ADMIN
-        if($raidLog == "Yes") {
-            $to = "gilbert.carolino@cox.com,Kirsten.DeWitty@cox.com,Briana.Baynham@cox.com";
+        if($raidLog == 1) {
+            $to = "Briana.Baynham@cox.com";
             $subject = "Updated Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 
@@ -314,7 +322,7 @@ include ("../sql/MS_Users_prg.php");
             $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
-            $message .="<br><b>Associated Projects: </b>"; $message .= $emailAssocProj ;
+            if($formName == "PRJR" || $formName == "PRJI"){$message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;}
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             
