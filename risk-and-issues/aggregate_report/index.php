@@ -230,8 +230,8 @@
       const p4plist = <?= $p4pout ?>;
       console.log(ridata)
       
-      const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
-      const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Facility", width: "9"}, {name: "Owner", width: "28"}, {name: "Subprogram", width: "5"}];
+      const projectfields = ["EPSProject_Nm", "Subprogram_nm", "EPSProject_Owner", "Region_Cd", "Market_Cd", "EPS_Location_Cd"];
+      const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}];
       const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
       const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
       const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "Program_Nm": {name: "Program", width: "9"}, "Region_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
@@ -496,7 +496,7 @@
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.Program_Nm);
         const saferi = makesafe(program.RI_Nm);
-        console.log(program.ImpactLevel_Nm);
+        // console.log(program.ImpactLevel_Nm);
         if (document.getElementById('impact_level').value != "") {
           // console.log($('#impact_level').val());
           // console.log(program.ImpactLevel_Nm);
@@ -566,10 +566,11 @@
 
     document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
     document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
-    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 4}));
+    document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
     if (projects.length != 0) {
       const table = document.createElement("table");
       table.id = "table" + saferi;
+      table.className = "projecttable";
       table.appendChild(projectheader());
       document.getElementById("td" + saferi).appendChild(table);
       let p = [];
@@ -579,7 +580,14 @@
           tr.id = "tr" + project.PROJECT_key;
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
-            tr.appendChild(makeelement({e: "td", t: project[field], c: "p4 datacell"}));
+            console.log(project);
+            locale = getlocationbykey(project.PROJECT_key);
+            console.log(locale);
+            txt = (field == "Region_Cd") ? locale.Region_Cd 
+              : (field == "Market_Cd") ? locale.Market_Cd 
+              : (field == "EPS_Location_Cd")  ? locale.Facility_Cd 
+              : project[field];
+            tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
           }
           p.push(project.PROJECT_key);
         }
@@ -594,7 +602,7 @@
     // Make the header row for a project 
     const trri = document.createElement("tr");
     for (field of Object.keys(projectfieldnames)) {
-      trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-4 titles", w: projectfieldnames[field].width}));
+      trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-4 subtitles", w: projectfieldnames[field].width}));
     }
     // trri.appendChild(makeelement({e: "th", w: "69"}));
     return trri;

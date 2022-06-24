@@ -75,6 +75,20 @@
   font-size: x-small;
   text-transform:uppercase;
 }
+.subtitles {
+  background-color: #34AEE8;
+  color: #fff;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+  padding: 10px;
+  cursor: default;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: x-small;
+  text-transform:uppercase;
+}
 .datarow {
     color: #000;
     border: 1px solid #888;
@@ -115,5 +129,20 @@
 .filtercol {
   display: inline-block;
 }
-
-
+.projecttable {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.lightbox {
+  /* position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0, 0, 0, .3); */
+  display:none;
+  cursor:pointer
+}
+#cboxClose {
+  top: 0px !important;
+}
