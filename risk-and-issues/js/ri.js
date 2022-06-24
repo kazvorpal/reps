@@ -55,12 +55,36 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
 
 
 //   const mapper = (mode == "project") ? "Project_Key" : "Program_Nm";
-  const mapper = (mode == "project") ? "Project_Key" : "Program_Nm";
+  const mapper = "RiskAndIssue_Key";
   const key = (mode == "project") ? "Project_Key" : "PROJECT_Key";
-  const filtration = () => {
-    let filtered = ridata.filter(function(o) {
+
+    const filtery = (o) => {
         console.log(o);
-        console.log(o.ForecastedResolution_Dt);
+        // console.log(o.ForecastedResolution_Dt);
+        // console.log(getlocationbykey(o[key]));
+        console.log  (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1)
+        // console.log(($('#pStatus').val()).includes(toString(o.Active_Flg)));
+        return (
+        (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
+        (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+        (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
+        ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
+        (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1) &&
+        (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm) || key == "Project_Key") &&
+        (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
+        (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
+        (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
+        (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
+        );
+    }
+
+
+  const filtration = () => {
+      console.log("filtering");
+    let filtered = ridata.filter(function(o) {
+        // console.log(o);
+        console.log(mode);
+        // console.log(o.ForecastedResolution_Dt);
         // console.log(getlocationbykey(o[key]));
         // console.log($('#owner').val());
         // console.log(($('#pStatus').val()).includes(toString(o.Active_Flg)));
@@ -68,10 +92,11 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
           (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
           (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
           (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
-          (o.LastUpdateBy_Nm != null ||document.getElementById("owner").value == '' || ($('#owner').val()).includes(o.LastUpdateBy_Nm)) &&
+          ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
           (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1) &&
           (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm) || key == "Project_Key") &&
-          (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
+          (mode == "project" || document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
+          (mode == "program" || (getlocationbykey(o[key]) != undefined) && (document.getElementById("region").value == '' || $('#region').val().includes(getlocationbykey(o[key]).Region_Cd))) &&
           (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
           (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
           (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
@@ -90,9 +115,10 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     //     }
     //     filtered = secondpass;
     // }
-      console.log(document.f = filtered);
-    const results = (mode == "program") ? filtered.map(item => item[mapper]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.RiskAndIssue_Key);
-    // console.log(results);
+    //   console.log(document.f = filtered);
+    // const results = (mode == "program") ? filtered.map(item => item[mapper]).filter((value, index, self) => self.indexOf(value) === index) : filtered.map(item => item.RiskAndIssue_Key);
+    results = (mode == "program") ? removenullproperty(getwholeuniques(filtered, "Program_Nm"), "Program_Nm") : getwholeuniques(filtered, "RiskAndIssue_Key");
+    console.log(results);
     return results;
   }  
   const searchproperty = (list, field, value) => {
@@ -157,19 +183,40 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     return filtered.map(item => item.Project_Key).filter((value, index, self) => self.indexOf(value) === index)
   }  
 
+    const reload = () => {
+        document.getElementById("formfilter").reset();
+    }
 
 
     const getuniques = (list, field) => {
         return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index);
     }
-
-    const getuniqueobjects = (list, field) => {
-        return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index);
+    const getwholeuniques = (list, field) => {
+        return list.filter((value, index, self) => {
+            return self.findIndex(v => v[field] === value[field]) === index;
+        })
+    }
+     
+    const removenullproperty = (list, field) => {
+        return list.filter(function(value) {
+            return value[field] != null;
+        })
     }
 
-
-
-
+    const getuniqueobjects = (list, field) => {
+        const objectlist = list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index);
+        // console.log(objectlist);
+        let returnlist = [];
+        for (item in objectlist) {
+            console.log(objectlist[item]);
+            if (objectlist[item].Program_Nm != null) {
+                let hold = getribykey(objectlist[item])
+                returnlist.push(hold);
+            }
+        }
+        // console.log(returnlist);
+        return(returnlist);
+    }
 
     const initexcel = () => {
         let cols = [];

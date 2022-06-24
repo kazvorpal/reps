@@ -86,7 +86,7 @@ const jq = `
       select.appendChild(makeelement({e: "option", v: 1, t: "Open"}));
       select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
     } else if (o.i == "program") {
-      console.log(o.l)
+      // console.log(o.l)
       for (option in o.l) 
         if(o.l[option] != ""&& o.l[option] != null)
           select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
@@ -101,7 +101,7 @@ const jq = `
   }
 
     const programnames = getuniques(ridata, "Program_Nm");
-
+console.log(programnames)
     const menuitems = {};
 
 

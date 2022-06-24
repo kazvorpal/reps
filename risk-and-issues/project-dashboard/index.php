@@ -346,11 +346,10 @@ include ("../../includes/load.php");
         d.src = target.href;
     }
 
-    const createrow = (name) => {
-      
+    const createrow = (ri) => {
+      const name = ri.RI_Nm;
       // Create a row in the table
-      const ri = getribykey(name);
-      // console.log(ri);
+      // const ri = getribykey(name);
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
       const fieldswitch = {
@@ -416,13 +415,13 @@ include ("../../includes/load.php");
               return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
           },
           subprogram: function() {
-              console.log("p4plist");
-              console.log(ri);
+              // console.log("p4plist");
+              // console.log(ri);
               if (ri.ProgramRI_Key != null) {
                 p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgram_Key]
-                console.log(ri);
-                console.log(ri.RiskAndIssue_Key + "-" + ri.ProgramRI_Key + ":" + ri.MLMProgram_Key);
-                console.log(p4plist[ri.RiskAndIssue_Key + "-" + ri.ProgramRI_Key]);
+                // console.log(ri);
+                // console.log(ri.RiskAndIssue_Key + "-" + ri.ProgramRI_Key + ":" + ri.MLMProgram_Key);
+                // console.log(p4plist[ri.RiskAndIssue_Key + "-" + ri.ProgramRI_Key]);
               }
               // program.RiskAndIssue_Key + "-" + program.ProgramRI_Key
           }
@@ -456,14 +455,6 @@ include ("../../includes/load.php");
     }  
 
 
-    function listri(target, type) {
-      
-      // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-      
-      pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.Program_Nm == target);
-      uni = pre.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
-      return uni;
-    }
     
     const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
     const getribykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
@@ -471,7 +462,7 @@ include ("../../includes/load.php");
     const fulllist = ridata.map(item => item.RiskAndIssue_Key);
     
     // const uniques = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index)
-    const uniques = getuniques(ridata, "RiskAndIssue_Key");
+    const uniques = getwholeuniques(ridata, "RiskAndIssue_Key");
 
     const exporter = () => {
       document.workbook.xlsx.writeBuffer().then((buf) => {
@@ -520,7 +511,7 @@ include ("../../includes/load.php");
       return false;
     }  
     // console.log(fulllist)
-    populate(fulllist);
+    populate(uniques);
   </script>
   </body>
 </html>

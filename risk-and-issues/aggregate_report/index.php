@@ -228,7 +228,7 @@
       const driverlist = <?= $driverout ?>;
       const locationlist = <?= $locationout ?>;
       const p4plist = <?= $p4pout ?>;
-      console.log(ridata)
+      // console.log(ridata)
       
       const projectfields = ["EPSProject_Nm", "Subprogram_nm", "EPSProject_Owner", "Region_Cd", "Market_Cd", "EPS_Location_Cd"];
       const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}];
@@ -321,6 +321,7 @@
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
+        console.log(loop);
         makerow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
       }
     }
@@ -348,25 +349,28 @@
     return buf;    
   }
 
-  const makerow = (name, risks, issues) => {
+  const makerow = (target, risks, issues) => {
 
     // Runs once per Program
 
-    const safename = makesafe(name);
+    // console.log(target);
+    // const name = id;
+    const safename = makesafe(target.Program_Nm);
+    console.log(safename);
     const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
     const banner = makebanner(safename);
     const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
     const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
     const table = makeelement({e: "table", i: "table" + safename, c: "table"});
 
-    banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: name}));
+    banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: target.Program_Nm}));
     banner.appendChild(document.createTextNode(" (R:" + risks + " I:" + issues + ")"));
     item.appendChild(banner);
     item.appendChild(collapse).appendChild(body).appendChild(table);
     document.getElementById("main").appendChild(item);
 
-    makeri(name, "Risk");
-    makeri(name, "Issue");
+    makeri(target, "Risk");
+    makeri(target, "Issue");
   }  
 
   const makebanner = (safename) => {
@@ -383,20 +387,20 @@
     return banner;
   }  
 
-  const makeri = (name, type) => {
+  const makeri = (ri, type) => {
     // Create a Risk or Issue section
-    
-    program = getprogrambyname(name);
+    name = ri.Program_Nm;
+    // program = getribykey(name);
     if (
       (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
-      (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(program.ImpactLevel_Nm))
+      (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(ri.ImpactLevel_Nm))
       ){
-        let lr = listri(name, type);
-        if (lr.length != 0) {
+        let list = listri(name, type);
+        if (list.length != 0) {
           document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
           // console.log(ridata)
-          for (ri of lr) {
-            makedata(ri, type, name);  
+          for (ri of list) {
+            makedata(ri, type, name);
           }
         }
       }
@@ -580,9 +584,9 @@
           tr.id = "tr" + project.PROJECT_key;
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
-            console.log(project);
+            // console.log(project);
             locale = getlocationbykey(project.PROJECT_key);
-            console.log(locale);
+            // console.log(locale);
             txt = (field == "Region_Cd") ? locale.Region_Cd 
               : (field == "Market_Cd") ? locale.Market_Cd 
               : (field == "EPS_Location_Cd")  ? locale.Facility_Cd 
@@ -674,15 +678,38 @@
     // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
     
     pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.Program_Nm == target);
-    uni = pre.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
+    post = pre.filter(function(o) {
+        console.log(o);
+        // console.log(o.ForecastedResolution_Dt);
+        // console.log(getlocationbykey(o[key]));
+        console.log  (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1)
+        // console.log(($('#pStatus').val()).includes(toString(o.Active_Flg)));
+        return (
+          (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
+          (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+          (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
+          ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
+          (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1) &&
+          (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.Program_Nm) || key == "Project_Key") &&
+          (document.getElementById("region").value == '' || $('#region').val().includes(o.Region_Cd)) &&
+          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
+          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
+          (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
+        );
+    });
+    uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni;
   }
-  
+
+  const getprogramnamefromrikey = (target) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
+
+  const getribykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
+
   const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.PROJECT_key == name);
   
   
   // const uniques = ridata.map(item => item.Program_Nm).filter((value, index, self) => self.indexOf(value) === index)
-  const uniques = getuniques(ridata, "Program_Nm");
+  const uniques = removenullproperty(getwholeuniques(getwholeuniques(ridata, "RiskAndIssue_Key"), "Program_Nm"), "Program_Nm");
 
 
 
