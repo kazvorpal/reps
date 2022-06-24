@@ -15,23 +15,13 @@
 <title>Detailed Phase Report</title>
 <link rel="shortcut icon" href="favicon.ico"/>
 <?php include ("includes/load.php");?>
-<!--<link href="jQueryAssets/jquery.ui.core.min.css" rel="stylesheet" type="text/css">
-<link href="jQueryAssets/jquery.ui.theme.min.css" rel="stylesheet" type="text/css">
-<link href="jQueryAssets/jquery.ui.button.min.css" rel="stylesheet" type="text/css">-->
 
 <link rel="stylesheet" href="colorbox-master/example1/colorbox.css" />
-<!--<link href="css/bootstrap-3.3.4.css" rel="stylesheet" type="text/css">-->
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
-
-  <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"> -->
-  <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script> -->
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <!--<script src="bootstrap/js/jquery-1.11.2.min.js"></script>-->
 <script src="colorbox-master/jquery.colorbox.js"></script>
