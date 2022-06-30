@@ -248,7 +248,7 @@
       const locationlist = <?= $locationout ?>;
       const p4plist = <?= $p4pout ?>;
       // console.log(ridata)
-      
+      const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "Corp"}
       const projectfields = ["EPSProject_Nm", "Subprogram_nm", "EPSProject_Owner", "MLMRegion_Cd", "Market_Cd", "EPS_Location_Cd"];
       const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}];
       const finder = (target, objective) => (target.find(o => o.MLMProgram_Nm == objective));
@@ -474,18 +474,21 @@
           return  (program.RiskRealized_Flg) ? "Y" : "";
         },
         MLMRegion_Cd: function() {
+          let list = ""
           let counter = 0;
           for(r of ridata) {
-              if (r.RI_Nm == program.RI_Nm) {
+              if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
                 counter++;
+                list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : r.MLMRegion_Cd;
               }
             }
-          return (counter < 2) ? program.MLMRegion_Cd : "Multiple";
+            console.log(list.slice(0, -2));
+          return (list.slice(0, -2));
         },
         regioncount: function() {
           let counter = 0;
           for(r of ridata) {
-              if (r.RI_Nm == program.RI_Nm) {
+              if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
                 counter++;
               }
             }
@@ -513,7 +516,7 @@
           let list = "";
           for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
             list += r.Subprogram_nm + ", ";
-            console.log(r.Subprogram_nm);
+            // console.log(r.Subprogram_nm);
           } 
           return list.slice(0, -2);
         },

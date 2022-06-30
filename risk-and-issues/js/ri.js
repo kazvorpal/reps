@@ -77,9 +77,9 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   const filtration = () => {
     //   console.log("filtering");
     let filtered = ridata.filter(function(o) {
-        console.log($("#pStatus").val());
-        console.log(o.RIActive_Flg.toString());
-        console.log($("#pStatus").val().includes(o.RIActive_Flg.toString()));
+        // console.log($("#pStatus").val());
+        // console.log(o.RIActive_Flg.toString());
+        // console.log($("#pStatus").val().includes(o.RIActive_Flg.toString()));
         // console.log(mode);
         // console.log(o.ForecastedResolution_Dt);
         // console.log(getlocationbykey(o[key]));
