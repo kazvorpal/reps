@@ -422,7 +422,7 @@
         //    in the format {fieldname: "Human Name"}
         //    If it exists as a field in ridata, it will be populated.
         //    If instead you need to do some calculation to produce it,
-        //    add its fieldname to this "switch" constant.
+        //    add its fieldname to this "switch" object, fieldswitch.
         RiskAndIssue_Key: function() {
           return text;
         },
@@ -531,65 +531,49 @@
       const saferi = makesafe(program.RI_Nm);
       const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + program["RiskAndIssue_Key"]  + "&fscl_year=" + program["Fiscal_Year"] + "&proj_name=" + program["EPSProject_Nm"];
       const text = "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + program["RiskAndIssue_Key"] + "</a>";
-        // console.log(program.ImpactLevel_Nm);
-        if (document.getElementById('impact_level').value != "") {
-          // console.log($('#impact_level').val());
-          // console.log(program.ImpactLevel_Nm);
-          // console.log($('#impact_level').val().includes(program.ImpactLevel_Nm));
-          // console.log(program.ImpactLevel_Nm);
-          // console.log(document.getElementById('impact_level').selectedOptions);
-          // console.log(document.getElementById('impact_level').selectedOptions.namedItem(program.ImpactLevel_Nm));
-          for (let option of document.getElementById('impact_level').options) {
-            if(option.selected) {
-              if(option.value == program.ImpactLevel_Nm)
-                console.log("match")
-              else
-                console.log("fail")
-            }
+      if (document.getElementById('impact_level').value != "") {
+        for (let option of document.getElementById('impact_level').options) {
+          if(option.selected) {
+            if(option.value == program.ImpactLevel_Nm)
+              console.log("match")
+            else
+              console.log("fail")
           }
         }
-        if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
-          const trid = "tr" + type + saferi + Math.random();
-          document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: "ptr"}));
-          const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "";
-          const c = (arrow == "") ? "plainbox" : "namebox";
-          const header = makeelement({
-            "e": "th", 
-            "i": "th" + type + saferi, 
-            // "t": "<div class='arrows' id='arrow" + saferi + "'> " + arrow + " </div><div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-            // "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-            // "c":"p-4 " + c
-            "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-            "c":"p-4 " + c
-          });
-          const tridobj = document.getElementById(trid);
-          if (arrow != "") {
-            tridobj.onclick = function() {
-              toggler(document.getElementById("projects" + saferi), this.children[0]);
-            };
+      }
+      if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
+        const trid = "tr" + type + saferi + Math.random();
+        document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: "ptr"}));
+        const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "";
+        const c = (arrow == "") ? "plainbox" : "namebox";
+        const header = makeelement({
+          "e": "th", 
+          "i": "th" + type + saferi, 
+          "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+          "c":"p-4 " + c
+        });
+        const tridobj = document.getElementById(trid);
+        if (arrow != "") {
+          tridobj.onclick = function() {
+            toggler(document.getElementById("projects" + saferi), this.children[0]);
+          };
+        }
+        for (field of Object.keys(rifields)) {
+          (function(test) {
+            const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+            tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell"}));
+          })(field);
+          if (rifields[field].name == "ID") {
+            tridobj.appendChild(header);
           }
-          for (field of Object.keys(rifields)) {
-            (function(test) {
-              const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell"}));
-            })(field);
-            if (rifields[field].name == "ID") {
-              tridobj.appendChild(header);
-            }
-          }
-          var rowValues = [];
-          // for (field in program) {
-            //   (function(test) {
-              //     const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-              //     rowValues.push(texter);
-              //   })(field);
-              // }
-          for (field in excelfields) {
-            (function(test) {
-                const t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
-            })(field);
-          }
+        }
+        var rowValues = [];
+        for (field in excelfields) {
+          (function(test) {
+              const t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+              rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
+          })(field);
+        }
       let newrow = document.worksheet.addRow(rowValues);
       if(arrow != "") {
         makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
@@ -617,9 +601,7 @@
           tr.id = "tr" + project.EPSProject_Key;
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
-            // console.log(project);
             locale = getlocationbykey(project.EPSProject_Key);
-            // console.log(locale);
             txt = (field == "MLMRegion_Cd") ? locale.Region_Cd 
               : (field == "Subprogram") ? locale.Subprogram_nm 
               : (field == "Market_Cd") ? locale.Market_Cd 
@@ -642,7 +624,6 @@
     for (field of Object.keys(projectfieldnames)) {
       trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-4 subtitles", w: projectfieldnames[field].width}));
     }
-    // trri.appendChild(makeelement({e: "th", w: "69"}));
     return trri;
   }  
 
@@ -650,11 +631,7 @@
   const makeheader = (name, type) => {
     
     // Make the header row for a risk or issue
-    // let cells = [];
-    // for (field in rifields) {
-    //   cells.push(rifields[field]);
-    // }
-    // document.worksheet.addRow(cells);
+
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
     let cells = ["Risk/Issue"];
@@ -666,40 +643,18 @@
         trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
       }
     }
-    // document.worksheet.addRow(cells);
     excelrows();
-    // document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true};
     return trri;
   }
 
   // Utility functions
-
-  const todate = (date) => new Date(date).toLocaleString("en-US", {day: "numeric", month: "numeric", year: "numeric"}).replace(/-/g, "/");  
 
   function countri(target, type) {
     
     // returns count of risks or issues for a given program, taking program name and type (risk, issue)
     
     pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.MLMProgram_Nm == target);
-    post = pre.filter(function(o) {
-        // console.log(o);
-        // console.log(o.ForecastedResolution_Dt);
-        // console.log(getlocationbykey(o[key]));
-        // console.log  (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1)
-        // console.log(($('#pStatus').val()).includes(toString(o.RIActive_Flg)));
-        return (
-          (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
-          (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-          (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
-          ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
-          (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || $("#pStatus").val().includes(o.RIActive_Flg.toString())) &&
-          (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || key == "EPSProject_Key") &&
-          (document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
-          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
-          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
-          (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
-        );
-    });
+    post = pre.filter(filterfunction);
     uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni.length;
   }
@@ -708,24 +663,7 @@
     // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
     
     pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.MLMProgram_Nm == target);
-    post = pre.filter(function(o) {
-        // console.log(o);
-        // console.log(o.ForecastedResolution_Dt);
-        // console.log(getlocationbykey(o[key]));
-        // console.log  (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || document.getElementById("pStatus").value == 1)
-        // console.log(($('#pStatus').val()).includes(toString(o.RIActive_Flg)));
-        return (
-          (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
-          (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-          (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
-          ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
-          (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || key == "EPSProject_Key") &&
-          (document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
-          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("market").value == '' || $('#market').val().includes(getlocationbykey(o[key]).Market_Cd))) &&
-          (mode == "program" || getlocationbykey(o[key]) != undefined && (document.getElementById("facility").value == '' || $('#facility').val().includes(getlocationbykey(o[key]).Facility_Cd))) &&
-          (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
-        );
-    });
+    post = pre.filter(filterfunction);
     uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni;
   }

@@ -100,7 +100,7 @@ const jq = `
     document.getElementById("row").appendChild(td);
   }
 
-    const programnames = getuniques(ridata, "MLMProgram_Nm");
+    const programnames = (mode == "program") ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
 console.log(programnames)
     const menuitems = {};
 
@@ -113,7 +113,7 @@ console.log(programnames)
     }
     makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", e: "select", c: "form-control", m: "multiple"});
     makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", e: "select", c: "form-control", m: "multiple"});
-    makeselect({l: locationlist, f: "MLMRegion_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
+    makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
     if (mode == "project") {
       makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", e: "select", c: "form-control", m: "multiple"});
       makeselect({l: locationlist, f: "Facility_Cd", i: "facility", n: "facility", t: "Facility<br/>", e: "select", c: "form-control", m: "multiple"});
