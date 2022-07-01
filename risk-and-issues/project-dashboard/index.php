@@ -41,6 +41,27 @@ include ("../../includes/load.php");
         $rows[] = array_map("fixutf8", $row);
       }
       
+      $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'project'";
+      print '<!--' . $sqlstr . "<br/>-->";
+      ini_set('mssql.charset', 'UTF-8');
+      $closedquery = sqlsrv_query($data_conn, $sqlstr);
+      if($closedquery === false) {
+        if(($error = sqlsrv_errors()) != null) {
+          foreach($errors as $error) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".$error[ 'message']."<br />";
+          }
+        }
+      } else {
+        $closedrows = array();
+        $count = 1;
+        while($row = sqlsrv_fetch_array($closedquery, SQLSRV_FETCH_ASSOC)) {
+          $closedrows[] = array_map("fixutf8", $row);
+        }
+      }
+
+
       $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
       // print '<!--' . $sqlstr . "<br/> -->";
       $locationquery = sqlsrv_query($data_conn, $sqlstr);
@@ -63,11 +84,10 @@ include ("../../includes/load.php");
         }
       }
 
-
       $p4plist = array();
       foreach ($rows as $row)  {
-        if($row["ProgramRI_Key"] != '') {
-          $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["ProgramRI_Key"] .")";
+        if($row["MLMProgramRI_Key"] != '') {
+          $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .")";
           ini_set('mssql.charset', 'UTF-8');
           $p4pquery = sqlsrv_query($data_conn, $sqlstr);
           if($p4pquery === false) {
@@ -88,14 +108,14 @@ include ("../../includes/load.php");
               $checker = 1;
             }
           }
-          $p4plist[$row["RiskAndIssue_Key"]."-".$row["ProgramRI_Key"]] = $p4prows;
+          $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
         }
       }
       
       $mangerlist = array();
       foreach ($rows as $row)  {
-        if($row["ProgramRI_Key"] != '') {
-          $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["Program_Nm"] ."')";
+        if($row["MLMProgramRI_Key"] != '') {
+          $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["MLMProgram_Nm"] ."')";
           ini_set('mssql.charset', 'UTF-8');
           $mangerquery = sqlsrv_query($data_conn, $sqlstr);
           if($mangerquery === false) {
@@ -116,13 +136,66 @@ include ("../../includes/load.php");
             $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
           }
         }
+
+        $driverlist = array();
+        foreach ($rows as $row)  {
+          if($row["RiskAndIssue_Key"] != '') {
+            // Get OWNERS //
+            $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(". $row["RiskAndIssueLog_Key"] ." , 1)";
+            // print $sqlstr . "<br>";
+            ini_set('mssql.charset', 'UTF-8');
+            $driverquery = sqlsrv_query($data_conn, $sqlstr);
+            if($driverquery === false) {
+              if(($error = sqlsrv_errors()) != null) {
+                foreach($errors as $error) {
+                  echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+                  echo "code: ".$error[ 'code']."<br />";
+                  echo "message: ".$error[ 'message']."<br />";
+                }
+              }
+            } else {
+              $count = 1;
+              $driverrows = array();
+              while($driverrow = sqlsrv_fetch_array($driverquery, SQLSRV_FETCH_ASSOC)) {
+                $driverrows[] = array_map("fixutf8", $driverrow);
+              }
+            }
+            $driverlist[$row["RiskAndIssueLog_Key"]] = $driverrows;
+          }
+        }
+  
         $p4pout = json_encode($p4plist);
         $mangerout = json_encode($mangerlist);
+        $driverout = json_encode($driverlist);
         $locationout = json_encode($locationrows);
         $jsonout = json_encode($rows);
+        $closedout = json_encode($closedrows);
       }
-
     ?>
+    <script>
+
+      const ridata = <?= $jsonout ?>;  
+      const closeddata = <?= $closedout ?>;  
+      const mangerlist = <?= $mangerout ?>;
+      const driverlist = <?= $driverout ?>;
+      const locationlist = <?= $locationout ?>;
+      const p4plist = <?= $p4pout ?>;
+      
+      const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "SubMLMProgram_Nm"];
+      const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
+      const finder = (target, objective) => (target.find(o => o.MLMProgram_Nm == objective));
+      
+      // Names of Data for program fields
+      const fieldlist = ["Program", "Region", "Program Manager", "ID", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
+      const datafields = ["MLMProgram_Nm", "MLMRegion_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
+      const rifields = {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Grouping ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
+      const hiddenfields = ["AssociatedCR_Key", "MLMRegion_Key", "MLMProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
+      const excelfields = {"Fiscal_Year": "Fiscal Year", "RIActive_Flg": "Status", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Sub-Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "EPSRegion_Abb": "Region", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Grouping ID", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "TransferredPM_Flg": "Transferred to PDM", "AssociatedCR_Key": "CR", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
+
+      console.log(ridata);
+
+
+    </script>
     <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
@@ -179,23 +252,6 @@ include ("../../includes/load.php");
         $('[data-toggle="tooltip"]').tooltip()
       })
       
-      const ridata = <?= $jsonout ?>;  
-      const mangerlist = <?= $mangerout ?>;
-      const locationlist = <?= $locationout ?>;
-      const p4plist = <?= $p4pout ?>;
-      
-      const projectfields = ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "Subprogram_nm"];
-      const projectfieldnames = ["Project Name", "Facility", "Owner", "Subprogram"];
-      const finder = (target, objective) => (target.find(o => o.Program_Nm == objective));
-      
-      // Names of Data for program fields
-      const fieldlist = ["Program", "Region", "Program Manager", "ID", "Impact Level", "Action Status", "Forecast Resol. Date", "Response Strat", "Open Duration"];
-      const datafields = ["Program_Nm", "Region_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
-      const rifields = {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "Proj_Nm": "Project Name", "Program_Nm": "Program", "subprogram": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "Region_Cd": "Region", "market": "Market", "facility": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Status", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
-      const hiddenfields = ["AssociatedCR_Key", "Region_Key", "ProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
-      const excelfields = {"Fiscal_Year": "FY",	"Active_Flg": "Status", "Program_Nm": "Program", "subprogram": "Sub-Program", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "Region_Cd": "Region", "RI_Nm": "Name", "Proj_Nm": "Project Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
-      console.log(ridata);
-
       </script>
 
 <link rel="stylesheet" href="../css/ri.css">
@@ -237,7 +293,7 @@ include ("../../includes/load.php");
       </div>
     </div>
   </section>
-  <div id="cboxOverlay" class="lightbox" styleD="" onclick="hider();"></div>
+  <div id="cboxOverlay" class="lightbox" styleD="" onclick="hider(this);"></div>
   <iframe id="details" onclick="this.style.display= 'none'" onblur="this.style.display= 'none'" style="position:fixed;top:10%;left:10%;width:80vw;height:70vh;background-color:#000;display:none;z-index:100000"></iframe>
   <section>
 
@@ -261,23 +317,6 @@ include ("../../includes/load.php");
       resultcounter(rilist);
       const main = document.getElementById("main");
       main.innerHTML = '';
-      document.workbook = new ExcelJS.Workbook();
-      document.workbook.creator = "RePS Website";
-      document.workbook.lastModifiedBy = "Kaz";
-      document.workbook.created = new Date();
-      document.worksheet = document.workbook.addWorksheet('Project Report',  {properties:{tabColor:{argb:'3355bb'}, headerFooter: "Project Report Spreadsheet", firstFooter: "RePS"}});
-
-      // let cols = []
-      // for (field in ridata[0]) {
-      //   (hiddenfields.includes(field))
-      //   cols.push({
-      //     header: field,
-      //     key: field,
-      //     width: (ridata[0][field]) ? ridata[0][field].length : 8,
-      //     hidden: hiddenfields.includes(field)
-      //   })
-      // }
-      // document.worksheet.columns = cols;
 
       initexcel();
 
@@ -302,55 +341,19 @@ include ("../../includes/load.php");
         trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
         cells.push(value);
       })
-      // document.worksheet.addRow(cells);
-      // document.worksheet.getRow(1).font = { name: 'helvetica', family: 4, size: 12, underline: 'double', bold: true };
-
-      document.worksheet.getRow(1).eachCell( function(cell, colNumber){
-        if(cell.value){
-          document.worksheet.getRow(1).height = 42;
-          cell.font = { name: 'helvetica', family: 4, underline: 'none', bold: true, color: {argb: 'FFFFFFFF'}};
-          cell.alignment = {vertical: 'middle', horizontal: 'center'};
-          cell.fill = {
-            type: 'pattern',
-            pattern:'solid',
-            bgColor:{argb:'FF5588FF'},
-            fgColor:{argb: "FF3377AA"},
-            width: "256",
-            height: "256"
-          };
-        }
-      });
-      const borderstyle = "medium";
-      document.worksheet.columns.forEach(column => {
-        column.border = {
-          top: { style: borderstyle },
-          left: { style: borderstyle },
-          bottom: { style: borderstyle },
-          right: { style: borderstyle }
-        };
-      });
-
+      excelrows();
       return trri;
     }
 
-    const hider = () => {
+    const hider = (target) => {
       document.getElementById('cboxOverlay').style.display = 'none';
       document.getElementById('details').style.display='none';
     }
 
-    const details = (target) => {
-        const d = document.getElementById("details");
-        const l = document.getElementById("cboxOverlay");
-        l.style.display = "block";
-        d.style.display = "block";
-        d.src = target.href;
-    }
-
-    const createrow = (name) => {
-      
+    const createrow = (ri) => {
+      const name = ri.RI_Nm;
       // Create a row in the table
-      const ri = getribykey(name);
-      // console.log(ri);
+      // const ri = getribykey(name);
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
       const fieldswitch = {
@@ -366,14 +369,24 @@ include ("../../includes/load.php");
               } else
               return "";
           },
+          RIActive_Flg: function() {
+            return (ri.RIActive_Flg) ? "Open" : "Closed";
+          },
+          owner: function() {
+            return ri.LastUpdateBy_Nm;
+          },
           ForecastedResolution_Dt: function() {
-            return makestringdate(ri.ForecastedResolution_Dt);
+            // console.log(ri.RI_Nm);
+            if (ri.ForecastedResolution_Dt != undefined)
+              return formatDate(new Date(ri.ForecastedResolution_Dt.date));
+            else 
+              return "";
           },
           Created_Ts: function() {
-            return  makestringdate(ri.Created_Ts);
+            return  formatDate(new Date(ri.Created_Ts.date));
           },
           Last_Update_Ts: function() {
-            return  makestringdate(ri.Last_Update_Ts);
+            return  formatDate(new Date(ri.Last_Update_Ts.date));
           },
           RiskRealized_Flg: function() {
             return  (ri.RiskRealized_Flg) ? "Y" : "N";
@@ -382,16 +395,36 @@ include ("../../includes/load.php");
             return Math.floor(ri.RIOpen_Hours/24);
           },
           market: function() {
-            const m = getlocationbykey(ri.Project_Key);
+            const m = getlocationbykey(ri.EPSProject_Key);
             return (m != undefined) ? m.Market_Cd : "";
           },
           facility: function() {
-            const f = getlocationbykey(ri.Project_Key);
+            const f = getlocationbykey(ri.EPSProject_Key);
             return (f != undefined) ? f.Facility_Cd : "";
           },
-          Region_Cd: function() {
-            const r = getlocationbykey(ri.Project_Key);
-            return (r != undefined) ? r.Region_Cd : "";
+          EPSRegion_Cd: function() {
+            let counter = 0;
+            let list = "";
+            for(rr of ridata) {
+              if (rr.RI_Nm == ri.RI_Nm) {
+                list += rr.EPSRegion_Abb + ", ";
+                counter++;
+              }
+            }
+            // const r = getlocationbykey(ri.EPSProject_Key);
+            // rrr = (r != undefined) ? r.MLMRegion_Cd : "";
+            // return (counter < 2) ? rrr : "Multiple";
+            return ri.EPSRegion_Cd;
+            return list.slice(0, -2);
+          },
+          regioncount: function() {
+            let counter = 0;
+            for(r of ridata) {
+              if (r.RI_Nm == ri.RI_Nm) {
+                counter++;
+              }
+            }
+            return counter;
           },
           monthcreated: function() {
             return new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' });
@@ -399,45 +432,55 @@ include ("../../includes/load.php");
           monthclosed: function() {
             return new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' });
           },
+          RIIncrement_Num: function() {
+            return (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "";
+          },
           quartercreated: function() {
             const m = new Date(ri.Created_Ts.date).getMonth();
-            return  (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            return (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
           },
           quarterclosed: function() {
             const m = new Date(ri.Last_Update_Ts.date).getMonth();
-            return  (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            return (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
           },
           duration: function() {
             const d = Math.floor((new Date(ri.Last_Update_Ts.date) - new Date(ri.Created_Ts.date))/(1000 * 60 * 60 * 24));
             return  d + " days";
           },
           RI_Nm: function() {
-              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["Proj_Nm"];
+              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["EPSProject_Nm"];
               return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
           },
-          subprogram: function() {
-              console.log("p4plist");
-              console.log(ri);
-              if (ri.ProgramRI_Key != null) {
-                p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgram_Key]
-                console.log(ri);
-                console.log(ri.RiskAndIssue_Key + "-" + ri.ProgramRI_Key + ":" + ri.MLMProgram_Key);
-                console.log(p4plist[ri.RiskAndIssue_Key + "-" + ri.ProgramRI_Key]);
+          driver: function() {
+            return (driverlist[ri.RiskAndIssueLog_Key]) 
+            ? (driverlist[ri.RiskAndIssueLog_Key][0]) 
+            ? driverlist[ri.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
+          },
+          category: function() {
+            let counter = 0;
+            for(r of ridata) {
+              if (r.EPSProject_Nm == ri.EPSProject_Nm) {
+                counter++;
               }
-              // program.RiskAndIssue_Key + "-" + program.ProgramRI_Key
+            }
+            return (counter > 1) ? "Associated" : "Single";
+          },
+          projectcount: function() {
+            let counter = 0;
+            for(r of ridata) {
+              if (r.EPSProject_Nm == ri.EPSProject_Nm) {
+                counter++;
+              }
+            }
+            return counter;
+          },
+          subprogram: function() {
+            if (ri.MLMProgramRI_Key != null) {
+              p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgram_Key]
+            }
           }
       };
       const rowValues = [];
-      // console.log("ri");
-      // console.log(ri);
-      // for (field in excelfields) {
-      //     (function(test) {
-      //         const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-      //         rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
-      //     })(field);
-      // }
-      // let newrow = document.worksheet.addRow(rowValues);
-
       for (field in excelfields) {
         (function(test) {
             const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
@@ -455,32 +498,12 @@ include ("../../includes/load.php");
       return trri;
     }  
 
-
-    function listri(target, type) {
-      
-      // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-      
-      pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.Program_Nm == target);
-      uni = pre.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
-      return uni;
-    }
-    
-    const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.Project_Key == target && o.Program_Nm == name);
+    const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.EPSProject_Key == target && o.MLMProgram_Nm == name);
     const getribykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
-    const projectlist = ridata.map(item => item.Project_Key);
+    const projectlist = ridata.map(item => item.EPSProject_Key);
     const fulllist = ridata.map(item => item.RiskAndIssue_Key);
-    
-    // const uniques = ridata.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index)
-    const uniques = getuniques(ridata, "RiskAndIssue_Key");
+    const uniques = getwholeuniques(ridata, "RiskAndIssue_Key");
 
-    const exporter = () => {
-      document.workbook.xlsx.writeBuffer().then((buf) => {
-        saveAs(new Blob([buf]), 'ri-project-dashboard-' + makedate(new Date()) + '.xlsx');
-        // other stuffs
-      });
-    }
-
-    
     const splitdate = (datestring) => {
       let newdate = datestring.split(" - ");
       return newdate;
@@ -488,10 +511,14 @@ include ("../../includes/load.php");
 
     const betweendate = (dates, tween) => {
       spanner = splitdate(dates);
+      console.log(spanner);
       let first = new Date(spanner[0]);
       let middle = new Date(tween);
+      console.log(middle);
       let last = new Date(spanner[1]);
-      return ((middle >= first && middle <= last))
+      r = ((middle >= first && middle <= last));
+      console.log(r);
+      return r;
     }  
 
     const makedate = (dateobject) => {
@@ -520,7 +547,7 @@ include ("../../includes/load.php");
       return false;
     }  
     // console.log(fulllist)
-    populate(fulllist);
+    populate(uniques);
   </script>
   </body>
 </html>
