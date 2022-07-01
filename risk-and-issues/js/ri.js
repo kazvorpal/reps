@@ -57,7 +57,6 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
       const d = padder(new Date(dateobject.date).getDay()+1, "0", 2);
       const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
       r = (dateobject == null) ? "" : m + "/" + d + "/" + y;
-    //   console.log(r);
       return r;
     } else 
       return "";
@@ -75,12 +74,15 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
+      console.log(o);
+      console.log(o.RIActive_Flg);
+      console.log($("#pStatus").val());
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
         (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
-        (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || $("#pStatus").val().includes(o.RIActive_Flg)) &&
+        (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || $("#pStatus").val().includes('1')) &&
         (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) &&
         (mode == "project" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
         (mode == "program" || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
@@ -95,7 +97,6 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     let filtered = ridata.filter(filterfunction);
     console.log(filtered)
     results = (mode == "program") ? removenullproperty(getwholeuniques(filtered, "MLMProgram_Nm"), "MLMProgram_Nm") : getwholeuniques(filtered, "RiskAndIssue_Key");
-    // console.log(results);
     return results;
   }  
   const searchproperty = (list, field, value) => {

@@ -45,7 +45,7 @@
         // print("<br/>");
       }
       
-      $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'project'";
+      $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'program'";
       print '<!--' . $sqlstr . "<br/>-->";
       ini_set('mssql.charset', 'UTF-8');
       $closedquery = sqlsrv_query($data_conn, $sqlstr);
@@ -65,7 +65,7 @@
         }
       }
 
-      $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
+      $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(-1)";
       // print '<!--' . $sqlstr . "<br/> -->";
       $locationquery = sqlsrv_query($data_conn, $sqlstr);
       if($locationquery === false) {
@@ -92,7 +92,7 @@
       foreach ($rows as $row)  {
         if($row["MLMProgramRI_Key"] != '') {
           // Get PROJECTS //
-          $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", 1)";
+          $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", -1)";
           ini_set('mssql.charset', 'UTF-8');
           $p4pquery = sqlsrv_query($data_conn, $sqlstr);
           if($p4pquery === false) {
@@ -116,7 +116,36 @@
           $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
         }
       }
-      
+
+      // $p4pclosedlist = array();
+      // foreach ($rows as $row)  {
+      //   if($row["MLMProgramRI_Key"] != '') {
+      //     // Get PROJECTS //
+      //     $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", 0)";
+      //     ini_set('mssql.charset', 'UTF-8');
+      //     $p4pclosedquery = sqlsrv_query($data_conn, $sqlstr);
+      //     if($p4pclosedquery === false) {
+      //       if(($error = sqlsrv_errors()) != null) {
+      //         print_r($error);
+      //         foreach($error as $errors) {
+      //           echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
+      //           echo "code: ".$errors[ 'code']."<br />";
+      //           echo "message: ".$errors[ 'message']."<br />";
+      //         }
+      //       }
+      //     } else {
+      //       $count = 1;
+      //       $p4pclosedrows = array();
+      //       $checker = 0;
+      //       while($p4pclosedrow = sqlsrv_fetch_array($p4pclosedquery, SQLSRV_FETCH_ASSOC)) {
+      //         $p4pclosedrows[] = array_map("fixutf8", $p4pclosedrow);
+      //         $checker = 1;
+      //       }
+      //     }
+      //     $p4pclosedlist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4pclosedrows;
+      //   }
+      // }
+
       $mangerlist = array();
       foreach ($rows as $row)  {
         if($row["MLMProgramRI_Key"] != '') {
@@ -147,7 +176,7 @@
       foreach ($rows as $row)  {
         if($row["MLMProgramRI_Key"] != '') {
           // Get OWNERS //
-          $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(". $row["RiskAndIssueLog_Key"] ." , 1)";
+          $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(". $row["RiskAndIssueLog_Key"] ." , " . $row["RIActive_Flg"] . ")";
           // print $sqlstr . "<br>";
           ini_set('mssql.charset', 'UTF-8');
           $driverquery = sqlsrv_query($data_conn, $sqlstr);
@@ -333,7 +362,6 @@
     for (loop of rilist) {
       // creates all the programs
       if(loop != null) {
-        // console.log(loop);
         makerow(loop, countri(loop, "Risk"), countri(loop, "Issue"));
       }
     }
@@ -482,7 +510,6 @@
                 list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : r.MLMRegion_Cd;
               }
             }
-            console.log(list.slice(0, -2));
           return (list.slice(0, -2));
         },
         regioncount: function() {
@@ -510,19 +537,22 @@
         },
         projectcount: function() {
           let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-          return (projects.length>0) ? projects.length : "";
+          return (projects != undefined && projects.length>0) ? projects.length : "";
         }, 
         subprogram: function() {
           let list = "";
-          for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
-            list += r.Subprogram_nm + ", ";
-            // console.log(r.Subprogram_nm);
-          } 
-          return list.slice(0, -2);
+          let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+          if (prog != undefined) {
+            for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
+              list += r.Subprogram_nm + ", ";
+              // console.log(r.Subprogram_nm);
+            } 
+          }
+          return (list != "") ? list.slice(0, -2) : "";
         },
         category: function() {
           let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-          return (projects.length>0) ? "Projects" : "Global";
+          return (projects != undefined && projects.length>0) ? "Projects" : "Global";
         }
       };
       
@@ -544,7 +574,7 @@
       if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
         const trid = "tr" + type + saferi + Math.random();
         document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: "ptr"}));
-        const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "";
+        const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "" : "";
         const c = (arrow == "") ? "plainbox" : "namebox";
         const header = makeelement({
           "e": "th", 
@@ -602,10 +632,10 @@
           document.getElementById("table" + saferi).appendChild(tr);
           for (field of projectfields) {
             locale = getlocationbykey(project.EPSProject_Key);
-            txt = (field == "MLMRegion_Cd") ? locale.Region_Cd 
-              : (field == "Subprogram") ? locale.Subprogram_nm 
-              : (field == "Market_Cd") ? locale.Market_Cd 
-              : (field == "EPS_Location_Cd")  ? locale.Facility_Cd 
+            txt = (field == "MLMRegion_Cd" && locale != undefined) ? locale.Region_Cd 
+              : (field == "Subprogram" && locale != undefined) ? locale.Subprogram_nm 
+              : (field == "Market_Cd" && locale != undefined) ? locale.Market_Cd 
+              : (field == "EPS_Location_Cd" && locale != undefined)  ? locale.Facility_Cd 
               : project[field];
             tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
           }
