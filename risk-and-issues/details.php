@@ -2,6 +2,8 @@
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
+include ("../sql/MS_Users.php");
+include ("../sql/project_by_name.php");
 
 //FIND PROJECT RISK AND ISSUES 1.26.2022
 $RiskAndIssue_Key = $_GET['rikey'];
@@ -18,17 +20,54 @@ $ri_name = $row_risk_issue['RI_Nm'];
 $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 
 //GET DRIVERS
-$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status)";
+$sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) where RiskAndIssueLog_Key = $riLog_Key";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_driver['Driver_Nm']; 
-//echo $sql_risk_issue_driver;
+//echo $sql_risk_issue_driver; exit();
 
 //GET ASSOCIATED PROJECTS
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
+
+$row_assoc_proj_count = sqlsrv_num_rows( $stmt_risk_issue_assoc_proj );
+   
+if ($row_assoc_proj_count=== false)
+   echo "Error in retrieveing row count.";
+else
+   echo $row_assoc_proj_count;
+
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 
+
+// CHECK IF THE USER AND OWNER MATCH
+                //$ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
+                //$authUser = trim($_GET['winuser']);
+                $alias = trim($row_winuser['CCI_Alias']);
+                //$tempID = uniqid();
+                //$projectOwner = $row_projID['PROJ_OWNR_NM'];
+
+                $sql_authorize = "SELECT [CCI_Alias], [PROJ_OWNR_NM], [PROJ_NM], [PROJ_ID],[RI_MGT].[RiskandIssues_Users].[Username]
+                from [RI_MGT].[RiskandIssues_Users]
+                left join [EPS].[ProjectStage] on [PROJ_OWNR_NM] = [CCI_Alias]
+                Where [RI_MGT].[RiskandIssues_Users].[Username] = '$windowsUser'and [PROJ_NM] = '$proj_name'";
+
+								$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
+                $row_authorize = sqlsrv_fetch_array( $stmt_authorize, SQLSRV_FETCH_ASSOC);
+
+                $authorized = "";
+                if(!is_null($row_authorize)) {
+                $authorized = $row_authorize['PROJ_OWNR_NM'];
+                }
+                
+                //ACCESS 
+                if($authorized != ''){ 
+                  $access = "true";
+                } else { 
+                  $access = "false";}
+                //PRINT USER SQL TO SCREEN FOR DEBUG
+                //echo $sql_authorize;
+                echo $access;
 
 //DECLARE
 $name = trim($row_risk_issue['RI_Nm']);
@@ -36,7 +75,7 @@ $RILevel = "";
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
 $programs = "";
-$project_nm = $row_risk_issue['Proj_Nm'];
+$project_nm = $row_risk_issue['EPSProject_Nm'];
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
 $regionx = "";
@@ -184,7 +223,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects</td>
+      <td>Associated Projects ()</td>
       <td>
         <?php 
         while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) {
@@ -194,15 +233,22 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
       </td>
     </tr>
     <tr>
-      <td>Action Plan</td>
+      <td>Action Plan <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-calendar"></span></a></td>
       <td><?php echo $actionPlan; ?>
+
+        <div class="collapse" id="collapseExample">
+          <div class="well">
+          <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+          </div>
+        </div>
+
     </td>
     </tr>
     <tr>
       <td>Notify Porfolio Team</td>
       <td><?php 
       
-      if($raidLog = 0){
+      if($raidLog == 0){
         echo "No"; 
       } else {
         echo "Yes";
@@ -228,28 +274,28 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
       <?php if($popup=="false"){?>
         <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
       <?php } ?>
-      <?php if($uaccess=="true"){?>  
-      <?php if($status == 1){ ?>
-      <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
-      <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
-      &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
-      %0D%0ARisk/Issue Name: <?php echo $name;?>
-      %0D%0AType: <?php echo $RIType?>
-      %0D%0AProject: <?php echo $project_nm?>
-      %0D%0AIssue Descriptor: <?php echo $descriptor ?>
-      %0D%0ADescription: <?php echo $description?>
-      %0D%0ADrivers: <?php echo $Driversx?>
-      %0D%0AImpact Area: <?php echo $impactArea2?>
-      %0D%0AImpact Level: <?php echo $impactLevel2?>
-      %0D%0APOC Group/Name: <?php echo $individual?>
-      %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
-      %0D%0AForecasted Resolution Date:: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; }?>
-      %0D%0AAssociated Projects: <?php echo $assocProject?>
-      %0D%0AAction Plan: <?php echo $actionPlan?>
-      %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-      " 
-      class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
-      <?php } ?>
+        <?php if($access=="true"){?>  
+          <?php if($status == 1){ ?>
+            <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+            <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
+            &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
+            %0D%0ARisk/Issue Name: <?php echo $name;?>
+            %0D%0AType: <?php echo $RIType?>
+            %0D%0AProject: <?php echo $project_nm?>
+            %0D%0AIssue Descriptor: <?php echo $descriptor ?>
+            %0D%0ADescription: <?php echo $description?>
+            %0D%0ADrivers: <?php echo $Driversx?>
+            %0D%0AImpact Area: <?php echo $impactArea2?>
+            %0D%0AImpact Level: <?php echo $impactLevel2?>
+            %0D%0APOC Group/Name: <?php echo $individual?>
+            %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
+            %0D%0AForecasted Resolution Date:: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; }?>
+            %0D%0AAssociated Projects: <?php echo $assocProject?>
+            %0D%0AAction Plan: <?php echo $actionPlan?>
+            %0D%0ADate Closed: <?php convtimex($dateClosed)?>
+            " 
+            class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+        <?php } ?>
       <?php } ?>
     </div>
   </form>
