@@ -23,6 +23,7 @@
                 $sql_closed_ri = "select * from [RI_MGT].[fn_GetListOfAllInactiveRiskAndIssue]('Project')  where proj_nm = '$proj_name' order by RiskAndIssue_Key desc";
 								$stmt_closed_ri = sqlsrv_query( $data_conn, $sql_closed_ri );
                 //$row_closed_ri = sqlsrv_fetch_array( $stmt_closed_ri, SQLSRV_FETCH_ASSOC);
+                echo $sql_closed_ri; exit();
               
                 // CHECK IF THE USER AND OWNER MATCH
                 $ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
