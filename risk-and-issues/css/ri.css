@@ -5,10 +5,10 @@
   padding: 4px;
   cursor: default;
 }
-.ptr:nth-of-type(odd) {
+.ptr:nth-of-type(odd), .oddrow {
     background-color: rgb(233, 233, 233);
 }
-.ptr:nth-of-type(even) {
+.ptr:nth-of-type(even), .evenrow {
     background-color: rgb(255, 255, 255);
 }
 .databox {
