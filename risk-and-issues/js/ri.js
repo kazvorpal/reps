@@ -47,7 +47,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
       padTo2Digits(date.getMonth() + 1),
       padTo2Digits(date.getDate()),
       date.getFullYear(),
-    ].join('/');
+    ].join('-');
   }
   
 
@@ -56,7 +56,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
       const m = padder(new Date(dateobject.date).getMonth()+1, "0", 2);
       const d = padder(new Date(dateobject.date).getDay()+1, "0", 2);
       const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
-      r = (dateobject == null) ? "" : m + "/" + d + "/" + y;
+      r = (dateobject == null) ? "" : m + "-" + d + "-" + y;
       return r;
     } else 
       return "";
@@ -74,15 +74,16 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
-      console.log(o);
-      console.log(o.RIActive_Flg);
-      console.log($("#pStatus").val());
+    //   console.log(o);
+    //   console.log(o.RIActive_Flg);
+    //   console.log($("#pStatus").val());
+    //   console.log(($("#pStatus").val() != null) ? $("#pStatus").val().includes(o.RIActive_Flg.toString()): "bah");
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
         (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
-        (document.getElementById("pStatus") == null || document.getElementById("pStatus").value == '' || $("#pStatus").val().includes('1')) &&
+        ((document.getElementById("pStatus") == null && o.RIActive_Flg == '1') || (document.getElementById("pStatus").value == '' && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&
         (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) &&
         (mode == "project" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
         (mode == "program" || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&

@@ -276,13 +276,12 @@
       const driverlist = <?= $driverout ?>;
       const locationlist = <?= $locationout ?>;
       const p4plist = <?= $p4pout ?>;
-      // console.log(ridata)
-      const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "Corp"}
+      const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
       const projectfields = ["EPSProject_Nm", "Subprogram_nm", "EPSProject_Owner", "MLMRegion_Cd", "Market_Cd", "EPS_Location_Cd"];
       const projectfieldnames = [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}];
       const finder = (target, objective) => (target.find(o => o.MLMProgram_Nm == objective));
       const hiddenfields = ["AssociatedCR_Key", "MLMRegion_Key", "MLMProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
-      const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "MLMProgram_Nm": {name: "Program", width: "9"}, "MLMRegion_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Resol. Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}}
+      const rifields = {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "MLMProgram_Nm": {name: "Program", width: "9"}, "MLMRegion_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Status", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}, "RIActive_Flg": {name: "Open", width: "6"}}
       const excelfields = {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan Status", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Days Open", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed", "duration": "Duration"};
     </script>
     <link rel="stylesheet" href="../css/ri.css">
@@ -383,7 +382,8 @@
     for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
     return buf;    
   }
-
+  
+  var rowcolor = 1;
   const makerow = (target, risks, issues) => {
 
     // Runs once per Program
@@ -408,17 +408,18 @@
   const makebanner = (safename) => {
 
     // Program Start
-
+    console.log(rowcolor);
     const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
     const banner = document.createElement("div");
     banner.id = "banner" + safename;
     banner.className = "accordion-banner";
     //  (a c).log(bannerfields);
+    rowcolor = 1;
     Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
     banner.ariaExpanded = true;
     return banner;
   }  
-
+  
   const makeri = (ri, type) => {
     // Create a Risk or Issue section
     name = ri.MLMProgram_Nm;
@@ -434,6 +435,7 @@
           document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
           for (ri of list) {
             window.ricount.push(true);
+            rowcolor++;
             makedata(ri, type, name);
           }
         }
@@ -448,9 +450,10 @@
         //    Specific fields that need extra calculation
         //    Add any field to rifields that you want to be a column,
         //    in the format {fieldname: "Human Name"}
-        //    If it exists as a field in ridata, it will be populated.
-        //    If instead you need to do some calculation to produce it,
-        //    add its fieldname to this "switch" object, fieldswitch.
+        //    If it exists in rifields, it will be populated automatically here.
+        //    If, instead, you need to do some calculation to produce it,
+        //    add its fieldname to this "switch" object, fieldswitch,
+        //    with an anonymous function to handle the changes.
         RiskAndIssue_Key: function() {
           return text;
         },
@@ -492,7 +495,8 @@
           return  (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
         },
         duration: function() {
-          const d = Math.floor((new Date(program.Last_Update_Ts.date) - new Date(program.Created_Ts.date))/(1000 * 60 * 60 * 24));
+          const enddate = (program.RIActive_Flg == 1 || program.Created_Ts.date < program.RIClosed_Dt) ? program.Last_Update_Ts.date : program.RIClosed_Dt;
+          const d = Math.floor((new Date(enddate) - new Date(program.Created_Ts.date))/(1000 * 60 * 60 * 24));
           return  d + " days";
         },
         Last_Update_Ts: function() {
@@ -545,7 +549,6 @@
           if (prog != undefined) {
             for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
               list += r.Subprogram_nm + ", ";
-              // console.log(r.Subprogram_nm);
             } 
           }
           return (list != "") ? list.slice(0, -2) : "";
@@ -573,7 +576,8 @@
       }
       if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
         const trid = "tr" + type + saferi + Math.random();
-        document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: "ptr"}));
+        let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
+        document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
         const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "" : "";
         const c = (arrow == "") ? "plainbox" : "namebox";
         const header = makeelement({
@@ -665,6 +669,7 @@
     const safename = makesafe(name);
     const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
     let cells = ["Risk/Issue"];
+    rowcolor = 1;
     for (field of Object.keys(rifields)) {
       // classes = (field == "Action Status") ? 
       trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
@@ -706,7 +711,7 @@
   
   
   // const uniques = ridata.map(item => item.MLMProgram_Nm).filter((value, index, self) => self.indexOf(value) === index)
-  const uniques = removenullproperty(getwholeuniques(getwholeuniques(ridata, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm");
+  const uniques = removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm");
 
 
 
