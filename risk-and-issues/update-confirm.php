@@ -1,4 +1,5 @@
 <?php 
+//print_r($_POST);
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
@@ -21,7 +22,7 @@ $sql_risk_issue_driver = "SELECT * FROM [RI_MGT].[Driver] where Driver_Key in ($
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 			
-//echo $sql_risk_issue_driver;
+//echo  "<br>" . $sql_risk_issue_driver;
 //exit();
 
 //GET ASSOCIATED PROJECTS 
@@ -86,7 +87,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 	<div style="padding: 20px" class="alert">  </div>
   <form action="update-do.php" method="post" name="confirmation" id="confirmation">
 
-    <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 4 update, 3 close, 2 create, 1 initialize -->
+    <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 5 delete, 4 update, 3 close, 2 create, 1 initialize -->
     <input name="userId" type="hidden" id="userId" value="<?php echo $userId ?>">
     <input name="formName" type="hidden" id="formName" value="<?php echo $formName ?>">
     <input name="formType" type="hidden" id="formType" value="<?php echo $formType ?>">
@@ -122,8 +123,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <input name="regionKeys" type="hidden" id="regionKey" value="<?php echo $regionKeys ?>"> 
     <input name="programKeys" type="hidden" id="programKeys" value="<?php echo $programKeys ?>"> 
     <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>"> 
-
-    
+    <input name="del_proj_select" type="hidden" id="del_proj_select" value="<?php echo $del_proj_select ?>"> 
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>

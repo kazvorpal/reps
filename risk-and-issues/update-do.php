@@ -1,5 +1,6 @@
 
 <?php 
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
@@ -20,6 +21,8 @@ include ("../sql/MS_Users_prg.php");
         $changeLogName = "Closed";
      } else if ($changeLogKey == 4) {
         $changeLogName = "Updated";
+     } else if ($changeLogKey == 5) {
+        $changeLogName = "Deleted";
      }
     $userEmail = $row_winuser['Email'];
     $createdfrom = $_POST['createdFrom'];
@@ -49,7 +52,7 @@ include ("../sql/MS_Users_prg.php");
     $asscCRKey = NULL; 
 
     $riOpenFlg = 1;
-    if($changeLogKey == 3){
+    if($changeLogKey == 3 || $changeLogKey == 5 ){
         $riOpenFlg = 0;
     }
 
@@ -83,7 +86,7 @@ include ("../sql/MS_Users_prg.php");
     $closedByDate = $_POST['DateClosed'];
 
     $closedByUID = NULL; // USE ONLY IF CLOSING OTHERWISE NULL // USE FOR EDIT ONLY
-    if($changeLogKey == 3){
+    if($changeLogKey == 3 || $changeLogKey == 5){
         $closedByUID = $userId;
     }
 
@@ -186,7 +189,6 @@ include ("../sql/MS_Users_prg.php");
             //echo "<br><br>";
             //echo json_encode($params);
             //echo "<br><br>";
-            //print_r($_POST);
             //exit();
 
         //CALL THE PROCEDURE
@@ -296,7 +298,7 @@ include ("../sql/MS_Users_prg.php");
 
         //START - EMAIL RAID ADMIN
         if($raidLog == 1) {
-            $to = "Briana.Baynham@cox.com";
+            $to = "CCI-EngineeringPortfolioManagement@cox.com";
             $subject = "Updated Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 

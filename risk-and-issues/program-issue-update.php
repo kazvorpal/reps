@@ -622,23 +622,28 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
-          
           <div class="box">  
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
-                
-                  <tr>
-                    <td width="100%">
-                          
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea></td>
-                  </tr>
-                
                 <tr>
-                  <td>&nbsp;</td>
-                  <td></td>
+                  <td width="100%">
+                    <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>
+                  </td>
                 </tr>
+                <tr>
+                    <td>
+                    <div align="right" style="margin-top:10px; margin-bottom:10px;">  
+                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+                    </div>
+                        <div class="collapse" id="collapseExample">
+                          <div class="well">
+                            <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
               </tbody>
-</table>
+            </table>
           <div>
 
           </td>

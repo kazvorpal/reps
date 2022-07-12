@@ -156,6 +156,8 @@ Enter the details of your Project Issue
   <input name="RIName" type="hidden" id="RIName" value="">
   <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
+  <input name="DateClosed" type="hidden" id="DateClosed" value="">
+  <input name="raidLog" type="hidden" value="No" id="raidLog">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -188,12 +190,18 @@ Enter the details of your Project Issue
                   <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
                 </tr>
               <tr>
-                <td><label for="Created From">Issue Descriptor *<br>
+                <td></br><label for="Created From">Issue Descriptor * <a href="includes/definitions.php?tooltipkey=1" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a><br>
                   </label>
                   <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30"></td>
                 </tr>
               <tr>
-                <td><label for="Description">Description *<br>
+                <td></br><label for="Description">Description * <a href="includes/definitions.php?tooltipkey=5" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a><br>
             </label>
             <textarea name="Description" cols="120" required="required" class="form-control" id="Description"></textarea>  </td>
                 </tr>
@@ -209,10 +217,10 @@ Enter the details of your Project Issue
         </tr>
 
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS * <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-</svg></a></h4>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS * <a href="includes/definitions.php?tooltipkey=15" class="iframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a></h4>
             <div class="box subscriber">
             <table width="100%" border="0">
                 <tr>
@@ -284,7 +292,7 @@ Enter the details of your Project Issue
                   <table width="200" border="0">
                   <tr>
                   <strong>Impacted Area * </strong>
-                  <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                  <a href="includes/definitions.php?tooltipkey=17" class="iframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                     <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                   </svg></a>
@@ -301,7 +309,7 @@ Enter the details of your Project Issue
                   <table width="200" border="0">
                     <tr>
                       <strong>Impact Level * </strong>
-                      <a href="includes/instructions-impact-level.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                      <a href="includes/definitions.php?tooltipkey=1" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                       </svg></a>
@@ -318,7 +326,6 @@ Enter the details of your Project Issue
                 <td>
         				</td>
                 <td>
-                
 				        </td>
                 </tr>
               </tbody>
@@ -330,7 +337,10 @@ Enter the details of your Project Issue
           <td colspan="3" align="left"></td>
         </tr>
         <tr>
-          <td align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4></td>
+          <td align="left"><h4 style="color: #00aaf5">CURRENT TASK POC <a href="includes/definitions.php?tooltipkey=2" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a></h4></td>
           <td colspan="2" align="left">
 			  
 		  </td>
@@ -365,7 +375,10 @@ Enter the details of your Project Issue
             <tbody>
               <tr>
                 <td colspan="2">
-				  <label for="date">Forecasted Resolution Date *</label>
+				  <label for="date">Forecasted Resolution Date *  <a href="includes/definitions.php?tooltipkey=6" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a></label>
 				  <div id="dateUnknown" >
 					<input name="date" 
 					type="date"
@@ -391,7 +404,10 @@ Enter the details of your Project Issue
 				</div>  
 				</td>
                 <td><input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">
-          			<label for="TransfertoProgramManager">Transfer to Program Manager</label>
+          			<label for="TransfertoProgramManager">Transfer to Program Manager <a href="includes/definitions.php?tooltipkey=7" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a</label>
 				  </td>
               </tr>
             </tbody>
@@ -400,7 +416,10 @@ Enter the details of your Project Issue
 			</td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY *</h4>			  </td>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY * <a href="includes/definitions.php?tooltipkey=6" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left"><div class="box">
@@ -439,57 +458,30 @@ Enter the details of your Project Issue
           </div>			</td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN *</h4>
-          
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN * <a href="includes/definitions.php?tooltipkey=9" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a></h4>
           <div class="box">  
-
-            <!--<iframe 
-              src="includes/action-plans.php?uid=<?php //echo $_GET['uid'];?>&fiscal_year=<?php //echo $row_projID['FISCL_PLAN_YR'] ?>&tempid=<?php //echo $temp_id?>&username=<?php //echo $user_id ?>" 
-              height="200" 
-              width="1300" 
-              title="Associated Projects"  
-              frameBorder="0" 
-              scrolling="yes">
-            </iframe>		-->
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
-                
                   <tr>
                     <td width="100%">
-                          
                           <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea>  
                           <input type="hidden" name="user" value="<?php echo $user_id ?>">
                           <input type="hidden" name="tempID"value="<?php echo $temp_id ?>">
                     </td>
                   </tr>
-                <!-- <tr>
-                  <td colspan="2" align="left">
-                  <strong>Action Plan Status Log</strong>  
-                    table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
-                    <tbody>
-                      <tr>
-                        <th width="24%" bgcolor="#EFEFEF">User</th>
-                        <th width="55%" bgcolor="#EFEFEF">Update</th>
-                        <th width="21%" bgcolor="#EFEFEF">Timestamp</th>
-                      </tr>
-                      <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </tbody>
-                    </table> 
-
-                  </td>
-                </tr> -->
               </tbody>
-</table>
+            </table>
           <div>
-
           </td>
         </tr>
         <tr>
-        <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION</h4></td>
+        <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION <a href="includes/definitions.php?tooltipkey=11" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a</h4></td>
         </tr>
         <tr>
           <td colspan="3">
@@ -499,6 +491,7 @@ Enter the details of your Project Issue
         </div>
 		  </td>
         </tr>
+        <!-- 
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -521,10 +514,11 @@ Enter the details of your Project Issue
               </div>
 			    </td>
         </tr>
+        
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>
-        <!-- <tr>
+        <tr>
           <td align="left">
 			<div class="box">
 			<table width="50%" border="0">
@@ -556,17 +550,18 @@ Enter the details of your Project Issue
         <tr>
           <td colspan="3" align="left"></td>
         </tr>
+<!--
         <tr>
           <td colspan="3" align="left">
 			  <div class="box">
-			<table width="100%" border="0">
-            <tbody>
+			      <table width="100%" border="0">
+              <tbody>
               <tr>
                 <td colspan="2">
                   <label for="DateClosed">Closing Date:</label>
                   <input type="date" name="DateClosed" id="DateClosed" class="form-control">
-                  <!-- <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2"> -->
-                  <!-- <label for="TransfertoProgramManager2">Transfer to Program Manager</label> -->
+                  <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2">
+                  <label for="TransfertoProgramManager2">Transfer to Program Manager</label>
                 </td>
                 </tr>
               <tr>
@@ -574,8 +569,10 @@ Enter the details of your Project Issue
                 <td width="33%" align="center" valign="bottom">&nbsp;</td>
                 </tr>
               </tbody>
-            </table></div></td>
+            </table></div>
+            </td>
           </tr>
+-->
         <tr>
           <td colspan="3" align="right" valign="middle">&nbsp;</td>
         </tr>

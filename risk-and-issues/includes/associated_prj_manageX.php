@@ -24,7 +24,6 @@ $sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProjec
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 //$row_risk_issue['columnName'];
-//echo $sql_risk_issue;
 
 //RI ROW COUNT
 $sql_riRows = "SELECT COUNT(*) as ttlRows
@@ -55,8 +54,7 @@ $stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, proj_nm, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',$status) where RI_Nm != '$name' ";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_assoc_proj['RI_Nm]; 		
-//echo $sql_risk_issue_assoc_proj;	
+// echo $row_risk_issue_assoc_proj['RI_Nm]; 			
 
 //DECLARE
 $name = $row_risk_issue['RI_Nm'];
@@ -198,13 +196,13 @@ function toggle(source) {
     <h3>
       <?php
       if($ri_type == "Risk" && $ri_level == "prj"){
-        echo "BULK EDIT PROJECT RISKS";
+        echo "MANAGE PROJECT RISKS ASSOCIATED PROJECTS";
       } elseif ($ri_type == "RISKS" && $ri_level == "prg"){
-        echo "BULK EDIT PROGRAM RISKS";
+        echo "MANAGE PROGRAM RISKS ASSOCIATED PROJECTS";
       } elseif ($ri_type == "Issue" && $ri_level == "prj"){
-        echo "BULK EDIT POJECT ISSUES";
+        echo "MANAGE POJECT ISSUES ASSOCIATED PROJECTS";
       } else {
-        echo "BULK EDIT PROGRAM ISSUES";
+        echo "MANAGE PROGRAM ISSUES ASSOCIATED PROJECTS";
       }
       ?>
     </h3>

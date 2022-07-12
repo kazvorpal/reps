@@ -1,9 +1,11 @@
-<?php include ("../includes/functions.php");?>
-<?php include ("../includes/big_bro_functions.php");?>
-<?php include ("../db_conf.php");?>
-<?php include ("../data/emo_data.php");?>
-<?php include ("../sql/RI_Internal_External.php");?>
 <?php 
+//print_r($_POST);
+include ("../includes/functions.php");
+include ("../includes/big_bro_functions.php");
+include ("../db_conf.php");
+include ("../data/emo_data.php");
+include ("../sql/RI_Internal_External.php");
+
   //$action = $_GET['action']; //new
   //$temp_id = $_GET['tempid'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
@@ -27,10 +29,13 @@ $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEP
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 			
-//echo $sql_risk_issue_driver;
+// echo $sql_risk_issue_driver;
 
 //DECLARE
 $changeLogKey = 4;
+if(isset($_POST['add_proj_select'])) {
+  $changeLogKey = 2;
+}
 $name = trim($row_risk_issue['RI_Nm']);
 $RILevel = "";
 $RIType = $row_risk_issue['RIType_Cd'];
@@ -59,7 +64,16 @@ $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized =  $row_risk_issue['RiskRealized_Flg']; 
 $department = $row_risk_issue['POC_Department'];
+$add_proj_select = NULL;
 
+$groupID = "";
+if (isset($_POST['groupID'])) {
+  $groupID = $_POST['groupID'];
+}
+
+if (isset($_POST['add_proj_select'])){
+  $add_proj_select = implode(",", $_POST['add_proj_select']);
+}
 
 if(!empty($_POST['proj_select'])) {
 $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
@@ -75,7 +89,7 @@ $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issu
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 			
-// echo "<br>" . $sql_risk_issue_assoc_proj;
+//echo "<br>" . $sql_risk_issue_assoc_proj; //exit();
 
 ?>
 <!doctype html>
@@ -203,7 +217,15 @@ function toggle(source) {
 ?>
 </div>
 <div style="padding: 20px;">
-  <form action="update-confirm.php" method="post" id="projectRisk">
+  <?php 
+  if(isset($add_proj_select)) { 
+    $formAction = "confirm.php"; 
+    } else { 
+      $formAction = "update-confirm.php";
+    }
+  ?>
+
+  <form action="<?php echo $formAction;?>" method="post" id="projectRisk">
 
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey;?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id; ?>">
@@ -220,7 +242,11 @@ function toggle(source) {
   <input name="programKeys" type="hidden" id="programKeys" value="">
   <input name="status" type="hidden" id="status" value="<?php echo $status; ?>">
   <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized; ?>">
-  
+  <input name="raidLog" type="hidden" value="No" id="raidLog">
+  <input name="groupID" type="hidden" value="<?php echo $groupID; ?>">
+  <input name="add_proj_select" type="hidden" value="<?php echo $add_proj_select; ?>">
+
+
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
@@ -535,17 +561,23 @@ function toggle(source) {
                 
                   <tr>
                     <td width="100%">
-                          
                           <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
                           <input type="hidden" name="user" value="<?php echo $user_id ?>">
                           <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
                     </td>
                   </tr>
-                
-                <tr>
-                  <td>.</td>
-                  <td></td>
-                </tr>
+                  <tr>
+                    <td>
+                    <div align="right" style="margin-top:10px; margin-bottom:10px;">  
+                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+                    </div>
+                        <div class="collapse" id="collapseExample">
+                          <div class="well">
+                            <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
               </tbody>
             </table>
           <div>
@@ -558,14 +590,20 @@ function toggle(source) {
         </td>
         </tr>
         <tr>
-        <td colspan="3" align="left"><h4 style="color: #00aaf5"><?php echo strtoupper($RIType);?> ASSOCIATION</h4></td>
+        <td colspan="3" align="left"><h4 style="color: #00aaf5"><?php if(empty($add_proj_select)) {echo strtoupper($RIType);} else { echo "PROJECT";}?> ASSOCIATION</h4></td>
         </tr>
         <tr>
           <td colspan="3">
-        <div class="box" align="left" style="font-size: 12px;">
-				    <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } ?>
-        </div>
-		  </td>
+            <div class="box" align="left" style="font-size: 12px;">
+              <?php 
+                if(empty($add_proj_select)) {
+                  while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } 
+                } else {
+                  echo implode("</br>", $_POST['add_proj_select']);
+                } 
+              ?>
+            </div>
+		      </td>
         </tr>
 <!--
         <tr>
@@ -580,16 +618,16 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php if($riskRealized == 1){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php //if($riskRealized == 1){ echo "checked";} ?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php if($riskRealized == 0){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php //if($riskRealized == 0){ echo "checked";} ?>>
                     No</label></td>
                   </tr>
                 </table>
               </div>
 			    </td>
-        </tr>-->
+        </tr>
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -602,16 +640,16 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php if($raidLog == 1) {echo "checked";}?>>
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php //if($raidLog == 1) {echo "checked";}?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php if($raidLog == 0) {echo "checked";}?>>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php //if($raidLog == 0) {echo "checked";}?>>
                     No</label></td>
                   </tr>
                 </table>
               </div>
 			    </td>
-        </tr>
+        </tr>-->
         <tr>
               <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
             </tr>
@@ -636,13 +674,10 @@ function toggle(source) {
             </table></div></td>
           </tr>
         <tr>
-          <td colspan="3" align="right" valign="middle">&nbsp;</td>
+          <td colspan="3" align="left" valign="middle"></td>
         </tr>
         <tr>
-          <td colspan="3" align="right" valign="middle">
-            
-                           
-          </td>
+          <td colspan="3" align="right" valign="middle">&nbsp;</td>
         </tr>
       </tbody>
     </table>
@@ -650,7 +685,7 @@ function toggle(source) {
     <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
     </div>
   </form>
-    <div align="left" style="margin-top:-33px;">  
+    <div align="left" style="margin-top:-45px;">  
     <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
     </div>
 </div>

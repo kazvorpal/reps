@@ -4,7 +4,7 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
-//print_r($_POST);
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 //echo "<br><br>";
 //exit();
     //DECLARE
@@ -44,6 +44,7 @@ include ("../sql/MS_Users_prg.php");
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 
     $transfer2prgManager = (int)$_POST['transfer2prgManager'];
+    $groupID = $_POST['groupID'];
 
     $riskProbability = NULL; // FOR RISK ONLY
     if(!empty($_POST['RiskProbability'])){
@@ -153,13 +154,14 @@ $pocEmail = $row_poc ['POC_Email'];
         array($closedByUID, SQLSRV_PARAM_IN),
         array($riskRealized, SQLSRV_PARAM_IN),
         array($raidLog, SQLSRV_PARAM_IN),
+        array($groupID, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
         );
 
     //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
     //echo json_encode($params);
@@ -270,7 +272,7 @@ $pocEmail = $row_poc ['POC_Email'];
 
         //START - EMAIL RAID ADMIN
         if($raidLog == 1) {
-            $to = "Briana.Baynham@cox.com";
+            $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com";
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 

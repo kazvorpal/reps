@@ -648,54 +648,29 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
-          
           <div class="box">  
-
-            <!--<iframe 
-              src="includes/action-plans.php?uid=<?php //echo $_GET['uid'];?>&fiscal_year=<?php //echo $row_projID['FISCL_PLAN_YR'] ?>&tempid=<?php //echo $temp_id?>&username=<?php //echo $user_id ?>" 
-              height="200" 
-              width="1300" 
-              title="Associated Projects"  
-              frameBorder="0" 
-              scrolling="yes">
-            </iframe>		-->
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
-                
                   <tr>
                     <td width="100%">
-                          
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea></td>
+                      <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>
+                    </td>
                   </tr>
-                
-                <tr>
-                  <td>&nbsp;</td>
-                  <td></td>
-                </tr>
-                <!-- <tr>
-                  <td colspan="2" align="left">
-                  <strong>Action Plan Status Log</strong>  
-                    table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
-                    <tbody>
-                      <tr>
-                        <th width="24%" bgcolor="#EFEFEF">User</th>
-                        <th width="55%" bgcolor="#EFEFEF">Update</th>
-                        <th width="21%" bgcolor="#EFEFEF">Timestamp</th>
-                      </tr>
-                      <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                      </tr>
-                    </tbody>
-                    </table> 
-
-                  </td>
-                </tr> -->
+                  <tr>
+                    <td>
+                    <div align="right" style="margin-top:10px; margin-bottom:10px;">  
+                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+                    </div>
+                        <div class="collapse" id="collapseExample">
+                          <div class="well">
+                            <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+                          </div>
+                        </div>
+                    </td>
+                  </tr>
               </tbody>
-</table>
+            </table>
           <div>
-
           </td>
         </tr>
         <tr>
