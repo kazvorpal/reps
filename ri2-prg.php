@@ -18,15 +18,15 @@
                                     Where Region_Cd='$ri_region'
                                     ORDER BY RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
-//echo $sql_risk_issue . "<br><br>";
+//echo $sql_risk_issue . "<br><br>"; exit();
 
                 //CLOSED PROGRAM RISK AND ISSUES
                 $sql_risk_issue_cls = "select distinct RI_Nm, RIType_Cd,RIDescription_Txt, RIClosed_Dt, Last_Update_Ts, RiskAndIssue_Key
                                       from(
                                       select * from RI_MGT.fn_GetListOfAllInactiveRiskAndIssue ('Program') 
-                                      where Program_Nm = '$ri_program' and RIOpen_Flg = 0
+                                      where EPSProgram_Nm = '$ri_program' and RIOpen_Flg = 0
                                       ) a
-                                      Where Region_Cd='$ri_region'
+                                      Where EPSRegion_Cd='$ri_region'
                                       order by RiskAndIssue_Key desc";
 								$stmt_risk_issue_cls = sqlsrv_query( $data_conn, $sql_risk_issue_cls );
 ///echo $sql_risk_issue_cls;
@@ -59,6 +59,52 @@
 <title>Untitled Document</title>
 <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
 <link href='http://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="steps/style.css" type='text/css'> 
+    <link rel="stylesheet" href="includes/ri-styles.css" />
+    <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
+    <script src="../colorbox-master/jquery.colorbox.js"></script>
+<script>
+$(document).ready(function(){
+				//Examples of how to assign the Colorbox event to elements
+				$(".group1").colorbox({rel:'group1'});
+				$(".group2").colorbox({rel:'group2', transition:"fade"});
+				$(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
+				$(".group4").colorbox({rel:'group4', slideshow:true});
+				$(".ajax").colorbox();
+				$(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
+				$(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
+				$(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
+				$(".dno").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
+				$(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
+				$(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
+				$(".ocdframe").colorbox({iframe:true, width:"60%", height:"90%", scrolling:true, escKey: false, overlayClose: false});
+				$(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
+				$(".inline").colorbox({inline:true, width:"50%"});
+				$(".callbacks").colorbox({
+					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
+					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
+					onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
+					onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
+					onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
+				});
+
+				$('.non-retina').colorbox({rel:'group5', transition:'none'})
+				$('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
+				
+				//Example of preserving a JavaScript event for inline calls.
+				$("#click").click(function(){ 
+					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+					return false;
+				});
+			});
+</script>  
 </head>
 <body style="font-family:Mulish, serif;">
 <?php // echo $ri_program . '</br>' . $ri_region ?>
@@ -89,11 +135,13 @@ Program Manager is: <?php echo $alias; ?>
   <table width="98%" border="0" cellpadding="5" class="table table-bordered table-striped table-hover">
     <tbody>
     <tr>
-      <th><strong>Program Risk or Issue Name</strong></th>
+      <th width="35%"><strong>Program Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
-      <th><strong>Description</strong></th>
+      <th width="35%"><strong>Description</strong></th>
       <th><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
+      <th><div align="center"><strong>Action Plan</strong></div></th>
+      <th><div align="center"><strong>Assoc Projects</strong></div></th>
       <th align="center"><strong>Details</strong></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
@@ -103,6 +151,11 @@ Program Manager is: <?php echo $alias; ?>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
       <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
       <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
+      <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
+      <td align="center">
+        <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update"><span class="glyphicon glyphicon-plus"></span></a> | 
+        <a title="Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update"><span class="glyphicon glyphicon-minus"></span></a>      
+      </td>
       <td align="center"><a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&prg_nm=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
   </tr>
     <?php } ?>
@@ -118,9 +171,10 @@ Program Manager is: <?php echo $alias; ?>
     <tr cellpadding="5px">
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
-      <th><strong>Description</strong></th>
+      <th width="35%"><strong>Description</strong></th>
       <th><strong>Closed Date</strong></th>
       <th><strong>Last Update</strong></th>
+      <th><div align="center"><strong>Action Plan</strong></div></th>
       <th align="center"><strong>Details</strong></th>
     </tr>
     <?php while ($row_risk_issue_cls = sqlsrv_fetch_array($stmt_risk_issue_cls, SQLSRV_FETCH_ASSOC)){ ?>
@@ -130,6 +184,7 @@ Program Manager is: <?php echo $alias; ?>
       <td><?php echo $row_risk_issue_cls['RIDescription_Txt']; ?></td>
       <td><?php if(!empty($row_risk_issue_cls['RIClosed_Dt'])) { echo date_format($row_risk_issue_cls['RIClosed_Dt'], 'm-d-Y'); } ?></td>
       <td><?php if(!empty($row_risk_issue_cls['Last_Update_Ts'])) { echo date_format($row_risk_issue_cls['Last_Update_Ts'], 'm-d-Y'); } ?></td>
+      <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue_cls['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
       <td align="center"><a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue_cls['RiskAndIssue_Key'];?>&prg_nm=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=0&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
     </tr>
     <?php } ?>

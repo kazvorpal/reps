@@ -19,6 +19,7 @@
                 $sql_closed_ri = "select * from RI_MGT.fn_getlistofallriskandissue(0) where EPSProject_Nm = '$proj_name' order by RiskAndIssue_Key desc";
 								$stmt_closed_ri = sqlsrv_query( $data_conn, $sql_closed_ri );
                 //$row_closed_ri = sqlsrv_fetch_array( $stmt_closed_ri, SQLSRV_FETCH_ASSOC);
+                //echo $sql_closed_ri;
               
                 // CHECK IF THE USER AND OWNER MATCH
                 $ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
@@ -126,9 +127,9 @@ ProjectID: <?php echo $projID?>
 <?php if($authorized != ''){  ?> 
   
   <div style="padding:5px;">
-    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=risk&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Risk and Issues"><span class="btn btn-primary">CREATE PROJECT RISK</span></a>
+    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=risk&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Create Risk"><span class="btn btn-primary">CREATE PROJECT RISK</span></a>
     <!--<a href="risk-and-issues/project-risk.php?uid=<?php echo $uid?>&ri_type=risk&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Risk and Issues"><span class="btn btn-primary">Create Project Risk</span></a> -->
-    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=issue&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Risk and Issues"><span class="btn btn-primary">CREATE PROJECT ISSUE</span></a>
+    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=issue&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Create Issues"><span class="btn btn-primary">CREATE PROJECT ISSUE</span></a>
   </div>
 <?php } else {?>
   <div style="padding:5px;">
@@ -149,7 +150,7 @@ ProjectID: <?php echo $projID?>
       <th width="7%"><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
       <th><div align="center"><strong>Action Plan</strong></div></th>
-      <th><div align="center"><strong>Assoc Projects +/-</strong></div></th>
+      <th><div align="center"><strong>Assoc Projects</strong></div></th>
       <th><div align="center"><strong>Details</strong></div></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
@@ -160,9 +161,16 @@ ProjectID: <?php echo $projID?>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
       <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
       <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
-      <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
-      <td align="center"><a href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-edit"></span></a></td>
-      <td align="center"><a href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
+      <td align="center">
+        <a title="Action Plan History" href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a>
+      </td>
+      <td align="center">
+        <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-plus"></span></a> | 
+        <a title="Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-minus"></span></a>      
+      </td>
+      <td align="center">
+        <a title="View Detials | Update | Close" href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" ></span></a>
+      </td>
     </tr>
     <?php } ?>
   </tbody>

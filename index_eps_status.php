@@ -4,7 +4,7 @@
 <?php include ("sql/filter_vars.php");?>
 <?php include ("sql/filtered_data.php");?>
 <?php include ("sql/filters.php");?>
-<?php include ("sql/update-time.php");?>
+<?php include ("sql/update-time.php"); echo $sql_por; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

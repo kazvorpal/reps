@@ -1,7 +1,7 @@
 <?php 
 // DECLARE
-//4 update, 3 close, 2 create, 1 initialize 
-//print_r($_POST);
+//4 update, 3 close, 2 create/add, 1 initialize, 5 delete
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 //exit();
 // Entered Values
 if(!empty($_POST['status'])){
@@ -14,11 +14,28 @@ if(!empty($_POST['RiskAndIssue_Key'])){
   $RiskAndIssue_Key = $_POST['RiskAndIssue_Key'];
 }
 
+$del_proj_select = "";
+if(isset($_POST['del_proj_select'])) {
+  $del_proj_select = $_POST['del_proj_select'];
+  $RiskAndIssue_Key = $del_proj_select;
+}
+
 $Drivers = implode(',', $_POST['Drivers']);
   $Driversx = $Drivers;
 
-$Drivers_confirm = implode('<br>', $_POST['Drivers']); // For Confirmation page
+$Drivers_confirm = implode('<br>', $_POST['Drivers']); // For Confirmation page DISPLAY
   $Drivers_conx = $Drivers_confirm;
+
+
+//CONVERT DRIVER ID TO NAME FOR PROJECT ASSOCIATION ADDITION
+if(!empty($_POST['add_proj_select'])) {
+  $sql_assocproj_driver = "SELECT * FROM [COX_Dev].[RI_MGT].[Driver] WHERE Driver_Key = $Driversx";
+  $stmt_assocproj_driver  = sqlsrv_query( $data_conn, $sql_assocproj_driver ); 
+  $row_assocproj_driver  = sqlsrv_fetch_array( $stmt_assocproj_driver , SQLSRV_FETCH_ASSOC);
+
+  $Driversx = $row_assocproj_driver['Driver_Nm'];
+  $Drivers_conx = $row_assocproj_driver['Driver_Nm'];
+}
 
 $regionx = "";
 if($_POST['changeLogKey']==3 || $_POST['changeLogKey']==4 || $_POST['changeLogKey']==2 ){
@@ -54,8 +71,13 @@ $riskProbability = $_POST['RiskProbability'];
 
 $assocProject = "";
 if(!empty($_POST['assocProjects'])){
-$assocProject = $_POST['assocProjects']; 
+  $assocProject = $_POST['assocProjects']; 
+} 
+
+if(isset($_POST['add_proj_select'])) {
+  $assocProject = $_POST['add_proj_select'];
 }
+
 $assocProject_dsply = str_replace(",","<br>",$assocProject);
 
 $actionPlan = $_POST['ActionPlan']; 
@@ -115,9 +137,12 @@ $RIType = $_POST['RIType'];
 $RILevel = $_POST['RILevel'];
 
 $changeLogKey = $_POST['changeLogKey'];
-if(!empty($DateClosed)){
-$changeLogKey = 3;
-}
+  if(!empty($DateClosed)){
+    $changeLogKey = 3;
+  } 
+  if($_POST['changeLogKey'] == 5) {
+    $changeLogKey = 5;
+  }
 
 if ($changeLogKey == 4 || $changeLogKey == 3){
   $programKeys = $_POST['programKeys'];
@@ -142,6 +167,16 @@ $name = trim(str_replace("'","",$_POST['Namex'])); // PROJECT NAME
 
 $riskRealized = $_POST['riskRealized'];
 $raidLog = $_POST['raidLog'];
+
+if(isset($_POST['groupID'])){
+  $groupID = $_POST['groupID'];
+} else {
+  $groupID = NULL;
+}
+
+if(isset($_POST['del_proj_select'])) {
+$del_proj_select = $_POST['del_proj_select'];
+}
 
 //echo $changeLogKey . " - ";
 //echo $DateClosed;

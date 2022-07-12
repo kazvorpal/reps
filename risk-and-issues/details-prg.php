@@ -40,14 +40,16 @@ $stmt_risk_issue_regions  = sqlsrv_query( $data_conn, $sql_risk_issue_regions);
 $sql_progRIkey = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_progRIkey  = sqlsrv_query( $data_conn, $sql_progRIkey  );
 $row_progRIkey  = sqlsrv_fetch_array($stmt_progRIkey , SQLSRV_FETCH_ASSOC);
-$progRIkey = $row_progRIkey ['ProgramRI_Key']; 
+//echo $sql_progRIkey;
+//exit();
+$progRIkey = $row_progRIkey ['MLMProgramRI_Key']; 
 $programKey = $row_progRIkey ['MLMProgram_Key'];
 $riLog_Key =  $row_progRIkey ['RiskAndIssueLog_Key'];
 
 //echo $sql_progRIkey . "<br><br>";
 
 //GET DISTINCT DRIVERS FOR UPDATE 
-$sql_risk_issue_drivers_up = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status) ";
+$sql_risk_issue_drivers_up = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) WHERE RiskAndIssueLog_Key = $riLog_Key";
 $stmt_risk_issue_drivers_up  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers_up);
 //$row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_up['Risk_Issue_Name']; 			
@@ -55,7 +57,7 @@ $stmt_risk_issue_drivers_up  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers
 //exit();
 
 //GET DISTINCT DRIVERS
-$sql_risk_issue_drivers = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($riLog_Key,$status) ";
+$sql_risk_issue_drivers = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) WHERE RiskAndIssueLog_Key = $riLog_Key";
 $stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
 //$row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue['Risk_Issue_Name']; 			
@@ -75,7 +77,7 @@ $name = $row_risk_issue['RI_Nm'];
 $RILevel = "";
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
-$programs = $row_risk_issue['Program_Nm'];
+$programs = $row_risk_issue['MLMProgram_Nm'];
 $prject_nm = "";
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
@@ -156,7 +158,7 @@ $dateClosed = "";
       <td>
       <?php 
         while ($row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_regions , SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_regions['Region_Cd'] . '<br>';
+        echo $row_risk_issue_regions['MLMRegion_Cd'] . '<br>';
         }
         ?>
       </td>
@@ -230,7 +232,7 @@ $dateClosed = "";
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects</td>
+      <td>Associated Projects ()</td>
       <td>
         <?php 
         while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) {
@@ -240,8 +242,13 @@ $dateClosed = "";
       </td>
     </tr>
     <tr>
-      <td>Action Plan</td>
+      <td>Action Plan <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-calendar"></span></a></td>
       <td><?php echo $actionPlan; ?>
+        <div class="collapse" id="collapseExample">
+          <div class="well">
+          <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+          </div>
+        </div>
     </td>
     </tr>
     <tr>
@@ -264,7 +271,7 @@ $dateClosed = "";
         }
         ?>&regions=<?php 
         while ($row_risk_issue_regions_up  = sqlsrv_fetch_array($stmt_risk_issue_regions_up , SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_regions_up['Region_Cd'] . ',';
+        echo $row_risk_issue_regions_up['MLMRegion_Cd'] . ',';
         }
         ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
     <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>

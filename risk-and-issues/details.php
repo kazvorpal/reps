@@ -30,12 +30,12 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 
-$row_assoc_proj_count = sqlsrv_num_rows( $stmt_risk_issue_assoc_proj );
+//$row_assoc_proj_count = sqlsrv_num_rows( $stmt_risk_issue_assoc_proj );
    
-if ($row_assoc_proj_count=== false)
-   echo "Error in retrieveing row count.";
-else
-   echo $row_assoc_proj_count;
+//if ($row_assoc_proj_count=== false)
+   //echo "Error in retrieveing row count.";
+//else
+   //echo $row_assoc_proj_count;
 
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 
@@ -67,7 +67,7 @@ else
                   $access = "false";}
                 //PRINT USER SQL TO SCREEN FOR DEBUG
                 //echo $sql_authorize;
-                echo $access;
+                //echo $access;
 
 //DECLARE
 $name = trim($row_risk_issue['RI_Nm']);
@@ -223,7 +223,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects ()</td>
+      <td>Associated Projects</td>
       <td>
         <?php 
         while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) {
