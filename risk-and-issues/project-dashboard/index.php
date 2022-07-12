@@ -15,162 +15,14 @@
     <link rel="shortcut icon" href="favicon.ico"/>
     <?php 
     // print phpinfo();
-include ("../../includes/load.php");
+    include ("../../includes/load.php");
     function fixutf8($target) {
       if (gettype($target) == "string")
         return (utf8_encode($target));
       else 
         return ($target);
     }  
-    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'project'";
-    print '<!--' . $sqlstr . "<br/>-->";
-    ini_set('mssql.charset', 'UTF-8');
-    $riquery = sqlsrv_query($data_conn, $sqlstr);
-    if($riquery === false) {
-      if(($error = sqlsrv_errors()) != null) {
-        foreach($errors as $error) {
-          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-          echo "code: ".$error[ 'code']."<br />";
-          echo "message: ".$error[ 'message']."<br />";
-        }
-      }
-    } else {
-      $rows = array();
-      $count = 1;
-      while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
-        $rows[] = array_map("fixutf8", $row);
-      }
-      
-      $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'project'";
-      print '<!--' . $sqlstr . "<br/>-->";
-      ini_set('mssql.charset', 'UTF-8');
-      $closedquery = sqlsrv_query($data_conn, $sqlstr);
-      if($closedquery === false) {
-        if(($error = sqlsrv_errors()) != null) {
-          foreach($errors as $error) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-            echo "message: ".$error[ 'message']."<br />";
-          }
-        }
-      } else {
-        $closedrows = array();
-        $count = 1;
-        while($row = sqlsrv_fetch_array($closedquery, SQLSRV_FETCH_ASSOC)) {
-          $closedrows[] = array_map("fixutf8", $row);
-        }
-      }
-
-
-      $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(1)";
-      // print '<!--' . $sqlstr . "<br/> -->";
-      $locationquery = sqlsrv_query($data_conn, $sqlstr);
-      if($locationquery === false) {
-        if(($error = sqlsrv_errors()) != null) {
-          foreach($error as $errors) {
-            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-            echo "code: ".$error[ 'code']."<br />";
-            echo "message: ".$error[ 'message']."<br />";
-          }
-        }
-      } else {
-        $locationrows = array();
-        $count = 1;
-        while($locationrow = sqlsrv_fetch_array($locationquery, SQLSRV_FETCH_ASSOC)) {
-          $locationrows[] = array_map("fixutf8", $locationrow);
-          // print_r($row);
-          // print($row["RiskAndIssueLog_Key"]);
-          // print("<br/>");
-        }
-      }
-
-      $p4plist = array();
-      foreach ($rows as $row)  {
-        if($row["MLMProgramRI_Key"] != '') {
-          $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .")";
-          ini_set('mssql.charset', 'UTF-8');
-          $p4pquery = sqlsrv_query($data_conn, $sqlstr);
-          if($p4pquery === false) {
-            if(($error = sqlsrv_errors()) != null) {
-              // print_r($error);
-              foreach($errors as $error) {
-                echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-                echo "code: ".$error[ 'code']."<br />";
-                echo "message: ".$error[ 'message']."<br />";
-              }
-            }
-          } else {
-            $count = 1;
-            $p4prows = array();
-            $checker = 0;
-            while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
-              $p4prows[] = array_map("fixutf8", $p4prow);
-              $checker = 1;
-            }
-          }
-          $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
-        }
-      }
-      
-      $mangerlist = array();
-      foreach ($rows as $row)  {
-        if($row["MLMProgramRI_Key"] != '') {
-          $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["MLMProgram_Nm"] ."')";
-          ini_set('mssql.charset', 'UTF-8');
-          $mangerquery = sqlsrv_query($data_conn, $sqlstr);
-          if($mangerquery === false) {
-            if(($error = sqlsrv_errors()) != null) {
-              foreach($errors as $error) {
-                echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-                echo "code: ".$error[ 'code']."<br />";
-                echo "message: ".$error[ 'message']."<br />";
-              }
-            }
-          } else {
-            $count = 1;
-            $mangerrows = array();
-              while($mangerrow = sqlsrv_fetch_array($mangerquery, SQLSRV_FETCH_ASSOC)) {
-                $mangerrows[] = array_map("fixutf8", $mangerrow);
-              }
-            }
-            $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
-          }
-        }
-
-        $driverlist = array();
-        foreach ($rows as $row)  {
-          if($row["RiskAndIssue_Key"] != '') {
-            // Get OWNERS //
-            $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(". $row["RiskAndIssueLog_Key"] ." , 1)";
-            // print $sqlstr . "<br>";
-            ini_set('mssql.charset', 'UTF-8');
-            $driverquery = sqlsrv_query($data_conn, $sqlstr);
-            if($driverquery === false) {
-              if(($error = sqlsrv_errors()) != null) {
-                foreach($errors as $error) {
-                  echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-                  echo "code: ".$error[ 'code']."<br />";
-                  echo "message: ".$error[ 'message']."<br />";
-                }
-              }
-            } else {
-              $count = 1;
-              $driverrows = array();
-              while($driverrow = sqlsrv_fetch_array($driverquery, SQLSRV_FETCH_ASSOC)) {
-                $driverrows[] = array_map("fixutf8", $driverrow);
-              }
-            }
-            $driverlist[$row["RiskAndIssueLog_Key"]] = $driverrows;
-          }
-        }
-  
-        $p4pout = json_encode($p4plist);
-        $mangerout = json_encode($mangerlist);
-        $driverout = json_encode($driverlist);
-        $locationout = json_encode($locationrows);
-        $jsonout = json_encode($rows);
-        $closedout = json_encode($closedrows);
-      }
+    include ("../includes/data.php");
     ?>
     <script>
 
@@ -351,9 +203,8 @@ include ("../../includes/load.php");
     }
 
     const createrow = (ri) => {
-      const name = ri.RI_Nm;
       // Create a row in the table
-      // const ri = getribykey(name);
+      const name = ri.RI_Nm;
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
       const fieldswitch = {
@@ -376,7 +227,6 @@ include ("../../includes/load.php");
             return ri.LastUpdateBy_Nm;
           },
           ForecastedResolution_Dt: function() {
-            // console.log(ri.RI_Nm);
             if (ri.ForecastedResolution_Dt != undefined)
               return formatDate(new Date(ri.ForecastedResolution_Dt.date));
             else 
@@ -411,9 +261,6 @@ include ("../../includes/load.php");
                 counter++;
               }
             }
-            // const r = getlocationbykey(ri.EPSProject_Key);
-            // rrr = (r != undefined) ? r.MLMRegion_Cd : "";
-            // return (counter < 2) ? rrr : "Multiple";
             return ri.EPSRegion_Cd;
             return list.slice(0, -2);
           },
@@ -498,10 +345,6 @@ include ("../../includes/load.php");
       return trri;
     }  
 
-    const getprojectbykey = (target, name) =>  mlm = ridata.find(o => o.EPSProject_Key == target && o.MLMProgram_Nm == name);
-    const getribykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target);
-    const projectlist = ridata.map(item => item.EPSProject_Key);
-    const fulllist = ridata.map(item => item.RiskAndIssue_Key);
     const uniques = getwholeuniques(ridata, "RiskAndIssue_Key");
 
     const splitdate = (datestring) => {
@@ -525,12 +368,6 @@ include ("../../includes/load.php");
       return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
     }
 
-    const flipname = (name) => {
-      let fn = name.substring(name.indexOf(";")+2, name.indexOf("("));
-      let ln = name.substring(0, name.indexOf(";"))
-      return(fn + ln);
-    }  
-
     const ranger = (daterange) => {
       // get start and end date from a date range set via Bootstrap date range picker
       const dates = {};
@@ -546,7 +383,6 @@ include ("../../includes/load.php");
       populate(filtration())
       return false;
     }  
-    // console.log(fulllist)
     populate(uniques);
   </script>
   </body>
