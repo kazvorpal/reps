@@ -43,7 +43,10 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 // CHECK IF THE USER AND OWNER MATCH
                 //$ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
                 //$authUser = trim($_GET['winuser']);
+                $alias = "";
+                if(!empty($row_winuser['CCI_Alias'])){
                 $alias = trim($row_winuser['CCI_Alias']);
+                }
                 //$tempID = uniqid();
                 //$projectOwner = $row_projID['PROJ_OWNR_NM'];
 
