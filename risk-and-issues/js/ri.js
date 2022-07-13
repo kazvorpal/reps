@@ -110,7 +110,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
 
     const exporter = () => {
         document.workbook.xlsx.writeBuffer().then((buf) => {
-          saveAs(new Blob([buf]), 'ri-' + mode + "-dashboard-" + makedate(new Date()) + '.xlsx');
+          saveAs(new Blob([buf]), 'ri-' + mode + "-dashboard-" + formatDate(new Date()) + '.xlsx');
         });
     }
 
