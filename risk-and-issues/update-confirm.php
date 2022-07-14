@@ -1,5 +1,4 @@
 <?php 
-//print_r($_POST);
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
@@ -215,7 +214,14 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 <?php if(isset($_POST['opportunity'])) { ?>
     <tr>
       <td>Opportunity</td>
-      <td><?php $_POST['opportunity']; ?>
+      <td><?php echo $_POST['opportunity']; ?>
+    </td>
+    </tr>
+<?php } ?>
+<?php if($_POST['formaction'] == "update") { ?>
+    <tr>
+      <td>Associated Projects</td>
+      <td><?php echo str_replace(",", "<br>", $_POST['assocProjects']); ?>
     </td>
     </tr>
 <?php } ?>

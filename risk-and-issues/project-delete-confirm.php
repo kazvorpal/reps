@@ -232,9 +232,13 @@ function toggle(source) {
   <input name="groupID" type="hidden" value="<?php echo $groupID; ?>">
   <input name="del_proj_select" type="hidden" value="<?php echo $del_proj_select; ?>">
   <input name="DateClosed"type="hidden" id="DateClosed" value="<?php echo date('Y-m-d') ?>">
+  <input name="formaction" type="hidden" id="formaction" value="update">
 
   <div class="alert alert-danger">
-  <div align="left"><span class="glyphicon glyphicon-warning-sign"></span> You are about to remove the following projects from this Risk/Issue. There is no need to update any of the Risk/Issue Details.</div></br>
+  <div align="left">
+    <span class="glyphicon glyphicon-warning-sign"></span> You are about to remove the following projects from this Risk/Issue. There is no need to update any of the Risk/Issue Details.
+  </div>
+  </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5"><?php if(empty($del_proj_select)) {echo strtoupper($RIType);} else { echo "PROJECT";}?> ASSOCIATION</h4></td>

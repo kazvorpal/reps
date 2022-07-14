@@ -226,7 +226,6 @@ function toggle(source) {
   ?>
 
   <form action="<?php echo $formAction;?>" method="post" id="projectRisk">
-
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey;?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id; ?>">
   <input name="formName" type="hidden" id="formName" value="PRJR">
@@ -245,8 +244,34 @@ function toggle(source) {
   <input name="raidLog" type="hidden" value="No" id="raidLog">
   <input name="groupID" type="hidden" value="<?php echo $groupID; ?>">
   <input name="add_proj_select" type="hidden" value="<?php echo $add_proj_select; ?>">
+  <input name="formaction" type="hidden" id="formaction" value="update">
 
-
+  <?php if(!empty($add_proj_select)) { ?>
+  <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>
+  <div class="alert alert-success">
+  <div align="left">
+    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue. There is no need to update any of the Risk/Issue Details.
+  </div>
+  </br>
+      <table width="100%" border="0" cellpadding="10" cellspacing="10">
+        <tr>
+          <td colspan="3">
+            <div class="box" align="left" style="font-size: 12px;">
+            <?php 
+                if(!empty($add_proj_select)) {
+                  echo implode("</br>", $_POST['add_proj_select']);
+                } 
+              ?>
+            </div>
+		      </td>
+        </tr>
+      </table>
+  </div>
+  <hr>
+  <?php } ?>
+    <table width="100%" border="0" cellpadding="10" cellspacing="10">
+      <tbody>
+        <tr>
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>

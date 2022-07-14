@@ -212,7 +212,7 @@ function toggle(source) {
 <div align="center"><?php echo $name; ?></div>
 
 <!-- <div align="center">Select any project associated with this Risk or Issue</div> --><br>
-<form action="<?php echo $gotoPage; ?>" method="post" class="navbar-form navbar-center" id="assProjects" title="assProjects">
+<form action="<?php echo $gotoPage; ?>" method="post" class="navbar-form navbar-center" id="assProjects" title="Associated Projects">
 <input type="hidden" name="rikey" value="<?php echo $_GET['rikey']; ?>">
 <input type="hidden" name="fscl_year" value="<?php echo $_GET['fscl_year']; ?>">
 <input type="hidden" name="proj_name" value="<?php echo $_GET['proj_name']; ?>">
@@ -247,7 +247,7 @@ function toggle(source) {
 <?php } else { echo "<div align='center' class='alert alert-info'>There are no Associate Risks/Issues related to " . $name . "<div><br><br>"; }?>
 
 <div align='center'> 
-  <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+  <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-step-backward" title="Back to previous page"></span> Back </a>
   <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Next >" class="btn btn-primary"> 
 </div>
 </form>

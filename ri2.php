@@ -144,18 +144,22 @@ ProjectID: <?php echo $projID?>
   <tbody>
     <tr cellpadding="5px">
       <th><strong>ID</strong></th>
+      <th><strong>GID</strong></th>
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
       <th width="7%"><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
       <th><div align="center"><strong>Action Plan</strong></div></th>
-      <th><div align="center"><strong>Assoc Projects</strong></div></th>
-      <th><div align="center"><strong>Details</strong></div></th>
+        <?php if($authorized != ''){  ?> 
+        <th><div align="center"><strong>Assoc Projects</strong></div></th>
+        <?php } ?>
+      <th><div align="center"><strong>Details<br>Update</strong></div></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
     <tr>
-      <td><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
+      <td align="center"><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
+      <td align="center"><?php echo $row_risk_issue['RIIncrement_Num']; ?></td>
       <td><?php echo $row_risk_issue['RI_Nm']; ?></td>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
@@ -164,10 +168,12 @@ ProjectID: <?php echo $projID?>
       <td align="center">
         <a title="Action Plan History" href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a>
       </td>
-      <td align="center">
-        <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-plus"></span></a> | 
-        <a title="Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-minus"></span></a>      
-      </td>
+      <?php if($authorized != ''){  ?> 
+        <td align="center">
+          <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-plus"></span></a> | 
+          <a title="Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-minus"></span></a>      
+        </td>
+      <?php } ?>
       <td align="center">
         <a title="View Detials | Update | Close" href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" ></span></a>
       </td>
