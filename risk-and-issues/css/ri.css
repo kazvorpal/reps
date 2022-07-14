@@ -103,7 +103,7 @@
     padding: 2px;
     font-size: x-small;
     cursor: default;
-    text-align: left;
+    /* text-align: left; */
 }
 .namebox {
   /* background-color: #fff; */
