@@ -2,13 +2,18 @@
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
+include ("../sql/MS_Users_prg.php");
 
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
 $proj_name = $_GET['proj_name'];
-$prog_name = $_GET['prg_nm'];
+$prog_name = $_GET['program'];
+
+if(isset($_GET['uid'])) {
 $uid = $_GET['uid'];
+}
+
 $status = $_GET['status']; //0=closed , 1=open
 $popup = $_GET['popup'];
 $au = $_GET['au'];
@@ -71,6 +76,21 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 //echo $row_risk_issue_assoc_proj['ProgramRI_Key'];
 //echo $sql_risk_issue_assoc_proj; 
 
+//USER AUTHORIZATION
+$authUser = strtolower($windowsUser);
+$alias = "";
+  if(!empty($row_winuser_prg['User_UID'])) {
+  $alias = strtolower($row_winuser_prg['User_UID']);
+  }
+$tempID = uniqid();
+//$row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
+//echo $sql_risk_issue;
+
+$uaccess = "false";
+if($alias == $authUser){
+  $uaccess = "true";
+} 
+
 //exit;
 //DECLARE
 $name = $row_risk_issue['RI_Nm'];
@@ -94,6 +114,7 @@ $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = "";
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+$formaction =  "update"; 
 
 $raidLogx = $row_risk_issue['RaidLog_Flg'];
 if($raidLogx == 1) {$raidLog =  "Yes";}
@@ -260,7 +281,7 @@ $dateClosed = "";
   </tbody>
 </table>
 <div align="center">
-  
+<?php if($alias == $authUser){ ?> 
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
     <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
 <?php if($au == "true")  {?>  
@@ -293,6 +314,7 @@ $dateClosed = "";
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
     </div>
+    <?php } ?>
     <?php } ?>
     <?php } ?>
 </div>
