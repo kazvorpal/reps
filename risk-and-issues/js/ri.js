@@ -7,10 +7,6 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   // Sanitize a string
   const makesafe = (target) => target.replace(/\s/g,'');
   
-  const empty = (o) => {
-    o.children[0].innerHTML = "";
-  }
-
   const makeelement = (o) => {
 
     // o is an (o)bject with these optional properties:
@@ -37,19 +33,17 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     document.getElementById("resultcount").innerHTML = `${results.length} Result${s} Found`
   }
 
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, '0');
-  }
+  const padTo2Digits = (num) => num.toString().padStart(2, '0');
   
+  const textalign = (field) => (parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
 
-  function formatDate(date) {
+  const formatDate = (date) => {
     return [
       padTo2Digits(date.getMonth() + 1),
       padTo2Digits(date.getDate()),
       date.getFullYear(),
     ].join('-');
   }
-  
 
   const makestringdate = (dateobject) => {
     if (dateobject != null) {
@@ -189,31 +183,3 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
             };
         });
     }
-
-    // document.worksheet.getRow(1).eachCell( function(cell, colNumber){
-    //     if(cell.value){
-    //       document.worksheet.getRow(1).height = 42;
-    //       cell.font = { name: 'helvetica', family: 4, underline: 'none', bold: true, color: {argb: 'FFFFFFFF'}};
-    //       cell.alignment = {vertical: 'middle', horizontal: 'center'};
-    //       cell.fill = {
-    //         type: 'pattern',
-    //         pattern:'solid',
-    //         bgColor:{argb:'FF5588FF'},
-    //         fgColor:{argb: "FF3377AA"},
-    //         width: "256",
-    //         height: "256"
-    //       };
-    //     }
-    //   });
-    //   const borderstyle = "medium";
-    //   document.worksheet.columns.forEach(column => {
-    //     column.border = {
-    //       top: { style: borderstyle },
-    //       left: { style: borderstyle },
-    //       bottom: { style: borderstyle },
-    //       right: { style: borderstyle }
-    //     };
-    //   });
-
-
-
