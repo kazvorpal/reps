@@ -144,6 +144,7 @@ ProjectID: <?php echo $projID?>
   <tbody>
     <tr cellpadding="5px">
       <th><strong>ID</strong></th>
+      <th><strong>GID</strong></th>
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
@@ -151,11 +152,12 @@ ProjectID: <?php echo $projID?>
       <th><strong>Created On</strong></th>
       <th><div align="center"><strong>Action Plan</strong></div></th>
       <th><div align="center"><strong>Assoc Projects</strong></div></th>
-      <th><div align="center"><strong>Details</strong></div></th>
+      <th><div align="center"><strong>Details<br>Update</strong></div></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
     <tr>
-      <td><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
+      <td align="center"><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
+      <td align="center"><?php echo $row_risk_issue['RIIncrement_Num']; ?></td>
       <td><?php echo $row_risk_issue['RI_Nm']; ?></td>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>

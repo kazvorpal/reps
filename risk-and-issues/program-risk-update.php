@@ -4,15 +4,18 @@
 <?php include ("../sql/project_by_id.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
+echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+echo str_replace('  ', '&nbsp; ', nl2br(print_r($_GET, true)));
 
   //FIND PROJECT RISK AND ISSUES
   $RiskAndIssue_Key = $_GET['rikey'];
   $fscl_year = $_GET['fscl_year'];
-  $proj_name = $_GET['projname'];
+  //$proj_name = $_GET['projname'];  // I DONT NEED THIS FOR PROGRAM
   $progkey = $_GET['progkey']; //MLMProgramkey
-  $progrikey = $_GET['progRIkey'];
-  $status = $_GET['status'];
-  $progName = $_GET['progname'];
+  $progrikey = $_GET['progRIkey']; //ASSIGNED PROGRAM RI KEY
+  $status = $_GET['status']; // ALWAY 1 FOR ACTIVE
+  $progName = $_GET['progname']; // MLM PRGRAM NAME
+  $formaction =  $_GET['action'];
   //echo $progkey;
     
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -33,7 +36,7 @@
       } else { 
     $regionIN = "'" . $ass_project . "'"; 
       }
-  
+
   //GET ASSOCIATED PROJECTS FROM 
   $sql_assoc_prj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey,$status)";
   $stmt_assoc_prj = sqlsrv_query( $data_conn, $sql_assoc_prj );
@@ -45,6 +48,7 @@
   $stmt_assoc_prj_keys  = sqlsrv_query( $data_conn, $sql_assoc_prj_keys  );
   //$_keys = sqlsrv_fetch_array($stmt_assoc_prj_keys , SQLSRV_FETCH_ASSOC);
   //$row_assoc_prj_keys ['PROJECT_key'];
+  //echo $sql_assoc_prj_keys;
 
   //GET REGIONS FROM NAME
   $sql_regions = "SELECT DISTINCT Region_key, Region
@@ -96,6 +100,16 @@
   //echo $numRows;
   //exit();
 
+  //GET EPS PROJECT KEYS FROM PROJECT NAMES
+  $sql_epsProjKey = "DECLARE @EPS_IDs VARCHAR(100)
+                    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(100))
+                    FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) WHERE EPSProject_Nm in ($regionIN)
+                    SELECT @EPS_IDs AS eps_proj_key";
+  $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );
+  $row_epsProjKey = sqlsrv_fetch_array( $stmt_epsProjKey, SQLSRV_FETCH_ASSOC);
+  
+  $eps_proj_keys = $row_epsProjKey['eps_proj_key'];
+    
   if($numRows == 7){
       $regionCD = "All";
   } else if($numRows == 1) {
@@ -121,6 +135,9 @@
   
   //DEFINE
   $changeLogKey = 4;
+  if($formaction == "new"){
+    $changeLogKey = 2;
+  }
   $name = trim($row_risk_issue['RI_Nm']);
   $RILevel = "";
   $RIType = $row_risk_issue['RIType_Cd'];
@@ -154,12 +171,20 @@
   $assCRID = $row_risk_issue['AssociatedCR_Key'];
   $regions = $_GET['regions'];
   $probability = $row_risk_issue['RiskProbability_Key'];
-
-  if(!empty($_POST['proj_select'])) {
-  $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
-  } else {
-  $assocProject = $RiskAndIssue_Key;
-  }
+ 
+if($formaction == "new"){
+    if(!empty($_POST['proj_select'])) {
+    $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
+    } else {
+    $assocProject = $RiskAndIssue_Key;
+    }
+} else {
+    if(!empty($_POST['proj_select'])) {
+    $assocProject = implode(",",$_POST['proj_select']);
+    } else {
+    $assocProject = $RiskAndIssue_Key;
+    }
+}
 
   $raidLog = $row_risk_issue['RaidLog_Flg'];
   $department = $row_risk_issue['POC_Department'];
@@ -300,26 +325,43 @@ function toggle(source) {
 ?>
 </div>
 <div style="padding: 20px;">
-  <form action="update-confirm.php" method="post" id="programRisk">
+<?php 
+if($formaction == "update") {
+  $action = "update-confirm.php";
+} else {
+  $action = "confirm.php";
+}
 
-  <input name="changeLogKey" type="hidden" id="changeLogKey" value="4"><!-- 4 update, 3 close, 2 create, 1 initialize -->
+?>
+  <form action="<?php echo $action ?>" method="post" id="programRisk">
+
+  <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 4 update, 3 close, 2 create, 1 initialize -->
   <input name="programs" type="hidden" id="programs" value="<?php echo $row_projID['PRGM'] ?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value="PRGR">
-  <input name="formType" type="hidden" id="formType" value="Update">
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
+  <input name="formName" type="hidden" id="formName" value="PRGR">
   <input name="RIType" type="hidden" id="RIType" value="Risk">
   <input name="RILevel" type="hidden" id="RILevel" value="Program">
-  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
+
+  <?php if($formaction == "new") {?>
+    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
+    <input name="formType" type="hidden" id="formType" value="Update">
+    <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value='<?php while ($row_assoc_prj_keys= sqlsrv_fetch_array($stmt_assoc_prj_keys, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj_keys['PROJECT_key'] . ',';} ?>'>
+  <?php } else { ?>
+    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
+    <input name="formType" type="hidden" id="formType" value="New">
+    <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php echo $eps_proj_keys?>">
+  <?php } ?>
+
   <input name="CreatedFrom" type="hidden" id="Created From" value=''>
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
   <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value=''>
-  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value='<?php while ($row_assoc_prj_keys= sqlsrv_fetch_array($stmt_assoc_prj_keys, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj_keys['PROJECT_key'] . ',';} ?>'>
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value='<?php echo $RiskAndIssue_Key ?>'>
   <input name="programKeys" type="hidden" id="programKeys" value='<?php echo $progkey ?>'>
   <input name="regionKeys" type="hidden" id="regionKeys" value="<?php while ($row_regions_f= sqlsrv_fetch_array($stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region_key'] . ',';} ?>">
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
+  <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -682,7 +724,15 @@ function toggle(source) {
         <tr>
           <td colspan="2" align="left">
         <div class="box" style="font-size: 12px;">
-				  <?php while ($row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj['EPSProject_Nm'] . '<br>';} ?>
+
+				  <?php 
+          if($formaction == "new") {
+            while ($row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj['EPSProject_Nm'] . '<br>';} 
+          } else {
+            echo str_replace(",","<br>", $assocProject);
+          }
+          ?>
+
         </div>
       </td>
         </tr>
@@ -752,11 +802,11 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="2" align="left">
-			  <div class="box">
-			<label for="DateClosed">Date Closed:</label>
-            <input type="date" name="DateClosed" id="DateClosed" class="form-control">
-			</div>
-		  </td>
+            <div class="box">
+          <label for="DateClosed">Date Closed:</label>
+                <input type="date" name="DateClosed" id="DateClosed" class="form-control">
+          </div>
+          </td>
         </tr>
         <tr>
           <td colspan="2" align="right" valign="middle">&nbsp;</td>

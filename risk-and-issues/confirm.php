@@ -3,8 +3,8 @@ include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
 include("../sql/risk-issues-lookup.php");
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 ?>
-
 <!doctype html>
 <html>
 <head>

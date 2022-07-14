@@ -5,8 +5,7 @@ include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
-//echo "<br><br>";
-//exit();
+
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
     if ($changeLogKey == 1){

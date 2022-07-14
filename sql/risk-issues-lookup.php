@@ -3,6 +3,7 @@
 //4 update, 3 close, 2 create/add, 1 initialize, 5 delete
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 //exit();
+
 // Entered Values
 if(!empty($_POST['status'])){
   $status = $_POST['status'];
@@ -44,7 +45,8 @@ if($_POST['changeLogKey']==3 || $_POST['changeLogKey']==4 || $_POST['changeLogKe
     $regionx = $region;
     $region_confirm = substr($_POST['Region'],0, -1);
     $region_conx = $region_confirm;
-    $region_conx_dsply = str_replace(",","<br>",$region_conx);
+    //$region_conx_dsply = str_replace(",","<br>",$region_conx);
+    $region_conx_dsply = str_replace(",", "<br>", $_POST['Region']);
   }
 } else {
   if(!empty($_POST['Region'])) {
@@ -53,6 +55,7 @@ if($_POST['changeLogKey']==3 || $_POST['changeLogKey']==4 || $_POST['changeLogKe
     $region_confirm = implode(',', $_POST['Region']);
     $region_conx = $region_confirm;
     $region_conx_dsply = str_replace(",","<br>",$region_conx);
+    //$region_conx_dsply = str_replace(",", "<br>", $_POST['Region']);
   }
 }
 
@@ -147,7 +150,13 @@ $changeLogKey = $_POST['changeLogKey'];
 if ($changeLogKey == 4 || $changeLogKey == 3){
   $programKeys = $_POST['programKeys'];
   $regionKeys = substr($_POST['regionKeys'],0, -1);
-  $assocProjectsKeys = substr($_POST['assocProjectsKeys'],0, -1);
+
+  if($_POST['formaction'] == "update") {
+    $assocProjectsKeys = $_POST['assocProjectsKeys'];
+  } else {
+    $assocProjectsKeys = substr($_POST['assocProjectsKeys'],0, -1);
+  }
+    
 } else {
   $programKeys = NULL;
   $regionKeys = NULL;

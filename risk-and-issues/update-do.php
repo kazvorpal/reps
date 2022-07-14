@@ -7,10 +7,6 @@ include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
 
-//print_r($_POST);
-//echo "<br><br>";
-//exit();
-
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
      if ($changeLogKey == 1){
