@@ -4,8 +4,8 @@
 <?php include ("../sql/project_by_id.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
-echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
-echo str_replace('  ', '&nbsp; ', nl2br(print_r($_GET, true)));
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_GET, true)));
 
   //FIND PROJECT RISK AND ISSUES
   $RiskAndIssue_Key = $_GET['rikey'];

@@ -140,7 +140,9 @@ Program Manager is: <?php echo $alias; ?>
       <th><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
       <th><div align="center"><strong>Action Plan</strong></div></th>
-      <th><div align="center"><strong>Assoc Projects</strong></div></th>
+        <?php if($alias == $authUser){ ?> 
+        <th><div align="center"><strong>Assoc Projects</strong></div></th>
+        <?php } ?>
       <th align="center"><strong>Details</strong></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
@@ -151,9 +153,11 @@ Program Manager is: <?php echo $alias; ?>
       <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
       <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
       <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
+      <?php if($alias == $authUser){ ?> 
       <td align="center">
         <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage_prg.php?action=update&ri_level=prg&prg_nm=<?php echo $ri_program;?>&progRIKey=<?php echo $row_risk_issue['ProgramRI_key'];?>&fiscal_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="glyphicon glyphicon-edit"></span></a>   
       </td>
+      <?php } ?>
       <td align="center"><a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&prg_nm=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
   </tr>
     <?php } ?>
