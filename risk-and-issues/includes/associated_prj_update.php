@@ -202,7 +202,7 @@ function toggle(source) {
       } elseif ($ri_type == "RISKS" && $ri_level == "prg"){
         echo "BULK EDIT PROGRAM RISKS";
       } elseif ($ri_type == "Issue" && $ri_level == "prj"){
-        echo "BULK EDIT POJECT ISSUES";
+        echo "BULK EDIT PROJECT ISSUES";
       } else {
         echo "BULK EDIT PROGRAM ISSUES";
       }

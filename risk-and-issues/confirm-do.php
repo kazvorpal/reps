@@ -111,7 +111,11 @@ $responseStrategy2 = $row_resp_strg['ResponseStrategy_Nm'];
 $sql_poc = "SELECT TOP(1) * FROM [RI_MGT].[fn_GetListOfCurrentTaskPOC] (1) WHERE POC_Nm = '$individual'";
 $stmt_poc  = sqlsrv_query( $data_conn, $sql_poc  );  
 $row_poc  = sqlsrv_fetch_array( $stmt_poc , SQLSRV_FETCH_ASSOC);
+
+$pocEmail = "";
+if(!empty($row_poc ['POC_Email'])){
 $pocEmail = $row_poc ['POC_Email'];
+}
 
     //$unknown = $_POST['Unknown']; // IF UNKNOWN IS CHECKED SEND NULL TO FORCASTED RESOLUTION DATE
     //$createdFrom = $_POST['CreatedFrom']; // THE RISK THE ISSUE WAS CREATED FROM - FOR ISSUE ONLY
