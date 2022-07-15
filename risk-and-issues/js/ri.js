@@ -82,8 +82,8 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
         (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) &&
         (mode == "project" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
         (mode == "program" || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
-        ((document.getElementById("market").value == '' || ($('#market').val().includes(o.Market_Cd) || $('#market').val().includes(o.EPSMarket_Cd)))) &&
-        ((document.getElementById("facility").value == '' || ($('#facility').val().includes(o.Facility_Cd) || $('#facility').val().includes(o.EPSFacility_Cd)))) &&
+        ((mode == "program" || document.getElementById("market").value == '' || ($('#market').val().includes(o.Market_Cd) || $('#market').val().includes(o.EPSMarket_Cd)))) &&
+        ((mode == "program" || document.getElementById("facility").value == '' || ($('#facility').val().includes(o.Facility_Cd) || $('#facility').val().includes(o.EPSFacility_Cd)))) &&
         (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
     );
 }
