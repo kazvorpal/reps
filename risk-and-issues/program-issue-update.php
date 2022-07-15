@@ -696,7 +696,7 @@ if($formaction == "update") {
           <td colspan="2" align="left">
         <div class="box" style="font-size: 12px;">
 				  <?php 
-            if($formaction == "new") {
+            if($formaction == "update") {
               while ($row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj['EPSProject_Nm'] . '<br>';} 
             } else {
               echo str_replace(",","<br>", $assocProject);

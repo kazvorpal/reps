@@ -30,7 +30,7 @@ $Drivers_confirm = implode('<br>', $_POST['Drivers']); // For Confirmation page 
 
 //CONVERT DRIVER ID TO NAME FOR PROJECT ASSOCIATION ADDITION
 if(!empty($_POST['add_proj_select'])) {
-  $sql_assocproj_driver = "SELECT * FROM [COX_Dev].[RI_MGT].[Driver] WHERE Driver_Key = $Driversx";
+  $sql_assocproj_driver = "SELECT * FROM [RI_MGT].[Driver] WHERE Driver_Key = $Driversx";
   $stmt_assocproj_driver  = sqlsrv_query( $data_conn, $sql_assocproj_driver ); 
   $row_assocproj_driver  = sqlsrv_fetch_array( $stmt_assocproj_driver , SQLSRV_FETCH_ASSOC);
 

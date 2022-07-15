@@ -58,6 +58,12 @@ $(document).ready(function(){
 					$('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
 					return false;
 				});
+        var originalClose = $.colorbox.close;
+        $.colorbox.close = function(){
+          if (confirm('You are about to close this window.  Incomplete Risk/Issues will not be saved.')) {
+            originalClose();
+          }
+        };
 			});
 function MM_setTextOfTextfield(objId,x,newText) { //v9.0
   with (document){ if (getElementById){
