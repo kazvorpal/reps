@@ -12,7 +12,12 @@ include ("../sql/RI_Internal_External.php");
   $progrikey = $_GET['progRIkey'];
   $status = $_GET['status'];
   $progName = $_GET['progname'];
-  $formaction =  $_GET['action']; 
+  $formaction =  $_GET['action'];
+
+  $assc_prj_update = "";
+  if(!empty($_GET['assc_prj_update'])) {
+  $assc_prj_update = $_GET['assc_prj_update'];
+  }
     
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
   $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
@@ -73,6 +78,15 @@ include ("../sql/RI_Internal_External.php");
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
+
+  //GET ALL REGIONS FOR UPDATE
+  $sql_regions_update = "SELECT DISTINCT Region_key, Region
+  FROM [EPS].[ProjectStage]
+  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+  $stmt_regions_update = sqlsrv_query( $data_conn, $sql_regions_update );
+  //$row_regions_update = sqlsrv_fetch_array( $stmt_regions_update, SQLSRV_FETCH_ASSOC);
+  //$row_regions_update['Region'];
+  //echo $sql_regions_update;
 
   //SINGLE REGION FOR NAME CONCATINATION
   $sql_region = "SELECT DISTINCT Region_key, Region
@@ -158,7 +172,7 @@ include ("../sql/RI_Internal_External.php");
   $driverList = rtrim($_GET['drivertime'], ",");
   $driverArr = explode(",", $driverList);
   $regionList = rtrim($_GET['regions'], ",");
-  $regionArr = explode(",", $regionList);
+  $regionArr = explode(",", $regionList); //for update // add array for update assoc projects
   $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
   $raid = $row_risk_issue['RaidLog_Flg'];
   $riskRealized = $row_risk_issue['RiskRealized_Flg'];
@@ -339,11 +353,35 @@ if($formaction == "update") {
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value='<?php echo $RiskAndIssue_Key ?>'>
   <input name="programKeys" type="hidden" id="programKeys" value='<?php echo $progkey ?>'>
   <input name="regionKeys" type="hidden" id="regionKeys" value="<?php while ($row_regions_f= sqlsrv_fetch_array($stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region_key'] . ',';} ?>">
+  <input type="hidden" name="Region_add_assc_prj" id="Region_add_assco_proj" value="<?php while($row_regions_update = sqlsrv_fetch_array( $stmt_regions_update, SQLSRV_FETCH_ASSOC)) { echo $row_regions_update['Region'] . "," ; } ?>">
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value="">
   <input name="riskRealized" type="hidden" value="0">
   <input name="CreatedFrom" type="hidden" class="form-control" id="Created From" value="<?php echo $assCRID;?>">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
+
+  <?php if($assc_prj_update == "yes"){ ?>
+  <div class="alert alert-danger">
+  <div align="left">
+    <span class="glyphicon glyphicon-warning-sign"></span> You are Updating the Associated Project list for this Program Risk/Issue to the following.
+  </div>
+  </br>
+      <table width="100%" border="0" cellpadding="10" cellspacing="10">
+        <tr>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">PROGRAM <?php if(empty($del_proj_select)) {echo strtoupper($RIType);} else { echo "PROJECT";}?> PROJECT ASSOCIATION</h4></td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <div class="box" align="left" style="font-size: 12px;">
+              <?php 
+                echo str_replace(",", "<br>", $assocProject);?>
+            </div>
+		      </td>
+        </tr>
+      </table>
+  </div>
+  <hr>
+<?php } ?>
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>

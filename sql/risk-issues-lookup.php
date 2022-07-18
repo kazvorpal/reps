@@ -41,7 +41,8 @@ if(!empty($_POST['add_proj_select'])) {
 $regionx = "";
 if($_POST['changeLogKey']==3 || $_POST['changeLogKey']==4 || $_POST['changeLogKey']==2 ){
   if(!empty($_POST['Region'])) {
-    $region = substr($_POST['Region'],0, -1);
+    //$region = substr($_POST['Region'],0, -1);
+    $region = $_POST['Region'];
     $regionx = $region;
     $region_confirm = substr($_POST['Region'],0, -1);
     $region_conx = $region_confirm;

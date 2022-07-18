@@ -38,7 +38,7 @@ $sql_por = "Select*
 $stmt_por = sqlsrv_query( $data_conn, $sql_por ); 
 //$row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC) 
 //$row_por['columnname']
-echo $sql_por;
+//echo $sql_por;
 
 //COUNT PROJECTS FOUND AFTER FILTERED
 $sql_por_cnt = "SELECT COUNT(*) AS daCount 

@@ -64,16 +64,20 @@ $stmt_risk_issue_drivers_up  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers
 //GET DISTINCT DRIVERS
 $sql_risk_issue_drivers = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) WHERE RiskAndIssueLog_Key = $riLog_Key";
 $stmt_risk_issue_drivers  = sqlsrv_query( $data_conn, $sql_risk_issue_drivers);
-//$row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
+$row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue['Risk_Issue_Name']; 			
 //echo $sql_risk_issue_drivers  . "<br><br>";
 //exit();
 
 //GET THE ASSOCIATED PROJECTS USING THE PROGRAMRI_KEY
-$sql_risk_issue_assoc_proj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status)";
+$sql_risk_issue_assoc_proj = "DECLARE @temp VARCHAR(MAX)
+                              SELECT @temp = COALESCE(@temp+'<br>' ,'') + EPSProject_Nm
+                              FROM RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status)
+                              SELECT @temp AS eps_projects
+                              ";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
-//$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
-//echo $row_risk_issue_assoc_proj['ProgramRI_Key'];
+$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+//echo $row_risk_issue_assoc_proj['eps_pojects'];
 //echo $sql_risk_issue_assoc_proj; 
 
 //USER AUTHORIZATION
@@ -103,7 +107,7 @@ $prject_nm = "";
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
 $regionx = "";
-$Driversx = "<div id='driversx'></div>";//$row_risk_issue['Driver_Nm'];
+$Driversx = $row_risk_issue_drivers['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
 $individual = $row_risk_issue['POC_Nm'];
@@ -113,7 +117,7 @@ $unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];
 $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
-$assocProject = "";
+$assocProject = $row_risk_issue_assoc_proj['eps_projects'];
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $formaction =  "update"; 
 
@@ -199,12 +203,10 @@ $dateClosed = "";
     </tr>
     <tr>
       <td>Drivers</td>
-      <td><div id="drivers">
+      <td>
         <?php 
-        while ($row_risk_issue_drivers  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_drivers['Driver_Nm'] . '<br>';
-        }
-        ?></div>
+        echo $Driversx;
+        ?>
       </td>
     </tr>
     <tr>
@@ -260,11 +262,7 @@ $dateClosed = "";
     <tr>
       <td>Associated Projects ()</td>
       <td>
-        <?php 
-        while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_assoc_proj['EPSProject_Nm'] . "<br>"; 
-        }
-        ?>
+        <?php echo $assocProject?>
       </td>
     </tr>
     <tr>
@@ -307,14 +305,15 @@ $dateClosed = "";
       %0D%0AProject: <?php echo $prog_name ?>
       %0D%0AIssue Descriptor: <?php echo $descriptor ?>
       %0D%0ADescription: <?php echo $description?>
-      %0D%0ADrivers: <?php //echo $Driversx?>
+      %0D%0ADrivers: <?php echo $Driversx?>
       %0D%0AImpact Area: <?php echo $impactArea2?>
       %0D%0AImpact Level: <?php echo $impactLevel2?>
-      %0D%0APOC Group/Name: <?php echo $individual?>
+      %0D%0APOC Group/Name: <?php echo $individual . " : " . $department?>
       %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
       %0D%0AForecasted Resolution Date: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; } ?>
-      %0D%0AAssociated Projects: <?php echo $assocProject?>
+      %0D%0AAssociated Projects: <?php echo str_replace("<br>", ", ", $assocProject);?>
       %0D%0AAction Plan: <?php echo $actionPlan?>
+      %0D%0ANotify Portfolio: <?php echo $raidLog?>
       %0D%0ADate Closed: <?php echo $dateClosed?>
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>

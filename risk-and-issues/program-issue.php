@@ -46,6 +46,7 @@
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
+  //echo $sql_regions;
 
   //SINGLE REGION FOR NAME CONCATINATION
   $sql_region = "SELECT DISTINCT Region_key, Region
