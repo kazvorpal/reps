@@ -12,7 +12,7 @@ if($fiscal_year ==0) {
 // program Drop
 // echo $row_program_n['id'];
 $sql_program_n = "SELECT [PRGM]
-						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','$pStatus','$program_d','$region','$market','$owner','$subprogram','$facility')
+						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
 						WHERE [PRGM] IS NOT NULL
 						Group By [PRGM]
 						ORDER BY [PRGM]";
@@ -22,7 +22,7 @@ $stmt_program_n = sqlsrv_query( $db_uni, $sql_program_n );
 // echo $row_region_drop['region'];
 
 $sql_region_drop = "SELECT [Region]
-						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','$pStatus','$program_d','$region','$market','$owner','$subprogram','$facility')
+						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
 						WHERE [Region] IS NOT NULL
 						GROUP BY [Region]
 						ORDER BY [Region]";
@@ -32,7 +32,7 @@ $stmt_region_drop = sqlsrv_query( $db_uni, $sql_region_drop );
 // echo $row_market_drop['id'];
 
 $sql_market_drop = "SELECT [Market]
-						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','$pStatus','$program_d','$region','$market','$owner','$subprogram','$facility')
+						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
 						WHERE [Market] IS NOT NULL
 						GROUP BY [Market]
 						ORDER BY [Market]";
@@ -42,7 +42,7 @@ $stmt_market_drop = sqlsrv_query( $db_uni, $sql_market_drop );
 // echo $row_owner_drop['id'];
 
 $sql_owner_drop = "SELECT [PROJ_OWNR_NM]
-						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','$pStatus','$program_d','$region','$market','$owner','$subprogram','$facility')
+						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
 						WHERE [PROJ_OWNR_NM] IS NOT NULL
 						GROUP BY [PROJ_OWNR_NM]
 						ORDER BY [PROJ_OWNR_NM]";
@@ -64,7 +64,7 @@ $stmt_fiscal_year = sqlsrv_query( $db_uni, $sql_fiscal_year );
 $sql_subprogram = "SELECT [Sub_Prg]
 					FROM (
 						Select [Sub_Prg]
-						From [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','$pStatus','$program_d','$region','$market','$owner','$subprogram','$facility')
+						From [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
 						Group By [Sub_Prg]
 						) AS SPRGMX
 					WHERE [Sub_Prg] IS NOT NULL
@@ -74,7 +74,7 @@ $stmt_subprogram  = sqlsrv_query( $db_uni, $sql_subprogram );
 // Facility
 // echo $row_facility_drop['id'];
 $sql_facility_drop = "SELECT [Facility]
-						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','$pStatus','$program_d','$region','$market','$owner','$subprogram','$facility')
+						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
 						WHERE [Facility] IS NOT NULL
 						GROUP BY [Facility]
 						ORDER BY [Facility]";

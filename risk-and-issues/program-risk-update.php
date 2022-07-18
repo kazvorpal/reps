@@ -461,10 +461,7 @@ if($formaction == "update") {
         </td>
         </tr>
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-</svg></a></h4>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">DRIVERS </h4>
             <div class="box">
             <table width="100%" border="0">
                 <tr>
@@ -536,10 +533,6 @@ if($formaction == "update") {
                   <table width="200" border="0">
                   <tr>
                   <strong>Impacted Area </strong>
-                  <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                  </svg></a>
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
@@ -639,7 +632,7 @@ if($formaction == "update") {
                   class="form-control" 
                   id="date" 
                   value=""
-                  onChange="forCasted()"  
+                  onChange="forCastedx()"  
                   oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                   oninput="this.setCustomValidity('')"
                   >
@@ -648,7 +641,7 @@ if($formaction == "update") {
               <input type="checkbox" 
                   name="Unknown" 
                   id="Unknown" 
-                  onChange="unKnown()"
+                  onChange="unKnownx()"
                   <?php if(empty($date)){ echo "checked";} ?>
                   >
               <label for="Unknown">Unknown</label>
@@ -804,7 +797,7 @@ if($formaction == "update") {
           <td colspan="2" align="left">
             <div class="box">
           <label for="DateClosed">Date Closed:</label>
-                <input type="date" name="DateClosed" id="DateClosed" class="form-control">
+                <input type="date" name="DateClosed" id="DateClosed" class="form-control" max="<?php echo $closeDateMax; ?>">
           </div>
           </td>
         </tr>
@@ -953,7 +946,6 @@ document.getElementById('date').value = today;
 
 <script>
 var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_encode(date_format($RIClosed_Dt,'Y-m-d'), JSON_HEX_TAG); } ?>
-
 document.getElementById('DateClosed').value = closeday;
 </script>
 <script>

@@ -15,7 +15,7 @@ $popup = $_GET['popup'];
 $sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-//$sql_risk_issue;
+//echo $sql_risk_issue;
 $ri_name = $row_risk_issue['RI_Nm'];
 $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 
@@ -73,8 +73,9 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
                 //echo $access;
 
 //DECLARE
+$ri_id = $row_risk_issue['RiskAndIssue_Key'];
 $name = trim($row_risk_issue['RI_Nm']);
-$RILevel = "";
+$RILevel = $row_risk_issue['RILevel_Cd'];
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
 $programs = "";
@@ -119,7 +120,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
 
 <body style="font-family:Mulish, serif;">
 <div id='dlist'></div> 
-	<div align="center"><h3>PROJECT RISKS & ISSUES DETAILS</h3></div>
+	<div align="center"><h3>PROJECT <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
 
@@ -132,6 +133,10 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     </tr>
 </thead>
   <tbody>
+    <tr>
+      <td width="20%">ID</td>
+      <td><?php echo $ri_id; ?></td>
+    </tr>
     <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
@@ -247,6 +252,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
 
     </td>
     </tr>
+<?php if($RILevel == "Program") { ?>
     <tr>
       <td>Notify Porfolio Team</td>
       <td><?php 
@@ -258,6 +264,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
       }?>
     </td>
     </tr>
+<?php } ?>
     <tr>
       <td>Date Closed</td>
       <td>

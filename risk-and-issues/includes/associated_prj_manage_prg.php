@@ -195,7 +195,7 @@ function toggle(source) {
 </div>
 <!-- <div align="center">Using Project: <?php // echo $ri_proj_name; ?></div> -->
 <!-- <div align="center">Select any project associated with this Risk or Issue</div> -->
-  <form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
+  <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
     <table align="center" cellpadding="0" cellspacing="0">
         <tbody>
         <tr align="center">

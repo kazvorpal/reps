@@ -501,7 +501,7 @@ function toggle(source) {
 					class="form-control" 
 					id="date" 
 					value=""
-					onChange="forCasted()"  
+					onChange="forCastedx()"  
 					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
 					oninput="this.setCustomValidity('')"	 
 					> 
@@ -511,7 +511,7 @@ function toggle(source) {
               <tr>
                 <td>
 				<div id="forcastedDate">
-				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnown()" <?php if(empty($date)){ echo "checked"; } ?> >
+				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnownx()" <?php if(empty($date)){ echo "checked"; } ?> >
             <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label>
           </div>  
 				</td>

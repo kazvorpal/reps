@@ -178,7 +178,7 @@ function toggle(source) {
                 </td>
                 </tr>
               <tr>
-                <td></br><label for="Created From">Risk Descriptor * <a href="includes/definitions.php?tooltipkey=1" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                <td></br><label for="Created From">Risk Descriptor * <a href="includes/definitions.php?tooltipkey=1" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a><br>
@@ -187,7 +187,7 @@ function toggle(source) {
                 </td>
                 </tr>
               <tr>
-                <td></br><label for="Description">Description * <a href="includes/definitions.php?tooltipkey=5" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                <td></br><label for="Description">Description * <a href="includes/definitions.php?tooltipkey=5" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a><br>
@@ -215,42 +215,42 @@ function toggle(source) {
               <table width="100%" border="0">
                 <tr>
                   <td width="50%"><label>
-                    <input type="radio" name="Drivers[]" value="Material Delay"  id="Drivers_0" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Material Delay"  id="Drivers_0" class="required_group" required>
                     Material Delay</label></td>
                     <td><label>
-                    <input type="radio" name="Drivers[]" value="Project Dependency" id="Drivers_1" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Project Dependency" id="Drivers_1" class="required_group" required>
                     Project Dependency</label></td>
                 </tr>
                 <tr>
                     <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="Shipping/Receiving Delay" id="Drivers_10" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Shipping/Receiving Delay" id="Drivers_10" class="required_group" required>
                     Shipping/Receiving Delay</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="Budget/Funding" id="Drivers_6" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Budget/Funding" id="Drivers_6" class="required_group" required>
                     Budget/Funding</label></td>
                 </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="Ordering Error" id="Drivers_2" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Ordering Error" id="Drivers_2" class="required_group" required>
                     Ordering Error</label></td>
                     <td><label>
-                    <input type="radio" name="Drivers[]" value="Design/Scope Change" id="Drivers_7" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Design/Scope Change" id="Drivers_7" class="required_group" required>
                     Design/Scope Change</label></td>
                 </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_3" class="required_group">
+                    <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_3" class="required_group" required>
                     People Resource</label></td>
                   <td><label title="">
-                    <input type="radio" name="Drivers[]" value="Admin Error" id="Drivers_8" class="required_group">
+                    <input type="radio" name="Drivers[]" value="Admin Error" id="Drivers_8" class="required_group" required>
                     Admin Error</label></td>
                   </tr>
                 <tr>
                   <td><label title="">
-                    <input type="radio" name="Drivers[]" value="3PL Resource" id="Drivers_4" class="required_group">
+                    <input type="radio" name="Drivers[]" value="3PL Resource" id="Drivers_4" class="required_group" required>
                     3PL Resource</label></td>
                   <td><label title="">
-                    <input type="radio" name="Drivers[]" value="External Forces" id="Drivers_9" class="required_group">
+                    <input type="radio" name="Drivers[]" value="External Forces" id="Drivers_9" class="required_group" required>
                     External Forces</label></td>
                 </tr>
                 </table>
@@ -340,7 +340,7 @@ function toggle(source) {
           <td colspan="3" align="left"></td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">CURRENT TASK POC <a href="includes/definitions.php?tooltipkey=2" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">CURRENT TASK POC <a href="includes/definitions.php?tooltipkey=2" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a></h4></td>
@@ -378,7 +378,7 @@ function toggle(source) {
             <tbody>
               <tr>
                 <td colspan="3">
-				<label for="date">Forecasted Resolution Date * <a href="includes/definitions.php?tooltipkey=6" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+				<label for="date">Forecasted Resolution Date * <a href="includes/definitions.php?tooltipkey=6" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a></label>
@@ -408,7 +408,7 @@ function toggle(source) {
 				</td>
                 <td>
 					<input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">
-					<label for="TransfertoProgramManager">Transfer to Program Manager</label>  <a href="includes/definitions.php?tooltipkey=7" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+					<label for="TransfertoProgramManager">Transfer to Program Manager</label>  <a href="includes/definitions.php?tooltipkey=7" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
             </svg></a>
@@ -427,7 +427,7 @@ function toggle(source) {
           <td colspan="3" align="left"></td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY * <a href="includes/definitions.php?tooltipkey=13" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY * <a href="includes/definitions.php?tooltipkey=13" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
             </svg></a></h4>
@@ -470,7 +470,7 @@ function toggle(source) {
           </div>			</td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN * <a href="includes/definitions.php?tooltipkey=9" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN * <a href="includes/definitions.php?tooltipkey=9" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
             </svg></a></h4>
@@ -495,7 +495,7 @@ function toggle(source) {
           </td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION <a href="includes/definitions.php?tooltipkey=11" class="miniframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION <a href="includes/definitions.php?tooltipkey=11" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
             </svg></a></h4></td>

@@ -225,7 +225,7 @@ function toggle(source) {
     }
   ?>
 
-  <form action="<?php echo $formAction;?>" method="post" id="projectRisk">
+  <form action="<?php echo $formAction;?>" method="post" id="riform">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey;?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id; ?>">
   <input name="formName" type="hidden" id="formName" value="PRJR">
@@ -326,10 +326,7 @@ function toggle(source) {
         </tr>
 
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS <a href="includes/instructions.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-</svg></a></h4>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS</h4>
             <div class="box subscriber">
             <table width="100%" border="0">
                 <tr>
@@ -400,10 +397,6 @@ function toggle(source) {
                   <table width="200" border="0">
                   <tr>
                   <strong>Impacted Area </strong>
-                  <a href="includes/instructions-impact-area.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                  </svg></a>
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
@@ -418,10 +411,6 @@ function toggle(source) {
                   <table width="200" border="0">
                     <tr>
                       <strong>Impact Level </strong>
-                      <a href="includes/instructions-impact-level.php" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                      </svg></a>
                     </tr>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
@@ -513,7 +502,7 @@ function toggle(source) {
 					class="form-control" 
 					id="date" 
 					value=""
-					onChange="forCasted()"  
+					onChange="forCastedx()"  
 					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
 					oninput="this.setCustomValidity('')"	 
 					> 
@@ -523,7 +512,7 @@ function toggle(source) {
               <tr>
                 <td>
 				<div id="forcastedDate">
-				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnown()" <?php if(empty($date)){ echo "checked"; } ?> >
+				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnownx()" <?php if(empty($date)){ echo "checked"; } ?> >
             <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label>
           </div>  
 				</td>
@@ -685,8 +674,8 @@ function toggle(source) {
             <tbody>
               <tr>
                 <td colspan="2">
-                  <label for="DateClosed">Date Closed:</label>
-                  <input type="date" name="DateClosed" id="DateClosed" class="form-control">
+                  <label for="DateClosed">Date Closed:</label><div id="warning"></div>
+                  <input type="date" name="DateClosed" id="DateClosed" class="form-control" max="<?php echo $closeDateMax; ?>" onchange="closeWarning()">
                   <!-- <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2"> -->
                   <!-- <label for="TransfertoProgramManager2">Transfer to Program Manager</label> -->
                 </td>
@@ -707,7 +696,7 @@ function toggle(source) {
       </tbody>
     </table>
     <div align="right">
-    <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
+    <button type="submit" class="btn btn-primary" id="btn" onclick="validateForm() ">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
     </div>
   </form>
     <div align="left" style="margin-top:-45px;">  
@@ -845,19 +834,7 @@ var today = <?php if(is_null($date)) {echo ""; } else { echo json_encode(date_fo
 document.getElementById('date').value = today;
 </script>
 
-<script>
-var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_encode(date_format($RIClosed_Dt,'Y-m-d'), JSON_HEX_TAG); } ?>
 
-document.getElementById('DateClosed').value = closeday;
-</script>
-<script>
-$('.subscriber :checkbox').change(function () {
-    var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
-    if ($cs.length > 3) {
-        this.checked = false;
-    }
-});
-</script>  
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>
