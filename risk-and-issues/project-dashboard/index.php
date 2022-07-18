@@ -95,6 +95,12 @@
               $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
               return false;
           });
+          var originalClose = $.colorbox.close;
+          $.colorbox.close = function(){
+            if (confirm('You are about to close this window.  Incomplete Risk/Issues will not be saved.')) {
+              originalClose();
+            }
+          };
       });
       const MM_setTextOfTextfield = (objId,x,newText) => { //v9.0
         with (document){ if (getElementById){
@@ -230,7 +236,7 @@
             if (ri.ForecastedResolution_Dt != undefined)
               return formatDate(new Date(ri.ForecastedResolution_Dt.date));
             else 
-              return "";
+              return "Unknown";
           },
           Created_Ts: function() {
             return  formatDate(new Date(ri.Created_Ts.date));
@@ -239,7 +245,7 @@
             return  formatDate(new Date(ri.Last_Update_Ts.date));
           },
           RIClosed_Dt: function() {
-            return  formatDate(new Date(ri.RIClosed_Dt));
+            return  (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "";
           },
           RiskRealized_Flg: function() {
             return  (ri.RiskRealized_Flg) ? "Y" : "N";
@@ -283,7 +289,7 @@
             return new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' });
           },
           monthclosed: function() {
-            return new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' });
+            return (ri.RIClosed_Dt != null) ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "";
           },
           RIIncrement_Num: function() {
             return (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "";
@@ -306,8 +312,8 @@
           },
           driver: function() {
             return (driverlist[ri.RiskAndIssueLog_Key]) 
-            ? (driverlist[ri.RiskAndIssueLog_Key][0]) 
-            ? driverlist[ri.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
+            ? (driverlist[ri.RiskAndIssueLog_Key]) 
+            ? driverlist[ri.RiskAndIssueLog_Key].Driver_Nm : "" : "";
           },
           category: function() {
             let counter = 0;

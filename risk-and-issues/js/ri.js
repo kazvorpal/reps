@@ -1,7 +1,7 @@
   // Takes a program key and name and returns the row object
 const getprogrambyname = (target) =>  mlm = ridata.find(o => o.MLMProgram_Nm == target);
 const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.MLMProgram_Nm == name);
-const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_Key == key);
+const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
 const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "program";
 
   // Sanitize a string
@@ -68,7 +68,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
-      console.log(o);
+      // console.log(o);
     //   console.log(o.RIActive_Flg);
     //   console.log(o.Facility_Cd);
     //   console.log($('#facility').val().includes(o.Facility_Cd));

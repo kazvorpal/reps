@@ -56,6 +56,12 @@
             $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
             $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
             $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
+            // var oc = $.colorbox.close;
+            // $.close = function() {
+            //   if (confirm('You are about to close this window. Incomplete Risk/Issues will not be saved')) {
+            //     oc();
+            //   }
+            // }
             $(".inline").colorbox({inline:true, width:"50%"});
             $(".callbacks").colorbox({
               onOpen:function(){ alert('onOpen: colorbox is about to open'); },
@@ -73,6 +79,12 @@
               $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
               return false;
             });
+            var originalClose = $.colorbox.close;
+            $.colorbox.close = function(){
+              if (confirm('You are about to close this window.  Incomplete Risk/Issues will not be saved.')) {
+                originalClose();
+              }
+            };
           });
     function MM_setTextOfTextfield(objId,x,newText) { //v9.0
       with (document){ if (getElementById){
@@ -207,7 +219,7 @@
   const makebanner = (safename) => {
 
     // Program Start
-    console.log(rowcolor);
+    // console.log(rowcolor);
     const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
     const banner = document.createElement("div");
     banner.id = "banner" + safename;
@@ -270,7 +282,7 @@
           return program.LastUpdateBy_Nm;
         },
         ForecastedResolution_Dt: function() {
-          return (program.ForecastedResolution_Dt == null) ? "" : makestringdate(program.ForecastedResolution_Dt);
+          return (program.ForecastedResolution_Dt == null) ? "Unknown" : makestringdate(program.ForecastedResolution_Dt);
         },
         RIActive_Flg: function() {
           return (program.RIActive_Flg) ? "Open" : "Closed";
@@ -282,7 +294,7 @@
           return new Date(program.Created_Ts.date).toLocaleString('default', { month: 'long' });
         },
         monthclosed: function() {
-          return new Date(program.Last_Update_Ts.date).toLocaleString('default', { month: 'long' });
+          return (program.RIClosed_Dt != null) ? Date(program.RIClosed_Dt.date).toLocaleString('default', { month: 'long' }) : "";
         },
         quartercreated: function() {
           const m = new Date(program.Created_Ts.date).getMonth();
@@ -301,7 +313,8 @@
           return  makestringdate(program.Last_Update_Ts);
         },
         RIClosed_Dt: function() {
-            return  formatDate(new Date(program.RIClosed_Dt));
+            console.log(program.RIClosed_Dt);
+            return  (program.RIClosed_Dt != null) ? formatDate(new Date(program.RIClosed_Dt.date)) : "";
         },
         AssociatedCR_Key: function() {
           return  (program.AssociatedCR_Key) ? "Y" : "N";
@@ -336,9 +349,10 @@
           return Math.floor(program.RIOpen_Hours/24) + " days";
         },
         driver: function() {
+          console.log(driverlist[program.RiskAndIssueLog_Key]);
           return (driverlist[program.RiskAndIssueLog_Key]) 
-          ? (driverlist[program.RiskAndIssueLog_Key][0]) 
-          ? driverlist[program.RiskAndIssueLog_Key][0].Driver_Nm : "" : "";
+          ? (driverlist[program.RiskAndIssueLog_Key]) 
+          ? driverlist[program.RiskAndIssueLog_Key].Driver_Nm : "" : "";
         },
         projectcount: function() {
           let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
@@ -405,12 +419,15 @@
         var rowValues = [];
         for (field in excelfields) {
           (function(test) {
-              const t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+              let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+              t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
               rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
           })(field);
         }
       let newrow = document.worksheet.addRow(rowValues);
       if(arrow != "") {
+        // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "']");
+        // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]);
         makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
       }
     }
@@ -431,21 +448,24 @@
       document.getElementById("td" + saferi).appendChild(table);
       let p = [];
       for(project of projects) {
-        if (!p.includes(project.EPSProject_Key)){
+        // if (!p.includes(project.EPSProject_Key)){
+          // console.log(project)
           const tr = document.createElement("tr");
-          tr.id = "tr" + project.EPSProject_Key;
-          document.getElementById("table" + saferi).appendChild(tr);
+          tr.id = "tr" + project.PROJECT_key;
           for (field of projectfields) {
-            locale = getlocationbykey(project.EPSProject_Key);
+            // console.log("getlocationbykey(" + project.PROJECT_key + ")");
+            locale = getlocationbykey(project.PROJECT_key);
+            // console.log(locale);
             txt = (field == "MLMRegion_Cd" && locale != undefined) ? locale.Region_Cd 
-              : (field == "Subprogram" && locale != undefined) ? locale.Subprogram_nm 
+            : (field == "Subprogram" && locale != undefined) ? locale.Subprogram_nm 
               : (field == "Market_Cd" && locale != undefined) ? locale.Market_Cd 
               : (field == "EPS_Location_Cd" && locale != undefined)  ? locale.Facility_Cd 
               : project[field];
-            tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
+              tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
           }
+          document.getElementById("table" + saferi).appendChild(tr);
           p.push(project.EPSProject_Key);
-        }
+        // }
       }
     } else {
       let empty = document.createTextNode("No Associated Projects");
