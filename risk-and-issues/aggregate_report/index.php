@@ -55,7 +55,7 @@
             $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
             $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
             $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
-            $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:false});
+            $(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
             $(".inline").colorbox({inline:true, width:"50%"});
             $(".callbacks").colorbox({
               onOpen:function(){ alert('onOpen: colorbox is about to open'); },
@@ -254,7 +254,7 @@
         //    add its fieldname to this "switch" object, fieldswitch,
         //    with an anonymous function to handle the changes.
         RiskAndIssue_Key: function() {
-          return text;
+          return "<span style='font-weight:900'>" + text + "</span>";
         },
         mangerlist: function() {
           const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
@@ -361,8 +361,8 @@
       const program = getprogrambykey(id, name);
       const safename = makesafe(program.MLMProgram_Nm);
       const saferi = makesafe(program.RI_Nm);
-      const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + program["RiskAndIssue_Key"]  + "&fscl_year=" + program["Fiscal_Year"] + "&proj_name=" + program["EPSProject_Nm"];
-      const text = "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + program["RiskAndIssue_Key"] + "</a>";
+      const url = `/risk-and-issues/details-prg.php?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null`;
+      const text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
       if (document.getElementById('impact_level').value != "") {
         for (let option of document.getElementById('impact_level').options) {
           if(option.selected) {

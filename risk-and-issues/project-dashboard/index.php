@@ -169,9 +169,7 @@
       resultcounter(rilist);
       const main = document.getElementById("main");
       main.innerHTML = '';
-
       initexcel();
-
       main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
       const mt = document.getElementById("maintable");
       mt.appendChild(makeheader());
