@@ -28,6 +28,7 @@ $stmt_act_plan = sqlsrv_query( $data_conn, $sql_act_plan );
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;">
+<h3 align="center">ACTION PLAN HISTORY</h3>
 <div id='dlist'></div> 
 	<table class="table table-bordered table-striped table-hover" width="90%">
   <thead>

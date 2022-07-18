@@ -267,7 +267,7 @@ $pocEmail = $row_poc ['POC_Email'];
             
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
-                    echo '<div align="center">An email was sent on your behalf to the Program and Project Managers.</div>';
+                    //echo '<div align="center">An email was sent on your behalf to the Program and Project Managers.</div>';
                 } else {
                     echo 'Unable to send email. Please contact EE Solutions.';
                 }
@@ -307,7 +307,7 @@ $pocEmail = $row_poc ['POC_Email'];
             
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
-                    echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';
+                    //echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';
                 } else {
                     echo 'Unable to send email. Please contact EE Solutions.';
                 }

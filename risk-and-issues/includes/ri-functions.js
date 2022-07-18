@@ -8,3 +8,4 @@ function myConfirmation() {
     }
     document.getElementById("demo").innerHTML = text;
   }
+

@@ -31,7 +31,7 @@ $stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
 
 //COUNT PROJECT AVAILABLE TO ADD
 $sql_por_count = " SELECT COUNT(*)AS dacount FROM( Select* 
-            From [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year','$pStatus','$program_d','$region','$market','$owner', '$subprogram','$facility') 
+            From [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year','Active','$program_d','$region','$market','$owner', '$subprogram','$facility') 
             WHERE PROJ_NM not in ( $pjNames ))a";
 $stmt_por_count = sqlsrv_query( $data_conn, $sql_por_count ); 
 $row_por_count = sqlsrv_fetch_array( $stmt_por_count, SQLSRV_FETCH_ASSOC) ;
@@ -173,7 +173,7 @@ function toggle(source2) {
 <?php if($row_por_count['dacount'] == 0) {?>
   <div align="center" class="alert alert-danger" style="padding:20px; font-size:18px; font-color: #000000;">There are no project available to add to this Risk/Issue</div>
 <?php } else {?>
-  <form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
+  <form action="" method="post" class="navbar-form navbar-center" id="formfilter" 
     <table align="center" cellpadding="0" cellspacing="0">
         <tbody>
         <tr align="center">

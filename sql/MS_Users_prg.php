@@ -1,4 +1,9 @@
 <?php 
+//REQIREMENTS
+	//GET program
+	//GET fisl_year
+	//$_SERVER["AUTH_USER"] => windows login name
+
 //DECLARE
 $windowsUser = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
 

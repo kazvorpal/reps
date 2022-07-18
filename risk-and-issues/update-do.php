@@ -6,6 +6,7 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
+//echo $_SESSION["homebase"];
 
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
@@ -286,7 +287,7 @@ include ("../sql/MS_Users_prg.php");
             
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
-                    echo '<div align="center">An email was sent on your behalf to the Program and Project Managers. </div>';
+                    //echo '<div align="center">An email was sent on your behalf to the Program and Project Managers. </div>';
                 } else {
                     echo 'Unable to send email. Please contact EE Solutions.';
         }
@@ -326,7 +327,7 @@ include ("../sql/MS_Users_prg.php");
             
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
-                    echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';
+                    //echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';
                 } else {
                     echo 'Unable to send email. Please contact EE Solutions.';
                 }

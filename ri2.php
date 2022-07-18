@@ -3,7 +3,9 @@
 <?php include ("data/emo_data.php");?>
 <?php include ("sql/MS_Users.php");?>
 <?php include ("sql/project_by_id.php");?>
-<?php
+<?php 
+//session_start();
+//$_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
 								//FIND PROJECT RISK AND ISSUES FUNCTION 1.26.2022
                 $uid = $_GET['uid'];
                 $proj_name = $_GET['prj_name'];
@@ -102,7 +104,22 @@ $(document).ready(function(){
 					return false;
 				});
 			});
-</script>             
+</script>
+<style type="text/css">
+        .popover{
+            max-width:600px;
+        }
+        /* To change position of close button to Top Right Corner */
+        #colorbox #cboxClose
+        {
+        top: 0;
+        right: 0;
+        }
+        #cboxLoadedContent{
+        margin-top:28px;
+        margin-bottom:0;
+        }
+    </style>             
 </head>
 <body style="font-family:Mulish, serif;">
 
@@ -127,9 +144,9 @@ ProjectID: <?php echo $projID?>
 <?php if($authorized != ''){  ?> 
   
   <div style="padding:5px;">
-    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=risk&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Create Risk"><span class="btn btn-primary">CREATE PROJECT RISK</span></a>
+    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=risk&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Something that hasn’t happened yet but has some probability of occurring"><span class="btn btn-primary">CREATE PROJECT RISK</span></a>
     <!--<a href="risk-and-issues/project-risk.php?uid=<?php echo $uid?>&ri_type=risk&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Risk and Issues"><span class="btn btn-primary">Create Project Risk</span></a> -->
-    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=issue&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Create Issues"><span class="btn btn-primary">CREATE PROJECT ISSUE</span></a>
+    <a href="risk-and-issues/includes/associated_prj.php?uid=<?php echo $uid?>&ri_level=prj&ri_type=issue&action=new&fiscal_year=<?php echo $_GET['fscl_year']?>&tempid=<?php echo $tempID?>" title="Something that has happened "><span class="btn btn-primary">CREATE PROJECT ISSUE</span></a>
   </div>
 <?php } else {?>
   <div style="padding:5px;">
@@ -144,22 +161,22 @@ ProjectID: <?php echo $projID?>
   <tbody>
     <tr cellpadding="5px">
       <th><strong>ID</strong></th>
-      <th><strong>GID</strong></th>
+      <!--<th><strong>GID</strong></th>-->
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
       <th width="7%"><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
-      <th><div align="center"><strong>Action Plan</strong></div></th>
+      <th><div align="center"><strong>Action<br>Plan</strong></div></th>
         <?php if($authorized != ''){  ?> 
-        <th><div align="center"><strong>Assoc Projects</strong></div></th>
+        <th><div align="center"><strong>Assoc<br>Projects</strong></div></th>
         <?php } ?>
       <th><div align="center"><strong>Details<br>Update</strong></div></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
     <tr>
       <td align="center"><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
-      <td align="center"><?php echo $row_risk_issue['RIIncrement_Num']; ?></td>
+      <!--<td align="center"><?php//echo $row_risk_issue['RIIncrement_Num']; ?></td>-->
       <td><?php echo $row_risk_issue['RI_Nm']; ?></td>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>

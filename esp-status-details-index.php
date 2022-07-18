@@ -39,7 +39,7 @@ $(document).ready(function(){
 				$(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
 				$(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
 				$(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
-				$(".ocdframe").colorbox({iframe:true, width:"60%", height:"90%", scrolling:true, escKey: false, overlayClose: false});
+				$(".ocdframe").colorbox({iframe:true, width:"80%", height:"90%", scrolling:true, escKey: false, overlayClose: false});
 				$(".miframe").colorbox({iframe:true, width:"1500", height:"650", scrolling:true});
 				$(".inline").colorbox({inline:true, width:"50%"});
 				$(".callbacks").colorbox({

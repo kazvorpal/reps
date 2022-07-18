@@ -1,21 +1,41 @@
 <?php 
+//print_r($_GET);
 include ("../../includes/functions.php");
 include ("../../db_conf.php");
 include ("../../data/emo_data.php");
 include ("../../sql/project_by_id.php");
 include ("../../sql/ri_filter_vars.php");
 include ("../../sql/ri_filters.php");
-include ("../../sql/ri_filtered_data.php");
+include ("../../sql/ri_prj_assoc_manage_prog.php");
 
 //DECLARE
 $uid = $_GET['uid'];
-$ri_type = $_GET['ri_type'];
+$ri_type = strtolower($_GET['ri_type']);
 $action = $_GET['action'];
-$fiscal_year =  $_GET['fiscal_year'];
-$tempid =  $_GET['tempid'];
-$ri_level = $_GET['ri_level'];
+$fiscal_year =  $_GET['fscl_year'];
+$ri_level = strtolower($_GET['ri_level']);
 $ri_proj_name = $row_projID['PROJ_NM'];
+$name =$_GET['name'];
+$rikey = $_GET['rikey'];
+$status = $_GET['status'];
+$driver_time = "";
+//$groupID = $_GET['inc'];
 //$RiskAndIssue_Key = $_GET['rikey'];
+
+//GET DRIVERS LIST (DIRVERTIME)
+$sql_ri_driver_lst = "select Driver_Nm from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fiscal_year,'$ri_proj_name') where RiskAndIssue_Key = $rikey";
+$stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
+// $row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC);
+// echo $row_ri_driver_lst['Driver_Nm]; 
+
+//COUNT PROJECT AVAILABLE TO ADD
+$sql_por_count = " SELECT COUNT(*)AS dacount FROM( Select* 
+            From [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year','$pStatus','$program_d','$region','$market','$owner', '$subprogram','$facility') 
+            )a";
+$stmt_por_count = sqlsrv_query( $data_conn, $sql_por_count ); 
+$row_por_count = sqlsrv_fetch_array( $stmt_por_count, SQLSRV_FETCH_ASSOC) ;
+//echo $row_por_count['dacount'];
+//echo $sql_por_count;
 
 ?>
 <!doctype html>
@@ -85,6 +105,13 @@ function toggle(source) {
     checkboxes[i].checked = source.checked;
   }
 }
+
+function toggle(source2) {
+  checkboxes = document.getElementsByName('add_proj_select[]');
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source2.checked;
+  }
+}
 </script>
 </head>
 
@@ -97,7 +124,7 @@ function toggle(source) {
                   <div class="text-center bs-wizard-stepnum">STEP 1</div>
                   <div class="progress"><div class="progress-bar"></div></div>
                   <a href="#" class="bs-wizard-dot"></a>
-                  <div class="bs-wizard-info text-center">Select Associated Projects</div>
+                  <div class="bs-wizard-info text-center">Select Projects to Add</div>
                 </div>
                 
                 <div class="col-xs-3 bs-wizard-step disabled"><!-- complete -->
@@ -128,41 +155,38 @@ function toggle(source) {
     <h3>
       <?php
       if($ri_type == "risk" && $ri_level == "prj"){
-        echo "CREATE PROJECT RISK";
+        echo "ADD PROJECT RISK ASSOCIATED PROJECTS";
       } elseif ($ri_type == "risk" && $ri_level == "prg"){
-        echo "CREATE PROGRAM RISK";
+        echo "ADD PROGRAM RISK ASSOCIATED PROJECTS";
       } elseif ($ri_type == "issue" && $ri_level == "prj"){
-        echo "CREATE PROJECT ISSUE";
+        echo "ADD PROJECT ISSUE ASSOCIATED PROJECTS";
       } else {
-        echo "CREATE PROGRAM ISSUE";
+        echo "ADD PROGRAM ISSUE ASSOCIATED PROJECTS";
       }
       ?>
     </h3>
 </div>
-<!--
-<div align="center">
-<p>You selected an individual project from the Detailed Phase report, and this is step one.  The project that you chose is the first project highlighted in blue with a checkmark.  If this is an individual risk/issue, all you have to do is click the Next button.  </p>
-<p>Sometimes, multiple sites have the same risk/issue.  Instead of entering each site individually, the system is designed to do the heavy lifting for you!</p>
-<p>In this step, you have the opportunity to select all associated projects into a group.  When you create the risk/issue for the chosen project, the system will automatically create the individual risk/issue for all sites. </p> 
-</div>
--->
-<!-- <div align="center">Using Project: <?php // echo $ri_proj_name; ?></div> -->
-<!-- <div align="center">Select any project associated with this Risk or Issue</div> -->
-  <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
+<div align="center">For:  <?php echo $name; ?></div>
+    </br>
+<!--HIDE ADD PROJECTS -->
+<?php if($row_por_count['dacount'] == 0) {?>
+  <div align="center" class="alert alert-danger" style="padding:20px; font-size:18px; font-color: #000000;">There are no project available to add to this Risk/Issue</div>
+<?php } else {?>
+  <form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
     <table align="center" cellpadding="0" cellspacing="0">
         <tbody>
         <tr align="center">
             <?php  //if($fiscal_year !=0) { ?>
-            <td height="23">Program</td>
-            <td>Subprogram</td>
-            <td>Region</td>
-            <td>Market</td>
-            <td>Facility</td>
+            <td height="23"><b>Program</b></td>
+            <td><b>Subprogram</b></td>
+            <td><b>Region</b></td>
+            <td><b>Market</b></td>
+            <td><b>Facility</b></td>
             <?php // } ?>
             <td>
             <input name="pStatus[]" type="hidden" value="Active">
             <input name="Owner" type="hidden" value="get owner">
-            <input name="fiscal_year" type="hidden" value="<?php echo $_GET['fiscal_year']?>">
+            <input name="fiscal_year" type="hidden" value="<?php echo $fiscal_year?>">
             </td>
             <td>&nbsp;</td>
             </tr>
@@ -217,54 +241,73 @@ function toggle(source) {
     </table>  
     </form>
     <?php if($ri_type == "risk" && $ri_level == "prj"){ ?>      
-      <form action="../project-risk.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>&tempid=<?php echo $tempid ?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
+      <form action="../project-risk-update.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
     <?php } elseif ($ri_type == "issue" && $ri_level == "prj"){ ?>   
-      <form action="../project-issue.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>&tempid=<?php echo $tempid ?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
+      <form action="../project-issue-update.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
     <?php } elseif ($ri_type == "risk" && $ri_level == "prg"){ ?> 
-      <form action="../program-risk.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>&tempid=<?php echo $tempid ?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
+      <form action="../program-risk-update.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
     <?php } elseif ($ri_type == "issue" && $ri_level == "prg"){ ?> 
-      <form action="../program-issue.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>&tempid=<?php echo $tempid ?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
+      <form action="../program-issue-update.php?uid=<?php echo $uid ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
     <?php } ?>
-      <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select associated projects in addtion to the originating project.</div>
-        <table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
-                  <tbody>
-                    <tr>
-                        <th bgcolor="#EFEFEF"><input type="checkbox" name="checkbox" id="checkbox" onClick="toggle(this)"></th>
-                        <th bgcolor="#EFEFEF">Project Name</th>
-                        <th bgcolor="#EFEFEF">Program</th>
-                        <th bgcolor="#EFEFEF">Region</th>
-                        <th bgcolor="#EFEFEF">Market</th>
-                        <th bgcolor="#EFEFEF">Facility</th>
-                    </tr>
-                    <tr>
-                            <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" value="" disabled checked></td> <!-- NO CHECKBOX -->
-                            <td bgcolor="#d9edf7"><?php echo $row_ri['PROJ_NM'] ?> [ORIGINATING PROJECT]</td>
-                            <td bgcolor="#d9edf7"><?php echo $row_ri['PRGM'] ?></td>
-                            <td bgcolor="#d9edf7"><?php echo $row_ri['Region'] ?></td>
-                            <td bgcolor="#d9edf7"><?php echo $row_ri['Market'] ?></td>
-                            <td bgcolor="#d9edf7"><?php echo $row_ri['Facility'] ?></td>
-                    </tr>
-                    <?php while($row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC)) { ?>
-                        <tr>
-                            <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_por['PROJ_NM'];?>"></td> <!-- CHECK BOX FOR PROJECT SELECT -->
-                            <td><?php echo $row_por['PROJ_NM'] ?></td>
-                            <td><?php echo $row_por['PRGM'] ?></td>
-                            <td><?php echo $row_por['Region'] ?></td>
-                            <td><?php echo $row_por['Market'] ?></td>
-                            <td><?php echo $row_por['Facility'] ?></td>
-                        </tr>
-                    <?php } ?>
-                  </tbody>
-        </table>
+
+    <!-- HIDDEN VALUES -->
+    <input type="hidden" name="rikey" id="rikey" value="<?php echo $rikey ?>">
+    <input type="hidden" name="fscl_year" id="fscl_year" value="<?php echo $fiscal_year ?>">
+    <input type="hidden" name="proj_name" id="proj_name" value="<?php echo $ri_proj_name ?>">
+    <input type="hidden" name="status" id="status" value="<?php echo $status ?>">
+    <input type="hidden" name="drivertime" value="<?php while ($row_ri_driver_lst = sqlsrv_fetch_array($stmt_ri_driver_lst, SQLSRV_FETCH_ASSOC)) { echo $row_ri_driver_lst['Driver_Nm'] . ','; } ?>">
+    <!--<input type="hidden" name="groupID" id="groupID" value="<?php // echo $groupID ?>">-->
+    <input type="hidden" name="changeLogKey" id="changeLogKey" value="4">
+
+    <p>              
+            <div align="center" class="alert alert-success" style="padding:20px; font-size:18px; font-color: #000000;">ADD - Check any projects you would like to add to this Risk/Issure</div>
+          </p>
+          <table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
+                    <tbody>
+                      <tr>
+                          <th bgcolor="#EFEFEF"><input type="checkbox" name="add_checkbox" id="add_checkbox" onClick="toggle(this)"></th>
+                          <th bgcolor="#EFEFEF">Project Name</th>
+                          <th bgcolor="#EFEFEF">Program</th>
+                          <th bgcolor="#EFEFEF">Region</th>
+                          <th bgcolor="#EFEFEF">Market</th>
+                          <th bgcolor="#EFEFEF">Facility</th>
+                      </tr>
+                      <?php while($row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC)) { ?>
+                          <tr>
+                              <td><input type="checkbox" name="add_proj_select[]" id="add_proj_select" value="<?php echo $row_por['PROJ_NM'];?>"></td> <!-- CHECK BOX FOR PROJECT SELECT -->
+                              <td><?php echo $row_por['PROJ_NM'] ?></td>
+                              <td><?php echo $row_por['PRGM'] ?></td>
+                              <td><?php echo $row_por['Region'] ?></td>
+                              <td><?php echo $row_por['Market'] ?></td>
+                              <td><?php echo $row_por['Facility'] ?></td>
+                          </tr>
+                      <?php } ?>
+                    </tbody>
+          </table>
+<?php } ?>
+<!--STOP HIDE ADD PROJECT -->          
         <div align='center'> 
           <a href="javascript:void(0);" onclick="javascript:history.go(-1)"class="btn btn-primary">< Back </a>
-          <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Next >" class="btn btn-primary"> 
+          <?php if($row_por_count['dacount'] != 0) {?>
+          <input name="selectedProjects" type="submit" id="selectedProjects" form="assProjects" value="Next >" class="btn btn-primary" disabled>
+          <?php } ?> 
         </div>
     </form>
+   
 			    <?php //WHY IS THIS HERE?
           if(!empty($_POST['proj_select'])) {
           $assProjects = implode(',', $_POST['proj_select']);
           }
           ?>
 </body>
+<script>
+$("input[name='add_proj_select[]']").on('change', function() {
+  $("input[name='selectedProjects']").prop('disabled', !$("input[name='add_proj_select[]']:checked").length);
+})
+</script>
+<script>
+$("input[name='add_checkbox']").on('change', function() {
+  $("input[name='selectedProjects']").prop('disabled', !$("input[name='add_checkbox']:checked").length);
+})
+</script>
 </html>

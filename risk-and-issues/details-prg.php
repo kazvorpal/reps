@@ -93,8 +93,9 @@ if($alias == $authUser){
 
 //exit;
 //DECLARE
+$ri_id = $row_risk_issue['RiskAndIssue_Key'];
 $name = $row_risk_issue['RI_Nm'];
-$RILevel = "";
+$RILevel = $row_risk_issue['RILevel_Cd'];
 $RIType = $row_risk_issue['RIType_Cd'];
 $createdFrom  = "";
 $programs = $row_risk_issue['MLMProgram_Nm'];
@@ -143,7 +144,7 @@ $dateClosed = "";
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;" onload="copyDiv()">
-	<div align="center"><h3>PROGRAM RISKS & ISSUES DETAILS</h3></div>
+	<div align="center"><h3>PROGRAM <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
@@ -156,7 +157,11 @@ $dateClosed = "";
     </tr>
 </thead>
   <tbody>
-    <tr>
+  <tr>
+      <td width="20%">ID</td>
+      <td><?php echo $ri_id; ?></td>
+    </tr>  
+  <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
     </tr>

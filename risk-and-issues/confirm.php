@@ -200,11 +200,13 @@ include("../sql/risk-issues-lookup.php");
       <td><?php echo $actionPlan; ?>
     </td>
     </tr>
+<?php if($RILevel == "Program") { ?>
     <tr>
       <td>RAID LOG</td>
       <td><?php echo $raidLog; ?>
     </td>
     </tr>
+<?php } ?>
     <tr>
       <td>Date Closed</td>
       <td>

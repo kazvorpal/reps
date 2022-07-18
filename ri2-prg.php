@@ -103,6 +103,21 @@ $(document).ready(function(){
 				});
 			});
 </script>  
+<style type="text/css">
+        .popover{
+            max-width:600px;
+        }
+        /* To change position of close button to Top Right Corner */
+        #colorbox #cboxClose
+        {
+        top: 0;
+        right: 0;
+        }
+        #cboxLoadedContent{
+        margin-top:28px;
+        margin-bottom:0;
+        }
+    </style>
 </head>
 <body style="font-family:Mulish, serif;">
 <?php // echo $ri_program . '</br>' . $ri_region ?>
@@ -133,28 +148,30 @@ Program Manager is: <?php echo $alias; ?>
   <table width="98%" border="0" cellpadding="5" class="table table-bordered table-striped table-hover">
     <tbody>
     <tr>
+    <th><strong>ID</strong></th>
       <th width="35%"><strong>Program Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
       <th><strong>Impact</strong></th>
       <th><strong>Created On</strong></th>
-      <th><div align="center"><strong>Action Plan</strong></div></th>
+      <th><div align="center"><strong>Action<br>Plan</strong></div></th>
         <?php if($alias == $authUser){ ?> 
-        <th><div align="center"><strong>Assoc Projects</strong></div></th>
+        <th><div align="center"><strong>Assoc<br>Projects</strong></div></th>
         <?php } ?>
-      <th align="center"><strong>Details</strong></th>
+      <th align="center"><strong>Details<br>Update</strong></th>
     </tr>
     <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
       <tr>
+      <td><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
       <td><?php echo $row_risk_issue['RI_Nm']; ?></td>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
-      <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
+      <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td> 
       <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
       <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
       <?php if($alias == $authUser){ ?> 
       <td align="center">
-        <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage_prg.php?action=update&ri_level=prg&prg_nm=<?php echo $ri_program;?>&progRIKey=<?php echo $row_risk_issue['ProgramRI_key'];?>&fiscal_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="glyphicon glyphicon-edit"></span></a>   
+        <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=<?php echo $ri_program;?>&prg_nm=<?php echo $ri_program;?>&progRIKey=<?php echo $row_risk_issue['ProgramRI_key'];?>&fiscal_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="glyphicon glyphicon-edit"></span></a>   
       </td>
       <?php } ?>
       <td align="center"><a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&program=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
@@ -170,6 +187,7 @@ Program Manager is: <?php echo $alias; ?>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
     <tr cellpadding="5px">
+      <th><strong>ID</strong></th>
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
@@ -180,6 +198,7 @@ Program Manager is: <?php echo $alias; ?>
     </tr>
     <?php while ($row_risk_issue_cls = sqlsrv_fetch_array($stmt_risk_issue_cls, SQLSRV_FETCH_ASSOC)){ ?>
     <tr>
+      <td><?php echo $row_risk_issue_cls['RiskAndIssue_Key']; ?></td>
       <td><?php echo $row_risk_issue_cls['RI_Nm']; ?></td>
       <td><?php echo $row_risk_issue_cls['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue_cls['RIDescription_Txt']; ?></td>
