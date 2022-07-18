@@ -110,7 +110,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     }
 
     const getuniques = (list, field) => {
-        return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index);
+        return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
     }
     const getwholeuniques = (list, field) => {
         return list.filter((value, index, self) => {
