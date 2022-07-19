@@ -385,7 +385,7 @@ Enter the details of your Project Issue
 					class="form-control" 
 					id="date" 
 							value="2022-01-01"
-							onChange="forCasted()"  
+							onChange="forCastedX()"  
 					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
 					oninput="this.setCustomValidity('')"	 
 					> 
@@ -398,9 +398,9 @@ Enter the details of your Project Issue
 				  <input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChange="unKnown()"
+					onChange="unKnownX()"
 				  >
-				  <label for="Unknown">Unknown</label>
+				  <label for="Unknown">Unknown</label> - Overides Resolution Date
 				</div>  
 				</td>
                 <td><input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">

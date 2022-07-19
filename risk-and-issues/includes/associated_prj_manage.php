@@ -173,21 +173,21 @@ function toggle(source2) {
 <?php if($row_por_count['dacount'] == 0) {?>
   <div align="center" class="alert alert-danger" style="padding:20px; font-size:18px; font-color: #000000;">There are no project available to add to this Risk/Issue</div>
 <?php } else {?>
-  <form action="" method="post" class="navbar-form navbar-center" id="formfilter" 
+  <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
     <table align="center" cellpadding="0" cellspacing="0">
         <tbody>
         <tr align="center">
             <?php  //if($fiscal_year !=0) { ?>
-            <td height="23"><b>Program</b></td>
-            <td><b>Subprogram</b></td>
-            <td><b>Region</b></td>
-            <td><b>Market</b></td>
-            <td><b>Facility</b></td>
+            <td height="23">Program</td>
+            <td>Subprogram</td>
+            <td>Region</td>
+            <td>Market</td>
+            <td>Facility</td>
             <?php // } ?>
             <td>
             <input name="pStatus[]" type="hidden" value="Active">
             <input name="Owner" type="hidden" value="get owner">
-            <input name="fiscal_year" type="hidden" value="<?php echo $fiscal_year?>">
+            <input name="fiscal_year" type="hidden" value="<?php echo $_GET['fiscal_year']?>">
             </td>
             <td>&nbsp;</td>
             </tr>

@@ -173,7 +173,7 @@
   $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
   $raid = $row_risk_issue['RaidLog_Flg'];
   $riskRealized = $row_risk_issue['RiskRealized_Flg'];
-  $assCRID = $row_risk_issue['AssociatedCR_Key'];
+  $assCRID = ""; //$row_risk_issue['AssociatedCR_Key'];
   $regions = $_GET['regions'];
   $probability = $row_risk_issue['RiskProbability_Key'];
  
@@ -367,6 +367,8 @@ if($formaction == "update") {
   <input name="regionKeys" type="hidden" id="regionKeys" value="<?php while ($row_regions_f= sqlsrv_fetch_array($stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region_key'] . ',';} ?>">
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
+  <input type="hidden" name="riskRealized" value="1" id="riskRealized" value="0">
+  <input name="CreatedFrom" type="hidden" id="Created From" value="<?php echo $assCRID;?>">
 
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">
@@ -672,7 +674,7 @@ if($formaction == "update") {
                   onChange="unKnownx()"
                   <?php if(empty($date)){ echo "checked";} ?>
                   >
-              <label for="Unknown">Unknown</label>
+              <label for="Unknown">Unknown</label> - Overrides Resolution Date
           </div>
           </div></td>
         </tr>
@@ -757,7 +759,7 @@ if($formaction == "update") {
         </div>
       </td>
         </tr>
-
+<!--
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
@@ -774,10 +776,10 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php if($riskRealized == 1){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php //if($riskRealized == 1){ echo "checked";} ?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php if($riskRealized == 0){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php //if($riskRealized == 0){ echo "checked";} ?>>
                     No</label></td>
                   </tr>
                 </table>
@@ -786,8 +788,10 @@ if($formaction == "update") {
           </td>
           </tr>
         <tr>
+        -->
           <td colspan="2" align="left"></td>
         </tr>
+        <!--
         <tr>
           <td colspan="2" align="left">
             <br>
@@ -796,8 +800,9 @@ if($formaction == "update") {
               <input name="CreatedFrom" type="text" class="form-control" id="Created From" value="<?php echo $assCRID;?>">
             </div>
           </td>
-      </tr>
-      <tr>
+        -->
+        </tr>
+        <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
         <tr>

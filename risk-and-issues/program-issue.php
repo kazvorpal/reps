@@ -614,7 +614,7 @@ function toggle(source) {
                   class="form-control" 
                   id="date" 
                   value="2022-01-01"
-                  onChange="forCasted()"  
+                  onChange="forCastedx()"  
                   oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                   oninput="this.setCustomValidity('')">
           </div>
@@ -622,8 +622,8 @@ function toggle(source) {
               <input type="checkbox" 
                   name="Unknown" 
                   id="Unknown" 
-                  onChange="unKnown()">
-              <label for="Unknown">Unknown</label>
+                  onChange="unKnownx()">
+              <label for="Unknown">Unknown</label> - Overrides Resolution Date
           </div>
           </div>
           </td>

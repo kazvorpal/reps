@@ -204,7 +204,7 @@ include("../sql/risk-issues-lookup.php");
     </tr>
 <?php if($RILevel == "Program") { ?>
     <tr>
-      <td>RAID LOG</td>
+      <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?>
     </td>
     </tr>

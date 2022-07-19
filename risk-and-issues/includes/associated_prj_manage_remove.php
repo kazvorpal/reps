@@ -163,7 +163,7 @@ function toggle(source2) {
 <div align="center">For:  <?php echo $name; ?></div>
     </br>
 <?php if($row_assoc_prj_count['dacount'] == 0) { ?>
-  <div align="center" class="alert alert-danger" style="padding:20px; font-size:18px; font-color: #000000;">There are no other project associated to this Risk/Issue.</div>
+  <div align="center" class="alert alert-danger" style="padding:20px; font-size:18px; font-color: #000000;">There are no other projects associated to this Risk/Issue.</div>
 <?php } else { ?>
   <form action="" method="post" class="navbar-form navbar-center" id="formfilter" title="formfilter">
     <table align="center" cellpadding="0" cellspacing="0">

@@ -33,11 +33,13 @@ $stmt_risk_issue_regions_up = sqlsrv_query( $data_conn, $sql_risk_issue_regions_
 //echo $sql_risk_issue_regions_up;
 
 //GET DISTINCT REGIONS
-$sql_risk_issue_regions = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue_regions = "DECLARE @temp VARCHAR(MAX) 
+                          SELECT @temp = COALESCE(@temp+', ' ,'') + MLMRegion_Cd 
+                          FROM RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key 
+                          SELECT @temp AS MLMRegion_Cd ";
 $stmt_risk_issue_regions  = sqlsrv_query( $data_conn, $sql_risk_issue_regions);
-//$row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_drivers , SQLSRV_FETCH_ASSOC);
-//echo $row_risk_issue_regions['Risk_Issue_Name']; 			
-//echo $sql_risk_issue_regions . "<BR><BR>";
+$row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_regions , SQLSRV_FETCH_ASSOC);
+//echo $row_risk_issue_regions['MLMRegion_Cd']; 			
 
 //GET ASSOCIATED PROJECTS
 //FIRST GET THE PROGRAM RI KEY
@@ -80,6 +82,12 @@ $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQL
 //echo $row_risk_issue_assoc_proj['eps_pojects'];
 //echo $sql_risk_issue_assoc_proj; 
 
+//COUNT ASSOCIATED PROJECTS USING THE PROGRAMRI_KEY
+$sql_assoc_proj_cnt = "SELECT COUNT(*) AS AsscPrjCnt FROM RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status)";
+$stmt_assoc_proj_cnt = sqlsrv_query( $data_conn, $sql_assoc_proj_cnt );
+$row_assoc_proj_cnt = sqlsrv_fetch_array($stmt_assoc_proj_cnt, SQLSRV_FETCH_ASSOC);
+$assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
+
 //USER AUTHORIZATION
 $authUser = strtolower($windowsUser);
 $alias = "";
@@ -106,7 +114,7 @@ $programs = $row_risk_issue['MLMProgram_Nm'];
 $prject_nm = "";
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
-$regionx = "";
+$regionx = $row_risk_issue_regions['MLMRegion_Cd']; ;
 $Driversx = $row_risk_issue_drivers['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
@@ -130,7 +138,7 @@ $department = $row_risk_issue['POC_Department'];
 if(!empty($row_risk_issue['RIClosed_Dt'])){
 $dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
 } else {
-$dateClosed = "";
+$dateClosed = "N/A";
 }
 ?>
 <!doctype html>
@@ -186,11 +194,7 @@ $dateClosed = "";
     <tr>
       <td>Region(s)</td>
       <td>
-      <?php 
-        while ($row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_regions , SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_regions['MLMRegion_Cd'] . '<br>';
-        }
-        ?>
+      <?php echo $regionx ?>
       </td>
     </tr>
     <tr>
@@ -236,13 +240,8 @@ $dateClosed = "";
     <tr>
       <td>Forecasted Resolution Date</td>
       <td>
-        <?php if($unknown == "off"){
-        echo $date; 
-        } else {
-        echo "Unknown";
-        }
-        ?>
-        </td>
+        <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ?>
+      </td>
     </tr>
 <?php if(!empty($_POST['TransfertoProgramManager'])) { ?>
     <tr>
@@ -260,7 +259,7 @@ $dateClosed = "";
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects ()</td>
+      <td>Associated Projects (<?php echo $assPrjCnt ?>)</td>
       <td>
         <?php echo $assocProject?>
       </td>
@@ -300,20 +299,22 @@ $dateClosed = "";
         ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
     <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
+      %0D%0AID: <?php echo $ri_id;?>
       %0D%0ARisk/Issue Name: <?php echo $name;?>
-      %0D%0AType: <?php echo $RIType?>
-      %0D%0AProject: <?php echo $prog_name ?>
-      %0D%0AIssue Descriptor: <?php echo $descriptor ?>
+      %0D%0AType: <?php echo $RILevel . " " . $RIType?>
+      %0D%0AProgram: <?php echo $regionx ?>
+      %0D%0ARegions: <?php echo $prog_name ?>
+      %0D%0ADescriptor: <?php echo $descriptor ?>
       %0D%0ADescription: <?php echo $description?>
       %0D%0ADrivers: <?php echo $Driversx?>
       %0D%0AImpact Area: <?php echo $impactArea2?>
       %0D%0AImpact Level: <?php echo $impactLevel2?>
-      %0D%0APOC Group/Name: <?php echo $individual . " : " . $department?>
+      %0D%0APOC Name and Group: <?php echo $individual . " : " . $department?>
       %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
-      %0D%0AForecasted Resolution Date: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; } ?>
+      %0D%0ANotify Portfolio: <?php echo $raidLog?>
+      %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ?>
       %0D%0AAssociated Projects: <?php echo str_replace("<br>", ", ", $assocProject);?>
       %0D%0AAction Plan: <?php echo $actionPlan?>
-      %0D%0ANotify Portfolio: <?php echo $raidLog?>
       %0D%0ADate Closed: <?php echo $dateClosed?>
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>

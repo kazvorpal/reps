@@ -513,7 +513,7 @@ function toggle(source) {
                 <td>
 				<div id="forcastedDate">
 				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnownx()" <?php if(empty($date)){ echo "checked"; } ?> >
-            <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label>
+            <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label> - Overides Resolution Date
           </div>  
 				</td>
                 <td>

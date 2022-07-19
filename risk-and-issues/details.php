@@ -34,15 +34,12 @@ $sql_risk_issue_assoc_proj = "DECLARE @temp VARCHAR(MAX)
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 
-//$row_assoc_proj_count = sqlsrv_num_rows( $stmt_risk_issue_assoc_proj );
-   
-//if ($row_assoc_proj_count=== false)
-   //echo "Error in retrieveing row count.";
-//else
-   //echo $row_assoc_proj_count;
+//COUNT ASSOCIATED PROJECTS
+$sql_assoc_proj_cnt = "SELECT COUNT(*) AS AsscPrjCnt FROM RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";
+$stmt_assoc_proj_cnt = sqlsrv_query( $data_conn, $sql_assoc_proj_cnt );
+$row_assoc_proj_cnt = sqlsrv_fetch_array($stmt_assoc_proj_cnt, SQLSRV_FETCH_ASSOC);
+$assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
 
-// $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_assoc_proj['RI_Nm]; 
 
 // CHECK IF THE USER AND OWNER MATCH
                 //$ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
@@ -94,8 +91,8 @@ $riskProbability = $row_risk_issue['RiskProbability_Nm'];
 $individual = $row_risk_issue['POC_Nm'];
 $internalExternal = $row_risk_issue['POC_Nm'];
 $responseStrategy2 = $row_risk_issue['ResponseStrategy_Nm'];
-$unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];
+$unknown = ""; // IF DATE IS EMPTY
 $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = $row_risk_issue_assoc_proj['eps_projects'];
@@ -206,13 +203,8 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     <tr>
       <td>Forecasted Resolution Date</td>
       <td>
-        <?php if($unknown == "off"){
-        echo $date; 
-        } else {
-        echo "Unknown";
-        }
-        ?>
-        </td>
+        <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ?>
+      </td>
     </tr>
 <?php if(!empty($row_risk_issue['TransferredPM_Flg'])) { ?>
     <tr>
@@ -231,7 +223,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects</td>
+      <td>Associated Projects (<?php echo $assPrjCnt; ?>)</td>
       <td>
         <?php echo $assocProject; 
         ?>
@@ -286,17 +278,18 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
             <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
-            %0D%0ARisk/Issue Name: <?php echo $name;?>
-            %0D%0AType: <?php echo $RIType?>
+            %0D%0AID: <?php echo $ri_id;?>
+            %0D%0AName: <?php echo $name;?>
+            %0D%0AType: <?php echo $RILevel . " " . $RIType?>
             %0D%0AProject: <?php echo $project_nm?>
-            %0D%0AIssue Descriptor: <?php echo $descriptor ?>
+            %0D%0ADescriptor: <?php echo $descriptor ?>
             %0D%0ADescription: <?php echo $description?>
             %0D%0ADrivers: <?php echo $Driversx?>
             %0D%0AImpact Area: <?php echo $impactArea2?>
             %0D%0AImpact Level: <?php echo $impactLevel2?>
-            %0D%0APOC Group/Name: <?php echo $individual . " : " . $department?>
+            %0D%0APOC Name and Department: <?php echo $individual . " : " . $department?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
-            %0D%0AForecasted Resolution Date:: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; }?>
+            %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0AAssociated Projects: <?php echo str_replace("<br>", ", ", $assocProject)?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>

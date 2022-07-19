@@ -648,7 +648,7 @@ if($formaction == "update") {
                   onChange="unKnownx()"
                   <?php if(empty($date)){ echo "checked";} ?>
                   >
-              <label for="Unknown">Unknown</label>
+              <label for="Unknown">Unknown</label> - Overrides Resolution Date
           </div>
           </div></td>
         </tr>

@@ -225,7 +225,7 @@ function toggle(source) {
     <?php } elseif ($ri_type == "issue" && $ri_level == "prg"){ ?> 
       <form action="../program-issue.php?uid=<?php echo $uid ?>&ri_level=<?php echo $ri_level; ?>&ri_type=<?php echo $ri_type ?>&action=<?php echo $action ?>&fiscal_year=<?php $fiscal_year?>&tempid=<?php echo $tempid ?>" method="post" class="navbar-form navbar-center" id="assProjects" name="assProjects">
     <?php } ?>
-      <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select associated projects in addtion to the originating project.</div>
+      <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select associated projects in addition to the originating project.</div>
         <table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
                   <tbody>
                     <tr>
