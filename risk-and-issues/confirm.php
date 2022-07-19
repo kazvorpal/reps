@@ -20,7 +20,7 @@ include("../sql/risk-issues-lookup.php");
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
 
-<body>
+<body style="font-family:Mulish, serif;">
     <!-- PROGRESS BAR -->
 <div class="container">       
             <div class="row bs-wizard" style="border-bottom:0;">
@@ -55,7 +55,7 @@ include("../sql/risk-issues-lookup.php");
             </div>
   </div>
   <!-- END PROGRESS BAR -->
-	<div align="center"><h3>Confirm Risk or Issue</h3></div>
+	<div align="center"><h2>CONFIRM <?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
 	<div align="center">Please review your risk or issue.  If you need to make an update, use the Edit button below.</div>
 	<div style="padding: 20px" class="alert">  </div>
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
@@ -112,13 +112,15 @@ include("../sql/risk-issues-lookup.php");
 <!--<?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td><?php //echo $createdFrom ; ?></td>
     </tr>
 <?php } ?>-->
+<?php if(!empty($program)) { ?>
     <tr>
       <td>Program</td>
       <td><?php echo $program ; ?></td>
     </tr>
+<?php } ?>
     <tr>
     <tr>
       <td>Descriptor</td>

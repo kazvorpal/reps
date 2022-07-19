@@ -142,7 +142,11 @@ include ("../sql/MS_Users_prg.php");
     $sql_poc = "SELECT TOP(1) * FROM [RI_MGT].[fn_GetListOfCurrentTaskPOC] (1) WHERE POC_Nm = '$individual'";
     $stmt_poc  = sqlsrv_query( $data_conn, $sql_poc  );  
     $row_poc  = sqlsrv_fetch_array( $stmt_poc , SQLSRV_FETCH_ASSOC);
+
+    $pocEmail = "";
+    if(!empty($row_poc ['POC_Email'])){
     $pocEmail = $row_poc ['POC_Email'];
+    }
 
     $SPCode = NULL ;
     $SPMessage = NULL ;

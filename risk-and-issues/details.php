@@ -22,13 +22,17 @@ $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 //GET DRIVERS
 $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) where RiskAndIssueLog_Key = $riLog_Key";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
-// $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+$row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_driver['Driver_Nm']; 
 //echo $sql_risk_issue_driver; exit();
 
 //GET ASSOCIATED PROJECTS
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";
+$sql_risk_issue_assoc_proj = "DECLARE @temp VARCHAR(MAX) 
+                              SELECT @temp = COALESCE(@temp+'<br>' ,'') + Proj_Nm 
+                              FROM RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)
+                              SELECT @temp AS eps_projects";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
+$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 
 //$row_assoc_proj_count = sqlsrv_num_rows( $stmt_risk_issue_assoc_proj );
    
@@ -83,7 +87,7 @@ $project_nm = $row_risk_issue['EPSProject_Nm'];
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
 $regionx = "";
-$Driversx = ""; //$row_risk_issue_driver['Driver_Nm'];
+$Driversx = $row_risk_issue_driver['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
 $riskProbability = $row_risk_issue['RiskProbability_Nm'];
@@ -94,7 +98,7 @@ $unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];
 $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
-$assocProject = "";
+$assocProject = $row_risk_issue_assoc_proj['eps_projects'];
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $dateClosed = $row_risk_issue['RIClosed_Dt'];
 $driver_list = "";
@@ -170,11 +174,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     <tr>
       <td>Drivers</td>
       <td>
-        <?php 
-        while ($row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_driver['Driver_Nm'] . '<br>';
-        }
-        ?>
+        <?php echo $Driversx;?>
       </td>
     </tr>
     <tr>
@@ -233,10 +233,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     <tr>
       <td>Associated Projects</td>
       <td>
-        <?php 
-        while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_assoc_proj['proj_nm'] . "<br>"; 
-        }
+        <?php echo $assocProject; 
         ?>
       </td>
     </tr>
@@ -297,10 +294,10 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
             %0D%0ADrivers: <?php echo $Driversx?>
             %0D%0AImpact Area: <?php echo $impactArea2?>
             %0D%0AImpact Level: <?php echo $impactLevel2?>
-            %0D%0APOC Group/Name: <?php echo $individual?>
+            %0D%0APOC Group/Name: <?php echo $individual . " : " . $department?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date:: <?php if($unknown == "off"){ echo $date; } else { echo "Unknown"; }?>
-            %0D%0AAssociated Projects: <?php echo $assocProject?>
+            %0D%0AAssociated Projects: <?php echo str_replace("<br>", ", ", $assocProject)?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             " 

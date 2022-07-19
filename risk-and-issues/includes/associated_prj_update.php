@@ -221,7 +221,7 @@ function toggle(source) {
 <input type="hidden" name="status" value="<?php echo $status;?>">
 
 <?php if($row_riRows['ttlRows'] > 0) { ?>
-  <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to select Associated <?php echo $row_risk_issue['RIType_Cd']?>(s) in addtion to the originating project.</div>
+  <div align="center" class="aalert alert-info" style="padding:20px; font-size:18px; font-color: #000000;">It is <b><u><i>optional</i></u></b> to uncheck Associated <?php echo $row_risk_issue['RIType_Cd']?>(s) if you don't want to include them in this update.</div>
 <table class="table table-bordered table-striped table-hover" width="90%">
   <tr>
     <th><input type="checkbox" name="checkbox" id="checkbox" onClick="toggle(this)"></th>
@@ -237,7 +237,7 @@ function toggle(source) {
   </tr>
   <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { ?>
   <tr>
-    <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_risk_issue_assoc_proj['RiskAndIssue_Key'];?>"></td>
+    <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_risk_issue_assoc_proj['RiskAndIssue_Key'];?>" checked></td>
     <td><?php echo $row_risk_issue_assoc_proj['RI_Nm'];?></td>
     <td><?php echo $row_risk_issue_assoc_proj['proj_nm'];?></td>
     <td><?php echo $row_risk_issue_assoc_proj['RIDescription_Txt'];?></td>

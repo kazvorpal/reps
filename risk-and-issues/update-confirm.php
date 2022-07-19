@@ -46,7 +46,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
 
-<body>
+<body style="font-family:Mulish, serif;">
     <!-- PROGRESS BAR -->
 <div class="container">       
             <div class="row bs-wizard" style="border-bottom:0;">
@@ -81,7 +81,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
             </div>
   </div>
   <!-- END PROGRESS BAR -->
-	<div align="center"><h3>Confirm Risk or Issue</h3></div>
+	<div align="center"><h2><?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
 	<div align="center">Please review your risk or issue.  If you need to make an update, use the Edit button below.</div>
 	<div style="padding: 20px" class="alert">  </div>
   <form action="update-do.php" method="post" name="confirmation" id="confirmation">
@@ -142,9 +142,15 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 <!--<?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td><?php //echo $createdFrom ; ?></td>
     </tr>
 <?php } ?>-->
+<?php if(!empty($program)) { ?>
+    <tr>
+      <td>Program</td>
+      <td><?php echo $program ; ?></td>
+    </tr>
+<?php } ?>
     <tr>
     <tr>
       <td>Descriptor</td>
@@ -157,7 +163,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 <?php if(!empty($region_conx)){ ?>
     <tr>
       <td>Region</td>
-      <td><?php echo $region_conx; ?></td>
+      <td><?php //echo $region_conx; ?><?php echo str_replace(",", "<br>", $region) ?></td>
     </tr>
 <?php } ?>
     <tr>

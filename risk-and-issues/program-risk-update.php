@@ -16,6 +16,11 @@
   $status = $_GET['status']; // ALWAY 1 FOR ACTIVE
   $progName = $_GET['progname']; // MLM PRGRAM NAME
   $formaction =  $_GET['action'];
+
+  $assc_prj_update = "";
+  if(!empty($_GET['assc_prj_update'])) {
+  $assc_prj_update = $_GET['assc_prj_update'];
+  }
   //echo $progkey;
     
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -362,6 +367,29 @@ if($formaction == "update") {
   <input name="regionKeys" type="hidden" id="regionKeys" value="<?php while ($row_regions_f= sqlsrv_fetch_array($stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region_key'] . ',';} ?>">
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
+
+  <?php if($assc_prj_update == "yes"){ ?>
+  <div class="alert alert-danger">
+  <div align="left">
+    <span class="glyphicon glyphicon-warning-sign"></span> You are Updating the Associated Project list for this Program Risk/Issue to the following.
+  </div>
+  </br>
+      <table width="100%" border="0" cellpadding="10" cellspacing="10">
+        <tr>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">PROGRAM <?php if(empty($del_proj_select)) {echo strtoupper($RIType);} else { echo "PROJECT";}?> PROJECT ASSOCIATION</h4></td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <div class="box" align="left" style="font-size: 12px;">
+              <?php 
+                echo str_replace(",", "<br>", $assocProject);?>
+            </div>
+		      </td>
+        </tr>
+      </table>
+  </div>
+  <hr>
+<?php } ?>
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
