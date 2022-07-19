@@ -222,7 +222,7 @@ $dateClosed = "N/A";
       <td><?php echo $impactLevel2; ?></td>
     </tr>
     <tr>
-      <td>Individua POC</td>
+      <td>Individual POC</td>
       <td><?php echo $individual; ?></td>
     </tr>
     <tr>
@@ -301,21 +301,22 @@ $dateClosed = "N/A";
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
       %0D%0AID: <?php echo $ri_id;?>
       %0D%0ARisk/Issue Name: <?php echo $name;?>
-      %0D%0AType: <?php echo $RILevel . " " . $RIType?>
-      %0D%0AProgram: <?php echo $regionx ?>
-      %0D%0ARegions: <?php echo $prog_name ?>
-      %0D%0ADescriptor: <?php echo $descriptor ?>
-      %0D%0ADescription: <?php echo $description?>
-      %0D%0ADrivers: <?php echo $Driversx?>
-      %0D%0AImpact Area: <?php echo $impactArea2?>
-      %0D%0AImpact Level: <?php echo $impactLevel2?>
-      %0D%0APOC Name and Group: <?php echo $individual . " : " . $department?>
-      %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
-      %0D%0ANotify Portfolio: <?php echo $raidLog?>
-      %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ?>
-      %0D%0AAssociated Projects: <?php echo str_replace("<br>", ", ", $assocProject);?>
-      %0D%0AAction Plan: <?php echo $actionPlan?>
-      %0D%0ADate Closed: <?php echo $dateClosed?>
+      %0D%0AType: <?php echo $RILevel . " " . $RIType;?>
+      %0D%0AProgram: <?php echo $prog_name;?>
+      %0D%0ARegion(s): <?php echo $regionx;?>
+      %0D%0ADescriptor: <?php echo $descriptor;?>
+      %0D%0ADescription: <?php echo $description;?>
+      %0D%0ADriver: <?php echo $Driversx;?>
+      %0D%0AImpact Area: <?php echo $impactArea2;?>
+      %0D%0AImpact Level: <?php echo $impactLevel2;?>
+      %0D%0AIndividual POC: <?php echo $individual;?>
+      %0D%0ATeam POC: <?php echo $department;?>
+      %0D%0AResponse Strategy: <?php echo $responseStrategy2;?>
+      %0D%0ANotify Portfolio: <?php echo $raidLog;?>
+      %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ;?>
+      %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject);?>
+      %0D%0AAction Plan: <?php echo $actionPlan;?>
+      %0D%0ADate Closed: <?php echo $dateClosed;?>
       " 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
     </div>
