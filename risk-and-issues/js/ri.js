@@ -186,20 +186,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
     }
     document.cbrun = false;
     const colorboxschtuff = () => {
-      $(".group1").colorbox({rel:'group1'});
-      $(".group2").colorbox({rel:'group2', transition:"fade"});
-      $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-      $(".group4").colorbox({rel:'group4', slideshow:true});
-      $(".ajax").colorbox();
-      $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-      $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-      $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
-      $(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
-      $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
-      $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
-      $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
       $(".miframe").colorbox({iframe:true, width:"80%", height:"70%", scrolling:true});
-      $(".inline").colorbox({inline:true, width:"50%"});
       $(".callbacks").colorbox({
           onOpen:function(){ alert('onOpen: colorbox is about to open'); },
           onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
@@ -219,7 +206,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
       if (!document.cbrun) {
         var originalClose = $.colorbox.close;
         $.colorbox.close = function(){
-          if (confirm('You are about to close this window.  Incomplete Risk/Issues will not be saved.')) {
+          if (confirm('You are about to close this window.  Incomplete Risks/Issues will not be saved.')) {
             originalClose();
           }
         };

@@ -14,15 +14,9 @@
     <title>Project R&I Dashboard</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <?php 
-    // print phpinfo();
     include ("../../includes/load.php");
-    function fixutf8($target) {
-      if (gettype($target) == "string")
-        return (utf8_encode($target));
-      else 
-        return ($target);
-    }  
     include ("../includes/data.php");
+    include ("../includes/cdns.php");
     ?>
     <script>
 
@@ -48,20 +42,6 @@
 
 
     </script>
-    <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
-    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-    <script src="../../colorbox-master/jquery.colorbox.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script>
       $(document).ready(function(){
           //Examples of how to assign the Colorbox event to elements
@@ -77,7 +57,7 @@
         $('[data-toggle="tooltip"]').tooltip()
       })
       
-      </script>
+    </script>
 
 <link rel="stylesheet" href="../css/ri.css">
 <style type="text/css">
