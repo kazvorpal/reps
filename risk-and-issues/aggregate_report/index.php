@@ -379,16 +379,16 @@
       const saferi = makesafe(program.RI_Nm);
       const url = `/risk-and-issues/details-prg.php?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null`;
       const text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
-      if (document.getElementById('impact_level').value != "") {
-        for (let option of document.getElementById('impact_level').options) {
-          if(option.selected) {
-            if(option.value == program.ImpactLevel_Nm)
-              console.log("match")
-            else
-              console.log("fail")
-          }
-        }
-      }
+      // if (document.getElementById('impact_level').value != "") {
+      //   for (let option of document.getElementById('impact_level').options) {
+      //     if(option.selected) {
+      //       if(option.value == program.ImpactLevel_Nm)
+      //         console.log("match")
+      //       else
+      //         console.log("fail")
+      //     }
+      //   }
+      // }
       if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
         const trid = "tr" + type + saferi + Math.random();
         let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
