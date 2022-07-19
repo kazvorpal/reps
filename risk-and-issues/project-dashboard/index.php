@@ -65,42 +65,7 @@
     <script>
       $(document).ready(function(){
           //Examples of how to assign the Colorbox event to elements
-          $(".group1").colorbox({rel:'group1'});
-          $(".group2").colorbox({rel:'group2', transition:"fade"});
-          $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-          $(".group4").colorbox({rel:'group4', slideshow:true});
-          $(".ajax").colorbox();
-          $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-          $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-          $(".iframe").colorbox({iframe:true, width:"900", height:"600", scrolling:false});
-          $(".dno").colorbox({iframe:true, width:"80%", height:"60%", scrolling:false});
-          $(".mapframe").colorbox({iframe:true, width:"95%", height:"95%", scrolling:true});
-          $(".miniframe").colorbox({iframe:true, width:"30%", height:"50%", scrolling:true});
-          $(".ocdframe").colorbox({iframe:true, width:"75%", height:"90%", scrolling:true});
-          $(".miframe").colorbox({iframe:true, width:"80%", height:"70%", scrolling:true});
-          $(".inline").colorbox({inline:true, width:"50%"});
-          $(".callbacks").colorbox({
-              onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-              onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-              onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-              onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-              onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
-          });
-
-          $('.non-retina').colorbox({rel:'group5', transition:'none'})
-          $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
-          
-          //Example of preserving a JavaScript event for inline calls.
-          $("#click").click(function(){ 
-              $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
-              return false;
-          });
-          var originalClose = $.colorbox.close;
-          $.colorbox.close = function(){
-            if (confirm('You are about to close this window.  Incomplete Risk/Issues will not be saved.')) {
-              originalClose();
-            }
-          };
+          colorboxschtuff();
       });
       const MM_setTextOfTextfield = (objId,x,newText) => { //v9.0
         with (document){ if (getElementById){
@@ -392,10 +357,12 @@
 
     document.getElementById("Go").onclick = function() {
       // filter form button
-      populate(filtration())
+      populate(filtration());
+      colorboxschtuff();
       return false;
     }  
     populate(uniques);
+    // setTimeout(function(){populate(uniques)}, 5000);
   </script>
   </body>
 </html>
