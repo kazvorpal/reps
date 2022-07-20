@@ -21,7 +21,7 @@
   if(!empty($_GET['assc_prj_update'])) {
   $assc_prj_update = $_GET['assc_prj_update'];
   }
-  //echo $progkey;
+  //echo $_GET['assc_prj_update'];
     
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
   $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
@@ -41,6 +41,7 @@
       } else { 
     $regionIN = "'" . $ass_project . "'"; 
       }
+      echo $ass_project_regions . "<br>" .  $regionIN . "<br>";
 
   //GET ASSOCIATED PROJECTS FROM 
   $sql_assoc_prj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey,$status)";
@@ -63,13 +64,45 @@
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
   //echo $sql_regions;
-  
+
+  //GET EPS PROJECT KEYS FROM PROJECT NAMES
+  $sql_epsProjKey = "DECLARE @EPS_IDs VARCHAR(100)
+      SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(100))
+      FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) WHERE EPSProject_Nm in ($regionIN)
+      SELECT @EPS_IDs AS eps_proj_key";
+  $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );
+  $row_epsProjKey = sqlsrv_fetch_array( $stmt_epsProjKey, SQLSRV_FETCH_ASSOC);
+
+  $eps_proj_keys = $row_epsProjKey['eps_proj_key'];
+
+  //REGIONS FROM ASSOC PROJECT KEYS FOR DISPLAY CHECKBOX
+  $sql_region_update = "DECLARE @temp VARCHAR(MAX)
+      SELECT @temp = COALESCE(@temp+',' ,'') + Region_Cd 
+      FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) Where  EPSProject_key in ($eps_proj_keys)
+      SELECT @temp AS Region_Cd ";
+  $stmt_region_update = sqlsrv_query( $data_conn, $sql_region_update );
+  $row_region_update = sqlsrv_fetch_array( $stmt_region_update, SQLSRV_FETCH_ASSOC);
+  echo $sql_region_update . "<br><br>";
   //GET REGIONS KEYS FOR HIDDEN FIELD
-  $sql_regions_f = "select distinct Region_key,[RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd]
-                    from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] (2022, '$progName') 
-                    left join [CR_MGT].[Region] on [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd] = [CR_MGT].[Region].[Region_Cd]
-                    where RiskAndIssue_Key = $RiskAndIssue_Key
-                    order by [CR_MGT].[Region].[Region_key]";
+  $regionkeySQL = "select distinct Region_key,[RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd]
+      from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] (2022, '$progName') 
+      left join [CR_MGT].[Region] on [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram].[Region_Cd] = [CR_MGT].[Region].[Region_Cd]
+      where RiskAndIssue_Key = $RiskAndIssue_Key
+      order by [CR_MGT].[Region].[Region_key]";
+
+  if($assc_prj_update == "yes") {
+
+      $inRegion = $ass_project_regions; //$row_region_update['Region_Cd'];
+      $IReplace = "'" . $inRegion . "'";
+      //$IReplace = str_replace(",", "','", $inRegion);
+
+      $regionkeySQL = "DECLARE @REG_IDs VARCHAR(100)
+      SELECT @REG_IDs = COALESCE(@REG_IDs+',','')+ CAST(Region_key AS VARCHAR(100))
+      FROM [COX_Dev].[CR_MGT].[Region] WHERE Region_Cd IN ('$IReplace')
+      SELECT @REG_IDs AS Region_key";
+    }
+echo $regionkeySQL;
+  $sql_regions_f = "$regionkeySQL";
   $stmt_regions_f = sqlsrv_query( $data_conn, $sql_regions_f );
   //echo $sql_regions_f;
   //$row_region_fs = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC);
@@ -103,17 +136,7 @@
 
   $numRows = $row_regions_con['numRows'];
   //echo $numRows;
-  //exit();
-
-  //GET EPS PROJECT KEYS FROM PROJECT NAMES
-  $sql_epsProjKey = "DECLARE @EPS_IDs VARCHAR(100)
-                    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(100))
-                    FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) WHERE EPSProject_Nm in ($regionIN)
-                    SELECT @EPS_IDs AS eps_proj_key";
-  $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );
-  $row_epsProjKey = sqlsrv_fetch_array( $stmt_epsProjKey, SQLSRV_FETCH_ASSOC);
-  
-  $eps_proj_keys = $row_epsProjKey['eps_proj_key'];
+  //exit();  
     
   if($numRows == 7){
       $regionCD = "All";
@@ -168,7 +191,7 @@
   $DateClosed = $row_risk_issue['RIClosed_Dt'];
   $driverList = rtrim($_GET['drivertime'], ",");
   $driverArr = explode(",", $driverList);
-  $regionList = rtrim($_GET['regions'], ",");
+  $regionList = rtrim($_GET['regions'], ","); //echo $regionList;
   $regionArr = explode(",", $regionList);
   $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
   $raid = $row_risk_issue['RaidLog_Flg'];
@@ -176,6 +199,15 @@
   $assCRID = ""; //$row_risk_issue['AssociatedCR_Key'];
   $regions = $_GET['regions'];
   $probability = $row_risk_issue['RiskProbability_Key'];
+  $regionkeyUp = $row_region_update['Region_Cd']; //echo $regionkeyUp;
+  $regionkeyUpArray = explode(",", $regionkeyUp); //print_r($regionkeyUpArray);
+  $createDT = date_format($row_risk_issue['Created_Ts'],'Y-m-d');
+
+  if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
+    $forecastMin = date_format($date, "Y-m-d");
+  } else {
+    $forecastMin = $closeDateMax;
+  }
  
 if($formaction == "new"){
     if(!empty($_POST['proj_select'])) {
@@ -446,38 +478,46 @@ if($formaction == "update") {
               <tr>
                 <td>
                   <div style="padding: 0px 0px 0px 30px">
-                    <p><strong>Select Regions
+                    <p><strong>Select Regions 
                       </strong><br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="All" id="Region" onClick="toggle(this); updatebox()" class="required_group_reg" <?php if(in_array("All", $regionArr)) { echo "checked";} ?> disabled>
-                        Select All</label>
+                        <input type="checkbox" name="Regionx[]" value="All" id="Region" onClick="toggle(this); updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("All", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("All", $regionArr)) { echo "checked";} } ?> disabled>
+                        All</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="Corporate" id="Region_6" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Corporate", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regionx[]" value="Corporate" id="Region_6" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("Corporate", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Corporate", $regionArr)) { echo "checked";} } ?> disabled>
                         Corporate (COR)</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regioxn[]" value="California" id="Region_0" onClick="updatebox()" class="required_group_reg" <?php if(in_array("California", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regioxn[]" value="California" id="Region_0" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("California", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("California", $regionArr)) { echo "checked";} } ?> disabled>
                         California (CA)</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="Central" id="Region_1" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Central", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regionx[]" value="Central" id="Region_1" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("Central", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Central", $regionArr)) { echo "checked";} } ?> disabled>
                         Central (CE)</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="Northeast" id="Region_2" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Northeast", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regionx[]" value="Northeast" id="Region_2" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("Northeast", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Northeast", $regionArr)) { echo "checked";} } ?> disabled>
                         Northeast (NE)</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="Southeast" id="Region_3" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Southeast", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regionx[]" value="Southeast" id="Region_3" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("Southeast", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Southeast", $regionArr)) { echo "checked";} } ?> disabled>
                         Southeast (SE)</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="Southwest" id="Region_4" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Southwest", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regionx[]" value="Southwest" id="Region_4" onClick="updatebox()" class="required_group_reg"
+                        <?php if($assc_prj_update == "yes") { if(in_array("Southwest", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Southwest", $regionArr)) { echo "checked";} } ?> disabled>
                         Southwest (SW)</label>
                       <br>
                       <label>
-                        <input type="checkbox" name="Regionx[]" value="Virginia" id="Region_5" onClick="updatebox()" class="required_group_reg" <?php if(in_array("Virginia", $regionArr)) { echo "checked";} ?> disabled>
+                        <input type="checkbox" name="Regionx[]" value="Virginia" id="Region_5" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("Virginia", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Virginia", $regionArr)) { echo "checked";} } ?> disabled>
                         Virginia (VA)</label>
                       <br>
                       </p>
@@ -499,12 +539,12 @@ if($formaction == "update") {
                     <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?>>
                     Material Delay</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
                     Project Dependency</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
                     Shipping/Receiving Delay</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
@@ -512,7 +552,7 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="3" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
                     Ordering Error</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Design/Scope Change", $driverArr)) { echo "checked";} ?>>
@@ -520,7 +560,7 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="4" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resource</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Admin Error", $driverArr)) { echo "checked";} ?>>
@@ -528,7 +568,7 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="5" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
                     3PL Resource</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("External Forces", $driverArr)) { echo "checked";} ?>>
@@ -659,6 +699,7 @@ if($formaction == "update") {
 			  <div id="dateUnknown">
               <input name="date" 
                   type="date"
+                  min="<?php echo $forecastMin; ?>"
                   class="form-control" 
                   id="date" 
                   value=""
@@ -830,7 +871,7 @@ if($formaction == "update") {
           <td colspan="2" align="left">
             <div class="box">
           <label for="DateClosed">Date Closed:</label>
-                <input type="date" name="DateClosed" id="DateClosed" class="form-control" max="<?php echo $closeDateMax; ?>">
+                <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>">
           </div>
           </td>
         </tr>
@@ -996,6 +1037,12 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script> 
+
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+  document.getElementById("Unknown").checked = false;
+})
+</script>
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

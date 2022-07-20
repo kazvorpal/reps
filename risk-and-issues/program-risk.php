@@ -519,6 +519,7 @@ function toggle(source) {
 			  <div id="dateUnknown">
               <input name="date" 
                   type="date"
+                  min="<?php echo $closeDateMax ?>"
                   class="form-control" 
                   id="date" 
                   value="2022-01-01"
@@ -817,6 +818,7 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   validateGrp()
 });
 </script>
+
 <script>
   var date = new Date();
   var day = date.getDate();
@@ -837,6 +839,7 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   document.getElementById("InternalExternal").value = v[1];
   });
 </script>
+
 <script>
 $('.subscriber :checkbox').change(function () {
     var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
@@ -845,6 +848,12 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script> 
+
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+  document.getElementById("Unknown").checked = false;
+})
+</script>
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

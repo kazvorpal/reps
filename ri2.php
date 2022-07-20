@@ -181,7 +181,7 @@ ProjectID: <?php echo $projID?>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
       <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
-      <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
+      <td><?php echo date_format($row_risk_issue['Created_Ts'], 'm-d-Y'); ?></td>
       <td align="center">
         <a title="Action Plan History" href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a>
       </td>
@@ -223,7 +223,7 @@ ProjectID: <?php echo $projID?>
       <td><?php echo $row_closed_ri['RIType_Cd']; ?></td>
       <td><?php echo $row_closed_ri['RIDescription_Txt']; ?></td>
       <td><?php echo $row_closed_ri['ImpactLevel_Nm']; ?></td>
-      <td><?php echo date_format($row_closed_ri['Last_Update_Ts'], 'm-d-Y'); ?></td>
+      <td><?php echo date_format($row_closed_ri['Created_Ts'], 'm-d-Y'); ?></td>
       <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_closed_ri['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
       <td align="center"><a href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_closed_ri['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>&status=0&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
     </tr>

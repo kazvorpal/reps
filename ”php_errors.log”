@@ -1,0 +1,8 @@
+[20-Jul-2022 19:34:52 UTC] PHP Notice:  Undefined index: Created_Ts in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Warning:  date_format() expects parameter 1 to be DateTimeInterface, null given in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Notice:  Undefined index: Created_Ts in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Warning:  date_format() expects parameter 1 to be DateTimeInterface, null given in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Notice:  Undefined index: Created_Ts in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Warning:  date_format() expects parameter 1 to be DateTimeInterface, null given in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Notice:  Undefined index: Created_Ts in C:\inetpub\wwwroot\ri2-prg.php on line 170
+[20-Jul-2022 19:34:52 UTC] PHP Warning:  date_format() expects parameter 1 to be DateTimeInterface, null given in C:\inetpub\wwwroot\ri2-prg.php on line 170

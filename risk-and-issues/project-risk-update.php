@@ -31,6 +31,13 @@ $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
 // echo $row_risk_issue_driver['Driver_Nm]; 			
 // echo $sql_risk_issue_driver;
 
+//GET CREATION DATE - HAVE AVI ADD CREATE TS TO [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]
+$sql_ri_createDT = "select* from [RI_MGT].[fn_GetListOfAllRiskAndIssue](1) where RiskAndIssue_Key = $RiskAndIssue_Key";
+$stmt_ri_createDT = sqlsrv_query( $data_conn, $sql_ri_createDT );
+$row_ri_createDT = sqlsrv_fetch_array($stmt_ri_createDT, SQLSRV_FETCH_ASSOC);
+// echo $row_ri_createDT['Driver_Nm]; 			
+// echo $sql_ri_createDT;
+
 //DECLARE
 $changeLogKey = 4;
 if(isset($_POST['add_proj_select'])) {
@@ -65,6 +72,13 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized =  $row_risk_issue['RiskRealized_Flg']; 
 $department = $row_risk_issue['POC_Department'];
 $add_proj_select = NULL;
+$createDT = date_format($row_ri_createDT['Created_Ts'],'Y-m-d'); // server on UTC time zone; need to get user time zone then set date - echo date_default_timezone_get();
+
+if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
+  $forecastMin = date_format($date, "Y-m-d");
+} else {
+  $forecastMin = $closeDateMax;
+}
 
 $groupID = "";
 if (isset($_POST['groupID'])) {
@@ -334,12 +348,12 @@ function toggle(source) {
                     <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?>>
                     Material Delay</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
                     Project Dependency</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
                     Shipping/Receiving Delay</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
@@ -347,7 +361,7 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="3" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
                     Ordering Error</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Design/Scope Change", $driverArr)) { echo "checked";} ?>>
@@ -355,7 +369,7 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="4" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resource</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Admin Error", $driverArr)) { echo "checked";} ?>>
@@ -363,7 +377,7 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="5" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
                     3PL Resource</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("External Forces", $driverArr)) { echo "checked";} ?>>
@@ -499,6 +513,7 @@ function toggle(source) {
 				  <div id="dateUnknown" >
 				  <input name="date" 
 					type="date"
+          min="<?php echo $forecastMin; ?>"
 					class="form-control" 
 					id="date" 
 					value=""
@@ -675,7 +690,7 @@ function toggle(source) {
               <tr>
                 <td colspan="2">
                   <label for="DateClosed">Date Closed:</label><div id="warning"></div>
-                  <input type="date" name="DateClosed" id="DateClosed" class="form-control" max="<?php echo $closeDateMax; ?>" onchange="closeWarning()">
+                  <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>" onchange="closeWarning()">
                   <!-- <input type="checkbox" name="TransfertoProgramManager2" id="TransfertoProgramManager2"> -->
                   <!-- <label for="TransfertoProgramManager2">Transfer to Program Manager</label> -->
                 </td>
@@ -834,6 +849,11 @@ var today = <?php if(is_null($date)) {echo ""; } else { echo json_encode(date_fo
 document.getElementById('date').value = today;
 </script>
 
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+  document.getElementById("Unknown").checked = false;
+})
+</script>
 
 <script src="includes/ri-functions.js"></script>
 </body>

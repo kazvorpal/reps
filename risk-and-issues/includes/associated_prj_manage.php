@@ -261,7 +261,7 @@ function toggle(source2) {
     <input type="hidden" name="changeLogKey" id="changeLogKey" value="4">
 
     <p>              
-            <div align="center" class="alert alert-success" style="padding:20px; font-size:18px; font-color: #000000;">ADD - Check any projects you would like to add to this Risk/Issure</div>
+            <div align="center" class="alert alert-success" style="padding:20px; font-size:18px; font-color: #000000;">ADD - Check any projects you would like to add to this <?php echo $ri_type?>.</div>
           </p>
           <table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
                     <tbody>

@@ -38,7 +38,7 @@ include ("../sql/MS_Users_prg.php");
     $individual = $_POST['individual']; 
     $internalExternal = $_POST['internalExternal'];
     $poc = $_POST['poc']; // POC FROM INDIVIDUAL OR INTERNAL/EXTERNAL
-    $pocFlag = (int)$_POST['pocFlag'];
+    $pocFlag = 1; //(int)$_POST['pocFlag'];
     $descriptor = $_POST['descriptor']; 
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 

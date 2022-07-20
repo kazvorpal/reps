@@ -60,7 +60,7 @@ $(document).ready(function(){
 				});
         var originalClose = $.colorbox.close;
         $.colorbox.close = function(){
-          if (confirm('You are about to close this window.  Incomplete Risk/Issues will not be saved.')) {
+          if (confirm('You are about to close this window.  Any unsaved data will be lost.')) {
             originalClose();
           }
         };

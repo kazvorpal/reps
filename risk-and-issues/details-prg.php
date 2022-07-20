@@ -206,7 +206,7 @@ $dateClosed = "N/A";
       <td><?php echo $description; ?></td>
     </tr>
     <tr>
-      <td>Drivers</td>
+      <td>Driver</td>
       <td>
         <?php 
         echo $Driversx;
@@ -312,7 +312,7 @@ $dateClosed = "N/A";
       %0D%0AIndividual POC: <?php echo $individual;?>
       %0D%0ATeam POC: <?php echo $department;?>
       %0D%0AResponse Strategy: <?php echo $responseStrategy2;?>
-      %0D%0ANotify Portfolio: <?php echo $raidLog;?>
+      %0D%0ANotify Portfolio Team: <?php echo $raidLog;?>
       %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ;?>
       %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject);?>
       %0D%0AAction Plan: <?php echo $actionPlan;?>
