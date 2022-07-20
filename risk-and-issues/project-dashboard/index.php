@@ -200,7 +200,7 @@
             return  (ri.RaidLog_Flg) ? "Y" : "N";
           },
           RIOpen_Hours: function() {
-            return Math.floor(ri.RIOpen_Hours/24);
+            return Math.floor(ri.RIOpen_Hours/24) + " days";
           },
           market: function() {
             const m = getlocationbykey(ri.EPSProject_Key);
