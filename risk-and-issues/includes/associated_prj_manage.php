@@ -187,7 +187,7 @@ function toggle(source2) {
             <td>
             <input name="pStatus[]" type="hidden" value="Active">
             <input name="Owner" type="hidden" value="get owner">
-            <input name="fiscal_year" type="hidden" value="<?php echo $_GET['fiscal_year']?>">
+            <input name="fiscal_year" type="hidden" value="<?php echo $fiscal_year?>">
             </td>
             <td>&nbsp;</td>
             </tr>
