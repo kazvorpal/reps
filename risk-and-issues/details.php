@@ -189,11 +189,11 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     </tr>
     <?php } ?>
     <tr>
-      <td>POC Name</td>
+      <td>Individual POC</td>
       <td><?php echo $individual; ?></td>
     </tr>
     <tr>
-      <td>Team/Group POC</td>
+      <td>Team POC</td>
       <td><?php echo $department; ?></td>
     </tr>
     <tr>
@@ -284,13 +284,14 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
             %0D%0AProject: <?php echo $project_nm?>
             %0D%0ADescriptor: <?php echo $descriptor ?>
             %0D%0ADescription: <?php echo $description?>
-            %0D%0ADrivers: <?php echo $Driversx?>
+            %0D%0ADriver: <?php echo $Driversx?>
             %0D%0AImpact Area: <?php echo $impactArea2?>
             %0D%0AImpact Level: <?php echo $impactLevel2?>
-            %0D%0APOC Name and Department: <?php echo $individual . " : " . $department?>
+            %0D%0AIndividual POC: <?php echo $individual?>
+            %0D%0ATeam POC: <?php echo $department?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
-            %0D%0AAssociated Projects: <?php echo str_replace("<br>", ", ", $assocProject)?>
+            %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject)?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             " 
