@@ -20,8 +20,9 @@
     ?>
     <script>
 
-      const ridata = <?= $jsonout ?>;  
-      const closeddata = <?= $closedout ?>;  
+      const d1 = <?= $jsonout ?>;  
+      const d2 = <?= $closedout ?>;  
+      const ridata = d1.concat(d2);  
       const mangerlist = <?= $mangerout ?>;
       const driverlist = <?= $driverout ?>;
       const locationlist = <?= $locationout ?>;
@@ -302,7 +303,7 @@
       return trri;
     }  
 
-    const uniques = getwholeuniques(ridata, "RiskAndIssue_Key");
+    const uniques = getwholeuniques(d1, "RiskAndIssue_Key");
 
     const splitdate = (datestring) => {
       let newdate = datestring.split(" - ");
