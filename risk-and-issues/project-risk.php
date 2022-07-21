@@ -775,7 +775,20 @@ jQuery(document).ready(function($) {
 document.getElementById("dateUnknown").addEventListener("change", function(){
   document.getElementById("Unknown").checked = false;
 })
+
+$(function() {
+   $('#date').keypress(function(event) {
+       event.preventDefault();
+       return false;
+   });
+});
 </script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

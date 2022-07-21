@@ -825,6 +825,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 })
 </script>
 
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

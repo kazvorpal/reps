@@ -80,7 +80,7 @@ $sql_risk_issue_assoc_proj = "DECLARE @temp VARCHAR(MAX)
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue_assoc_proj['eps_pojects'];
-//echo $sql_risk_issue_assoc_proj; 
+//echo "<br><br>" . $sql_risk_issue_assoc_proj; 
 
 //COUNT ASSOCIATED PROJECTS USING THE PROGRAMRI_KEY
 $sql_assoc_proj_cnt = "SELECT COUNT(*) AS AsscPrjCnt FROM RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status)";
@@ -126,6 +126,7 @@ $date = $row_risk_issue['ForecastedResolution_Dt'];
 $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = $row_risk_issue_assoc_proj['eps_projects'];
+$assocProjectcomma = str_replace("<br>", ",", $assocProject);
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $formaction =  "update"; 
 
@@ -288,7 +289,7 @@ $dateClosed = "N/A";
     <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
 <?php if($au == "true")  {?>  
 <?php if($status == 1){ ?>
-    <a href="<?php echo $formType ?>?action=update&status=1&ri_level=prg&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
+    <a href="<?php echo $formType ?>?action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
         echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
         }

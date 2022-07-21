@@ -28,7 +28,7 @@
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
-  //echo $sql_regions;
+  echo $sql_regions;
   
   //GET REGIONS FOR HIDDEN FIELD
   $sql_regions_f = "SELECT DISTINCT Region_key, Region
@@ -851,9 +851,15 @@ $('.subscriber :checkbox').change(function () {
 
 <script language="javascript">
 document.getElementById("dateUnknown").addEventListener("change", function(){
-  document.getElementById("Unknown").checked = false;
+document.getElementById("Unknown").checked = false;
 })
 </script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

@@ -851,8 +851,13 @@ document.getElementById('date').value = today;
 
 <script language="javascript">
 document.getElementById("dateUnknown").addEventListener("change", function(){
-  document.getElementById("Unknown").checked = false;
+document.getElementById("Unknown").checked = false;
 })
+</script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 </script>
 
 <script src="includes/ri-functions.js"></script>

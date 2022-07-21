@@ -38,7 +38,7 @@ $row_prg_assc= sqlsrv_fetch_array( $stmt_prg_assc, SQLSRV_FETCH_ASSOC);
 $avRaw = $row_prg_assc ['eps_projects'];
 $avCom = str_replace(", ","','",$avRaw);
 $pjNames =  "'" . $avCom . "'";
- echo "<br><br>". $pjNames;
+//echo "<br><br>". $pjNames;
 //echo "<br><br>".$sql_prg_assc;
 
 //FIRST GET THE PROGRAM RI KEY
