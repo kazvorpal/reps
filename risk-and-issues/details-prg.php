@@ -130,6 +130,11 @@ $assocProjectcomma = str_replace("<br>", ",", $assocProject);
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $formaction =  "update"; 
 
+$formName = "PRGR";
+if($RIType == "Issue"){
+  $formName = "PRGI";
+}
+
 $raidLogx = $row_risk_issue['RaidLog_Flg'];
 if($raidLogx == 1) {$raidLog =  "Yes";}
 if($raidLogx == 0) {$raidLog = "No";}
@@ -289,7 +294,7 @@ $dateClosed = "---";
     <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
 <?php if($au == "true")  {?>  
 <?php if($status == 1){ ?>
-    <a href="<?php echo $formType ?>?action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
+    <a href="<?php echo $formType ?>?formName=<?php echo $formName?>&action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
         echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
         }
