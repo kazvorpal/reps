@@ -28,7 +28,7 @@
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
-  echo $sql_regions;
+  //echo $sql_regions;
   
   //GET REGIONS FOR HIDDEN FIELD
   $sql_regions_f = "SELECT DISTINCT Region_key, Region

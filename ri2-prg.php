@@ -3,6 +3,9 @@
 <?php include ("data/emo_data.php");?>
 <?php include ("sql/MS_Users_prg.php");?>
 <?php
+session_start();
+$_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
+
 								//DECLARE
                 $uid = $_GET['uid'];
                 $ri_region = $_GET['region'];

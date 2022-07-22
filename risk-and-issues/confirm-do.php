@@ -6,6 +6,9 @@ include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 
+session_start();
+$backhome = $_SESSION["homebase"];
+
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
     if ($changeLogKey == 1){
@@ -231,7 +234,9 @@ $pocEmail = $row_poc ['POC_Email'];
 
 //EXECUTE IF RI IS SUCCESSFULLY CREATED
     if($SPCode == 0) { 
-        echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPBatch_Id . '</div>';
+        echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPBatch_Id . '</div>
+        <br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>
+        ';
         
         //EMAIL PM AND RI CREATOR
             //DISTRO

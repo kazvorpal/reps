@@ -6,7 +6,9 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
-//echo $_SESSION["homebase"];
+
+session_start();
+$backhome = $_SESSION["homebase"];
 
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
@@ -255,7 +257,9 @@ include ("../sql/MS_Users_prg.php");
     ';
 // echo $SPCode;
     if($SPCode == 0) {
-        echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>ID: ' . $SPBatch_Id . '</div>';
+        echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>ID: ' . $SPBatch_Id . '</div>
+            <br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>    
+        ';
         //EMAIL PM AND RI CREATOR
         if($changeLogKey == 3 || $changeLogKey == 4){
             //DISTRO

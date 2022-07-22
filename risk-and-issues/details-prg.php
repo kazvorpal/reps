@@ -139,7 +139,7 @@ $department = $row_risk_issue['POC_Department'];
 if(!empty($row_risk_issue['RIClosed_Dt'])){
 $dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
 } else {
-$dateClosed = "N/A";
+$dateClosed = "---";
 }
 ?>
 <!doctype html>

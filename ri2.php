@@ -4,8 +4,9 @@
 <?php include ("sql/MS_Users.php");?>
 <?php include ("sql/project_by_id.php");?>
 <?php 
-//session_start();
-//$_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
+session_start();
+$_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
+
 								//FIND PROJECT RISK AND ISSUES FUNCTION 1.26.2022
                 $uid = $_GET['uid'];
                 $proj_name = $_GET['prj_name'];

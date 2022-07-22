@@ -16,6 +16,7 @@
   $status = $_GET['status']; // ALWAY 1 FOR ACTIVE
   $progName = $_GET['progname']; // MLM PRGRAM NAME
   $formaction =  $_GET['action'];
+
   
   $projFromURL ="";
   if(isset($_GET['assoc_prj'])) {
@@ -31,7 +32,7 @@
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
   $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
   $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-  //echo $sql_risk_issue; exit();
+  //echo $sql_risk_issue; //exit();
 
   //DECLARE
   //$action = $_GET['action']; //new
@@ -197,9 +198,10 @@
     $changeLogKey = 2;
   }
   $name = trim($row_risk_issue['RI_Nm']);
-  $RILevel = "";
+  $formType = "update";
+  $RILevel = "Program";
   $RIType = $row_risk_issue['RIType_Cd'];
-  $createdFrom  = "";
+  $createdFrom  = ""; //TBA
   $programs = "";
   $project_nm = "";
   $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
@@ -230,6 +232,7 @@
   $riskRealized = $row_risk_issue['RiskRealized_Flg'];
   $assCRID = ""; //$row_risk_issue['AssociatedCR_Key'];
   $probability = $row_risk_issue['RiskProbability_Key'];
+  $formName = $_GET['formName'];
 
   $regionkeyUp = $row_region_update['Region_Cd']; //echo "<b></br></br>Regions to update: </b>" .  $regionkeyUp . "</br>";
   $regionkeyUpArray = explode(",", $regionkeyUp); //echo "" . print_r($regionkeyUpArray);
@@ -382,8 +385,8 @@ function toggle(source) {
   </div>
   <!-- END PROGRESS BAR -->
 <div align="center">
-  <h3>PROGRAM RISK UPDATE</h3>
-  Enter the details of your Program Risk
+  <h3>PROGRAM <?php echo strtoupper($RIType) ?> UPDATE</h3>
+  Edit the details of your Program <?php echo $RIType ?>
 </div>
 <div class="finePrint">
 <?php  
@@ -409,12 +412,12 @@ if($formaction == "update") {
   <input name="programs" type="hidden" id="programs" value="<?php echo $row_projID['PRGM'] ?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
-  <input name="formName" type="hidden" id="formName" value="PRGR">
-  <input name="RIType" type="hidden" id="RIType" value="Risk">
-  <input name="RILevel" type="hidden" id="RILevel" value="Program">
+  <input name="formName" type="hidden" id="formName" value="<?php echo $formName ?>">
+  <input name="RIType" type="hidden" id="RIType" value="<?php echo $RIType?>">
+  <input name="RILevel" type="hidden" id="RILevel" value="<?php echo $RILevel ?>">
 
     <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
-    <input name="formType" type="hidden" id="formType" value="New">
+    <input name="formType" type="hidden" id="formType" value="<?php echo $formType?>">
     <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php echo $eps_proj_keys?>">
 
   <input name="CreatedFrom" type="hidden" id="Created From" value=''>
@@ -432,7 +435,7 @@ if($formaction == "update") {
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> You are Updating the Associated Project list for this Program Risk/Issue to the following.
+    <span class="glyphicon glyphicon-warning-sign"></span> You are updating the Associated Project list for this Program <?php echo $RIType ?> to the list below.  You may edit the details of the <?php echo $RIType ?>.
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
@@ -457,7 +460,7 @@ if($formaction == "update") {
         <tr>
           <th width="50%" align="left">
             <div id="myRisk">
-              <h4 style="color: #00aaf5">PROGRAM RISK</h4>
+              <h4 style="color: #00aaf5">PROGRAM <?php echo strtoupper($RIType) ?></h4>
             </div></th>
           <th align="left">&nbsp;</th>
         </tr>
@@ -484,7 +487,7 @@ if($formaction == "update") {
                 <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
               </tr>
               <tr>
-                <td><label for="Descriptor">Risk Descriptor<br>
+                <td><label for="Descriptor">Descriptor<br>
                   </label>
                   <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" value="<?php echo $descriptor;?>" readonly>  
                 </td>
@@ -655,6 +658,7 @@ if($formaction == "update") {
                   </td>
                 <td valign="top">
 				<div id="myDIV2">
+          <?php if($RIType == "Risk") { ?>
                     <table width="200" border="0">
                               <tr>
                                 <td>
@@ -670,7 +674,10 @@ if($formaction == "update") {
                         </tr>
                         <?php } ?>
                     </table>
-                </div>
+          <?php } else { ?>
+            <input name="RiskProbability" type="hidden" id="RiskProbability" value="">
+          <?php } ?>
+        </div>
 				</td>
                 <td>
                 

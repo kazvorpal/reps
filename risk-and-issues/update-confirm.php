@@ -29,6 +29,7 @@ $sql_ri_assoc_prj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_Ge
 $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 //$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 //$Projassoc = $row_risk_issue_assoc_proj['proj_nm']; //NEED TO SHOW ALL DRIVER LOOP
+//echo $sql_ri_assoc_prj;
 
 ?>
 <!doctype html>
