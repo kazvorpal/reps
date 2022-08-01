@@ -4,7 +4,7 @@
 <?php include ("sql/filter_vars.php");?>
 <?php include ("sql/filtered_data.php");?>
 <?php include ("sql/filters.php");?>
-<?php include ("sql/update-time.php"); echo $sql_por; ?>
+<?php include ("sql/update-time.php");?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +74,6 @@ function MM_setTextOfTextfield(objId,x,newText) { //v9.0
 <!--loader-->
 <div id="loader"></div>
 <div style="display:block;" id="myDiv" class="animate-bottom">
-<?php //echo $sql_por ?>
 <!--menu-->
 <?php include ("includes/menu.php");?>
 <section>
