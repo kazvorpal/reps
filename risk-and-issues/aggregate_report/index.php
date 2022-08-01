@@ -39,6 +39,8 @@
       $('[data-toggle="tooltip"]').tooltip()
     })
 
+      mode = "program";
+      // mode = (window.location.href.indexOf("program")>=0) ? "program" : "project";
       const d1 = <?= $jsonout ?>;  
       const d2 = <?= $closedout ?>;  
       const ridata = d1.concat(d2);
@@ -55,9 +57,9 @@
       const excelfields = {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"};
     </script>
     <link rel="stylesheet" href="../css/ri.css">
+  <script src="../js/ri.js"></script>
     <style type="text/css">
       </style>
-  <script src="../js/ri.js"></script>
   </head>
   
   <body onload="myFunction()" style="margin:0;">
@@ -141,22 +143,26 @@
   const makerow = (target, risks, issues) => {
 
     // Runs once per Program
-
-    const safename = makesafe(target.MLMProgram_Nm);
-    const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
-    const banner = makebanner(safename);
-    const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
-    const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
-    const table = makeelement({e: "table", i: "table" + safename, c: "table"});
-
-    banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: target.MLMProgram_Nm}));
-    item.appendChild(banner);
-    item.appendChild(collapse).appendChild(body).appendChild(table);
-    document.getElementById("main").appendChild(item);
-    document.getElementById("banner" + safename).appendChild(document.createTextNode(" ("));
-    makeri(target, "Risk");
-    makeri(target, "Issue");
-    document.getElementById("banner" + safename).appendChild(document.createTextNode(")"));
+    if (target.MLMProgram_Nm != null) {
+      const safename = makesafe(target.MLMProgram_Nm);
+      const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
+      const banner = makebanner(safename);
+      const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
+      const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
+      const table = makeelement({e: "table", i: "table" + safename, c: "table"});
+      
+      banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: target.MLMProgram_Nm}));
+      item.appendChild(banner);
+      item.appendChild(collapse).appendChild(body).appendChild(table);
+      document.getElementById("main").appendChild(item);
+      document.getElementById("banner" + safename).appendChild(document.createTextNode(" ("));
+      makeri(target, "Risk");
+      makeri(target, "Issue");
+      document.getElementById("banner" + safename).appendChild(document.createTextNode(")"));
+    } else {
+      console.log("Skipped unnamed program:");
+      console.log(target);
+    }
   }  
 
   const makebanner = (safename) => {
@@ -256,7 +262,7 @@
           return  makestringdate(program.Last_Update_Ts);
         },
         RIClosed_Dt: function() {
-            console.log(program.RIClosed_Dt);
+            // console.log(program.RIClosed_Dt);
             return  (program.RIClosed_Dt != null) ? formatDate(new Date(program.RIClosed_Dt.date)) : "";
         },
         AssociatedCR_Key: function() {
@@ -292,7 +298,7 @@
           return Math.floor(program.RIOpen_Hours/24) + " days";
         },
         driver: function() {
-          console.log(driverlist[program.RiskAndIssueLog_Key]);
+          // console.log(driverlist[program.RiskAndIssueLog_Key]);
           return (driverlist[program.RiskAndIssueLog_Key]) 
           ? (driverlist[program.RiskAndIssueLog_Key]) 
           ? driverlist[program.RiskAndIssueLog_Key].Driver_Nm : "" : "";
@@ -448,7 +454,10 @@
     return uni;
   }
 
-  const uniques = removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm");
+  const olduniques = removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm");
+  console.log("olduniques");
+  console.log(olduniques);
+
 
   const toggler = (target, o) => {
     // Toggles visibility of projects when a given program is clicked
@@ -464,27 +473,23 @@
   }
   
   
-  const splitdate = (datestring) => {
-    let newdate = datestring.split(" - ");
-    return newdate;
-  }  
+  // const splitdate = (datestring) => {
+  //   let newdate = datestring.split(" - ");
+  //   return newdate;
+  // }  
 
-  const betweendate = (dates, tween) => {
-    spanner = splitdate(dates);
-    let first = new Date(spanner[0]);
-    let middle = new Date(tween);
-    let last = new Date(spanner[1]);
-    return ((middle >= first && middle <= last))
-  }  
+  // const betweendate = (dates, tween) => {
+  //   spanner = splitdate(dates);
+  //   let first = new Date(spanner[0]);
+  //   let middle = new Date(tween);
+  //   let last = new Date(spanner[1]);
+  //   return ((middle >= first && middle <= last))
+  // }  
+    console.log(mode)
+  console.log("uniques()");
+  console.log(uniques());
 
-  document.getElementById("Go").onclick = function() {
-    // filter form button
-    populate(filtration())
-    colorboxschtuff();
-    return false;
-  }  
-
-  populate(uniques);
+  populate(uniques());
   colorboxschtuff();
 
 </script>

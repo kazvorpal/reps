@@ -2,7 +2,7 @@
 const getprogrambyname = (target) =>  mlm = ridata.find(o => o.MLMProgram_Nm == target);
 const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o.RiskAndIssue_Key == target && o.MLMProgram_Nm == name);
 const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
-const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "program";
+// mode = (window.location.href.indexOf("program")>=0) ? "program" : "project";
 
   // Sanitize a string
   const makesafe = (target) => target.replace(/\s/g,'');
@@ -35,7 +35,7 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
 
   const padTo2Digits = (num) => num.toString().padStart(2, '0');
   
-  const textalign = (field) => (parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
+  const textalign = (field) => (field == null || parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
 
   const formatDate = (date) => {
     return [
@@ -89,8 +89,8 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
   }
 
 
-  const filtration = () => {
-    let filtered = ridata.filter(filterfunction);
+  const filtration = (data) => {
+    let filtered = data.filter(filterfunction);
     console.log(filtered);
     console.log("filtered");
     results = (mode == "program") ? removenullproperty(getwholeuniques(filtered, "MLMProgram_Nm"), "MLMProgram_Nm") : getwholeuniques(filtered, "RiskAndIssue_Key");
@@ -213,3 +213,46 @@ const mode = (window.location.pathname.indexOf("project")>=0) ? "project" : "pro
       }
       document.cbrun = true;
     }
+    const setlists = () => {
+      projectfields = (mode == "program") ? ["EPSProject_Nm", "Subprogram_nm", "EPSProject_Owner", "MLMRegion_Cd", "Market_Cd", "EPS_Location_Cd"]
+         : ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "SubMLMProgram_Nm"];
+      projectfieldnames = (mode == "program") ? [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}]
+         : ["Project Name", "Facility", "Owner", "Subprogram"];
+      rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "MLMProgram_Nm": {name: "Program", width: "9"}, "MLMRegion_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Plan", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}, "RIActive_Flg": {name: "Open", width: "6"}} 
+         : {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
+      excelfields = (mode == "program") ? {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"}
+         : {"Fiscal_Year": "Fiscal Year", "RIActive_Flg": "Status", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Sub-Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "EPSRegion_Abb": "Region", "regioncount": "Region Count", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "TransferredPM_Flg": "Transferred to PDM", "AssociatedCR_Key": "CR", "AssociatedCR_Key": "CR", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"};
+ }
+
+ const uniques = () => (mode == "program") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") : getwholeuniques(d1, "RiskAndIssue_Key");
+
+ const splitdate = (datestring) => {
+   let newdate = datestring.split(" - ");
+   return newdate;
+ }  
+
+ const betweendate = (dates, tween) => {
+   spanner = splitdate(dates);
+   console.log(spanner);
+   let first = new Date(spanner[0]);
+   let middle = new Date(tween);
+   console.log(middle);
+   let last = new Date(spanner[1]);
+   r = ((middle >= first && middle <= last));
+   console.log(r);
+   return r;
+ }  
+
+ const makedate = (dateobject) => {
+   return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+ }
+
+ const ranger = (daterange) => {
+   // get start and end date from a date range set via Bootstrap date range picker
+   const dates = {};
+   dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
+   dates.end = daterange.substring(daterange.indexOf(" - ")+4);
+   return dates;
+ } 
+
+

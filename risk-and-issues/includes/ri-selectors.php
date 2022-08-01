@@ -99,8 +99,10 @@ const jq = `
     document.getElementById("row").appendChild(td);
   }
 
+  const makefilters = () => {
+    document.getElementById("row").innerHTML = "";
     const programnames = (mode == "program") ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
-console.log(programnames)
+    console.log(programnames)
     const menuitems = {};
 
     selectors = {fiscalyear: {l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", e: "select", c: "form-control", m: "multiple"}, riskissue: {l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", e: "select", c: "form-control", m: "multiple"}, impactlevel: {l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", e: "select", c: "form-control", m: "multiple"}, "resolutiondate": function() {document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}))} }
@@ -136,11 +138,10 @@ console.log(programnames)
     $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
       });
-  
-  
-</script>
-<script language="javascript">
-	$(document).ready(function() {
+  }
+  makefilters();
+
+  const dofilters = () => {
     $('#fiscal_year').multiselect({
           includeSelectAllOption: true,
         });
@@ -171,6 +172,17 @@ console.log(programnames)
 		$('#impact_level').multiselect({
           includeSelectAllOption: true,
         });
-		
+        document.getElementById("Go").onclick = function() {
+      // filter form button
+      populate(filtration(ridata));
+      colorboxschtuff();
+      return false;
+    }  
+  }
+  
+</script>
+<script language="javascript">
+	$(document).ready(function() {
+    dofilters();
   });
 </script>
