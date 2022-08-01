@@ -254,7 +254,7 @@
             return  d + " days";
           },
           RI_Nm: function() {
-              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri.RiskAndIssue_Key.  + "&fscl_year=" + ri.Fiscal_Year. + "&proj_name=" + ri.EPSProject_Nm + "&status=" + ri.RIActive_Flg;
+              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri.RiskAndIssue_Key.  + "&fscl_year=" + ri.Fiscal_Year + "&proj_name=" + ri.EPSProject_Nm + "&status=" + ri.RIActive_Flg;
               return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri.RI_Nm + "</a>";
           },
           driver: function() {
