@@ -180,6 +180,13 @@ include ("../sql/RI_Internal_External.php");
   $regions = $_GET['regions'];
   $raidLog = $row_risk_issue['RaidLog_Flg'];
   $department = $row_risk_issue['POC_Department'];
+  $createDT = date_format($row_risk_issue['Created_Ts'],'Y-m-d');
+
+  if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
+    $forecastMin = date_format($date, "Y-m-d");
+  } else {
+    $forecastMin = $closeDateMax;
+  }
 
   if($formaction == "new"){
     if(!empty($_POST['proj_select'])) {
@@ -363,7 +370,7 @@ if($formaction == "update") {
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> You are Updating the Associated Project list for this Program Risk/Issue to the following.
+    <span class="glyphicon glyphicon-warning-sign"></span> You are Updating the Associated Project list for this Program Risk/Issue to the following.  You may change the details of this Risk/Issue at this time.
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
@@ -490,12 +497,12 @@ if($formaction == "update") {
                     <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?>>
                     Material Delay</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
                     Project Dependency</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="3" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
                     Shipping/Receiving Delay</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
@@ -503,7 +510,7 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="4" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="3" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
                     Ordering Error</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Design/Scope Change", $driverArr)) { echo "checked";} ?>>
@@ -511,7 +518,7 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="5" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="4" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
                     People Resource</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Admin Error", $driverArr)) { echo "checked";} ?>>
@@ -519,7 +526,7 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="5" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
                     3PL Resource</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("External Forces", $driverArr)) { echo "checked";} ?>>
@@ -631,7 +638,8 @@ if($formaction == "update") {
           <td colspan="2" align="left"><div class="box">
               <label for="date">Forecasted Resolution Date:</label>
 			  <div id="dateUnknown">
-              <input name="date" 
+              <input name="date"
+                  min="<?php echo $forecastMin; ?>"
                   type="date"
                   class="form-control" 
                   id="date" 
@@ -772,7 +780,7 @@ if($formaction == "update") {
           <td colspan="2" align="left">
             <div class="box">
           <label for="DateClosed">Date Closed:</label>
-                <input type="date" name="DateClosed" id="DateClosed" class="form-control" max="<?php echo $closeDateMax; ?>">
+                <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>">
           </div>
           </td>
         </tr>
@@ -904,6 +912,7 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   validateGrp()
 });
 </script>
+
 <script>
 var date = new Date();
 
@@ -924,6 +933,7 @@ var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_enco
 
 document.getElementById('DateClosed').value = closeday;
 </script>
+
 <script>
   document.getElementById("indy").addEventListener("change", function(){
   const v = this.value.split(" : ");
@@ -931,6 +941,7 @@ document.getElementById('DateClosed').value = closeday;
   document.getElementById("InternalExternal").value = v[1];
   });
 </script>
+
 <script>
 $('.subscriber :checkbox').change(function () {
     var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
@@ -938,6 +949,19 @@ $('.subscriber :checkbox').change(function () {
         this.checked = false;
     }
 });
+</script>
+
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+document.getElementById("Unknown").checked = false;
+})
+</script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

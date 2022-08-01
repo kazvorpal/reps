@@ -381,13 +381,14 @@ Enter the details of your Project Issue
             </svg></a></label>
 				  <div id="dateUnknown" >
 					<input name="date" 
-					type="date"
-					class="form-control" 
-					id="date" 
-							value="2022-01-01"
-							onChange="forCastedX()"  
-					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-					oninput="this.setCustomValidity('')"	 
+            type="date"
+            min="<?php echo $closeDateMax ?>"
+            class="form-control" 
+            id="date" 
+						value="2022-01-01"
+						onChange="forCastedX()"  
+            oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
+            oninput="this.setCustomValidity('')"	 
 					> 
             	  </div>  
 				</td>
@@ -728,6 +729,18 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script> 
+
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+document.getElementById("Unknown").checked = false;
+})
+</script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

@@ -29,6 +29,7 @@ $sql_ri_assoc_prj = "select distinct RiskAndIssue_Key, proj_nm from RI_MGT.fn_Ge
 $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 //$row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 //$Projassoc = $row_risk_issue_assoc_proj['proj_nm']; //NEED TO SHOW ALL DRIVER LOOP
+//echo $sql_ri_assoc_prj;
 
 ?>
 <!doctype html>
@@ -81,8 +82,14 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
             </div>
   </div>
   <!-- END PROGRESS BAR -->
-	<div align="center"><h2><?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
-	<div align="center">Please review your risk or issue.  If you need to make an update, use the Edit button below.</div>
+	
+  <?php if($changeLogKey==5) { ?>
+    <div align="center"><h2>DELETE <?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
+	  <div align="center">You are removing the following <?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></div>
+  <?php } else { ?>
+    <div align="center"><h2><?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
+    <div align="center">Please review your risk or issue.  If you need to make an update, use the Edit button below.</div>
+  <?php } ?>
 	<div style="padding: 20px" class="alert">  </div>
   <form action="update-do.php" method="post" name="confirmation" id="confirmation">
 
@@ -123,6 +130,14 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <input name="programKeys" type="hidden" id="programKeys" value="<?php echo $programKeys ?>"> 
     <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>"> 
     <input name="del_proj_select" type="hidden" id="del_proj_select" value="<?php echo $del_proj_select ?>"> 
+
+ <?php if($DateClosed != "") { ?>
+  <div class="alert alert-danger">
+    <div align="left">
+      <span class="glyphicon glyphicon-warning-sign"></span> Your are about to close this Risk/Issue.  If you entered a Closing Date unintentionally, use the back button and remove the close date.
+    </div>
+  </div>
+  <?php } ?>
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>

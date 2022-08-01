@@ -1,3 +1,4 @@
+//BACK BUTTON WARNING
 function myConfirmation() {
     let text = "If you go back, you will lose the information you have entered or changed on this form.";
     if (confirm(text) == true) {
@@ -8,4 +9,3 @@ function myConfirmation() {
     }
     document.getElementById("demo").innerHTML = text;
   }
-

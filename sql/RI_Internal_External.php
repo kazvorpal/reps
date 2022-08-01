@@ -1,6 +1,7 @@
 <?php 
 // LIMIT DATE TODAY FOR DATE CLOSED USED ON UPDATE PAGES
-$closeDateMax = date("Y-m-d");
+$closeDateMax = date("Y-m-d"); //universal
+
 
 //INTERNAL
 $sql_internal = "select * from [RI_MGT].[fn_GetListOfCurrentTaskPOC] (1) order by POC_Nm";

@@ -384,29 +384,30 @@ function toggle(source) {
 </svg></a></label>
 				  <div id="dateUnknown" >
 				  <input name="date" 
-					type="date"
-					class="form-control" 
-					id="date" 
-							value="<?php echo $forcastDate;?>"
-							onChange="forCastedX()"  
-					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-					oninput="this.setCustomValidity('')"	 
+            type="date"
+            min="<?php echo $closeDateMax ?>"
+            class="form-control" 
+            id="date" 
+            value="<?php echo $forcastDate;?>"
+            onChange="forCastedX()"  
+            oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
+            oninput="this.setCustomValidity('')"	 
 					> 
-              </div>  
+      </div>  
 				</td>
-                </tr>
-              <tr>
-                <td>
+      </tr>
+      <tr>
+        <td>
 				<div id="forcastedDate">
 				<input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
 					onChange="unKnownX()"
 			  >
-            <label for="Unknown">Unknown</label> - Overides Resolution Date
-          </div> 
+        <label for="Unknown">Unknown</label> - Overides Resolution Date
+        </div> 
 				</td>
-                <td>
+        <td>
 					<input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">
 					<label for="TransfertoProgramManager">Transfer to Program Manager</label>  <a href="includes/definitions.php?tooltipkey=7" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -770,6 +771,24 @@ jQuery(document).ready(function($) {
     });
 });
 </script>
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+  document.getElementById("Unknown").checked = false;
+})
+
+$(function() {
+   $('#date').keypress(function(event) {
+       event.preventDefault();
+       return false;
+   });
+});
+</script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

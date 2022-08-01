@@ -3,6 +3,9 @@
 <?php include ("data/emo_data.php");?>
 <?php include ("sql/MS_Users_prg.php");?>
 <?php
+session_start();
+$_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
+
 								//DECLARE
                 $uid = $_GET['uid'];
                 $ri_region = $_GET['region'];
@@ -18,6 +21,7 @@
                                     Where Region_Cd='$ri_region'
                                     ORDER BY RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
+                //echo $sql_risk_issue;
 
                 //CLOSED PROGRAM RISK AND ISSUES
                 $sql_risk_issue_cls = "select distinct RI_Nm, RIType_Cd,RIDescription_Txt, RIClosed_Dt, Last_Update_Ts, RiskAndIssue_Key
@@ -27,7 +31,8 @@
                                       ) a
                                       Where MLMRegion_Cd='$ri_region'
                                       order by RiskAndIssue_Key desc";
-								$stmt_risk_issue_cls = sqlsrv_query( $data_conn, $sql_risk_issue_cls );
+								$stmt_risk_issue_cls = sqlsrv_query( $data_conn, $sql_risk_issue_cls ); 
+                //echo $sql_risk_issue_cls;
 
                 //USER AUTHORIZATION
                 $authUser = strtolower($windowsUser);

@@ -611,6 +611,7 @@ function toggle(source) {
               
               <input name="date" 
                   type="date"
+                  min="<?php echo $closeDateMax ?>"
                   class="form-control" 
                   id="date" 
                   value="2022-01-01"
@@ -994,6 +995,18 @@ $('.subscriber :checkbox').change(function () {
     }
 });
 </script>
+
+<script language="javascript">
+document.getElementById("dateUnknown").addEventListener("change", function(){
+document.getElementById("Unknown").checked = false;
+})
+</script>
+
+<script>
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>
