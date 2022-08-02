@@ -20,6 +20,7 @@
     ?>
     <script>
 
+      mode = (window.location.href.indexOf("program")>=0) ? "program" : "project";
       const d1 = <?= $jsonout ?>;  
       const d2 = <?= $closedout ?>;  
       const ridata = d1.concat(d2);  
@@ -253,8 +254,8 @@
             return  d + " days";
           },
           RI_Nm: function() {
-              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["EPSProject_Nm"];
-              return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
+              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri.RiskAndIssue_Key  + "&fscl_year=" + ri.Fiscal_Year + "&proj_name=" + ri.EPSProject_Nm + "&status=" + ri.RIActive_Flg;
+              return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri.RI_Nm + "</a>";
           },
           driver: function() {
             return (driverlist[ri.RiskAndIssueLog_Key]) 
@@ -303,46 +304,43 @@
       return trri;
     }  
 
-    const uniques = getwholeuniques(d1, "RiskAndIssue_Key");
+    const olduniques = getwholeuniques(d1, "RiskAndIssue_Key");
+    console.log("olduniques");
+    console.log(olduniques);
 
-    const splitdate = (datestring) => {
-      let newdate = datestring.split(" - ");
-      return newdate;
-    }  
+    // const splitdate = (datestring) => {
+    //   let newdate = datestring.split(" - ");
+    //   return newdate;
+    // }  
 
-    const betweendate = (dates, tween) => {
-      spanner = splitdate(dates);
-      console.log(spanner);
-      let first = new Date(spanner[0]);
-      let middle = new Date(tween);
-      console.log(middle);
-      let last = new Date(spanner[1]);
-      r = ((middle >= first && middle <= last));
-      console.log(r);
-      return r;
-    }  
+    // const betweendate = (dates, tween) => {
+    //   spanner = splitdate(dates);
+    //   console.log(spanner);
+    //   let first = new Date(spanner[0]);
+    //   let middle = new Date(tween);
+    //   console.log(middle);
+    //   let last = new Date(spanner[1]);
+    //   r = ((middle >= first && middle <= last));
+    //   console.log(r);
+    //   return r;
+    // }  
 
-    const makedate = (dateobject) => {
-      return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
-    }
+    // const makedate = (dateobject) => {
+    //   return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+    // }
 
-    const ranger = (daterange) => {
-      // get start and end date from a date range set via Bootstrap date range picker
-      const dates = {};
-      dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
-      dates.end = daterange.substring(daterange.indexOf(" - ")+4);
-      return dates;
-    } 
+    // const ranger = (daterange) => {
+    //   // get start and end date from a date range set via Bootstrap date range picker
+    //   const dates = {};
+    //   dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
+    //   dates.end = daterange.substring(daterange.indexOf(" - ")+4);
+    //   return dates;
+    // } 
 
 
-
-    document.getElementById("Go").onclick = function() {
-      // filter form button
-      populate(filtration());
-      colorboxschtuff();
-      return false;
-    }  
-    populate(uniques);
+      console.log("uniques()");
+      console.log(uniques());
+    populate(uniques());
     // setTimeout(function(){populate(uniques)}, 5000);
   </script>
   </body>
