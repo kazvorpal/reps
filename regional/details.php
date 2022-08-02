@@ -41,156 +41,152 @@ $CPhase = $row_proj_clps['PHASE_NAME'];
 <div class="panel-body" style="font-size:10px">
 <div class="row">
   <div class="col-lg-2">
-                                                          	<h4>PROJECT INFO</h4>
-                                                            <h5>Access Required </h5>
-                                                            <P>
-                                                            <a href="https://coxcomminc.sharepoint.com/sites/pwaeng/project detail pages/schedule.aspx?projuid=<?php echo htmlspecialchars($PUid)?>" target="_blank">EPS Project Schedule</a> 
-                                                            <br>
-																                                <?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-                                                                      <a href="../ri2.php?prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
-                                                                <?php } else { ?>
-                                                                      <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
-                                                                <?php } ?>
-                                                            <br>  
-                                                             	  <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
-                                                                      <a href="../ri2-prg.php?region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);;?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']);?>" class="miframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
-                                                                <?php } else { ?>
-                                                                      <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
-                                                                <?php } ?>
+	<h4>PROJECT INFO</h4>
+  <h5>Access Required </h5>
+  <P>
+  <a href="https://coxcomminc.sharepoint.com/sites/pwaeng/project detail pages/schedule.aspx?projuid=<?php echo htmlspecialchars($PUid)?>" target="_blank">EPS Project Schedule</a> 
+  <br>
+			<?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
+            <a href="../ri2.php?uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
+      <?php } else { ?>
+            <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
+      <?php } ?>
+  <br>  
+   	  <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
+            <a href="../ri2-prg.php?proj_nm=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM'])?>&uid=<?php echo htmlspecialchars($PUid) ?>&region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);;?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']);?>" class="miframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
+      <?php } else { ?>
+            <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
+      <?php } ?>
 															</P>
-                                                            
-                                                            <h5>
-                                                            No Access Required
-                                                            </h5>
-                                                            <p>
-                                                            <a href="level_2_details_all.php?uid=<?php echo htmlspecialchars($PUid)?>" class="mapframe">Project Schedule</a>
-                                                            <br>
-                                                                <?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-                                                                      <a href="../ri-no_access_proj.php?proj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="mapframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
-                                                                <?php } else { ?>
-                                                                      <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
-                                                                <?php } ?>
-                                                            <br>
-                                                                <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
-                                                                      <a href="../ri-no_access_prog.php?region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt'])?>" class="mapframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
-                                                                <?php } else { ?>
-                                                                      <?php echo 'Program Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
-                                                                <?php } ?>
-                                                            </p>
-															<!--<a href="eq-order-history?uid=<?php // echo htmlspecialchars($uid_x)?>" class="mapframe">Equipment Order History</a>    -->                                                        <!--<table width="100%" border="0" class="table-striped table-bordered table-hover">
-                                                             
-                                                         <!--<iframe width="1150" height="500" src="l2-frame.php?uid=<?php //echo htmlspecialchars($uid_x)?>" frameborder="0" allowfullscreen></iframe>-->
-                                                            
-  </div>
-  <div class="col-lg-4">
-                                                          	<h4>PROJECT DATA</h4>
-                                                          	
-                                                            <table width="100%" border="0" cellpadding="3" class="table-striped table-bordered table-hover">
-                                                              <tbody>
-                                                                <tr>
-                                                                  <td>UID</td>
-                                                                  <td><?php echo htmlspecialchars($_GET['uid'])?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Project Name</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Program</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['PRGM']);?></td>
-                                                                </tr>
+  
+  <h5>
+  No Access Required
+  </h5>
+  <p>
+  <a href="level_2_details_all.php?uid=<?php echo htmlspecialchars($PUid)?>" class="mapframe">Project Schedule</a>
+  <br>
+      <?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
+            <a href="../ri-no_access_proj.php?uid=<?php echo htmlspecialchars($PUid) ?>&proj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="mapframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
+      <?php } else { ?>
+            <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
+      <?php } ?>
+  <br>
+      <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
+            <a href="../ri-no_access_prog.php?uid=<?php echo htmlspecialchars($PUid) ?>&region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt'])?>" class="mapframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
+      <?php } else { ?>
+            <?php echo 'Program Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
+      <?php } ?>
+  </p>
 
-                                                                <tr>
-                                                                  <td>Sub Program</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['Sub_Prg']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Oracle Code</td>
-                                                                  <td><?php echo str_replace('', '', htmlspecialchars($row_proj_clps['OracleProject_Cd']));?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Oracle Start</td>
-                                                                  <td><?php convtimex($row_proj_clps['OracleProjectStart_Dt']);?></td>
-                                                                </tr>                                                                
-                                                                <tr>
-                                                                  <td>Oracle End</td>
-                                                                  <td><?php convtimex($row_proj_clps['OracleProjectEnd_Dt']);?></td>
-                                                                </tr>                                                                
-                                                                <tr>
-                                                                  <td>WATTS Master Order</td>
-                                                                  <td><?php echo wattsRepl($row_proj_clps['WATTS_MO']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Region</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['Region']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Market</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['Market']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Faclity</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['Facility']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>PPM No</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['PPM_PROJ']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Owner</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['PROJ_OWNR_NM']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Fiscal Year</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Project Type</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['ENTRPRS_PROJ_TYPE_NM']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Workflow Stage</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['PHASE_NAME']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Start Date</td>
-                                                                  <td><?php echo convtimex($row_proj_clps['Plan_Start_Dt']);?></td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Finish Date</td>
-                                                                  <td>
-																  	                                <?php echo convtimex($row_proj_clps['Plan_Finish_Dt']);?>
-                                                                  </td>
-                                                                </tr>
-                                                                <tr>
-                                                                  <td>Commit Date</td>
-                                                                  <td><?php echo convtimex($row_proj_clps['COMIT_DT']);?></td>
-                                                                </tr>
-                                                                <tr>                                                               
-                                                                  <td>Equipment Type 1</td>
-                                                                  <td>(<?php echo htmlspecialchars($row_proj_clps['Equip1_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip1_TYPE']);?></td>
-                                                                </tr>
-                                                                <tr>                                                               
-                                                                  <td>Equipment Type 2</td>
-                                                                  <td>(<?php echo htmlspecialchars($row_proj_clps['Equip2_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip2_TYPE']);?></td>
-                                                                </tr>
-                                                                <tr>                                                               
-                                                                  <td>Equipment Type 3</td>
-                                                                  <td>(<?php echo htmlspecialchars($row_proj_clps['Equip3_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip3_TYPE']);?></td>
-                                                                </tr>
-                                                                <tr>                                                               
-                                                                  <td>Equipment Type 4</td>
-                                                                  <td>(<?php echo htmlspecialchars($row_proj_clps['Equip4_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip4_TYPE']);?></td>
-                                                                </tr>
-								                                                <tr>                                                               
-                                                                  <td>OA Health Summary</td>
-                                                                  <td><?php echo htmlspecialchars($row_proj_clps['CURR_STAT_SUM']); ?></td>
-                                                                </tr>
+  </div>
+  <div class="col-lg-5">
+	<h4>PROJECT DATA</h4>
+	
+  <table width="100%" border="0" cellpadding="3" class="table-striped table-bordered table-hover">
+    <tbody>
+      <tr>
+        <td width="25%">UID</td>
+        <td><?php echo htmlspecialchars($_GET['uid'])?></td>
+      </tr>
+      <tr>
+        <td>Project Name</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?></td>
+      </tr>
+      <tr>
+        <td>Program</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['PRGM']);?></td>
+      </tr>
+
+      <tr>
+        <td>Sub Program</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['Sub_Prg']);?></td>
+      </tr>
+      <tr>
+        <td>Oracle Code</td>
+        <td><?php echo str_replace('', '', htmlspecialchars($row_proj_clps['OracleProject_Cd']));?></td>
+      </tr>
+      <tr>
+        <td>Oracle Start</td>
+        <td><?php convtimex($row_proj_clps['OracleProjectStart_Dt']);?></td>
+      </tr>      
+      <tr>
+        <td>Oracle End</td>
+        <td><?php convtimex($row_proj_clps['OracleProjectEnd_Dt']);?></td>
+      </tr>      
+      <tr>
+        <td>WATTS Master Order</td>
+        <td><?php echo wattsRepl($row_proj_clps['WATTS_MO']);?></td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['Region']);?></td>
+      </tr>
+      <tr>
+        <td>Market</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['Market']);?></td>
+      </tr>
+      <tr>
+        <td>Faclity</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['Facility']);?></td>
+      </tr>
+      <tr>
+        <td>PPM No</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['PPM_PROJ']);?></td>
+      </tr>
+      <tr>
+        <td>Owner</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['PROJ_OWNR_NM']);?></td>
+      </tr>
+      <tr>
+        <td>Fiscal Year</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?></td>
+      </tr>
+      <tr>
+        <td>Project Type</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['ENTRPRS_PROJ_TYPE_NM']);?></td>
+      </tr>
+      <tr>
+        <td>Workflow Stage</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['PHASE_NAME']);?></td>
+      </tr>
+      <tr>
+        <td>Start Date</td>
+        <td><?php echo convtimex($row_proj_clps['Plan_Start_Dt']);?></td>
+      </tr>
+      <tr>
+        <td>Finish Date</td>
+        <td><?php echo convtimex($row_proj_clps['Plan_Finish_Dt']);?>
+        </td>
+      </tr>
+      <tr>
+        <td>Commit Date</td>
+        <td><?php echo convtimex($row_proj_clps['COMIT_DT']);?></td>
+      </tr>
+      <tr>     
+        <td>Equipment Type 1</td>
+        <td>(<?php echo htmlspecialchars($row_proj_clps['Equip1_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip1_TYPE']);?></td>
+      </tr>
+      <tr>     
+        <td>Equipment Type 2</td>
+        <td>(<?php echo htmlspecialchars($row_proj_clps['Equip2_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip2_TYPE']);?></td>
+      </tr>
+      <tr>     
+        <td>Equipment Type 3</td>
+        <td>(<?php echo htmlspecialchars($row_proj_clps['Equip3_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip3_TYPE']);?></td>
+      </tr>
+      <tr>     
+        <td>Equipment Type 4</td>
+        <td>(<?php echo htmlspecialchars($row_proj_clps['Equip4_Cnt']); ?>) <?php echo htmlspecialchars($row_proj_clps['Equip4_TYPE']);?></td>
+      </tr>
+								                                                <tr>     
+        <td>OA Health Summary</td>
+        <td><?php echo htmlspecialchars($row_proj_clps['CURR_STAT_SUM']); ?></td>
+      </tr>
                                    
-                                                              </tbody>
-                                                            </table>
+    </tbody>
+  </table>
 	</div>
-  <div class="col-lg-6">
+  <div class="col-lg-5">
                             <h4>EQUIPMENT PLAN</h4>
 														 
  <?php while($row_plan = sqlsrv_fetch_array( $stmt_plan, SQLSRV_FETCH_ASSOC)) { ?>    

@@ -1,7 +1,7 @@
-<?php include ("includes/functions.php");?>
-<?php include ("db_conf.php");?>
-<?php include ("data/emo_data.php");?>
-<?php include ("sql/level2.php");?>
+<?php include ("../includes/functions.php");?>
+<?php include ("../db_conf.php");?>
+<?php include ("../data/emo_data.php");?>
+<?php include ("../sql/level2.php");?>
 <!doctype html>
 <html>
 <head>

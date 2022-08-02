@@ -1,17 +1,18 @@
-<?php include ("includes/functions.php");?>
-<?php include ("db_conf.php");?>
-<?php include ("data/emo_data.php");?>
-<?php include ("sql/level2.php");?>
+<?php include ("../includes/functions.php");?>
+<?php include ("../db_conf.php");?>
+<?php include ("../data/emo_data.php");?>
+<?php include ("../sql/level2.php");?>
 <!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
 <title>Untitled Document</title>
 
-<link href="css/bootstrap-3.3.4.css" rel="stylesheet" type="text/css">
-<script src="bootstrap/js/jquery-1.11.2.min.js"></script>
+<link href="../css/bootstrap-3.3.4.css" rel="stylesheet" type="text/css">
+<script src="../bootstrap/js/jquery-1.11.2.min.	"></script>
 </head>
 <body>
+	<lable>Show Level</lable>
 <div align="center" style="width:200px;">
 <form method="post">
   
@@ -58,7 +59,7 @@
 </form>
 
 </div>
-
+<br>
 
 <table width="100%" border="0" class="table-bordered table-hover table-striped" style="font-size:11px" >
   <tbody> 
