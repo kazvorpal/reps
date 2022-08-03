@@ -162,7 +162,7 @@ $dateClosed = "---";
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;" onload="copyDiv()">
-	<div align="center"><h3>PROGRAM <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
+	<div align="center"><h3>PROGRAM "<?php echo strtoupper($prog_name) . '" ' .strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
