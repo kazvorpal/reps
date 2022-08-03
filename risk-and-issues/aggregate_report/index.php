@@ -156,9 +156,10 @@
       item.appendChild(collapse).appendChild(body).appendChild(table);
       document.getElementById("main").appendChild(item);
       document.getElementById("banner" + safename).appendChild(document.createTextNode(" ("));
+      projectcount = 0;
       makeri(target, "Risk");
       makeri(target, "Issue");
-      document.getElementById("banner" + safename).appendChild(document.createTextNode(")"));
+      document.getElementById("banner" + safename).appendChild(document.createTextNode(` P: ${projectcount} )`));
     } else {
       console.log("Skipped unnamed program:");
       console.log(target);
@@ -197,6 +198,8 @@
             window.ricount.push(true);
             rowcolor++;
             makedata(ri, type, name);
+            program = getprogrambykey(ri, name);
+            projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
           }
         }
       }

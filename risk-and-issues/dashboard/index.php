@@ -439,17 +439,17 @@
     }  
 
     const toggler = (target, o) => {
-    // Toggles visibility of projects when a given program is clicked
-    if (target != null) {
-      if (target.className.indexOf("show") != -1) {
-        target.className = target.className.replace("show", "");
-        // o.children[0].innerHTML = "►";
-      } else { 
-        target.className += "show";
-        // o.children[0].innerHTML = "▼";
-       }
+        // Toggles visibility of projects when a given program is clicked
+        if (target != null) {
+        if (target.className.indexOf("show") != -1) {
+            target.className = target.className.replace("show", "");
+            // o.children[0].innerHTML = "►";
+        } else { 
+            target.className += "show";
+            // o.children[0].innerHTML = "▼";
+        }
+        }
     }
-  }
   
 
     const makeheader = (name, type) => {
