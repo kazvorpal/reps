@@ -257,6 +257,10 @@
               const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri.RiskAndIssue_Key  + "&fscl_year=" + ri.Fiscal_Year + "&proj_name=" + ri.EPSProject_Nm + "&status=" + ri.RIActive_Flg;
               return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri.RI_Nm + "</a>";
           },
+          EPSProject_Nm: function() {
+              const url = "https://coxcomminc.sharepoint.com/sites/pwaeng/project%20detail%20pages/schedule.aspx?projuid=" + ri.EPSProject_Id;
+              return "<a href='" + url + "'>" + ri.EPSProject_Nm + "</a>";
+          },
           driver: function() {
             return (driverlist[ri.RiskAndIssueLog_Key]) 
             ? (driverlist[ri.RiskAndIssueLog_Key]) 
