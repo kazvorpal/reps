@@ -259,7 +259,7 @@
           },
           EPSProject_Nm: function() {
               // const url = "https://coxcomminc.sharepoint.com/sites/pwaeng/project%20detail%20pages/schedule.aspx?projuid=" + ri.EPSProject_Id;
-              const url = "https://catl0dwas11209.corp.cox.com/regional/details.php?fiscal_yr=2022&uid=" + ri.EPSProject_Id;
+              const url = "/regional/details.php?fiscal_yr=2022&uid=" + ri.EPSProject_Id;
               return "<a href='" + url + "' class='miframe cboxElement'>" + ri.EPSProject_Nm + "</a>";
           },
           driver: function() {
