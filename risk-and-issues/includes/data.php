@@ -99,7 +99,8 @@
     foreach ($rows as $row)  {
       if($row["MLMProgramRI_Key"] != '') {
         // Get OWNERS //
-        $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $row["MLMProgram_Nm"] ."')";
+        $programname = ($mode=="program") ? "MLMProgram_Nm" : "EPSProgram_Nm";
+        $sqlstr = "select * from RI_MGT.fn_GetListOfOwnersInfoForProgram(". $row["Fiscal_Year"] ." ,'". $programname ."')";
         ini_set('mssql.charset', 'UTF-8');
         $mangerquery = sqlsrv_query($data_conn, $sqlstr);
         if($mangerquery === false) {
