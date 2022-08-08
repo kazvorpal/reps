@@ -588,7 +588,7 @@
               return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
           },
           EPSProject_Nm: function() {
-              const url = "https://coxcomminc.sharepoint.com/sites/pwaeng/project%20detail%20pages/schedule.aspx?projuid=" + ri.EPSProject_Id;
+              const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
               return "<a href='" + url + "'>" + ri.EPSProject_Nm + "</a>";
           },
           driver: function() {
