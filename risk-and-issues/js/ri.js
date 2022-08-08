@@ -46,11 +46,13 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   }
 
   const makestringdate = (dateobject) => {
+    // console.log(dateobject.date);
     if (dateobject != null) {
       const m = padder(new Date(dateobject.date).getMonth()+1, "0", 2);
-      const d = padder(new Date(dateobject.date).getDay()+1, "0", 2);
+      const d = padder(new Date(dateobject.date).getDate()+1, "0", 2);
       const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
       r = (dateobject == null) ? "" : m + "-" + d + "-" + y;
+      // console.log(r);
       return r;
     } else 
       return "";
@@ -232,14 +234,18 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
  }  
 
  const betweendate = (dates, tween) => {
+  // console.log("`dates`");
+  // console.log(dates);
+  // console.log("tween");
+  // console.log(tween);
    spanner = splitdate(dates);
-   console.log(spanner);
+  //  console.log(spanner);
    let first = new Date(spanner[0]);
    let middle = new Date(tween);
-   console.log(middle);
+  //  console.log(middle);
    let last = new Date(spanner[1]);
    r = ((middle >= first && middle <= last));
-   console.log(r);
+  //  console.log(r);
    return r;
  }  
 
