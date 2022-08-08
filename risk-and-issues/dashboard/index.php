@@ -382,7 +382,7 @@
         if(arrow != "") {
         // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "']");
         // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]);
-        makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
+        makeprojects(p4pslist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
             }
         }
     }    
