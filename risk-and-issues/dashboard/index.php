@@ -251,7 +251,7 @@
         //    add its fieldname to this "switch" object, fieldswitch,
         //    with an anonymous function to handle the changes.
         RiskAndIssue_Key: function() {
-            return "<span style='font-weight:900'>" + text + "</span>";
+            return `<span style='font-weight:900'>${text}</span>`;
         },
         mangerlist: function() {
             const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
@@ -602,8 +602,8 @@
             return  d + " days";
           },
           RI_Nm: function() {
-              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["EPSProject_Nm"];
-              return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
+              const url = `/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
+              return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
           EPSProject_Nm: function() {
               const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
@@ -616,8 +616,12 @@
           },
           category: function() {
             let counter = 0;
+            console.log("::::::::::::::::");
+            console.log(ri.EPSProject_Nm);
             for(r of ridata) {
-              if (r.EPSProject_Nm == ri.EPSProject_Nm) {
+                if (r.EPSProject_Nm == ri.EPSProject_Nm) {
+                  console.log(r.EPSProject_Nm)
+                console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
                 counter++;
               }
             }
