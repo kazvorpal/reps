@@ -65,7 +65,8 @@ $unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];
 $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
-$actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+$actionPlan = "";
+$actionPlan_b = $row_risk_issue['ActionPlanStatus_Cd'];
 $DateClosed = $row_risk_issue['RIClosed_Dt'];
 $driverList = rtrim($_POST['drivertime'], ",");
 $driverArr = explode(",", $driverList);
@@ -86,8 +87,11 @@ if (isset($_POST['groupID'])) {
   $groupID = $_POST['groupID'];
 }
 
+$disble_it = "";
+
 if (isset($_POST['add_proj_select'])){
   $add_proj_select = implode(",", $_POST['add_proj_select']);
+  $disble_it = " disable";
 }
 
 if(!empty($_POST['proj_select'])) {
@@ -266,7 +270,7 @@ function toggle(source) {
   <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>
   <div class="alert alert-success">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue. There is no need to update any of the Risk/Issue Details.
+    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue.  You can not edit the details.
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
@@ -296,7 +300,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box">
+			<div class="box <?php echo $disble_it;?>">
 			<table width="100%" border="0" cellpadding="10" cellspacing="10">
             <tbody>
               <!--<tr>
@@ -338,7 +342,7 @@ function toggle(source) {
 
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS </h4>
-            <div class="box subscriber">
+            <div class="box subscriber <?php echo $disble_it;?>">
             <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
@@ -392,7 +396,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box"> 
+			<div class="box <?php echo $disble_it;?>"> 
 			<table width="100%" border="0">
             <tbody>
 
@@ -452,7 +456,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-          <div class="box">
+          <div class="box <?php echo $disble_it;?>">
               <label for="Individual">Individual POC<br>
                 </label>
               
@@ -486,7 +490,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box">
+            <div class="box <?php echo $disble_it;?>">
             <table width="100%" border="0">
                   <tbody>
                     <tr>
@@ -534,7 +538,7 @@ function toggle(source) {
           <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4></td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><div class="box">
+          <td colspan="3" align="left"><div class="box <?php echo $disble_it;?>">
             <table width="246" border="0" cellpadding="5" cellspacing="5">
               <tr>
                 <td>&nbsp;</td>
@@ -564,49 +568,57 @@ function toggle(source) {
           </div>			</td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
-          
-          <div class="box">  
-            <table width="100%" border="0" cellpadding="5" cellspacing="5">
-              <tbody>
-                
-                  <tr>
-                    <td width="100%">
-                          
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
-                          <input type="hidden" name="user" value="<?php echo $user_id ?>">
-                          <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                    <div align="right" style="margin-top:10px; margin-bottom:10px;">  
-                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
-                    </div>
+          <td colspan="3" align="left">
+            <h4 style="color: #00aaf5" width="50%">ACTION PLAN</h4>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box">  
+              <table width="100%" border="0" cellpadding="5" cellspacing="5">
+                <tbody>
+                    <tr>
+                      <td width="50%">
+                        <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+                        <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
+                        <input type="hidden" name="user" value="<?php echo $user_id ?>">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div align="right" style="margin-top:10px; margin-bottom:10px;">  
+                          <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+                        </div>
                         <div class="collapse" id="collapseExample">
                           <div class="well">
                             <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
                           </div>
                         </div>
-                    </td>
-                  </tr>
-              </tbody>
-            </table>
-          <div>
-
+                      </td>
+                    </tr>
+                </tbody>
+              </table>
+            <div>
           </td>
         </tr>
         <tr>
-          <td colspan="3" align="left">
-            
-        </td>
-        </tr>
-        <tr>
-        <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION</h4></td>
+          <td colspan="3">
+          <h4 style="color: #00aaf5" width="50%" align="left">CR ID</h4>
+          </td>
         </tr>
         <tr>
           <td colspan="3">
-        <div class="box" align="left" style="font-size: 12px;"> 
+            <div class="box">
+              <input type="text" name="assCRID" class="form-control">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION</h4></td>
+        </tr>
+        <tr>
+          <td colspan="3">
+        <div class="box <?php echo $disble_it;?>" align="left" style="font-size: 12px;"> 
               <?php 
                 if(empty($add_proj_select)) {
                   while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } 
@@ -617,29 +629,6 @@ function toggle(source) {
         </div>
 		  </td>
         </tr>
-        <!--
-			  <tr>
-        <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
-			  </tr>
-        <tr>
-          <td colspan="3" align="left">
-            <div class="box">
-              <table width="50%" border="0">
-                <tr>
-                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
-                  </tr>
-                  <tr>
-                  <td><label>
-                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php if($raidLog == 1) {echo "checked";}?>>
-                    Yes</label></td>
-                  <td><label>
-                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php if($raidLog == 0) {echo "checked";}?>>
-                    No</label></td>
-                  </tr>
-                </table>
-              </div>
-			    </td>
-        </tr>-->
         <tr>
           <td colspan="3" align="left"></td>
         </tr>
@@ -648,7 +637,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-			  <div class="box">
+			  <div class="box <?php echo $disble_it;?>">
 			<table width="100%" border="0">
             <tbody>
               <tr>
