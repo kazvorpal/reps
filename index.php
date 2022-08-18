@@ -7,8 +7,11 @@
 	<link rel="shortcut icon" href="favicon.ico"/>
 
     <!-- Bootstrap CSS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.js" integrity="sha512-kvg/Lknti7OoAw0GqMBP8B+7cGHvp4M9O9V6nAYG91FZVDMW3Xkkq5qrdMhrXiawahqU7IZ5CNsY/wWy1PpGTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.css" integrity="sha512-EF5k2tHv4ShZB7zESroCVlbLaZq2n8t1i8mr32tgX0cyoHc3GfxuP7IoT8w/pD+vyoq7ye//qkFEqQao7Ofrag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.ui.position.js" integrity="sha512-vBR2rismjmjzdH54bB2Gx+xSe/17U0iHpJ1gkyucuqlTeq+Q8zwL8aJDIfhQtnWMVbEKMzF00pmFjc9IPjzR7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
 .footer {
   position: fixed;
@@ -113,7 +116,7 @@
 				title="Summary view of projects in EPS at the project level"></a></td>
 		<td colspan="2">
 			<img src="images/UP_15.jpg" width="136" height="92" alt=""></td>
-		<td colspan="3">
+		<td colspan="3" class="rimenu">
 			<a href="https://coxcomminc.sharepoint.com/sites/pwaeng/Lists/Risk%20and%20Issues/AllItems.aspx" >
 			<img src="images/UP_16.jpg" width="222" height="92" alt=""
 				onmouseover="this.src='images/DOWN_16.jpg'" 
@@ -169,13 +172,34 @@
 <!--<div class="footer">
   <p style="padding: 20px 5px 5px 5px;"><img src="images/ees-engineering-gear-email.png"></img></p>
 </div> -->
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script>
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
 })
+$(function(){
+    $.contextMenu({
+        selector: '.rimenu', 
+        trigger: 'hover',
+        delay: 500,
+        autoHide: true,
+        callback: function(key, options) {
+			console.log(options)
+            // var m = "clicked: " + key;
+			document.location.href = options.items[key].url;
+            // window.console && console.log(m) || alert(m); 
+        },
+        items: {
+            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program"},
+            "sep1": "---------",
+            "portfolio": {name: "Portfolio Dashboard", url: "/risk-and-issues/dashboard/?portfolio"},
+            "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},
+            "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?project"},
+            "quit": {name: "Quit", icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
+        }
+    });
+}); 
 </script>
 
 </body>
