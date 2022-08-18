@@ -236,7 +236,7 @@ function toggle(source) {
 
   <div class="alert alert-danger">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> You are about to remove the following projects from this Risk/Issue. There is no need to update any of the Risk/Issue Details.
+    <span class="glyphicon glyphicon-warning-sign"></span> Project(s) selected for removal will have their associated risks/issues deleted.You won't be able to make any updates.
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">

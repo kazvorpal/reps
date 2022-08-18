@@ -63,7 +63,8 @@ $unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];
 $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
-$actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+$actionPlan = "";
+$actionPlan_b = $row_risk_issue['ActionPlanStatus_Cd'];
 $DateClosed = $row_risk_issue['RIClosed_Dt'];
 $driverList = rtrim($_POST['drivertime'], ",");
 $driverArr = explode(",", $driverList);
@@ -73,6 +74,7 @@ $riskRealized =  $row_risk_issue['RiskRealized_Flg'];
 $department = $row_risk_issue['POC_Department'];
 $add_proj_select = NULL;
 $createDT = date_format($row_ri_createDT['Created_Ts'],'Y-m-d'); // server on UTC time zone; need to get user time zone then set date - echo date_default_timezone_get();
+$assCRID = "";
 
 if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
   $forecastMin = date_format($date, "Y-m-d");
@@ -85,8 +87,11 @@ if (isset($_POST['groupID'])) {
   $groupID = $_POST['groupID'];
 }
 
+$disble_it = "";
+
 if (isset($_POST['add_proj_select'])){
   $add_proj_select = implode(",", $_POST['add_proj_select']);
+  $disble_it = " disable";
 }
 
 if(!empty($_POST['proj_select'])) {
@@ -238,7 +243,6 @@ function toggle(source) {
       $formAction = "update-confirm.php";
     }
   ?>
-
   <form action="<?php echo $formAction;?>" method="post" id="riform">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey;?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id; ?>">
@@ -259,12 +263,14 @@ function toggle(source) {
   <input name="groupID" type="hidden" value="<?php echo $groupID; ?>">
   <input name="add_proj_select" type="hidden" value="<?php echo $add_proj_select; ?>">
   <input name="formaction" type="hidden" id="formaction" value="update">
+  <input name="project_nm" type="hidden" id="project_nm" value="<?php echo $project_nm?>">
+  <input name="assCRID" type="hidden" id="assCRID" value="">
 
   <?php if(!empty($add_proj_select)) { ?>
   <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>
   <div class="alert alert-success">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue. There is no need to update any of the Risk/Issue Details.
+    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue. You can not edit the details.
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
@@ -301,7 +307,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box">
+			<div class="box <?php echo $disble_it;?>">
 			<table width="100%" border="0" cellpadding="10" cellspacing="10">
             <tbody>
               <tr>
@@ -341,19 +347,19 @@ function toggle(source) {
 
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DRIVERS</h4>
-            <div class="box subscriber">
+            <div class="box subscriber <?php echo $disble_it;?>">
             <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";}?>>
                     Material Delay</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";}?>>
                     Project Dependency</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";}?>>
                     Shipping/Receiving Delay</label></td>
                   <td><label>
                     <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
@@ -395,7 +401,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box"> 
+			<div class="box <?php echo $disble_it;?>"> 
 			<table width="100%" border="0">
             <tbody>
 
@@ -467,7 +473,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-          <div class="box">
+          <div class="box <?php echo $disble_it;?>">
               <label for="Individual">Individual POC<br>
                 </label>
               
@@ -504,7 +510,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box">
+			<div class="box <?php echo $disble_it;?>">
 			<table width="100%" border="0">
             <tbody>
               <tr>
@@ -552,7 +558,7 @@ function toggle(source) {
           <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4></td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><div class="box">
+          <td colspan="3" align="left"><div class="box <?php echo $disble_it;?>">
             <table width="246" border="0" cellpadding="5" cellspacing="5">
               <tr>
                 <td>&nbsp;</td>
@@ -584,13 +590,13 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
           
-          <div class="box">  
+          <div class="box <?php echo $disble_it;?>">  
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
-                
                   <tr>
                     <td width="100%">
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+                          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+                          <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
                           <input type="hidden" name="user" value="<?php echo $user_id ?>">
                           <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
                     </td>
@@ -610,20 +616,26 @@ function toggle(source) {
               </tbody>
             </table>
           <div>
-
           </td>
         </tr>
         <tr>
           <td colspan="3" align="left">
-            
-        </td>
+            <h4 style="color: #00aaf5" width="50%" align="left">CR ID</h4>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box">
+              <input type="text" name="assCRID" class="form-control">
+            </div>
+          </td>
         </tr>
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5"><?php if(empty($add_proj_select)) {echo strtoupper($RIType);} else { echo "PROJECT";}?> ASSOCIATION</h4></td>
         </tr>
         <tr>
           <td colspan="3">
-            <div class="box" align="left" style="font-size: 12px;">
+            <div class="box <?php echo $disble_it;?>" align="left" style="font-size: 12px;">
               <?php 
                 if(empty($add_proj_select)) {
                   while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['RI_Nm'] . '<br>'; } 
@@ -634,7 +646,6 @@ function toggle(source) {
             </div>
 		      </td>
         </tr>
-<!--
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
@@ -647,16 +658,17 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php //if($riskRealized == 1){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php if($riskRealized == 1){ echo "checked";} ?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php //if($riskRealized == 0){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php if($riskRealized == 0){ echo "checked";} ?>>
                     No</label></td>
                   </tr>
                 </table>
               </div>
 			    </td>
         </tr>
+        <!--
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -684,7 +696,7 @@ function toggle(source) {
             </tr>
         <tr>
           <td colspan="3" align="left">
-          <div class="box">
+          <div class="box <?php echo $disble_it;?>">
             <table width="100%" border="0">
             <tbody>
               <tr>
