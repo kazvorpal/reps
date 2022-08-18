@@ -79,12 +79,16 @@ const jq = `
 <style>
 </style>
 <script type="text/javascript">
+  //PHP Notice: Trying to access array offset on value of type null in C:\inetpub\wwwroot\includes\menu.php on line 79 PHP Warning: date_format() expects parameter 1 to be DateTimeInterface, null given in C:\inetpub\wwwroot\includes\menu.php on line 79
   const makeselect = (o) => {
     const td = makeelement({e: "div", c: "filtercol", t: o.t});
     const select = makeelement(o);
     if (o.i == "pStatus") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Open"}));
       select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
+    } else if (o.i == "category") {
+      select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
+      select.appendChild(makeelement({e: "option", v: 0, t: "No bowdProject Association"}));
     } else if (o.i == "program") {
       for (option in o.l) 
         if(o.l[option] != ""&& o.l[option] != null)
@@ -101,7 +105,7 @@ const jq = `
 
   const makefilters = () => {
     document.getElementById("row").innerHTML = "";
-    const programnames = (mode == "program") ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
+    const programnames = (ispp(mode)) ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
     console.log(programnames)
     const menuitems = {};
 
@@ -112,8 +116,11 @@ const jq = `
     makeselect({l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", e: "select", c: "form-control", m: "multiple"});
     document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
     makeselect({l: ridata, f: "RIActive_Flg", i: "pStatus", n: "pStatus", t: "Status<br/>", e: "select", c: "form-control", m: "multiple"});
-    if (mode == "program") {
+    if (ispp(mode)) {
       makeselect({l: ridata, f: "MLMRegion_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
+    }
+    if (mode == "program") {
+      makeselect({l: ridata, f: "category", i: "category", n: "category", t: "Category<br/>", e: "select", c: "form-control", m: "multiple"});
     }
     makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", e: "select", c: "form-control", m: "multiple"});
     makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", e: "select", c: "form-control", m: "multiple"});
@@ -146,6 +153,9 @@ const jq = `
           includeSelectAllOption: true,
         });
 		$('#pStatus').multiselect({
+          includeSelectAllOption: true,
+        });
+		$('#category').multiselect({
           includeSelectAllOption: true,
         });
 		$('#owner').multiselect({

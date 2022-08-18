@@ -155,10 +155,11 @@
       item.appendChild(banner);
       item.appendChild(collapse).appendChild(body).appendChild(table);
       document.getElementById("main").appendChild(item);
-      document.getElementById("banner" + safename).appendChild(document.createTextNode(" ("));
+      document.getElementById("banner" + safename).innerHTML += " (";
+      projectcount = 0;
       makeri(target, "Risk");
       makeri(target, "Issue");
-      document.getElementById("banner" + safename).appendChild(document.createTextNode(")"));
+      document.getElementById("banner" + safename).innerHTML += `  <span title="Project Count">P: ${projectcount} )</span>`;
     } else {
       console.log("Skipped unnamed program:");
       console.log(target);
@@ -190,13 +191,15 @@
       (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(ri.ImpactLevel_Nm))
       ){
         let list = listri(name, type);
-        document.getElementById("banner" + safename).appendChild(document.createTextNode(" " + type.charAt(0).toUpperCase() + ":" + list.length + " "));
+        document.getElementById("banner" + safename).innerHTML += `  <span title="${type.charAt(0).toUpperCase() + type.slice(1)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
         if (list.length != 0) {
           document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
           for (ri of list) {
             window.ricount.push(true);
             rowcolor++;
             makedata(ri, type, name);
+            program = getprogrambykey(ri, name);
+            projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length) : 0;
           }
         }
       }
