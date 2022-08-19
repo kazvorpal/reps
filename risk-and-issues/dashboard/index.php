@@ -107,7 +107,7 @@
       const modes = ["project", "program", "portfolio"];
       var projectfields, projectfieldnames, rifields, excelfields, centerfields;
       var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "span", "c": "btn btn-primary", "j": function() {
+        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "span", "c": "btn btn-primary pl-3", "j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
@@ -675,6 +675,10 @@
         });
         // init();
     }  
+    const makeheadline = () => {
+        console.log("headline");
+        document.getElementById("title").innerHTML = (mode == "portfolio") ? "Raid Log" : `${capitalize(mode)} R&I Dashboard`;
+    }
 
     const init = (target) => {
         mode = target;
@@ -682,10 +686,8 @@
         makefilters();
         dofilters();
         setdata();
-        // d1 = (mode == "program") ? programopen : projectopen;
-        // d2 = (mode == "program") ? programclosed : projectclosed;
+        makeheadline();
         ridata = d1.concat(d1);
-        document.getElementById("title").innerHTML = document.title = capitalize(mode) + " R&I Dashboard";
         populate(uniques());
         console.log("uniques()");
         console.log(uniques());

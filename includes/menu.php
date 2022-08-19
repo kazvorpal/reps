@@ -48,7 +48,7 @@
           <li><a href="/risk-and-issues/global-program/glb-prog.php">Create Global Risk or Issue</a></li>
           <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?program">Program Dashboard</a></li>
           <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/">Project Dashboard</a></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?portfolio">Raid Log</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?portfolio">RAID Log</a></li>
         </ul>
       </li>
 
