@@ -27,6 +27,7 @@ $sql_cfPor = "SELECT * FROM [PORMgt].[fn_GetListOfPlanChangeForCR]('$fundingKey'
 $stmt_cfPor = sqlsrv_query( $conn_COXProd, $sql_cfPor );
 //$row_cfPor = sqlsrv_fetch_array( $stmt_cfPor, SQLSRV_FETCH_ASSOC);
 //echo $row_cfPor['column_name']
+echo $sql_cfPor;
 
 // CHANGE REQUEST FROM CURRENT PLAN (RED) $fundingKey
 $sql_budCapCCR = "SELECT * 
@@ -1358,7 +1359,7 @@ if($_GET['year'] == '2019') {
   	include ("por/2019.php");
 } else if($_GET['year'] == '2020') {
 	include ("por/2020.php");
-} else if($_GET['year'] == '2021') {
+} else if($_GET['year'] >= '2021') {
 	include ("por/2021.php"); 
 } ?>
 
