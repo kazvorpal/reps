@@ -107,7 +107,7 @@
       const modes = ["project", "program", "portfolio"];
       var projectfields, projectfieldnames, rifields, excelfields, centerfields;
       var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "span", "c": "btn btn-primary", "j": function() {
+        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "span", "c": "btn btn-primary pl-3", "j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
@@ -251,7 +251,7 @@
         //    add its fieldname to this "switch" object, fieldswitch,
         //    with an anonymous function to handle the changes.
         RiskAndIssue_Key: function() {
-            return "<span style='font-weight:900'>" + text + "</span>";
+            return `<span style='font-weight:900'>${text}</span>`;
         },
         mangerlist: function() {
             const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
@@ -602,8 +602,8 @@
             return  d + " days";
           },
           RI_Nm: function() {
-              const url = "/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=" + ri["RiskAndIssue_Key"]  + "&fscl_year=" + ri["Fiscal_Year"] + "&proj_name=" + ri["EPSProject_Nm"];
-              return "<a href='" + url + "' onclickD='details(this);return(false)' class='miframe cboxElement'>" + ri["RI_Nm"] + "</a>";
+              const url = `/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
+              return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
           EPSProject_Nm: function() {
               const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
@@ -616,8 +616,12 @@
           },
           category: function() {
             let counter = 0;
+            console.log("::::::::::::::::");
+            console.log(ri.EPSProject_Nm);
             for(r of ridata) {
-              if (r.EPSProject_Nm == ri.EPSProject_Nm) {
+                if (r.EPSProject_Nm == ri.EPSProject_Nm) {
+                  console.log(r.EPSProject_Nm)
+                console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
                 counter++;
               }
             }
@@ -671,6 +675,10 @@
         });
         // init();
     }  
+    const makeheadline = () => {
+        console.log("headline");
+        document.getElementById("title").innerHTML = (mode == "portfolio") ? "Raid Log" : `${capitalize(mode)} R&I Dashboard`;
+    }
 
     const init = (target) => {
         mode = target;
@@ -678,10 +686,8 @@
         makefilters();
         dofilters();
         setdata();
-        // d1 = (mode == "program") ? programopen : projectopen;
-        // d2 = (mode == "program") ? programclosed : projectclosed;
+        makeheadline();
         ridata = d1.concat(d1);
-        document.getElementById("title").innerHTML = document.title = capitalize(mode) + " R&I Dashboard";
         populate(uniques());
         console.log("uniques()");
         console.log(uniques());

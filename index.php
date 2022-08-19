@@ -193,7 +193,7 @@ $(function(){
         items: {
             "create": {name: "Create Global Risk/Issue", icon: "edit", url: "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program"},
             "sep1": "---------",
-            "portfolio": {name: "Portfolio Dashboard", url: "/risk-and-issues/dashboard/?portfolio"},
+            "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?portfolio"},
             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},
             "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?project"},
             "quit": {name: "Quit", icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
