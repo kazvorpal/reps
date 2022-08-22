@@ -38,6 +38,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <td>SUBPROGRAM</td>
       <td>PROJECT NAME</td>
       <td>OWNER</td>
+      <td>TECH PROJ MGR</td>
       <td>FISCAL YR</td>
       <td>REGION</td>
       <td>MARKET</td>
@@ -70,6 +71,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <td><?php //echo $row_program_n['PROJECT_SIZE'];?></td>
       <td><?php echo $row_program_n['PROJ_NM'];?></td>
       <td><?php echo $row_program_n['PROJ_OWNR_NM'];?></td>
+      <td><?php echo $row_program_n['TECH_PROJ_MGR'];?></td>
       <td><?php echo $row_program_n['FISCL_PLAN_YR'];?></td>
       <td><?php echo $row_program_n['Region'];?></td>
       <td><?php echo $row_program_n['Market'];?></td>

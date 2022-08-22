@@ -7,6 +7,8 @@ $bmysql = $_GET['sql'];
 $sql_por = "$bmysql"; 
 $stmt_por = sqlsrv_query( $data_conn, $sql_por );
 //$stmt_por = sqlsrv_query( $conn_COX_QA, $sql_por );
+//echo $bmysql;
+//exit();
 
  header("Content-type: application/vnd.ms-excel; name='excel'");
  header("Content-Disposition: attachment; filename=export_DPR.xls");
@@ -30,7 +32,8 @@ $stmt_por = sqlsrv_query( $data_conn, $sql_por );
 	  <th bgcolor="#337AB7"><div align="center">PROGRAM</div></th>
       <th bgcolor="#337AB7"><div align="center">SUBPROGRAM</div></th>
       <th bgcolor="#337AB7"><div align="center">PROJECT NAME</div></th>
-      <th bgcolor="#337AB7"><div align="center">OWNER</div></th>
+	  <th bgcolor="#337AB7"><div align="center">OWNER</div></th>
+	  <th bgcolor="#337AB7"><div align="center">TECH PROJ MGR</div></th>
       <th bgcolor="#337AB7"><div align="center">FY</div></th>
       <th bgcolor="#337AB7"><div align="center">REGION</div></th>
       <th bgcolor="#337AB7"><div align="center">MARKET</div></th>
@@ -422,6 +425,7 @@ $stmt_por = sqlsrv_query( $data_conn, $sql_por );
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Sub_Prg']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['PROJ_NM']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['PROJ_OWNR_NM']);?></td>
+	  <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['TECH_PROJ_MGR']);?></td>
 	  <td style="padding:2px" align="center"><?php echo htmlspecialchars($row_program_n['FISCL_PLAN_YR']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Region']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Market']);?></td>
