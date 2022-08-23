@@ -195,8 +195,7 @@ $(function(){
             "sep1": "---------",
             "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?portfolio"},
             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},
-            "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?project"},
-            "quit": {name: "Quit", icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}
+            "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?project"}
         }
     });
 }); 

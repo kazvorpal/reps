@@ -654,27 +654,6 @@ jQuery(function ($) {
 </script>
 
 <script>
-function validateGrp() {
-  let things = document.querySelectorAll('.required_group')
-  let checked = 0;
-  for (let thing of things) {
-    thing.checked && checked++
-  }
-  if (checked) {
-    things[things.length - 1].setCustomValidity("");
-    document.getElementById('checkGroup').submit();
-  } else {
-    things[things.length - 1].setCustomValidity("You must select at least one Driver");
-    things[things.length - 1].reportValidity();
-  }
-}
-
-document.querySelector('[type=submit]').addEventListener('click', () => {
-  validateGrp()
-});
-</script>
-
-<script>
   var date = new Date();
   var day = date.getDate();
   var month = date.getMonth() + 1;
