@@ -128,7 +128,7 @@ function toggle(source) {
 </div>
 
 <div style="padding: 20px;">
-  <form action="../confirm.php" method="post" id="programRisk" oninput="Namex.value = program.value + ' ' + Region.value + ' ' + Descriptor.value + ' POR' + fiscalYer.value.slice(2)">
+  <form action="../confirm.php" method="post" id="programRisk" oninput="makename()">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
   <input name="formName" type="hidden" id="formName" value="PRGR"> <!--this needs to be prgi or prgr-->
@@ -554,7 +554,8 @@ function toggle(source) {
 </div>
 <!--end container -->
   <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
-  <button type="submit" class="btn btn-primary" onmouseover="Namex.value = program.value + ' ' + Region.value + ' ' + Descriptor.value + ' POR' + fiscalYer.value.slice(2)">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary" onmouseover="makename()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary" onmouseover="makename()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
@@ -668,7 +669,7 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
+document.querySelector('[type=submit]').addEventListener('click', () => {
   validateGrp()
 });
 </script>
@@ -712,6 +713,42 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+document.getElementsByName("RIType").forEach((target) =>  {
+  target.addEventListener("click", (e) => {
+    const disable = (document.querySelector('input[name="RIType"]:checked').value == "Issue");
+    document.getElementsByName("ResponseStrategy").forEach((t2) => {
+      t2.disabled = disable;
+      t2.title = (disable) ? "Only available for Risks" : "Choose an option for your Risk";
+    })
+  })
+})
+
+document.getElementsByName("Region[]").forEach((target) => {
+  target.addEventListener("click", (e) => {
+    makename();
+  })
+})
+
+nameparts = ["program", "Descriptor", "fiscalYer"]
+nameparts.forEach((target) => {
+  document.getElementById(target).addEventListener("change", (e) => makename());
+})
+
+const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
+
+const makename = () => {
+  let locations = "";
+  if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
+    locations = "ALL ";
+  } else {
+    document.getElementsByName("Region[]").forEach((e) => {
+      locations += (e.checked) ? regions[e.value] + " " : "";
+    });
+  }
+  Namex.value = program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
+  return(locations)
+}
+
 </script>
 
 <script src="includes/ri-functions.js"></script>

@@ -626,7 +626,7 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left">
             <div class="box">
-              <input type="text" name="assCRID" class="form-control">
+              <input type="text" name="assCRID" id="AssCRID" class="form-control">
             </div>
           </td>
         </tr>
@@ -723,7 +723,7 @@ function toggle(source) {
       </tbody>
     </table>
     <div align="right">
-    <button type="submit" class="btn btn-primary" id="btn" onclick="validateForm() ">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
+    <button type="submit" class="btn btn-primary" id="btn" onclick="return validateForm()">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
     </div>
   </form>
     <div align="left" style="margin-top:-45px;">  
