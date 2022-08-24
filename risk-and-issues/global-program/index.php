@@ -128,11 +128,11 @@ function toggle(source) {
 }
 </script>
 <script language="javascript">
-	// $(document).ready(function() {
-  //   $('#subprogram').multiselect({
-  //         includeSelectAllOption: true,
-  //       });
-  // });
+	$(document).ready(function() {
+    $('#subprogram').multiselect({
+          includeSelectAllOption: true,
+        });
+  });
 
   const getuniques = (list, field) => {
     return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
@@ -654,15 +654,19 @@ document.getElementById("program").addEventListener("change", function() {
       console.log(target);
       let sublist = [];
       subprograms.forEach(subtarget => {
-        if (subtarget.Program_Nm == target && !sublist.includes(subtarget.Program_Nm)) {
+        if (subtarget.Program_Nm == target && !sublist.includes(subtarget.SubProgram_Nm)) {
           sublist.push(subtarget.SubProgram_Nm);
         }
       });
       console.log(sublist);
-      sublist.forEach(o => {
-        console.log(o)
-        s.appendChild(makeelement({e: "option", t: o, v: o}));
-      });
+      if (sublist.length == 0) {
+        s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
+      } else {
+        sublist.forEach(o => {
+          console.log(o)
+          s.appendChild(makeelement({e: "option", t: o, v: o}));
+        });
+      }
       $('#subprogram').multiselect("destroy").multiselect({
           includeSelectAllOption: true,
       });
