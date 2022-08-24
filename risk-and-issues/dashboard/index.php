@@ -692,7 +692,7 @@
         console.log("uniques()");
         console.log(uniques());
         colorboxschtuff();
-        makemodebuttons(mode)
+        makemodebuttons(mode);
     }
 
     init(mode);

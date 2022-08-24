@@ -9,10 +9,50 @@ $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
 //$ass_project = $row_projID['PROJ_NM'];
 
 //PROGRAM
+function fixutf8($target) {
+  return (gettype($target) == "string") ? (utf8_encode($target)) : ($target);
+}  
+
 $sql_prog = "select * from mlm.fn_getlistofPrograms(2022)";
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
+if($stmt_prog === false) {
+  if(($error = sqlsrv_errors()) != null) {
+    foreach($error as $errors) {
+      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+      echo "code: ".$error[ 'code']."<br />";
+      echo "message: ".$error[ 'message']."<br />";
+    }
+  }
+} else {
+  $programrows = array();
+  $count = 1;
+  while($programrow = sqlsrv_fetch_array($stmt_prog, SQLSRV_FETCH_ASSOC)) {
+    $programrows[] = array_map("fixutf8", $programrow);
+  }
+}
+
+$sql_sub = "select * from mlm.fn_getlistofsubprogramforprogram(-1)";
+$stmt_sub   = sqlsrv_query( $data_conn, $sql_sub ); 
+if($stmt_sub === false) {
+  if(($error = sqlsrv_errors()) != null) {
+    foreach($error as $errors) {
+      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+      echo "code: ".$error[ 'code']."<br />";
+      echo "message: ".$error[ 'message']."<br />";
+    }
+  }
+} else {
+  $subprogramrows = array();
+  $count = 1;
+  while($subprogramrow = sqlsrv_fetch_array($stmt_sub, SQLSRV_FETCH_ASSOC)) {
+    $subprogramrows[] = array_map("fixutf8", $subprogramrow);
+  }
+}
+
 //$row_prog   = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
 // $row_prog ['Program_Nm'];
+$programout = json_encode($programrows);
+$subprogramout = json_encode($subprogramrows);
 
 //SUBPROGRAM 
 //Needs to be limited according to the program selection. replce -1 with Program ID 8.17.2022
@@ -20,6 +60,7 @@ $sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1)";
 $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog ); 
 //$row_subprog   = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC);
 // $row_subprog ['SubProgram_Nm'];
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -74,6 +115,8 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
             return false;
           });
         });
+        programs = <?= $programout ?>;
+        subprograms = <?= $subprogramout ?>;
   </script> 
 
 <script language="JavaScript">
@@ -85,11 +128,54 @@ function toggle(source) {
 }
 </script>
 <script language="javascript">
-	$(document).ready(function() {
-    $('#subprogram').multiselect({
-          includeSelectAllOption: true,
-        });
-  });
+	// $(document).ready(function() {
+  //   $('#subprogram').multiselect({
+  //         includeSelectAllOption: true,
+  //       });
+  // });
+
+  const getuniques = (list, field) => {
+    return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
+  }
+  const makeselect = (o) => {
+    // const td = makeelement({e: "div", c: "filtercol", t: o.t});
+    const select = makeelement(o);
+    if (o.i == "pStatus") {
+    } else {
+      const list = getuniques(o.l, o.f);
+      for (option in list) 
+        if(list[option] != ""&& list[option] != null)
+          select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+    }
+    // td.appendChild(select);
+    // document.getElementById("row").appendChild(td);
+    return select;
+  }
+
+  const makeelement = (o) => {
+
+    // o is an (o)bject with these optional properties:
+    // o.e is the (e)lement, like "td" or "tr"
+    // o.c is the (i)d
+    // o.c is the (c)lasses, separated by spaces like usual
+    // o.t is the innerHTML (t)ext
+    // o.s is the col(s)pan
+
+    const t = document.createElement(o.e);
+    t.id = (typeof o.i == "undefined") ? "" : o.i;
+    t.name = (typeof o.n == "undefined") ? "" : o.n + "[]";
+    t.className = (typeof o.c == "undefined") ? "" : o.c;
+    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
+    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
+    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
+    t.multiple = (typeof o.m == "undefined") ? "" : o.m;
+    t.value = (typeof o.v == "undefined") ? "" : o.v;
+    if (typeof o.j != "undefined") {
+      t.onclick = o.j;
+    }
+    return t;
+  }
+
 </script>
 
 </head>
@@ -195,12 +281,12 @@ function toggle(source) {
         <div class="panel-heading">
           <h3 class="panel-title">PROGRAM</h3>
         </div>
-        <div class="panel-body">
-          <select name="program" id="program" class="form-control">
-            <?php while($row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC)) { ?>
-            <option value="<?php echo $row_prog ['Program_Nm']; ?>"><?php echo $row_prog ['Program_Nm']; ?></option>
-            <?php } ?>
-          </select>
+        <div class="panel-body" id="programdiv">
+          <!-- <select name="program" id="program" class="form-control">
+            <?php //while($row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC)) { ?>
+            <option value="<?php //echo $row_prog ['Program_Nm']; ?>"><?php //echo $row_prog ['Program_Nm']; ?></option>
+            <?php //} ?>
+          </select> -->
         </div>
       </div>
     </div>
@@ -235,11 +321,9 @@ function toggle(source) {
         <div class="panel-heading">
           <h3 class="panel-title">SUBPROGRAM (Limit to Program)</h3>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" id="subdiv">
           <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
-            <?php while($row_subprog = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC)) { ?>
-              <option value="<?php echo $row_subprog ['SubProgram_Key']; ?>"><?php echo $row_subprog ['SubProgram_Nm']; ?></option>
-            <?php } ?>
+          <option>Select Program first
           </select>
         </div>
       </div>
@@ -561,6 +645,29 @@ function toggle(source) {
 </main>
 
 <script>
+const prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
+document.getElementById("programdiv").appendChild(prog);
+document.getElementById("program").addEventListener("change", function() {
+      s = document.getElementById("subprogram");
+      s.options.length = 0;
+      let target = document.getElementById("program").value
+      console.log(target);
+      let sublist = [];
+      subprograms.forEach(subtarget => {
+        if (subtarget.Program_Nm == target && !sublist.includes(subtarget.Program_Nm)) {
+          sublist.push(subtarget.SubProgram_Nm);
+        }
+      });
+      console.log(sublist);
+      sublist.forEach(o => {
+        console.log(o)
+        s.appendChild(makeelement({e: "option", t: o, v: o}));
+      });
+      $('#subprogram').multiselect("destroy").multiselect({
+          includeSelectAllOption: true,
+      });
+      // document.getElementById("subprogram").  
+})
 function myFunction() {
   var x = document.getElementById("myDIV");
   if (x.style.display === "none") {
