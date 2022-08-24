@@ -836,7 +836,7 @@ const makename = () => {
     });
     console.log(locations)
     if (locations.length > 4) {
-      locations = "MULTI";
+      locations = "MULTI ";
     }
   }
   Namex.value = program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
