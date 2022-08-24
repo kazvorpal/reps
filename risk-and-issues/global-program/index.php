@@ -237,7 +237,7 @@ function toggle(source) {
         </div>
         <div class="panel-body">
           <label for="RILevel"><input type="radio" name="RILevel" value="Program" required> Program </label> 
-          <label for="RILevel"><input type="radio" name="RILevel" value="Portfolio" required disabled> Portfolio </label>
+          <label for="RILevel"><input type="radio" name="RILevel" value="Portfolio" required> Portfolio </label>
         </div>
       </div>
     </div>
@@ -803,15 +803,23 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
-document.getElementsByName("RIType").forEach((target) =>  {
-  target.addEventListener("click", (e) => {
-    const disable = (document.querySelector('input[name="RIType"]:checked').value == "Issue");
-    document.getElementsByName("RiskProbability").forEach((t2) => {
-      t2.disabled = disable;
-      t2.title = (disable) ? "Only available for Risks" : "Choose an option for your Risk";
+
+const disabler = (o) => {
+  document.getElementsByName(o.t).forEach((target) =>  {
+    target.addEventListener("click", (e) => {
+      const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
+      console.log(document.querySelector(`input[name="${o.t}"]:checked`).value)
+      document.getElementsByName(o.d).forEach((t2) => {
+        t2.disabled = disable;
+        t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
+      })
     })
   })
-})
+}
+
+disabler({t: "RIType", v: "Issue", d: "RiskProbability", e: "risk"})
+disabler({t: "RILevel", v: "Program", d: "portfolioType", e: "Portfolio"})
+
 
 document.getElementsByName("Region[]").forEach((target) => {
   target.addEventListener("click", (e) => {
