@@ -639,7 +639,6 @@ function toggle(source) {
 <!--end container -->
   <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
   <button type="submit" class="btn btn-primary" onmouseover="makename()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
-  <button type="submit" class="btn btn-primary" onmouseover="makename()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
@@ -808,17 +807,25 @@ const disabler = (o) => {
   document.getElementsByName(o.t).forEach((target) =>  {
     target.addEventListener("click", (e) => {
       const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
-      console.log(document.querySelector(`input[name="${o.t}"]:checked`).value)
-      document.getElementsByName(o.d).forEach((t2) => {
-        t2.disabled = disable;
-        t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
+      // console.log(document.querySelector(`input[name="${o.t}"]:checked`).value);
+      o.d.forEach(field => {
+        console.log(field)
+        if(document.getElementsByName(field).length == 0) {
+          $(`#subprogram`).multiselect(disable ? "disable" : "enable");
+        } else {
+          document.getElementsByName(field).forEach(t2 => {
+            t2.disabled = disable;
+            t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
+          })
+        }
       })
     })
   })
 }
 
-disabler({t: "RIType", v: "Issue", d: "RiskProbability", e: "risk"})
-disabler({t: "RILevel", v: "Program", d: "portfolioType", e: "Portfolio"})
+disabler({t: "RIType", v: "Issue", d: ["RiskProbability"], e: "risk"})
+disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
+disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
 
 
 document.getElementsByName("Region[]").forEach((target) => {
