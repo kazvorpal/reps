@@ -319,7 +319,7 @@ function toggle(source) {
     <div class="col-md-4 " align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">SUBPROGRAM (Limit to Program)</h3>
+          <h3 class="panel-title">SUBPROGRAM</h3>
         </div>
         <div class="panel-body" id="subdiv">
           <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
@@ -806,7 +806,7 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 document.getElementsByName("RIType").forEach((target) =>  {
   target.addEventListener("click", (e) => {
     const disable = (document.querySelector('input[name="RIType"]:checked').value == "Issue");
-    document.getElementsByName("ResponseStrategy").forEach((t2) => {
+    document.getElementsByName("RiskProbability").forEach((t2) => {
       t2.disabled = disable;
       t2.title = (disable) ? "Only available for Risks" : "Choose an option for your Risk";
     })
@@ -834,6 +834,10 @@ const makename = () => {
     document.getElementsByName("Region[]").forEach((e) => {
       locations += (e.checked) ? regions[e.value] + " " : "";
     });
+    console.log(locations)
+    if (locations.length > 4) {
+      locations = "MULTI";
+    }
   }
   Namex.value = program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
   return(locations)
