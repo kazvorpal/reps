@@ -826,7 +826,7 @@ const disabler = (o) => {
 
 document.getElementsByName("RILevel").forEach((target) =>  {
   target.addEventListener("click", (e) => {
-      document.getElementById("program").multiple = (e.srcElement.value == "Program");
+      document.getElementById("program").multiple = (e.srcElement.value == "Portfolio");
       $('#program').multiselect("destroy").multiselect({
           includeSelectAllOption: true,
       });
