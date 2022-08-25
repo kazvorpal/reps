@@ -811,7 +811,7 @@ const disabler = (o) => {
       o.d.forEach(field => {
         console.log(field)
         if(document.getElementsByName(field).length == 0) {
-          $(`#subprogram`).multiselect(disable ? "disable" : "enable");
+          $(`#${field}`).multiselect(disable ? "disable" : "enable");
         } else {
           document.getElementsByName(field).forEach(t2 => {
             t2.disabled = disable;
@@ -822,6 +822,16 @@ const disabler = (o) => {
     })
   })
 }
+
+
+document.getElementsByName("RILevel").forEach((target) =>  {
+  target.addEventListener("click", (e) => {
+      document.getElementById("program").multiple = (e.srcElement.value == "Program");
+      $('#program').multiselect("destroy").multiselect({
+          includeSelectAllOption: true,
+      });
+  })
+})
 
 disabler({t: "RIType", v: "Issue", d: ["RiskProbability"], e: "risk"})
 disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
