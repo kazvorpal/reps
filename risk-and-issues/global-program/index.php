@@ -772,7 +772,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
 const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
 const nameevent = () => {
-  console.log("nameevent");
+  // console.log("nameevent");
   let locations = "";
   if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
     locations = "ALL ";
@@ -877,6 +877,8 @@ const setnameevent = () => {
   });
 };
 
+setInterval(nameevent, 1000);
+
 const disabler = (o) => {
   document.getElementsByName(o.t).forEach((target) =>  {
     target.addEventListener("click", (e) => {
@@ -899,7 +901,7 @@ const disabler = (o) => {
 }
 
 $(document).ready(function() {
-  // document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
+  document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
   document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
   document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
   disabler({t: "RIType", v: "Issue", d: ["RiskProbability"], e: "risk"})
