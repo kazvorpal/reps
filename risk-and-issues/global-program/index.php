@@ -128,11 +128,6 @@ function toggle(source) {
 }
 </script>
 <script language="javascript">
-	$(document).ready(function() {
-    $('#subprogram').multiselect({
-          includeSelectAllOption: true,
-        });
-  });
 
   const getuniques = (list, field) => {
     return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
@@ -214,7 +209,7 @@ function toggle(source) {
 </div>
 
 <div style="padding: 20px;">
-  <form action="../confirm.php" method="post" id="programRisk" oninput="makename()">
+  <form action="../confirm.php" method="post" id="programRisk" oninputD="nameevent()">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
   <input name="formName" type="hidden" id="formName" value="PRGR"> <!--this needs to be prgi or prgr-->
@@ -638,39 +633,13 @@ function toggle(source) {
 </div>
 <!--end container -->
   <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
-  <button type="submit" class="btn btn-primary" onmouseover="makename()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary" onmouseoverD="nameevent()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
 
 <script>
-const prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
-document.getElementById("programdiv").appendChild(prog);
-document.getElementById("program").addEventListener("change", function() {
-      s = document.getElementById("subprogram");
-      s.options.length = 0;
-      let target = document.getElementById("program").value
-      console.log(target);
-      let sublist = [];
-      subprograms.forEach(subtarget => {
-        if (subtarget.Program_Nm == target && !sublist.includes(subtarget.SubProgram_Nm)) {
-          sublist.push(subtarget.SubProgram_Nm);
-        }
-      });
-      console.log(sublist);
-      if (sublist.length == 0) {
-        s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
-      } else {
-        sublist.forEach(o => {
-          console.log(o)
-          s.appendChild(makeelement({e: "option", t: o, v: o}));
-        });
-      }
-      $('#subprogram').multiselect("destroy").multiselect({
-          includeSelectAllOption: true,
-      });
-      // document.getElementById("subprogram").  
-})
+
 function myFunction() {
   var x = document.getElementById("myDIV");
   if (x.style.display === "none") {
@@ -775,12 +744,10 @@ jQuery(function ($) {
   var today = year + "-" + month + "-" + day;
 
   document.getElementById('date').value = today;
-  </script>
-  <script>
   document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
+    const v = this.value.split(" : ");
+    this.value = v[0];
+    document.getElementById("InternalExternal").value = v[1];
   });
 </script>
 
@@ -795,63 +762,17 @@ $('.subscriber :checkbox').change(function () {
 
 <script language="javascript">
 document.getElementById("dateUnknown").addEventListener("change", function(){
-document.getElementById("Unknown").checked = false;
+  document.getElementById("Unknown").checked = false;
 })
 </script>
 
 <script>
-document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
-document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 
-const disabler = (o) => {
-  document.getElementsByName(o.t).forEach((target) =>  {
-    target.addEventListener("click", (e) => {
-      const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
-      // console.log(document.querySelector(`input[name="${o.t}"]:checked`).value);
-      o.d.forEach(field => {
-        console.log(field)
-        if(document.getElementsByName(field).length == 0) {
-          $(`#${field}`).multiselect(disable ? "disable" : "enable");
-        } else {
-          document.getElementsByName(field).forEach(t2 => {
-            t2.disabled = disable;
-            t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
-          })
-        }
-      })
-    })
-  })
-}
-
-
-document.getElementsByName("RILevel").forEach((target) =>  {
-  target.addEventListener("click", (e) => {
-      document.getElementById("program").multiple = (e.srcElement.value == "Portfolio");
-      $('#program').multiselect("destroy").multiselect({
-          includeSelectAllOption: true,
-      });
-  })
-})
-
-disabler({t: "RIType", v: "Issue", d: ["RiskProbability"], e: "risk"})
-disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
-disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
-
-
-document.getElementsByName("Region[]").forEach((target) => {
-  target.addEventListener("click", (e) => {
-    makename();
-  })
-})
-
-nameparts = ["program", "Descriptor", "fiscalYer"]
-nameparts.forEach((target) => {
-  document.getElementById(target).addEventListener("change", (e) => makename());
-})
+// Event functions to be used later
 
 const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
-
-const makename = () => {
+const nameevent = () => {
+  console.log("nameevent");
   let locations = "";
   if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
     locations = "ALL ";
@@ -867,6 +788,127 @@ const makename = () => {
   Namex.value = program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
   return(locations)
 }
+
+const subevent = () => {
+  console.log("subevent");
+  s = document.getElementById("subprogram");
+  s.options.length = 0;
+  let target = document.getElementById("program").value
+  console.log(target);
+  let sublist = [];
+  subprograms.forEach(subtarget => {
+    // console.log(subtarget)
+    if (subtarget.Program_Nm == target && !sublist.includes(subtarget.SubProgram_Nm)) {
+      console.log(subtarget.SubProgram_Nm)
+      sublist.push(subtarget.SubProgram_Nm);
+    } else {
+      // console.log(subtarget.Program_Nm +"==" + target + "&&" +sublist.includes(subtarget.SubProgram_Nm))
+      console.log("none")
+    }
+  });
+  console.log(sublist);
+  if (sublist.length == 0) {
+    s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
+  } else {
+    sublist.forEach(o => {
+      console.log(o)
+      s.appendChild(makeelement({e: "option", t: o, v: o}));
+    });
+  }
+  $('#subprogram').multiselect("destroy").multiselect({
+      includeSelectAllOption: true,
+  });
+  // document.getElementById("subprogram").  
+}
+
+const levelevent = (e) => {
+  // console.log("levelevent");
+  if (document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
+    // console.log("portfolio");
+    document.getElementById("program").multiple = true;
+    $('#program').multiselect("destroy").multiselect({
+        includeSelectAllOption: true,
+    });
+  } else {
+    // console.log("program");
+    document.getElementById("program").multiple = true;
+    $('#program').multiselect("destroy")
+    setsubprogramevent();
+  }
+}
+
+// Event creators
+
+const setregionevent = () => {
+  console.log("regionevent");
+  document.getElementsByName("Region[]").forEach((target) => {
+    target.addEventListener("click", (e) => {
+      nameevent();
+    });
+  });
+};
+
+var prog;
+const setsubprogramevent = () => {
+  console.log("setsubprogramevent")
+  prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
+  document.getElementById("programdiv").innerHTML = ""
+  document.getElementById("programdiv").appendChild(prog);
+  // $('#program').multiselect({
+  //     includeSelectAllOption: true,
+  // });
+  console.log("setsub");
+  // document.getElementById("program").addEventListener("change", (e) => subevent())
+  document.getElementById("program").addEventListener("change", (e) => subevent());
+};
+
+const setlevelevent = () => {
+  document.getElementsByName("RILevel").forEach((target) =>  {
+    target.addEventListener("click", (e) => {
+      levelevent();
+    });
+  })
+};
+
+nameparts = ["program", "Descriptor", "fiscalYer"]
+const setnameevent = () => {
+  nameparts.forEach((target) => {
+    document.getElementById(target).addEventListener("change", (e) => nameevent());
+  });
+};
+
+const disabler = (o) => {
+  document.getElementsByName(o.t).forEach((target) =>  {
+    target.addEventListener("click", (e) => {
+      const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
+      // console.log(document.querySelector(`input[name="${o.t}"]:checked`).value);
+      console.log("d")
+      o.d.forEach(field => {
+        // console.log(field)
+        if(document.getElementsByName(field).length == 0) {
+          $(`#${field}`).multiselect(disable ? "disable" : "enable");
+        } else {
+          document.getElementsByName(field).forEach(t2 => {
+            t2.disabled = disable;
+            t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
+          })
+        }
+      })
+    })
+  })
+}
+
+$(document).ready(function() {
+  // document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
+  document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+  document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+  disabler({t: "RIType", v: "Issue", d: ["RiskProbability"], e: "risk"})
+  disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
+  disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+  setregionevent();
+  setsubprogramevent();
+  setlevelevent();
+});
 
 </script>
 
