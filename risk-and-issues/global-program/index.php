@@ -780,7 +780,7 @@ const nameevent = () => {
     document.getElementsByName("Region[]").forEach((e) => {
       locations += (e.checked) ? regions[e.value] + " " : "";
     });
-    console.log(locations)
+    // console.log(locations)
     if (locations.length > 4) {
       locations = "MULTI ";
     }
@@ -904,7 +904,7 @@ $(document).ready(function() {
   document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
   document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
   document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
-  disabler({t: "RIType", v: "Issue", d: ["RiskProbability"], e: "risk"})
+  disabler({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
   disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
   disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
   setregionevent();
