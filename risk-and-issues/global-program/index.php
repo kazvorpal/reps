@@ -13,7 +13,7 @@ function fixutf8($target) {
   return (gettype($target) == "string") ? (utf8_encode($target)) : ($target);
 }  
 
-$sql_prog = "select * from mlm.fn_getlistofPrograms(2022)";
+$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
 if($stmt_prog === false) {
   if(($error = sqlsrv_errors()) != null) {
@@ -210,12 +210,12 @@ function toggle(source) {
 
 <div style="padding: 20px;">
   <form action="../confirm.php" method="post" id="programRisk" oninputD="nameevent()">
+
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value="PRGR"> <!--this needs to be prgi or prgr-->
+  <input name="formName" type="hidden" id="formName" value=""> <!--this needs to be prgi or prgr-->
   <input name="formType" type="hidden" id="formType" value="New">
   <input name="CreatedFrom" type="hidden" id="Created From" value="">
-  <input name="TransfertoProgramManager" type="hidden" id="Created From" value="0">
   <input name="RIName" type="hidden" id="RIName" value="">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
@@ -242,8 +242,8 @@ function toggle(source) {
           <h3 class="panel-title">PORTFOLIO TYPE</h3>
         </div>
         <div class="panel-body">
-        <label for="portfolioType"><input type="radio" name="portfolioType" value="nt 2.0" required> NT 2.0 </label> 
-        <label for="portfolioType1"><input type="radio" name="portfolioType" value="bau" required> BAU </label>
+        <label for="portfolioType"><input type="radio" name="portfolioType" value="1" required> NT 2.0 </label> 
+        <label for="portfolioType1"><input type="radio" name="portfolioType" value="2" required> BAU </label>
         </div>
     </div>
     </div>
@@ -591,10 +591,10 @@ function toggle(source) {
           <table width="50%" border="0">
             <tr>
               <td><label>
-                  <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0" checked>
+                  <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0">
                   Yes</label></td>
               <td><label>
-                  <input type="radio" name="riskRealized" value="No" id="RiskRelized_1">
+                  <input type="radio" name="riskRealized" value="No" id="RiskRelized_1" checked>
                   No</label></td>
             </tr>
           </table>
