@@ -88,7 +88,7 @@ const jq = `
       select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
     } else if (o.i == "category") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
-      select.appendChild(makeelement({e: "option", v: 0, t: "No bowdProject Association"}));
+      select.appendChild(makeelement({e: "option", v: 0, t: "No Project Association"}));
     } else if (o.i == "program") {
       for (option in o.l) 
         if(o.l[option] != ""&& o.l[option] != null)

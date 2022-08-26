@@ -151,7 +151,7 @@
       initexcel();
       if (ispp(mode)) {
         console.log(mode)
-        main.innerHTML = `<div class="header">{${capitalize(mode)} Name (Risks, Issues, Projects)</div>`;
+        main.innerHTML = `<div class="header">${capitalize(mode)} Name (Risks, Issues, Projects)</div>`;
       } else {
           console.log("project")
           main.innerHTML = '';
