@@ -13,7 +13,8 @@ function fixutf8($target) {
   return (gettype($target) == "string") ? (utf8_encode($target)) : ($target);
 }  
 
-$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
+$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('Gcarolin', 2022)";
+// $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
 if($stmt_prog === false) {
   if(($error = sqlsrv_errors()) != null) {
@@ -126,51 +127,6 @@ function toggle(source) {
     checkboxes[i].checked = source.checked;
   }
 }
-</script>
-<script language="javascript">
-
-  const getuniques = (list, field) => {
-    return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
-  }
-  const makeselect = (o) => {
-    // const td = makeelement({e: "div", c: "filtercol", t: o.t});
-    const select = makeelement(o);
-    if (o.i == "pStatus") {
-    } else {
-      const list = getuniques(o.l, o.f);
-      for (option in list) 
-        if(list[option] != ""&& list[option] != null)
-          select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
-    }
-    // td.appendChild(select);
-    // document.getElementById("row").appendChild(td);
-    return select;
-  }
-
-  const makeelement = (o) => {
-
-    // o is an (o)bject with these optional properties:
-    // o.e is the (e)lement, like "td" or "tr"
-    // o.c is the (i)d
-    // o.c is the (c)lasses, separated by spaces like usual
-    // o.t is the innerHTML (t)ext
-    // o.s is the col(s)pan
-
-    const t = document.createElement(o.e);
-    t.id = (typeof o.i == "undefined") ? "" : o.i;
-    t.name = (typeof o.n == "undefined") ? "" : o.n + "[]";
-    t.className = (typeof o.c == "undefined") ? "" : o.c;
-    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
-    t.multiple = (typeof o.m == "undefined") ? "" : o.m;
-    t.value = (typeof o.v == "undefined") ? "" : o.v;
-    if (typeof o.j != "undefined") {
-      t.onclick = o.j;
-    }
-    return t;
-  }
-
 </script>
 
 </head>
@@ -768,6 +724,43 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
 <script>
 
+  const getuniques = (list, field) => {
+    return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
+  }
+  const makeselect = (o) => {
+    const select = makeelement(o);
+      list = o.l;
+      select.appendChild(makeelement({e: "option", v: "", t: "None Selected"}));
+      for (option in list) 
+        if(list[option].Program_Nm != ""&& list[option].Program_Nm != null)
+          select.appendChild(makeelement({e: "option", v: list[option].Program_Key, t: list[option].Program_Nm}));
+    return select;
+  }
+
+  const makeelement = (o) => {
+
+    // o is an (o)bject with these optional properties:
+    // o.e is the (e)lement, like "td" or "tr"
+    // o.c is the (i)d
+    // o.c is the (c)lasses, separated by spaces like usual
+    // o.t is the innerHTML (t)ext
+    // o.s is the col(s)pan
+
+    const t = document.createElement(o.e);
+    t.id = (typeof o.i == "undefined") ? "" : o.i;
+    t.name = (typeof o.n == "undefined") ? "" : o.n + "[]";
+    t.className = (typeof o.c == "undefined") ? "" : o.c;
+    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
+    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
+    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
+    t.multiple = (typeof o.m == "undefined") ? "" : o.m;
+    t.value = (typeof o.v == "undefined") ? "" : o.v;
+    if (typeof o.j != "undefined") {
+      t.onclick = o.j;
+    }
+    return t;
+  }
+
 // Event functions to be used later
 
 const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
@@ -791,28 +784,29 @@ const nameevent = () => {
 
 const subevent = () => {
   console.log("subevent");
-  s = document.getElementById("subprogram");
+  let p = document.getElementById("program");
+  let s = document.getElementById("subprogram");
   s.options.length = 0;
-  let target = document.getElementById("program").value
+  let target = p.options[p.selectedIndex].text;
   console.log(target);
-  let sublist = [];
+  let sublist = {};
   subprograms.forEach(subtarget => {
     // console.log(subtarget)
-    if (subtarget.Program_Nm == target && !sublist.includes(subtarget.SubProgram_Nm)) {
+    if (subtarget.Program_Nm == target && !sublist[subtarget.SubProgram_Nm]) {
       console.log(subtarget.SubProgram_Nm)
-      sublist.push(subtarget.SubProgram_Nm);
+      sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
     } else {
       // console.log(subtarget.Program_Nm +"==" + target + "&&" +sublist.includes(subtarget.SubProgram_Nm))
       console.log("none")
     }
   });
-  console.log(sublist);
+  console.log(typeof sublist);
   if (sublist.length == 0) {
     s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
   } else {
-    sublist.forEach(o => {
+    Object.entries(sublist).forEach(([o, k]) => {
       console.log(o)
-      s.appendChild(makeelement({e: "option", t: o, v: o}));
+      s.appendChild(makeelement({e: "option", t: o, v: k}));
     });
   }
   $('#subprogram').multiselect("destroy").multiselect({
