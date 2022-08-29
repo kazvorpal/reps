@@ -733,7 +733,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       select.appendChild(makeelement({e: "option", v: "", t: "None Selected"}));
       for (option in list) 
         if(list[option].Program_Nm != ""&& list[option].Program_Nm != null)
-          select.appendChild(makeelement({e: "option", v: list[option].Program_Key, t: list[option].Program_Nm}));
+          select.appendChild(makeelement({e: "option", v: list[option].Program_Nm, t: list[option].Program_Nm}));
     return select;
   }
 
