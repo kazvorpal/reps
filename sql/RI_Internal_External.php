@@ -1,3 +1,4 @@
+
 <?php 
 // LIMIT DATE TODAY FOR DATE CLOSED USED ON UPDATE PAGES
 $closeDateMax = date("Y-m-d"); //universal
