@@ -190,7 +190,7 @@ $(function(){
             // window.console && console.log(m) || alert(m); 
         },
         items: {
-            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program"},
+            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global-program"},
             "sep1": "---------",
             "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?portfolio"},
             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},
