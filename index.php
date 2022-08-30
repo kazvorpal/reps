@@ -121,8 +121,7 @@
 			<img src="images/UP_16.jpg" width="222" height="92" alt=""
 				onmouseover="this.src='images/DOWN_16.jpg'" 
 				onmouseout="this.src='images/UP_16.jpg'" 
-				data-bs-toggle="tooltip" data-bs-placement="top" 
-				 title="Status of risks and issues for projects and programs"></a></td>
+				data-bs-toggle="tooltip" data-bs-placement="top"></a></td>
 		<td>
 			<img src="images/UP_17.jpg" width="179" height="92" alt=""></td>
 	</tr>
