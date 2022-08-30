@@ -158,8 +158,8 @@ function toggle(source) {
   </div>
   <!-- END PROGRESS BAR -->
 <div align="center">
-  <h3>GLOBAL PROGRAM RISK OR ISSUE</h3>
-  Enter the details of your Program Risk/Issue
+  <h3>CREATE GLOBAL RISK OR ISSUE</h3>
+  Enter the details of your Risk/Issue
 </div>
 
 <div style="padding: 20px;">
@@ -167,7 +167,7 @@ function toggle(source) {
 
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value=""> <!--this needs to be prgi or prgr-->
+  <input name="formName" type="hidden" id="formName" value=""> <!--DETERMINED IN LOOKUP-->
   <input name="formType" type="hidden" id="formType" value="New">
   <input name="CreatedFrom" type="hidden" id="Created From" value="">
   <input name="RIName" type="hidden" id="RIName" value="">
@@ -280,7 +280,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">REGION (Concat to Name, Require)</h3>
+          <h3 class="panel-title">REGION</h3>
         </div>
         <div class="panel-body">
           <table width="100%">
