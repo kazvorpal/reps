@@ -13,8 +13,7 @@ function fixutf8($target) {
   return (gettype($target) == "string") ? (utf8_encode($target)) : ($target);
 }  
 
-$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('Gcarolin', 2022)";
-// $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
+$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
 if($stmt_prog === false) {
   if(($error = sqlsrv_errors()) != null) {
@@ -32,7 +31,7 @@ if($stmt_prog === false) {
   }
 }
 
-$sql_sub = "select * from mlm.fn_getlistofsubprogramforprogram(-1)";
+$sql_sub = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = 2022";
 $stmt_sub   = sqlsrv_query( $data_conn, $sql_sub ); 
 if($stmt_sub === false) {
   if(($error = sqlsrv_errors()) != null) {
@@ -56,8 +55,7 @@ $programout = json_encode($programrows);
 $subprogramout = json_encode($subprogramrows);
 
 //SUBPROGRAM 
-//Needs to be limited according to the program selection. replce -1 with Program ID 8.17.2022
-$sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1)";
+$sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = 2022";
 $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog ); 
 //$row_subprog   = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC);
 // $row_subprog ['SubProgram_Nm'];
