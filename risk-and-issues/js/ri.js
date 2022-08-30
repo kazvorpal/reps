@@ -241,6 +241,12 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
 
  const uniques = () => (ispp(mode)) ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") : getwholeuniques(d1, "RiskAndIssue_Key");
 
+//  const uniques = () => (mode == "program") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm")
+//                        : (mode == "portfolio") ? getwholeuniques(d1, "RiskAndIssue_Key") 
+//                        : getwholeuniques(d1, "RiskAndIssue_Key");
+
+
+
  const splitdate = (datestring) => {
    let newdate = datestring.split(" - ");
    return newdate;

@@ -24,26 +24,39 @@
     const capitalize = (target) => {
         return target.charAt(0).toUpperCase() + target.slice(1);
     }
-     mode = (window.location.href.indexOf("program")>=0) ? "program" : 
-            (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
-     alt = (mode == "project") ? "program" : "project";
-     document.title = capitalize(mode) + " R&I Dashboard";
-     const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
+    mode = (window.location.href.indexOf("program")>=0) ? "program" : 
+        (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
+    alt = (mode == "project") ? "program" : "project";
+    document.title = capitalize(mode) + " R&I Dashboard";
+    const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
       
     const projectopen = <?= $projectout ?>;  
-      const projectclosed = <?= $closedout ?>;  
-      const projectfull = projectopen.concat(projectclosed);  
-      const programopen =<?= $programout ?>;
-      const programclosed =<?= $closedprogramout ?>;
-      const programfull = programopen.concat(programclosed);  
-      const mangerlist = <?= $mangerout ?>;
-      const driverlist = <?= $driverout ?>;
-      const locationlist = <?= $locationout ?>;
-      const p4plist = <?= $p4pout ?>;
+    const projectclosed = <?= $closedout ?>;  
+    const projectfull = projectopen.concat(projectclosed);  
+    const programopen =<?= $programout ?>;
+    const programclosed =<?= $closedprogramout ?>;
+    const programfull = programopen.concat(programclosed);  
+    const portfolioopen =<?= $portfolioout ?>;
+    const mangerlist = <?= $mangerout ?>;
+    const driverlist = <?= $driverout ?>;
+    const locationlist = <?= $locationout ?>;
+    const p4plist = <?= $p4pout ?>;
+    const portfolioprograms = <?= $portfolioprogramsout ?>;
 
+    const ffpp = (target) => {
+        return portfolioprograms.filter(o => {
+            return o.RiskAndIssue_Key == target;
+        })
+    }
 
+    for (key in portfolioopen) {
+        let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
+        portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nm;
+        portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
+    }    
+    const portfolioclosed = portfoliofull = portfolioopen;
 
-      const portfolioopen =[{"Fiscal_Year":2022,"RiskAndIssue_Key":4,"RiskAndIssueLog_Key":7,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Risk","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"CB Funding for Growth","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Corporate","MLMRegion_Key":1,"AssociatedCR_Key":null,"MLMProgramRI_Key":1,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"},{"Fiscal_Year":2022,"RiskAndIssue_Key":7,"RiskAndIssueLog_Key":7,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Issue","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"CB Funding for Growth","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Corporate","MLMRegion_Key":1,"AssociatedCR_Key":null,"MLMProgramRI_Key":1,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"},{"Fiscal_Year":2022,"RiskAndIssue_Key":5,"RiskAndIssueLog_Key":6,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Risk","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"Cranky Opossum Juggling","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Central","MLMRegion_Key":3,"AssociatedCR_Key":null,"MLMProgramRI_Key":2,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"}];
+    const portfolioopenDisabled =[{"Fiscal_Year":2022,"RiskAndIssue_Key":4,"RiskAndIssueLog_Key":7,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Risk","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"CB Funding for Growth","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Corporate","MLMRegion_Key":1,"AssociatedCR_Key":null,"MLMProgramRI_Key":1,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"},{"Fiscal_Year":2022,"RiskAndIssue_Key":7,"RiskAndIssueLog_Key":7,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Issue","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"CB Funding for Growth","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Corporate","MLMRegion_Key":1,"AssociatedCR_Key":null,"MLMProgramRI_Key":1,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"},{"Fiscal_Year":2022,"RiskAndIssue_Key":5,"RiskAndIssueLog_Key":6,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Risk","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"Bandwidth Management","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Central","MLMRegion_Key":3,"AssociatedCR_Key":null,"MLMProgramRI_Key":2,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"}];
 
         var ridata, d1, d1;
         const setdata = () => {
@@ -106,12 +119,6 @@
       const hiddenfields = ["AssociatedCR_Key", "MLMRegion_Key", "MLMProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
       const modes = ["project", "program", "portfolio"];
       var projectfields, projectfieldnames, rifields, excelfields, centerfields;
-      var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "span", "c": "btn btn-primary pl-3", "j": function() {
-            console.log("changing mode to " + target);
-            init(target);
-        }})
-      }
   </script>
   <?php include ("../../includes/menu.php");?>
   <section>
@@ -119,7 +126,7 @@
       <div style="width:98%">
         <div class="col-xs-12 text-center">
         <h1 id="title"><?= ucfirst($mode) ?> R&I Dashboard</h1>
-        <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results?</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
+        <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
 
       <?php 
         require '../includes/ri-selectors.php';
@@ -144,6 +151,7 @@
     //   document.getElementById("myDiv").style.display = "block";
     }
     const populate = (rilist) => {
+      console.log("rilist");
       console.log(rilist);
       resultcounter(rilist);
       window.ricount = [];
@@ -193,8 +201,9 @@
     function listri(target, type) {
     
         // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-        
-        pre = ridata.filter(o => o.RILevel_Cd == "Program" && o.RIType_Cd == type && o.MLMProgram_Nm == target);
+        console.log("target");
+        pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target);
+        console.log(pre);
         post = pre.filter(filterfunction);
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
         return uni;
@@ -226,9 +235,12 @@
         ){
             let list = listri(name, type);
             document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
+            console.log(1)
             if (list.length != 0) {
+                console.log(2)
                 document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
                 for (ri of list) {
+                    console.log(ri)
                     window.ricount.push(true);
                     rowcolor++;
                     makedata(ri, type, name);
@@ -363,7 +375,8 @@
             return (projects != undefined && projects.length>0) ? "Projects" : "Global";
         }
         };
-
+        // console.log(program);
+        console.log("program");
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
@@ -660,6 +673,12 @@
     }  
 
 
+    var modebutton = (target) => {
+        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
+            console.log("changing mode to " + target);
+            init(target);
+        }})
+    }
     const makemodebuttons = () => {
         let m = document.getElementById("modebuttons");
         while (m.firstChild) {
@@ -672,6 +691,7 @@
             // console.log(element!=mode);
             let e = (element != mode) ? modebutton(element) :"";
             (e != "") ? m.appendChild(e):"";
+            m.appendChild(document.createTextNode(" "));
         });
         // init();
     }  
@@ -687,7 +707,7 @@
         dofilters();
         setdata();
         makeheadline();
-        ridata = d1.concat(d1);
+        // ridata = d1.concat(d2);
         populate(uniques());
         console.log("uniques()");
         console.log(uniques());

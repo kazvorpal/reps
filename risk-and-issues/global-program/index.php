@@ -728,7 +728,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const makeselect = (o) => {
     const select = makeelement(o);
       list = o.l;
-      select.appendChild(makeelement({e: "option", v: "", t: "None Selected"}));
+      select.appendChild(makeelement({e: "option", v: "", t: ""}));
       for (option in list) 
         if(list[option].Program_Nm != ""&& list[option].Program_Nm != null)
           select.appendChild(makeelement({e: "option", v: list[option].Program_Nm, t: list[option].Program_Nm}));
@@ -776,7 +776,8 @@ const nameevent = () => {
       locations = "MULTI ";
     }
   }
-  Namex.value = program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
+  let p = (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) ? "PORTFOLIO " : "";
+  Namex.value = p + program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
   return(locations)
 }
 
@@ -784,16 +785,23 @@ const subevent = () => {
   console.log("subevent");
   let p = document.getElementById("program");
   let s = document.getElementById("subprogram");
+  let p0 = p.options[0];
+  if (p0.value == '') p0.remove();
   s.options.length = 0;
   let target = p.options[p.selectedIndex].text;
   console.log(target);
   let sublist = {};
   subprograms.forEach(subtarget => {
     // console.log(subtarget)
-    if (subtarget.Program_Nm == target && !sublist[subtarget.SubProgram_Nm]) {
+    if (subtarget.Program_Nm == target && 
+        !sublist[subtarget.SubProgram_Nm] &&
+        subtarget.LRPYear == '2022') {
       console.log(subtarget.SubProgram_Nm)
       sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
     } else {
+      if (subtarget.Program_Nm == target && 
+        !sublist[subtarget.SubProgram_Nm])
+        console.log(subtarget.LRPYear);
       // console.log(subtarget.Program_Nm +"==" + target + "&&" +sublist.includes(subtarget.SubProgram_Nm))
       console.log("none")
     }

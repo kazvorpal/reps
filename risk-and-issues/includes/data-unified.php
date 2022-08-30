@@ -47,6 +47,64 @@
     }
   }
 
+  $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
+  // print '<!--' . $sqlstr . "<br/> -->";
+  ini_set('mssql.charset', 'UTF-8');
+  $portfolioquery = sqlsrv_query($data_conn, $sqlstr);
+  // print($data_conn);
+  if($portfolioquery === false) {
+    if(($error = sqlsrv_errors()) != null) {
+      foreach($error as $errors) {
+        echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+        echo "code: ".$error[ 'code']."<br />";
+        echo "message: ".$error[ 'message']."<br />";
+      }
+    }
+  }  else {
+    $portfoliorows = array();
+    $count = 1;
+    while($portfoliorow = sqlsrv_fetch_array($portfolioquery, SQLSRV_FETCH_ASSOC)) {
+      $portfoliorows[] = array_map("fixutf8", $portfoliorow);
+    }
+
+    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'portfolio'";
+    ini_set('mssql.charset', 'UTF-8');
+    $closedportfolio = sqlsrv_query($data_conn, $sqlstr);
+    if($closedportfolio === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($errors as $error) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
+        }
+      }
+    } else {
+      $closedportfoliorows = array();
+      $count = 1;
+      while($row = sqlsrv_fetch_array($closedportfolio, SQLSRV_FETCH_ASSOC)) {
+        $closedportfoliorows[] = array_map("fixutf8", $row);
+      }
+    }
+    $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
+    ini_set('mssql.charset', 'UTF-8');
+    $portfolioprograms = sqlsrv_query($data_conn, $portfolioprogramsstr);
+    if($portfolioprograms === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($errors as $error) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
+        }
+      }
+    } else {
+      $portfolioprogramsrows = array();
+      $count = 1;
+      while($row = sqlsrv_fetch_array($portfolioprograms, SQLSRV_FETCH_ASSOC)) {
+        $portfolioprogramsrows[] = array_map("fixutf8", $row);
+      }
+    }
+  }
+
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'project'";
   print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
@@ -185,10 +243,14 @@
     $mangerout = json_encode($mangerlist);
     $driverout = json_encode($driverrows);
     $locationout = json_encode($locationrows);
+    $portfolioprogramsout = json_encode($portfolioprogramsrows);
     $projectout = json_encode($rows);
     $closedout = json_encode($closedrows);
     $programout = json_encode($programrows);
     $closedprogramout = json_encode($closedprogramrows);
+    $portfolioout = json_encode($portfoliorows);
+    $closedportfolioout = json_encode($closedportfoliorows);
+  
   
   }
 

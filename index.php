@@ -121,8 +121,7 @@
 			<img src="images/UP_16.jpg" width="222" height="92" alt=""
 				onmouseover="this.src='images/DOWN_16.jpg'" 
 				onmouseout="this.src='images/UP_16.jpg'" 
-				data-bs-toggle="tooltip" data-bs-placement="top" 
-				 title="Status of risks and issues for projects and programs"></a></td>
+				data-bs-toggle="tooltip" data-bs-placement="top"></a></td>
 		<td>
 			<img src="images/UP_17.jpg" width="179" height="92" alt=""></td>
 	</tr>
@@ -191,7 +190,7 @@ $(function(){
             // window.console && console.log(m) || alert(m); 
         },
         items: {
-            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program"},
+            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global-program"},
             "sep1": "---------",
             "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?portfolio"},
             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},
