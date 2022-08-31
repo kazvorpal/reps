@@ -13,7 +13,7 @@ $sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue](1) WHERE Ri
 $stmt_glb_prog   = sqlsrv_query( $data_conn, $sql_glb_prog ); 
 $row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
 // $row_glb_prog[''];
-echo $sql_glb_prog;
+//echo $sql_glb_prog;
 
 if(empty($row_glb_prog)){
   echo "No Risk/issue found.";
@@ -70,14 +70,14 @@ if($RILevel_Cd == "Program") {
   $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
   //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
   // $row_prog['Program_Nm'];
-  echo "<br>" . $sql_prog . "HERE";
+  //echo "<br>" . $sql_prog . "HERE";
 } else { 
   //PROGRAM FOR PORTFOLIO RI (MULTIPUL PROGRAMS)
   $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
   $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
   //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
   // $row_prog['Program_Nm'];
-  echo "<br>" . $sql_prog . "NO";
+  //echo "<br>" . $sql_prog . "NO";
 }
 
 //PROGRAM FROM RIKEY
@@ -95,7 +95,7 @@ $sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where Pro
 $stmt_subprog = sqlsrv_query( $data_conn, $sql_subprog ); 
 //$row_subprog = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC);
 // $row_subprog['SubProgram_Nm'];
-echo "<br>" . $sql_subprog;
+//echo "<br>" . $sql_subprog;
 
 //SUBPROGRAM FROM RIKEY
 $sql_rikey_subprog = "DECLARE @SUB_IDs VARCHAR(100)
@@ -106,7 +106,7 @@ $stmt_rikey_subprog = sqlsrv_query( $data_conn, $sql_rikey_subprog );
 $row_rikey_subprog = sqlsrv_fetch_array( $stmt_rikey_subprog , SQLSRV_FETCH_ASSOC);
 $SubProgramkeys = $row_rikey_subprog['SubProgram_Key'];
 $SubProgram = explode(",", $SubProgramkeys);
-echo "<br>" . $sql_rikey_subprog;
+//echo "<br>" . $sql_rikey_subprog;
 
 //DRIVERS
 $sql_driver= "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey](1) where RiskAndIssueLog_Key = $RiskAndIssueLog_Key";
@@ -195,7 +195,7 @@ function toggle(source) {
           includeSelectAllOption: true,
         });
 
-        $('#program').multiselect({
+    $('#program').multiselect({
           includeSelectAllOption: true,
         });
   
@@ -239,6 +239,7 @@ function toggle(source) {
 
 <div style="padding: 20px;">
   <form action="../update-confirm.php" method="post" id="programRisk">
+
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $ri_id ?>">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="4">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
@@ -260,8 +261,8 @@ function toggle(source) {
   <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $RIPortfolio_Key; ?>">
   
   <?php if($RILevel_Cd == "Portfolio") {?>
-    <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key ?>">
-    <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $SubProgramkeys ?>">
+    <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key; ?>">
+    <input name="subprogram" type="hidden" id="subprogramx" value="<?php echo $SubProgramkeys; ?>">
   <?php } ?>
   
    <div class="container">
@@ -356,7 +357,7 @@ function toggle(source) {
     <div class="col-md-4 " align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">SUBPROGRAM (Limit to Program)</h3>
+          <h3 class="panel-title">SUBPROGRAM</h3>
         </div>
         <div class="panel-body">
           <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required <?php if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>>
