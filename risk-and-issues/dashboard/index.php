@@ -159,7 +159,14 @@
       initexcel();
       if (ispp(mode)) {
         console.log(mode)
-        main.innerHTML = `<div class="header">${capitalize(mode)} Name (Risks, Issues, Projects)</div>`;
+        if (mode == "portfolio") {
+            p = "Programs";
+            n = "Raid Log";
+        } else {
+            p = "Projects";
+            n = capitalize(mode)
+        }
+        main.innerHTML = `<div class="header">${n} Name (Risks, Issues, ${p})</div>`;
       } else {
           console.log("project")
           main.innerHTML = '';
@@ -674,7 +681,7 @@
 
 
     var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
+        return makeelement({"i": target + "mode", "t": (target == "portfolio") ? "Raid Log" : capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
