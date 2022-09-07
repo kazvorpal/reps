@@ -45,6 +45,37 @@
         $closedprogramrows[] = array_map("fixutf8", $row);
       }
     }
+    $p4plist = array();
+    foreach ($programrows as $row)  {
+      if($row["MLMProgramRI_Key"] != '') {
+        // echo "IN";
+        // Get PROJECTS //
+        $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", -1)";
+        // echo $sqlstr . "<br/>";
+        ini_set('mssql.charset', 'UTF-8');
+        $p4pquery = sqlsrv_query($data_conn, $sqlstr);
+        if($p4pquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            print_r($error);
+            foreach($error as $errors) {
+              echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
+              echo "code: ".$errors[ 'code']."<br />";
+              echo "message: ".$errors[ 'message']."<br />";
+            }
+          }
+        } else {
+          // echo "OUT";
+          $count = 1;
+          $p4prows = array();
+          $checker = 0;
+          while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
+            $p4prows[] = array_map("fixutf8", $p4prow);
+            $checker = 1;
+          }
+        }
+        $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
+      }
+    }
   }
 
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
@@ -165,34 +196,6 @@
     }
 
 
-    $p4plist = array();
-    foreach ($rows as $row)  {
-      if($row["MLMProgramRI_Key"] != '') {
-        // Get PROJECTS //
-        $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", -1)";
-        ini_set('mssql.charset', 'UTF-8');
-        $p4pquery = sqlsrv_query($data_conn, $sqlstr);
-        if($p4pquery === false) {
-          if(($error = sqlsrv_errors()) != null) {
-            print_r($error);
-            foreach($error as $errors) {
-              echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
-              echo "code: ".$errors[ 'code']."<br />";
-              echo "message: ".$errors[ 'message']."<br />";
-            }
-          }
-        } else {
-          $count = 1;
-          $p4prows = array();
-          $checker = 0;
-          while($p4prow = sqlsrv_fetch_array($p4pquery, SQLSRV_FETCH_ASSOC)) {
-            $p4prows[] = array_map("fixutf8", $p4prow);
-            $checker = 1;
-          }
-        }
-        $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
-      }
-    }
 
     $mangerlist = array();
     foreach ($rows as $row)  {
