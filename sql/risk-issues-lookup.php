@@ -192,8 +192,8 @@ $opportunity = "";
     $opportunity = $_POST['opportunity'];
   }
 
-$transfer2prgManager = "off";
-  if($_POST['TransfertoProgramManager'] == "on") {
+$transfer2prgManager = "0";
+  if(isset($_POST['TransfertoProgramManager'])) {
     $transfer2prgManager = 1;
   }
 
