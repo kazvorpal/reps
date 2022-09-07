@@ -8,9 +8,14 @@ include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
 
 session_start();
+$backhome= "";
+if(isset($_SESSION["homebase"])) {
 $backhome = $_SESSION["homebase"];
+}
 
     //DECLARE
+    $global = $_POST['global'];
+
     $changeLogKey = (int)$_POST['changeLogKey'];
      if ($changeLogKey == 1){
         $changeLogName = "Initialize";
@@ -48,7 +53,8 @@ $backhome = $_SESSION["homebase"];
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 
     $transfer2prgManager = $_POST['transfer2prgManager'];
-    $asscCRKey = NULL; 
+    $asscCRKey = $_POST['assCRID']; 
+    $project_nm = $_POST['project_nm'];
 
     $riOpenFlg = 1;
     if($changeLogKey == 3 || $changeLogKey == 5 ){
@@ -99,12 +105,22 @@ $backhome = $_SESSION["homebase"];
 
     $assocProjectsKeys = $_POST['assocProjectsKeys']; //mutiple keys DONE
     $regionKeys = $_POST['regionKeys']; //multiple keys
+    if($global == 1){
+        $regionKeys = $_POST['assocRegions'];
+    }
     
     //echo $regionKeys . "<br> . $assocProjectsKeys . <br>"; 
 
     $programKeys = $_POST['programKeys']; //single key
+    if($global == 1) {
+        $programKeys = $_POST['program'];
+    }
+    
     $riKeys = $_POST['RiskAndIssue_Key']; //single key
     $programs = $_POST['programs']; //program name
+
+    $subprogram = $_POST['subprogram']; // array keys
+    $portfolioType_Key = $_POST['portfolioType_Key'];
 
     //LOOK UP KEY VALUES 
     // IMPACT AREA
@@ -161,7 +177,7 @@ $backhome = $_SESSION["homebase"];
         array($drivers, SQLSRV_PARAM_IN),
         array($regionKeys, SQLSRV_PARAM_IN), //new - list of keys
         array($programKeys, SQLSRV_PARAM_IN), //new - list of keys
-        array($assocProjectsKeys, SQLSRV_PARAM_IN),// project key list assocProjectsKeys
+        array($assocProjectsKeys, SQLSRV_PARAM_IN),// project key list / not for global
         array($impactArea, SQLSRV_PARAM_IN),
         array($impactLevel, SQLSRV_PARAM_IN),
         array($responseStrategy, SQLSRV_PARAM_IN),
@@ -182,7 +198,10 @@ $backhome = $_SESSION["homebase"];
         array($riOpenFlg, SQLSRV_PARAM_IN),// 0 for closed
         array($raidLog, SQLSRV_PARAM_IN),
         array($date, SQLSRV_PARAM_IN), //forcasted resolution date
-        array($DateClosed, SQLSRV_PARAM_IN), //date closed
+        array($DateClosed, SQLSRV_PARAM_IN), 
+        array($subprogram, SQLSRV_PARAM_IN),
+        array($global, SQLSRV_PARAM_IN), 
+        array($portfolioType_Key, SQLSRV_PARAM_IN), 
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
@@ -195,7 +214,7 @@ $backhome = $_SESSION["homebase"];
             //exit();
 
         //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
       //EXECUTE PROCEDDURE
     $stmt3 = sqlsrv_query( $data_conn, $tsql_callSP, $params);
@@ -257,9 +276,12 @@ $backhome = $_SESSION["homebase"];
     ';
 // echo $SPCode;
     if($SPCode == 0) {
-        echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>ID: ' . $SPBatch_Id . '</div>
-            <br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>    
-        ';
+        echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>Risk and Issue ID: ' . $riKeys . '</div>';
+
+        if($backhome != "" && $global != 1) {
+            echo '<br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
+        }
+
         //EMAIL PM AND RI CREATOR
         if($changeLogKey == 3 || $changeLogKey == 4){
             //DISTRO
@@ -278,6 +300,7 @@ $backhome = $_SESSION["homebase"];
 
             // BUILD EMAIL BODY
             $message = "<p>A " . $riLevel . " " .$riTypeCode . "  has been " . $changeLogName . ".  Below are the details.</p>";
+            $message .="<br><b>ID: </b>" . $riKeys ;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -291,8 +314,12 @@ $backhome = $_SESSION["homebase"];
             if($formName == "PRJR" || $formName == "PRJI"){$message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;}
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
-
-            
+            if($global == 1) {
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+            } else {
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=" . $riKeys ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
+            }
+                           
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
                     //echo '<div align="center">An email was sent on your behalf to the Program and Project Managers. </div>';
@@ -319,6 +346,7 @@ $backhome = $_SESSION["homebase"];
 
             // BUILD EMAIL BODY
             $message = "<p>There was an update to a " . $riLevel . " " .$riTypeCode . " that has been flagged for RAID Log.</p>";
+            $message .="<br><b>ID: </b>" . $riKeys ;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -332,7 +360,11 @@ $backhome = $_SESSION["homebase"];
             if($formName == "PRJR" || $formName == "PRJI"){$message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;}
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
-            
+            if($global == 1) {
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+            } else {
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=" . $riKeys ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
+            }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
                     //echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';

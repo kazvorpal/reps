@@ -167,7 +167,8 @@ include ("../sql/RI_Internal_External.php");
   $date = $row_risk_issue['ForecastedResolution_Dt'];
   $transProgMan = $row_risk_issue['TransferredPM_Flg'];
   $opportunity = $row_risk_issue['Opportunity_Txt'];
-  $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
+  $actionPlan = "";
+  $actionPlan_b = $row_risk_issue['ActionPlanStatus_Cd'];
   $DateClosed = $row_risk_issue['RIClosed_Dt'];
   $driverList = rtrim($_GET['drivertime'], ",");
   $driverArr = explode(",", $driverList);
@@ -364,7 +365,7 @@ if($formaction == "update") {
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value="">
   <input name="riskRealized" type="hidden" value="0">
-  <input name="CreatedFrom" type="hidden" class="form-control" id="Created From" value="<?php echo $assCRID;?>">
+  <input name="CreatedFrom" type="hidden" class="form-control" id="Created From" value="">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
 
   <?php if($assc_prj_update == "yes"){ ?>
@@ -700,7 +701,8 @@ if($formaction == "update") {
               <tbody>
                 <tr>
                   <td width="100%">
-                    <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>
+                    <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>
+                    <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
                   </td>
                 </tr>
                 <tr>
@@ -725,33 +727,34 @@ if($formaction == "update") {
           <td colspan="2" align="left"></td>
         </tr>
         <tr align="left">
-        <td colspan="2" align="left"><h4 style="color: #00aaf5">PROJECT ASSOCIATION</h4></td>
+        <td colspan="2" align="left"><h4 style="color: #00aaf5">ASSOCIATIONS</h4></td>
         </tr>
         <tr>
           <td colspan="2" align="left">
-        <div class="box" style="font-size: 12px;">
-				  <?php 
-            if($formaction == "update") {
-              while ($row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj['EPSProject_Nm'] . '<br>';} 
-            } else {
-              echo str_replace(",","<br>", $assocProject);
-            }
-          ?>
-        </div>
-      </td>
+          <b>Project Association</b>
+            <div class="box" style="font-size: 12px;">
+              <?php 
+                if($formaction == "update") {
+                  while ($row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_assoc_prj['EPSProject_Nm'] . '<br>';} 
+                } else {
+                  echo str_replace(",","<br>", $assocProject);
+                }
+              ?>
+            </div>
+          </td>
         </tr>
         <tr>
           <td colspan="2" align="left"></td>
         </tr>
-        <!--<tr>
+        <tr>
           <td colspan="2" align="left">
             <br>
             <div class="box">
-              <label for="Created From">Associated CR ID</label>
-              <input name="CreatedFrom" type="text" class="form-control" id="Created From" value="<?php echo $assCRID;?>">
+              <label for="assCRID">Associated CR ID</label> (Numbers Only)
+              <input name="assCRID" type="text" class="form-control" id="assCRID" value="<?php echo $assCRID;?>">
             </div>
           </td>
-      </tr>-->
+      </tr>
       <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -779,7 +782,7 @@ if($formaction == "update") {
         <tr>
           <td colspan="2" align="left">
             <div class="box">
-          <label for="DateClosed">Date Closed:</label>
+              <label for="DateClosed">Date Closed:</label>
                 <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>">
           </div>
           </td>

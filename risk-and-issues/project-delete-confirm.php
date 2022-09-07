@@ -56,8 +56,8 @@ $transProgMan = $row_risk_issue['TransferredPM_Flg'];
 $opportunity = $row_risk_issue['Opportunity_Txt'];
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $DateClosed = $row_risk_issue['RIClosed_Dt'];
-$driverList = rtrim($_POST['drivertime'], ",");
-$driverArr = explode(",", $driverList);
+$driverList = rtrim($_POST['drivertime'], ","); 
+$driverArr = explode(",", $driverList); 
 $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized =  $row_risk_issue['RiskRealized_Flg']; 
@@ -69,8 +69,11 @@ if (isset($_POST['groupID'])) {
   $groupID = $_POST['groupID'];
 }
 
+$disble_it = "";
+
 if (isset($_POST['del_proj_select'])){
   $del_proj_select = implode(",", $_POST['del_proj_select']);
+  $disble_it = " disable";
 }
 
 if(!empty($_POST['proj_select'])) {
@@ -233,10 +236,11 @@ function toggle(source) {
   <input name="del_proj_select" type="hidden" value="<?php echo $del_proj_select; ?>">
   <input name="DateClosed"type="hidden" id="DateClosed" value="<?php echo date('Y-m-d') ?>">
   <input name="formaction" type="hidden" id="formaction" value="update">
+  <input name="delete" type="hidden" id="delete" value="1">
 
   <div class="alert alert-danger">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> Project(s) selected for removal will have their associated risks/issues deleted.You won't be able to make any updates.
+    <span class="glyphicon glyphicon-warning-sign"></span> Project(s) selected for removal will have their associated risks/issues deleted. You won't be able to make any updates. If removal of this project association was unintentional, do NOT submit this form..
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
@@ -245,7 +249,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3">
-            <div class="box" align="left" style="font-size: 12px;">
+            <div class="box <?php echo $disble_it;?>" align="left" style="font-size: 12px;">
               <?php 
                 while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['Proj_Nm'] . '<br>'; } ?>
             </div>
@@ -269,7 +273,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box">
+			<div class="box <?php echo $disble_it;?>">
 			<table width="100%" border="0" cellpadding="10" cellspacing="10">
             <tbody>
               <tr>
@@ -312,46 +316,46 @@ function toggle(source) {
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a></h4>
-            <div class="box subscriber">
+            <div class="box subscriber <?php echo $disble_it;?>">
             <table width="100%" border="0">
                 <tr>
                   <td width="51%"><label>
-                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" <?php if(in_array("Material Delay", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Material Delay</label></td>
                   <td width="49%"><label>
-                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="6" id="Drivers_10" class="required_group" <?php if(in_array("Project Dependency", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Project Dependency</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="2" id="Drivers_1" class="required_group" <?php if(in_array("Shipping/Receiving Delay", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Shipping/Receiving Delay</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" <?php if(in_array("Budget/Funding", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Budget/Funding</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="3" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="3" id="Drivers_2" class="required_group" <?php if(in_array("Ordering Error", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Ordering Error</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Design/Scope Change", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" <?php if(in_array("Design/Scope Change", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Design/Scope Change</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="4" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="4" id="Drivers_3" class="required_group" <?php if(in_array("People Resource", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     People Resource</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Admin Error", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" <?php if(in_array("Admin Error", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     Admin Error</label></td>
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="5" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="5" id="Drivers_4" class="required_group" <?php if(in_array("3PL Resource", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     3PL Resource</label></td>
                   <td><label>
-                    <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("External Forces", $driverArr)) { echo "checked";} ?>>
+                    <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" <?php if(in_array("External Forces", $driverArr)) { echo "checked";} ?> onclick="this.checked = false;">
                     External Forces</label></td>
                   </tr>
                 </table>
@@ -366,7 +370,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box"> 
+			<div class="box <?php echo $disble_it;?>"> 
 			<table width="100%" border="0">
             <tbody>
 
@@ -390,7 +394,7 @@ function toggle(source) {
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?>>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?> onclick="this.checked = false;">
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
                   <?php } ?>
@@ -408,7 +412,7 @@ function toggle(source) {
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required <?php if($impactLevel2==$row_imLevel['ImpactLevel_Nm']){echo "checked";}?>>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required <?php if($impactLevel2==$row_imLevel['ImpactLevel_Nm']){echo "checked";}?> onclick="this.checked = false;">
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
                     <?php } ?>  
@@ -452,7 +456,7 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-          <div class="box">
+          <div class="box <?php echo $disble_it;?>">
               <label for="Individual">Individual POC<br>
                 </label>
               
@@ -489,7 +493,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-			<div class="box">
+			<div class="box <?php echo $disble_it;?>">
 			<table width="100%" border="0">
             <tbody>
               <tr>
@@ -503,7 +507,7 @@ function toggle(source) {
 					value=""
 					onChange="forCastedx()"  
 					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-					oninput="this.setCustomValidity('')"	 
+					oninput="this.setCustomValidity('')"	
 					> 
               </div>  
 				</td>
@@ -511,12 +515,12 @@ function toggle(source) {
               <tr>
                 <td>
 				<div id="forcastedDate">
-				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnownx()" <?php if(empty($date)){ echo "checked"; } ?> >
+				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnownx()" <?php if(empty($date)){ echo "checked"; } ?> onclick="this.checked = false;">
             <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label>
           </div>  
 				</td>
                 <td>
-					<input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager" <?php if($transProgMan != 0){ echo "checked"; } ?>>
+					<input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager" <?php if($transProgMan != 0){ echo "checked"; } ?> onclick="this.checked = false;">
 					<label for="TransfertoProgramManager">Transfer to Program Manager</label>  
 				</td>
                 <td>&nbsp;</td>
@@ -536,30 +540,30 @@ function toggle(source) {
           <td colspan="3" align="left"><h4 style="color: #00aaf5">RESPONSE STRATEGY</h4></td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><div class="box">
+          <td colspan="3" align="left"><div class="box <?php echo $disble_it;?>">
             <table width="246" border="0" cellpadding="5" cellspacing="5">
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required <?php if($responseStrategy2=="Avoid" ) { echo "checked";} ?>>
+                  <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required <?php if($responseStrategy2=="Avoid" ) { echo "checked";} ?> onclick="this.checked = false;">
                   Avoid</label></td>
                 </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required <?php if($responseStrategy2=="Mitigate" ) { echo "checked";} ?>>
+                  <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required <?php if($responseStrategy2=="Mitigate" ) { echo "checked";} ?> onclick="this.checked = false;">
                   Mitigate</label></td>
                 </tr>
               <tr>
                 <td width="16">&nbsp;</td>
                 <td width="195"><label>
-                  <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required <?php if($responseStrategy2=="Transfer" ) { echo "checked";} ?>>
+                  <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required <?php if($responseStrategy2=="Transfer" ) { echo "checked";} ?> onclick="this.checked = false;">
                   Transfer</label></td>
                 </tr>
               <tr>
                 <td>&nbsp;</td>
                 <td><label>
-                  <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required <?php if($responseStrategy2=="Accept" ) { echo "checked";} ?>>
+                  <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required <?php if($responseStrategy2=="Accept" ) { echo "checked";} ?> onclick="this.checked = false;">
                   Accept</label></td>
                 </tr>
             </table>
@@ -568,13 +572,13 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
           
-          <div class="box">  
+          <div class="box <?php echo $disble_it;?>">  
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
                 
                   <tr>
                     <td width="100%">
-                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+                          <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>  
                           <input type="hidden" name="user" value="<?php echo $user_id ?>">
                           <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
                     </td>
@@ -607,7 +611,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box">
+            <div class="box <?php echo $disble_it;?>">
               <table width="50%" border="0">
                 <tr>
                   <td colspan="2"><strong>Risk Realized?</strong></td>
@@ -629,7 +633,7 @@ function toggle(source) {
 			  </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box">
+            <div class="box <?php echo $disble_it;?>">
               <table width="50%" border="0">
                 <tr>
                   <td colspan="2"><strong>Notify Portfolio Team</strong></td>
@@ -651,7 +655,7 @@ function toggle(source) {
             </tr>
         <tr>
           <td colspan="3" align="left">
-          <div class="box">
+          <div class="box <?php echo $disble_it;?>">
             <table width="100%" border="0">
             <tbody>
               <tr>

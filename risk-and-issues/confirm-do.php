@@ -4,10 +4,15 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
-//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 
 session_start();
-$backhome = $_SESSION["homebase"];
+$backhome = "";
+if(isset($_SESSION["homebase"])) {
+    $backhome = $_SESSION["homebase"];
+}
+
+$project_nm ="";
 
     //DECLARE
     $changeLogKey = (int)$_POST['changeLogKey'];
@@ -46,7 +51,11 @@ $backhome = $_SESSION["homebase"];
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 
     $transfer2prgManager = (int)$_POST['transfer2prgManager'];
+
+    $groupID = NULL;
+    if($_POST['groupID'] != ""){
     $groupID = $_POST['groupID'];
+    }
 
     $riskProbability = NULL; // FOR RISK ONLY
     if(!empty($_POST['RiskProbability'])){
@@ -84,12 +93,19 @@ $backhome = $_SESSION["homebase"];
         $raidLog = 1;
     }
 
+    $portfolioType = $_POST['portfolioType'];
+    if ($_POST['portfolioType'] == ""){
+    $portfolioType = NULL;
+    }
+    $subprogram = $_POST['subprogram'];
+    $global = $_POST['global'];
+    $assCRID = $_POST['assCRID'];
+    $department = 1; //Temporary 8.17.22
+
     //print_r($_POST);
     //exit();
 
 //GET POC EMAIL 
-
-
 
 //LOOK UP KEY VALUES 
 // IMPACT AREA
@@ -129,6 +145,7 @@ $pocEmail = $row_poc ['POC_Email'];
     $SPCode = NULL ;
     $SPMessage = NULL ;
     $SPBatch_Id = NULL ;
+    $SPMaxRI_Id = NULL;
 
     $params = array(
         array($userId, SQLSRV_PARAM_IN),
@@ -161,16 +178,22 @@ $pocEmail = $row_poc ['POC_Email'];
         array($riskRealized, SQLSRV_PARAM_IN),
         array($raidLog, SQLSRV_PARAM_IN),
         array($groupID, SQLSRV_PARAM_IN),
+        array($global, SQLSRV_PARAM_IN),
+        array($subprogram, SQLSRV_PARAM_IN),
+        array($assCRID, SQLSRV_PARAM_IN),
+        array($department, SQLSRV_PARAM_IN),
+        array($portfolioType, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
-        array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
+        array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
+        array(&$SPMaxRI_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
         );
 
     //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
-    //echo json_encode($params);
+    echo json_encode($params);
     //exit();
 
    //EXECUTE PROCEDDURE
@@ -234,11 +257,27 @@ $pocEmail = $row_poc ['POC_Email'];
 
 //EXECUTE IF RI IS SUCCESSFULLY CREATED
     if($SPCode == 0) { 
-        echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPBatch_Id . '</div>
-        <br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>
-        ';
+        echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPMaxRI_Id . '</div><br>';
+
+        if(!empty($backhome) && $global != 1) {
+        echo '<div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
+        }
         
         //EMAIL PM AND RI CREATOR
+            //LINK PROGRAM OR PROJECT
+            if($riLevel == "Project"){
+                $link = "https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=";
+            } else {
+                $link = "https://catl0dwas10222.corp.cox.com/risk-and-issues/details-prg.php?au=true&rikey=";
+            }
+
+            //PROJECT NAME IN EMAIL LINK
+            if($project_nm != "") {
+                $prjnamelink = urlencode($project_nm);
+            } else {
+                $prjnamelink = "none";
+            }
+
             //DISTRO
             $to = $userEmail . "," . $pocEmail;
             $subject = $riLevel . " " .$riTypeCode . ' Created';
@@ -256,9 +295,10 @@ $pocEmail = $row_poc ['POC_Email'];
 
             // BUILD EMAIL BODY
             $message = "<p>A new " . $riLevel . " " .$riTypeCode . " has been created.  Below are the details.</p>";
+            $message .="<br><b>ID: </b>" . $SPMaxRI_Id;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
-            $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
+            $message .="<br><b>" . $riLevel . " Descriptor: </b>"; $message .= $descriptor ;
             $message .="<br><b>Description: </b>"; $message .= $description ;
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
@@ -269,6 +309,11 @@ $pocEmail = $row_poc ['POC_Email'];
             $message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
+            if($global == 1) {
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+            } else {
+                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
+            }
             
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
@@ -296,6 +341,7 @@ $pocEmail = $row_poc ['POC_Email'];
 
             // BUILD EMAIL BODY
             $message = "<p>A new " . $riLevel . " " .$riTypeCode . " has been flagged for RAID Log.</p>";
+            $message .="<br><b>ID: </b>" . $SPMaxRI_Id;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -309,7 +355,11 @@ $pocEmail = $row_poc ['POC_Email'];
             $message .="<br><b>Associated Projects: </b>"; $message .= $assocProject ;
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
-            
+            if($global == 1) {
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+            } else {
+                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
+            }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
                     //echo '<div align="center">An email was sent on your behalf to the RAID Log Admin.</div>';

@@ -104,6 +104,16 @@ $uaccess = $_GET['au'];
 $status = $_GET['status'];
 $department = $row_risk_issue['POC_Department'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
+$riskRealized_Raw = $row_risk_issue['RiskRealized_Flg'];
+
+if($riskRealized_Raw == 1){
+  $riskRealized = "Yes";
+} else {
+  $riskRealized = "No";
+}
+
+$link = urldecode("https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=false");
+echo $link; 
 ?>
 <!doctype html>
 <html>
@@ -146,6 +156,12 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
       <td width="20%">Type</td>
       <td><?php echo $RILevel . " " . $RIType; ?></td>
     </tr>
+<?php if(isset($_POST['CreatedFrom'])) { ?>
+    <tr>
+      <td>Created From</td>
+      <td><?php echo $createdFrom ; ?></td>
+    </tr>
+<?php } ?>
 <?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
@@ -254,6 +270,12 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
     </td>
     </tr>
 <?php } ?>
+<?php if($RIType == "Risk"){ ?>
+    <tr>
+      <td width="20%">Risk Realized</td>
+      <td><?php echo $riskRealized ; ?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td>Date Closed</td>
       <td>
@@ -294,7 +316,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
             %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject)?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-            " 
+            %0D%0ALink: <?php echo $link;?>"
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
         <?php } ?>
       <?php } ?>

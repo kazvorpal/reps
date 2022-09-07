@@ -7,7 +7,12 @@ include ("../sql/MS_Users_prg.php");
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
+
+$proj_name = "";
+if(!empty($_GET['proj_name'])){
 $proj_name = $_GET['proj_name'];
+}
+
 $prog_name = $_GET['program'];
 
 if(isset($_GET['uid'])) {
@@ -129,6 +134,14 @@ $assocProject = $row_risk_issue_assoc_proj['eps_projects'];
 $assocProjectcomma = str_replace("<br>", ",", $assocProject);
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $formaction =  "update"; 
+$asscCRKey = $row_risk_issue['AssociatedCR_Key'];
+$riskRealized_Raw = $row_risk_issue['RiskRealized_Flg'];
+
+if($riskRealized_Raw == 1){
+  $riskRealized = "Yes";
+} else {
+  $riskRealized = "No";
+}
 
 $formName = "PRGR";
 if($RIType == "Issue"){
@@ -146,6 +159,9 @@ $dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
 } else {
 $dateClosed = "---";
 }
+
+$link = urlencode("https://catl0dwas10222.corp.cox.com/risk-and-issues/details-prg.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&program=" . $prog_name . "&status=1&popup=false&uid=" . $uid);
+//echo $link;
 ?>
 <!doctype html>
 <html>
@@ -162,8 +178,8 @@ $dateClosed = "---";
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;" onload="copyDiv()">
-	<div align="center"><h3>PROGRAM "<?php echo strtoupper($prog_name) . '" ' .strtoupper($RIType) ?> DETAILS</h3></div>
-	<div align="center"><?php echo $name ?></div>
+	<div align="center"><h3>PROGRAM <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
+  <div align="center"><h4><?php echo $prog_name ?></h4></div>
 	<div style="padding: 10px" class="alert">  </div>
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
     
@@ -187,10 +203,16 @@ $dateClosed = "---";
       <td width="20%">Type</td>
       <td><?php echo $RILevel . " " . $RIType; ?></td>
     </tr>
-<?php if(isset($_POST['CreatedFrom'])) { ?>
+<?php if($RIType == "Risk"){ ?>
     <tr>
-      <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td width="20%">Risk Realized</td>
+      <td><?php echo $riskRealized ; ?></td>
+    </tr>
+<?php } ?>
+<?php if(!empty($asscCRKey)) { ?>
+    <tr>
+      <td>Associated CR ID</td>
+      <td><?php echo $asscCRKey ; ?></td>
     </tr>
 <?php } ?>
     <tr>
@@ -323,7 +345,7 @@ $dateClosed = "---";
       %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject);?>
       %0D%0AAction Plan: <?php echo $actionPlan;?>
       %0D%0ADate Closed: <?php echo $dateClosed;?>
-      " 
+      %0D%0ALink: <?php echo $link;?>" 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
     </div>
     <?php } ?>
