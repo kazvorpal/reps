@@ -36,7 +36,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Risk and Issues Update</title>
 </head>
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
@@ -130,14 +130,30 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <input name="programKeys" type="hidden" id="programKeys" value="<?php echo $programKeys ?>"> 
     <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>"> 
     <input name="del_proj_select" type="hidden" id="del_proj_select" value="<?php echo $del_proj_select ?>"> 
+    <input name="project_nm" type="hidden" id="project_nm" value="<?php echo $project_nm ?>"> 
+    <input name="assCRID" type="hidden" id="assCRID" value="<?php echo $assCRID?>"> 
+    <input name="global" type="hidden" id="global" value="<?php echo $global?>"> 
+    <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
+    <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $portfolioType_Key?>"> 
 
- <?php if($DateClosed != "") { ?>
+
+<?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
     <div align="left">
-      <span class="glyphicon glyphicon-warning-sign"></span> Your are about to close this Risk/Issue.  If you entered a Closing Date unintentionally, use the back button and remove the close date.
+      <span class="glyphicon glyphicon-warning-sign"></span> 
+      You are about to CLOSE this Program Risk/Issue.  If you do not intend to close it, please use the Edit button at the bottom of the page and clear the Date Closed.
     </div>
   </div>
-  <?php } ?>
+<?php } ?>
+
+<?php if($changeLogKey == 5 && $delete == 1) { ?>
+  <div class="alert alert-danger">
+    <div align="left">
+      <span class="glyphicon glyphicon-warning-sign"></span> 
+      Project(s) selected for removal will have their associated risks/issues deleted. If removal of this project association was unintentional, do NOT submit this form.
+    </div>
+  </div>
+<?php } ?>
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
@@ -147,26 +163,36 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     </tr>
 </thead>
   <tbody>
+  <tr>
+      <td width="20%">ID</td>
+      <td><?php echo $RiskAndIssue_Key ?></td>
+    </tr>  
+  <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
     </tr>
     <tr>
       <td width="20%">Type</td>
-      <td><?php echo $RILevel . " " . $RIType; ?></td>
+      <td><?php echo ucfirst($RILevel) . " " . ucfirst($RIType); ?></td>
     </tr>
-<!--<?php if(isset($_POST['CreatedFrom'])) { ?>
+<?php if(!empty($_POST['assCRID'])) { ?>
     <tr>
-      <td>Created From</td>
-      <td><?php //echo $createdFrom ; ?></td>
+      <td>Associated CR ID</td>
+      <td><?php echo $assCRID; ?></td>
     </tr>
-<?php } ?>-->
+<?php } ?>
 <?php if(!empty($program)) { ?>
     <tr>
       <td>Program</td>
-      <td><?php echo $program ; ?></td>
+      <td><?php if($global==1){echo $program_glb;} else { echo $Program; }?></td>
     </tr>
 <?php } ?>
+<?php if(!empty($subprogram)) { ?>
     <tr>
+      <td>Subprograms</td>
+      <td><?php if($global==1){echo $subprogram_glb;} else { echo $subprogram; }?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td>Descriptor</td>
       <td><?php echo $descriptor ; ?></td>
@@ -178,14 +204,14 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 <?php if(!empty($region_conx)){ ?>
     <tr>
       <td>Region</td>
-      <td><?php //echo $region_conx; ?><?php echo str_replace(",", "<br>", $region) ?></td>
+      <td><?php if($global==1){echo $region_glb;} else { echo str_replace(",", "<br>", $region); }?></td>
     </tr>
 <?php } ?>
     <tr>
     <tr>
       <td>Drivers</td>
       <td>
-      <?php while ($row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_driver['Driver_Nm'] . '<br>'; } ?>
+        <?php if($global==1){echo $Drivers_glb;} else { echo $Driversx; }?>
       </td>
     </tr>
     <tr>
@@ -239,13 +265,14 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     </td>
     </tr>
 <?php } ?>
+<?php if($global == "0") { ?>
 <?php if($_POST['formaction'] == "update") { ?>
     <tr>
       <td>Associated Projects</td>
       <td><?php echo str_replace(",", "<br>", $_POST['assocProjects']); ?>
     </td>
     </tr>
-<?php } ?>
+<?php } }?>
     <tr>
       <td>Associated Risk/Issue</td>
       <td>
@@ -263,14 +290,13 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
       <td><?php echo $raidLog; ?>
     </td>
     </tr>
-<!--<?php if($RIType == "Risk") { ?>
+<?php if($RIType == "Risk") { ?>
     <tr>
       <td>Risk Realized</td>
       <td><?php if($riskRealized == 0) { echo "No";} else { echo "Yes";} ?>
     </td>
     </tr>
-<?php } ?> -->
-
+<?php } ?>
     <tr>
       <td>Date Closed</td>
       <td>

@@ -14,14 +14,14 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
                 $ri_proj_nm = $_GET['proj_nm'];
 								
 								//OPEN PROGRAM RISK AND ISSUES 	
-								$sql_risk_issue = "select distinct ProgramRI_key, RI_Nm, ImpactLevel_Nm, Last_Update_Ts, RIDescription_Txt, RiskAndIssue_Key, RIType_Cd
+								$sql_risk_issue = "select distinct Global_Flg, ProgramRI_key, RI_Nm, ImpactLevel_Nm, Last_Update_Ts, RIDescription_Txt, RiskAndIssue_Key, RIType_Cd
                                     from
                                     (select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForMLMProgram] ($ri_fscl_yr,'$ri_program')
                                     ) a
                                     Where Region_Cd='$ri_region'
                                     ORDER BY RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
-                //echo $sql_risk_issue;
+                $sql_risk_issue;
 
                 //CLOSED PROGRAM RISK AND ISSUES
                 $sql_risk_issue_cls = "select distinct RI_Nm, RIType_Cd,RIDescription_Txt, RIClosed_Dt, Last_Update_Ts, RiskAndIssue_Key
@@ -127,6 +127,7 @@ $(document).ready(function(){
 <body style="font-family:Mulish, serif;">
 <?php // echo $ri_program . '</br>' . $ri_region ?>
 <h3 align="center">PROGRAM RISKS & ISSUES</h3>
+<h4 align="center"><?php echo $ri_program?></h4>
 <!-- DEBUG USERS -->
 <!-- <div align="center" class="alert alert-success" style="font-size:10px;">
 Logged in as: <?php echo $authUser; ?><br>
@@ -175,12 +176,22 @@ Program Manager is: <?php echo $alias; ?>
       <td><?php echo date_format($row_risk_issue['Last_Update_Ts'], 'm-d-Y'); ?></td>
       <td align="center"><a href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a></td>
       <?php if($alias == $authUser){ ?> 
-      <td align="center">
-        <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=<?php echo $ri_program;?>&prg_nm=<?php echo $ri_program;?>&progRIKey=<?php echo $row_risk_issue['ProgramRI_key'];?>&fiscal_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="glyphicon glyphicon-edit"></span></a>   
-      </td>
+        <td align="center">
+        <?php if($row_risk_issue['Global_Flg'] == 0) { ?>
+          <a title="Add/Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=<?php echo $ri_program;?>&prg_nm=<?php echo $ri_program;?>&progRIKey=<?php echo $row_risk_issue['ProgramRI_key'];?>&fiscal_year=<?php echo $ri_fscl_yr;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $ri_proj_nm;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="glyphicon glyphicon-edit"></span></a>   
+        <?php } else { ?>
+          <span class="glyphicon glyphicon-edit" style="color:#ECECEC;">
+        <?php } ?>
+        </td>
       <?php } ?>
-      <td align="center"><a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&program=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a></td>
-  </tr>
+      <td align="center">
+      <?php if($row_risk_issue['Global_Flg'] == 0) { ?>
+          <a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&program=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a>
+        <?php } else { ?>
+          <a href="risk-and-issues/global-program/details.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></a>
+        <?php } ?>
+      </td>
+    </tr>
     <?php } ?>
   </tbody>
 </table>

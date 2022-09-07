@@ -9,7 +9,7 @@ include("../sql/risk-issues-lookup.php");
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Confirm Risk/Issue</title>
 </head>
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
@@ -92,6 +92,12 @@ include("../sql/risk-issues-lookup.php");
     <input name="raidLog" type="hidden" id="raidLog" value="<?php echo $raidLog ?>">
     <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>">
     <input name="groupID" type="hidden" id="groupID" value="<?php echo $groupID ?>">
+    <input name="assCRID" type="hidden" id="assCRID" value="<?php echo $assCRID?>"> 
+<!-- new for global portfolio/program-->
+    <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $portfolioType?>"> 
+    <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
+    <input name="global" type="hidden" id="global" value="<?php echo $global?>"> 
+
     
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
@@ -107,21 +113,45 @@ include("../sql/risk-issues-lookup.php");
     </tr>
     <tr>
       <td width="20%">Type</td>
-      <td><?php echo $RILevel . " " . $RIType; ?></td>
+      <td><?php echo ucfirst($RILevel) . " " . ucfirst($RIType); ?></td>
     </tr>
-<!--<?php if(isset($_POST['CreatedFrom'])) { ?>
+<?php if($portfolioType != "") { ?>
     <tr>
-      <td>Created From</td>
-      <td><?php //echo $createdFrom ; ?></td>
+      <td>Portfolio</td>
+      <td><?php echo $portfolio_Nm; ?></td>
     </tr>
-<?php } ?>-->
+<?php } ?>
+<?php if(!empty($_POST['assCRID'])) { ?>
+    <tr>
+      <td>Associated CR ID</td>
+      <td><?php echo $assCRID; ?></td>
+    </tr>
+<?php } ?>
 <?php if(!empty($program)) { ?>
     <tr>
       <td>Program</td>
       <td><?php echo $program ; ?></td>
     </tr>
+<?php } else { ?>
+  <tr>
+      <td>Program</td>
+      <td><?php echo $programs ; ?></td>
+    </tr>
 <?php } ?>
+
+<?php if(!empty($subprogram) && $global != 1) { ?>
     <tr>
+      <td>Subprogram</td>
+      <td><?php echo $subprogram ; ?></td>
+    </tr>
+<?php } ?>
+<?php if($global == 1 && $RILevel != "Portfolio") { ?>
+    <tr>
+      <td>Subprogram</td>
+      <td><?php echo $subprogram_glb ; ?></td>
+    </tr>
+<?php } ?>
+
     <tr>
       <td>Descriptor</td>
       <td><?php echo $descriptor ; ?></td>
@@ -192,11 +222,13 @@ include("../sql/risk-issues-lookup.php");
     </td>
     </tr>
 <?php } ?>
+<?php if(!isset($_POST['global'])) { ?>
     <tr>
       <td>Associated Projects</td>
       <td><?php echo $assocProject_dsply; ?>
     </td>
     </tr>
+    <?php } ?>
     <tr>
       <td>Action Plan</td>
       <td><?php echo $actionPlan; ?>
@@ -206,6 +238,13 @@ include("../sql/risk-issues-lookup.php");
     <tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?>
+    </td>
+    </tr>
+<?php } ?>
+<?php if($RIType == "Risk") { ?>
+    <tr>
+      <td>Risk Realized</td>
+      <td><?php if($riskRealized == 0) { echo "No";} else { echo "Yes";} ?>
     </td>
     </tr>
 <?php } ?>

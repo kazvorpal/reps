@@ -23,7 +23,7 @@ if(empty($row_glb_prog)){
 //DELARE
 $RiskAndIssueLog_Key = $row_glb_prog['RiskAndIssueLog_Key'];
 
-$RILevel_Cd = $row_glb_prog['RILevel_Cd'];
+$RILevel_Cd = $row_glb_prog['RILevel_Cd']; 
 $RIPortfolio_Key = $row_glb_prog['PortfolioType_Key']; 
 $RIType_Cd = $row_glb_prog['RIType_Cd'];
 
@@ -44,7 +44,7 @@ $Drivers = "";//NEED THE DRIVERS
 
 $POC_Nm = $row_glb_prog['POC_Nm'];
 $POC_Department = $row_glb_prog['POC_Department'];
-$ForecastedResolution_Dt = $row_glb_prog['ForecastedResolution_Dt'];
+$ForecastedResolution_Dt = $row_glb_prog['ForecastedResolution_Dt']; //echo $ForecastedResolution_Dt;
 $ResponseStrategy_Cd = $row_glb_prog['ResponseStrategy_Cd'];
 
 $ActionPlanStatus_Cd = $row_glb_prog['ActionPlanStatus_Cd'];
@@ -59,7 +59,7 @@ $global = 1;
 $createDT = date_format($row_glb_prog['Created_Ts'],'Y-m-d');
 
 if(!empty($row_glb_prog['ForecastedResolution_Dt'])) {
-  $forecastMin = date_format($date, "Y-m-d");
+  $forecastMin = date_format($ForecastedResolution_Dt, "Y-m-d");
 } else {
   $forecastMin = $closeDateMax;
 }
@@ -80,15 +80,15 @@ if($RILevel_Cd == "Program") {
   //echo "<br>" . $sql_prog . "NO";
 }
 
-//PROGRAM FROM RIKEY
+//PROGRAM FROM RIKEY (ARRAY)
 $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
     SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
-    FROM [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] ($ri_id)
+    FROM [RI_MGT].[fn_GetListOfProgramsForRI_Key] ($ri_id,1)
     SELECT @PROG_IDs AS Program_Key";
 $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
 $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
 $Programkeys = $row_rikey_prg['Program_Key'];
-$Program_Key = explode(",", $Programkeys);
+$Program_Key = explode(",", $Programkeys); 
 
 //SUBPROGRAM 
 $sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where Program_Nm = '$MLMProgram_Nm' and LRPYear = $Fiscal_Year";
@@ -204,7 +204,11 @@ function toggle(source) {
 
 </head>
 <body style=" font-family:Mulish, serif;">
-<?php include ("../../includes/menu.php");?>
+<?php 
+  if($global != 1) {
+    include ("../../includes/menu.php");
+  } 
+?>
 <main align="center">
   <!-- PROGRESS BAR -->
   <div class="container">       
