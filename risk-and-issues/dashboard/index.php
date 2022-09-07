@@ -394,6 +394,7 @@
         let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
         document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
         const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "" : "";
+        console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "]")
         // console.log("arrow");
         // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"']");
         const c = (arrow == "") ? "plainbox" : "namebox";

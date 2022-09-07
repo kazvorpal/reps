@@ -10,11 +10,17 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   const makeelement = (o) => {
 
     // o is an (o)bject with these optional properties:
-    // o.e is the (e)lement, like "td" or "tr"
     // o.c is the (i)d
+    // o.e is the (e)lement, like "td" or "tr"
+    // o.n is the (n)ame of the element
     // o.c is the (c)lasses, separated by spaces like usual
-    // o.t is the innerHTML (t)ext
+    // o.t is the innerHTML (t)ext or such
     // o.s is the col(s)pan
+    // o.w is the (w)idth
+    // o.m is whether it's (m)ulti or the like
+    // o.m is any necessary (v)alue, like input.value
+    // o.j is onclick event code in (j)avascript ((c)lick or at least (e)vent was taken)
+    // o.d is (d)efault, or selected, or checked
 
     const t = document.createElement(o.e);
     t.id = (typeof o.i == "undefined") ? "" : o.i;
@@ -25,6 +31,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
     t.multiple = (typeof o.m == "undefined") ? "" : o.m;
     t.value = (typeof o.v == "undefined") ? "" : o.v;
+    t.selected = (typeof o.d == "undefined") ? "" : o.d;
     if (typeof o.j != "undefined") {
       t.onclick = o.j;
     }
