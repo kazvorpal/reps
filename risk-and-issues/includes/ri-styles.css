@@ -1,20 +1,33 @@
 .box {
-border: 1px solid #BCBCBC;
-	  background-color: #ffffff;
-border-radius: 5px;
-padding: 5px;
+    border: 1px solid #BCBCBC;
+        background-color: #ffffff;
+    border-radius: 5px;
+    padding: 5px;
 }
 .finePrint {
-font-size: 9px;  
-color: red;
+    font-size: 9px;  
+    color: red;
 }
 /* To change position of close button to Top Right Corner */
 #colorbox #cboxClose
 {
-top: 0;
-right: 0;
+    top: 0;
+    right: 0;
 }
 #cboxLoadedContent{
-margin-top:28px;
-margin-bottom:0;
+    margin-top:28px;
+    margin-bottom:0;
+}
+.disable {
+    pointer-events: none;
+}
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+}
+.equal {  
+    display: -webkit-flex;
+    display: flex;
 }

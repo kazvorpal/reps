@@ -2,7 +2,8 @@
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
-include("../sql/risk-issues-lookup.php");
+include ("../sql/risk-issues-lookup.php");
+include ("../sql/update-time.php");
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 ?>
 <!doctype html>
@@ -21,6 +22,7 @@ include("../sql/risk-issues-lookup.php");
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
 
 <body style="font-family:Mulish, serif;">
+<?php if($global == 1) { include ("../includes/menu.php"); }?>
     <!-- PROGRESS BAR -->
 <div class="container">       
             <div class="row bs-wizard" style="border-bottom:0;">
@@ -179,6 +181,12 @@ include("../sql/risk-issues-lookup.php");
       <td>Impact Level</td>
       <td><?php echo $impactLevel2; ?></td>
     </tr>
+<?php if(!empty($riskProbability)) { ?>
+    <tr>
+      <td>Risk Probability</td>
+      <td><?php echo $riskProbability2; ?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td>Individual POC</td>
       <td><?php echo $individual; ?></td>

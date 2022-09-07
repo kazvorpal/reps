@@ -1,7 +1,7 @@
 <?php 
 // DECLARE
 //4 update, 3 close, 2 create/add, 1 initialize, 5 delete
-echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 //exit();
 
 // Posted Values
@@ -192,9 +192,9 @@ $opportunity = "";
     $opportunity = $_POST['opportunity'];
   }
 
-$transfer2prgManager = "";
-  if(isset($_POST['TransfertoProgramManager'])) { 
-      $transfer2prgManager = $_POST['TransfertoProgramManager'];
+$transfer2prgManager = "off";
+  if($_POST['TransfertoProgramManager'] == "on") {
+    $transfer2prgManager = 1;
   }
 
 // Hidden Values
@@ -281,7 +281,7 @@ $del_proj_select = $_POST['del_proj_select'];
 //echo $DateClosed;
 
 // LOOKUP KEY VALUES 
-// IMPACT AREA
+//IMPACT AREA
 $sql_imp_area = "SELECT* FROM RI_MGT.Impact_Area WHERE ImpactArea_Key = $impactArea";
 $stmt_imp_area  = sqlsrv_query( $data_conn, $sql_imp_area  ); 
 $row_imp_area  = sqlsrv_fetch_array( $stmt_imp_area , SQLSRV_FETCH_ASSOC);
@@ -293,6 +293,11 @@ $stmt_imp_lvl = sqlsrv_query( $data_conn, $sql_imp_lvl );
 $row_imp_lvl = sqlsrv_fetch_array( $stmt_imp_lvl, SQLSRV_FETCH_ASSOC);
 $impactLevel2 = $row_imp_lvl['ImpactLevel_Nm'];
 
+//RISK PROBABILITY
+$sql_prob = "SELECT * FROM [RI_MGT].[Risk_Probability] WHERE RiskProbability_Key = $riskProbability";
+$stmt_prob = sqlsrv_query( $data_conn, $sql_prob );  
+$row_prob = sqlsrv_fetch_array( $stmt_prob, SQLSRV_FETCH_ASSOC);
+$riskProbability2 = $row_prob['RiskProbability_Nm'];
 
 //RESPONSE STRATIGY
 $sql_resp_strg = "SELECT* FROM RI_MGT.Response_Strategy WHERE ResponseStrategy_Key = $responseStrategy";

@@ -630,7 +630,7 @@ function toggle(source) {
           </td>
           <td align="left" valign="top" style="padding-left: 10px">
             <div class="box">
-              <label for="Created From">Associated CR ID</label> (Numbers Only)
+              <label for="Created From">Associated CR ID</label>
               <input name="assCRID" type="text" class="form-control" id="assCRID">
             </div>
           </td>

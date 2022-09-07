@@ -366,7 +366,7 @@ function toggle(source) {
     </div>
   </div>
   <!--ROW 5 | IMPACT -->
-  <div class="row row-eq-height">
+  <div class="row equal">
     <div class="col-md-12" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -438,11 +438,11 @@ function toggle(source) {
     </div>
   </div>
   <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATIGY -->
-  <div class="row row-eq-height">
+  <div class="row equal">
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">CURRENT TASK POC (Send Dept. Key)</h3>
+          <h3 class="panel-title">CURRENT TASK POC</h3>
         </div>
         <div class="panel-body">
           <label for="Individual">Individual POC *<br></label>
@@ -452,6 +452,7 @@ function toggle(source) {
                   <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
                 <?php } ?>
               </datalist>
+          <hr>
           <label for="Individual3">Team/Group POC *<br></label>
             <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required/>
         </div>
@@ -480,7 +481,14 @@ function toggle(source) {
                     name="Unknown" 
                     id="Unknown" 
                     onChange="unKnownX()">
-                <label for="Unknown">Unknown</label> - Overrides Resolution Date
+                <label for="Unknown"> Unknown</label> - Overrides Resolution Date
+          </div>
+        <hr>
+          <div id="trans2prgman">
+                <input type="checkbox" 
+                    name="TransfertoProgramManager" 
+                    id="TransfertoProgramManager">
+                <label for="TransfertoProgramManager"> Transfer to Program Manager</label>
           </div>
         </div>
       </div>
@@ -488,7 +496,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RESPONSE STRATIGY</h3>
+          <h3 class="panel-title">RESPONSE STRATEGY</h3>
         </div>
         <div class="panel-body">
           <table width="246" border="0" cellpadding="5" cellspacing="5">
@@ -545,10 +553,10 @@ function toggle(source) {
           <table width="50%" border="0">
             <tr>
               <td><label>
-                  <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0">
+                  <input type="radio" name="riskRealized" value="1" id="RiskRelized_0">
                   Yes</label></td>
               <td><label>
-                  <input type="radio" name="riskRealized" value="No" id="RiskRelized_1" checked>
+                  <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" checked>
                   No</label></td>
             </tr>
           </table>

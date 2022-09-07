@@ -105,6 +105,7 @@ $status = $_GET['status'];
 $department = $row_risk_issue['POC_Department'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized_Raw = $row_risk_issue['RiskRealized_Flg'];
+$crid = $row_risk_issue['AssociatedCR_Key'];
 
 if($riskRealized_Raw == 1){
   $riskRealized = "Yes";
@@ -113,7 +114,7 @@ if($riskRealized_Raw == 1){
 }
 
 $link = urldecode("https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=false");
-echo $link; 
+//echo $link; 
 ?>
 <!doctype html>
 <html>
@@ -143,8 +144,8 @@ echo $link;
       <th>Value</th>
     </tr>
 </thead>
-  <tbody>
-    <tr>
+  <tbody>  
+  <tr>
       <td width="20%">ID</td>
       <td><?php echo $ri_id; ?></td>
     </tr>
@@ -152,6 +153,12 @@ echo $link;
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
     </tr>
+<?php if(!empty($crid)){ ?>
+    <tr>
+      <td width="20%">Associated CR ID</td>
+      <td><?php echo $crid; ?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td width="20%">Type</td>
       <td><?php echo $RILevel . " " . $RIType; ?></td>
@@ -297,7 +304,7 @@ echo $link;
       <?php } ?>
         <?php if($access=="true"){?>  
           <?php if($status == 1){ ?>
-            <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+            <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo urlencode($name)?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
             %0D%0AID: <?php echo $ri_id;?>

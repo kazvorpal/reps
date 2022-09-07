@@ -45,6 +45,7 @@ $Drivers = "";//NEED THE DRIVERS
 $POC_Nm = $row_glb_prog['POC_Nm'];
 $POC_Department = $row_glb_prog['POC_Department'];
 $ForecastedResolution_Dt = $row_glb_prog['ForecastedResolution_Dt']; //echo $ForecastedResolution_Dt;
+$transfer2prgManager = $row_glb_prog['TransferredPM_Flg']; 
 $ResponseStrategy_Cd = $row_glb_prog['ResponseStrategy_Cd'];
 
 $ActionPlanStatus_Cd = $row_glb_prog['ActionPlanStatus_Cd'];
@@ -71,24 +72,36 @@ if($RILevel_Cd == "Program") {
   //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
   // $row_prog['Program_Nm'];
   //echo "<br>" . $sql_prog . "HERE";
+
+  //PROGRAM FROM RIKEY (ARRAY)(0 Non Global or 1 Global )
+  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
+  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
+  FROM [RI_MGT].[fn_GetListOfProgramsForRI_Key] ($ri_id, 1) 
+  SELECT @PROG_IDs AS Program_Key";
+  $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
+  $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
+  $Programkeys = $row_rikey_prg['Program_Key'];
+  $Program_Key = explode(",", $Programkeys); 
+
 } else { 
+
   //PROGRAM FOR PORTFOLIO RI (MULTIPUL PROGRAMS)
   $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
   $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
   //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
   // $row_prog['Program_Nm'];
   //echo "<br>" . $sql_prog . "NO";
-}
 
-//PROGRAM FROM RIKEY (ARRAY)
-$sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
-    SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
-    FROM [RI_MGT].[fn_GetListOfProgramsForRI_Key] ($ri_id,1)
-    SELECT @PROG_IDs AS Program_Key";
-$stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
-$row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
-$Programkeys = $row_rikey_prg['Program_Key'];
-$Program_Key = explode(",", $Programkeys); 
+  //PROGRAM FROM PORTFOLIO RIKEY (ARRAY)(0 Non Global or 1 Global )
+  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
+  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
+  FROM [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] ($ri_id) 
+  SELECT @PROG_IDs AS Program_Key";
+  $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
+  $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
+  $Programkeys = $row_rikey_prg['Program_Key'];
+  $Program_Key = explode(",", $Programkeys); 
+}
 
 //SUBPROGRAM 
 $sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where Program_Nm = '$MLMProgram_Nm' and LRPYear = $Fiscal_Year";
@@ -250,7 +263,6 @@ function toggle(source) {
   <input name="formName" type="hidden" id="formName" value="PRGR"> <!--this needs to be prgi or prgr-->
   <input name="formType" type="hidden" id="formType" value="Update">
   <input name="CreatedFrom" type="hidden" id="Created From" value="">
-  <input name="TransfertoProgramManager" type="hidden" id="Created From" value="0">
   <input name="RIName" type="hidden" id="RIName" value="">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
@@ -535,7 +547,7 @@ function toggle(source) {
     </div>
   </div>
   <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATIGY -->
-  <div class="row row-eq-height">
+  <div class="row equal">
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -580,6 +592,15 @@ function toggle(source) {
                     <?php if(empty($ForecastedResolution_Dt)){ echo "checked";} ?>
                 >
                 <label for="Unknown">Unknown</label> - Overrides Resolution Date
+          </div>
+          <hr>
+          <div id="trans2prgman">
+                <input type="checkbox" 
+                    name="TransfertoProgramManager" 
+                    id="TransfertoProgramManager"
+                    <?php if($transfer2prgManager == 1){ echo "checked";} ?>
+                    >
+                <label for="TransfertoProgramManager"> Transfer to Program Manager</label>
           </div>
         </div>
       </div>

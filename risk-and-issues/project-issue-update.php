@@ -75,6 +75,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
 $department = $row_risk_issue['POC_Department'];
 $add_proj_select = NULL;
 $createDT = date_format($row_ri_createDT['Created_Ts'],'Y-m-d'); // server on UTC time zone; need to get user time zone then set date - echo date_default_timezone_get();
+$assCRID = $row_risk_issue['AssociatedCR_Key'];
 
 if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
   $forecastMin = date_format($date, "Y-m-d");
@@ -609,7 +610,7 @@ function toggle(source) {
         <tr>
           <td colspan="3">
             <div class="box">
-              <input type="text" name="assCRID" class="form-control">
+              <input type="text" name="assCRID" class="form-control" value="<?php echo $assCRID; ?>">
             </div>
           </td>
         </tr>
