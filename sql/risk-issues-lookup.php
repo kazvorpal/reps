@@ -180,12 +180,18 @@ $individual = "";
     $pocFlag = 1;
   }
 
+//DEPARTMENT ($internalExternal) GET DEPARTMENT FROM POC NAME ($individual)
 $internalExternal = "";
-  if(isset($_POST['InternalExternal'])) {
-    $internalExternal = $_POST['InternalExternal']; 
-    $pocFlag = 0;
-  }
-//END
+
+$sql_dept = "select * from [RI_MGT].[fn_GetListOfCurrentTaskPOC] (1) WHERE POC_Nm = '$individual' ";
+$stmt_dept = sqlsrv_query( $data_conn, $sql_dept );
+$row_dept = sqlsrv_fetch_array($stmt_dept, SQLSRV_FETCH_ASSOC);
+
+if($row_dept != "" ) {
+  $internalExternal= $row_dept['POC_Department'];
+}
+
+$pocFlag = 0;
 
 $opportunity = "";
   if (!empty($_POST['opportunity'])){
@@ -248,7 +254,7 @@ if (($changeLogKey == 4 && $global !=1) || ($changeLogKey == 3 && $global !=1)){
   $assocProjectsKeys = $_POST['assocProjectsKeys'];
 }
 
-//POC STUFF
+//POC STUFF <DEAD/REMOVE>
 if ($individual == "") {
   $poc = $internalExternal;
 } else {
@@ -338,7 +344,7 @@ if($global == 1 && $formType == "Update") {
     $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
     $region_glb = $row_regions['Region_Cd'];
 
-    //SUBPROGRAMS FOR GLOBAL
+  //SUBPROGRAMS FOR GLOBAL
     $sql_subprg = "DECLARE @SUBP_IDs VARCHAR(100)
       SELECT @SUBP_IDs = COALESCE(@SUBP_IDs+'</BR>','')+ CAST(SubProgram_Nm AS VARCHAR(100))
       FROM mlm.fn_getlistofsubprogramforprogram(-1) WHERE SubProgram_Key IN ($global_subprg) AND Program_Key = $global_prg

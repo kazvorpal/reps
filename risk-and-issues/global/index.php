@@ -438,23 +438,29 @@ function toggle(source) {
     </div>
   </div>
   <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATIGY -->
-  <div class="row equal">
+  <div class="row eq-height">
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">CURRENT TASK POC</h3>
         </div>
         <div class="panel-body">
+
           <label for="Individual">Individual POC *<br></label>
-            <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required/>
-              <datalist id="Individual">
+            <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+              
                 <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
+                  <option value=""></option>
+                  <option value="<?php echo $row_internal['POC_Nm'] ;?>"><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                 <?php } ?>
-              </datalist>
-          <hr>
+            </select>  
+            <hr>
+            <div align="center">
+            <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
+            </div>
+            <!--<hr>
           <label for="Individual3">Team/Group POC *<br></label>
-            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" readonly/>
+            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" readonly/>-->
         </div>
       </div>
     </div>
