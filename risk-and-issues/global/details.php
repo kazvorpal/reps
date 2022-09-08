@@ -219,7 +219,7 @@ if($riskRealized_Raw == 1){
 
         <div class="collapse" id="collapseExample">
           <div class="well">
-          <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+          <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
           </div>
         </div>
 
@@ -283,7 +283,7 @@ if($riskRealized_Raw == 1){
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-            %0D%0ALink: <?php echo "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $ri_id;?>
+            %0D%0ALink: <?php echo "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $ri_id;?>
             " 
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
             <?php// } ?>

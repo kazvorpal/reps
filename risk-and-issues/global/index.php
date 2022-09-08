@@ -454,7 +454,7 @@ function toggle(source) {
               </datalist>
           <hr>
           <label for="Individual3">Team/Group POC *<br></label>
-            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required/>
+            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" readonly/>
         </div>
       </div>
     </div>

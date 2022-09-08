@@ -27,9 +27,10 @@ $sql_region_drop = "SELECT [Region]
 						GROUP BY [Region]
 						ORDER BY [Region]";
 $stmt_region_drop = sqlsrv_query( $db_uni, $sql_region_drop );
+//echo $sql_region_drop;
 
 // market_drop
-// echo $row_market_drop['id'];
+//echo $sql_region_drop;
 
 $sql_market_drop = "SELECT [Market]
 						FROM [EPS].[fn_GetListOfProjectStageWithCriteria]('$fiscal_year_d','Active','$program_d','$region','$market','$owner','$subprogram','$facility')
