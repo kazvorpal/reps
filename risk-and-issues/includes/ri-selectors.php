@@ -80,6 +80,17 @@ const jq = `
 </style>
 <script type="text/javascript">
   //PHP Notice: Trying to access array offset on value of type null in C:\inetpub\wwwroot\includes\menu.php on line 79 PHP Warning: date_format() expects parameter 1 to be DateTimeInterface, null given in C:\inetpub\wwwroot\includes\menu.php on line 79
+
+  var subp = [];
+  for (item in p4plist) {
+    // console.log(item)
+    p4plist[item].forEach(e => {
+      if (!subp.includes(e.Subprogram_nm)) {
+        subp.push(e.Subprogram_nm);
+      }
+    })
+  }
+
   const makeselect = (o) => {
     const td = makeelement({e: "div", c: "filtercol", t: o.t});
     const select = makeelement(o);
@@ -89,7 +100,7 @@ const jq = `
     } else if (o.i == "category") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
       select.appendChild(makeelement({e: "option", v: 0, t: "No Project Association"}));
-    } else if (o.i == "program") {
+    } else if (o.i == "program" || o.i == "subprogram") {
       for (option in o.l) 
         if(o.l[option] != ""&& o.l[option] != null)
           select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
@@ -124,6 +135,7 @@ const jq = `
     }
     makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", e: "select", c: "form-control", m: "multiple"});
     makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", e: "select", c: "form-control", m: "multiple"});
+    makeselect({l: subp, f: "Subprogram_Nm", i: "subprogram", n: "subprogram", t: "Subprogram<br/>", e: "select", c: "form-control", m: "multiple"});
     if (mode == "project") {
       makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
       makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", e: "select", c: "form-control", m: "multiple"});
@@ -149,6 +161,7 @@ const jq = `
   makefilters();
 
   const dofilters = () => {
+    document.getElementById("fiscal_year").value = new Date().getFullYear();
     $('#fiscal_year').multiselect({
           includeSelectAllOption: true,
         });
@@ -189,7 +202,6 @@ const jq = `
       return false;
     }  
   }
-  
 </script>
 <script language="javascript">
 	$(document).ready(function() {

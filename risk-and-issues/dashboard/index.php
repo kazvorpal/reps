@@ -50,9 +50,16 @@
     }
 
     for (key in portfolioopen) {
-        let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
-        portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nm;
-        portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
+      let ps = "";
+      for (lokey in portfolioprograms) {
+        if (portfolioprograms[lokey].RiskAndIssue_Key == portfolioopen[key].RiskAndIssue_Key) {
+          ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
+        }
+        portfolioopen[key].MLMProgram_Nm = ps;
+      }
+      let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
+        portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nmg;
+      portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
     }    
     const portfolioclosed = portfoliofull = portfolioopen;
 
@@ -371,9 +378,9 @@
             let list = "";
             let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             if (prog != undefined) {
-            for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
-                list += r.Subprogram_nm + ", ";
-            } 
+              for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
+                  list += r.Subprogram_nm + ", ";
+              } 
             }
             return (list != "") ? list.slice(0, -2) : "";
         },
@@ -432,7 +439,7 @@
         if(arrow != "") {
         // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "']");
         // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]);
-        makeprojects(p4pslist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
+        makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
             }
         }
     }    
