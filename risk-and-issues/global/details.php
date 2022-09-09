@@ -266,7 +266,7 @@ if($riskRealized_Raw == 1){
 
         <?php// if($access=="true"){?>  
             <?php// if($status == 1){ ?>
-            <a href="../global-program/update.php?&id=<?php echo $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+            <a href="../global/update.php?&id=<?php echo $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
             %0D%0AID: <?php echo $ri_id;?>
