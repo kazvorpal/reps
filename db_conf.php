@@ -7,6 +7,8 @@ $db_qa = "CATL0QWDB10005\EMOQA";
 $db_nm0 = 'Cox_Dev';  
 $db_nm1 = 'ODS';  
 $db_nm3 = 'COX_QA';  
+$db_nm4 = 'COX_UAT';
+
 
 //PROD EMO
 $db_prd = "CATL0DB723\EMO";
