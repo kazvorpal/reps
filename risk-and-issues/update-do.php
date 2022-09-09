@@ -361,7 +361,7 @@ $backhome = $_SESSION["homebase"];
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $riKeys;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=" . $riKeys ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
             }

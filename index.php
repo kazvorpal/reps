@@ -117,7 +117,7 @@
 		<td colspan="2">
 			<img src="images/UP_15.jpg" width="136" height="92" alt=""></td>
 		<td colspan="3" class="rimenu">
-			<a href="https://coxcomminc.sharepoint.com/sites/pwaeng/Lists/Risk%20and%20Issues/AllItems.aspx" >
+			<a href="#" >
 			<img src="images/UP_16.jpg" width="222" height="92" alt=""
 				onmouseover="this.src='images/DOWN_16.jpg'" 
 				onmouseout="this.src='images/UP_16.jpg'" 
@@ -190,7 +190,7 @@ $(function(){
             // window.console && console.log(m) || alert(m); 
         },
         items: {
-            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global-program"},
+            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global"},
             "sep1": "---------",
             "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?portfolio"},
             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},

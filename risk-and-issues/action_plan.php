@@ -7,11 +7,11 @@ include ("../data/emo_data.php");
 $RiskAndIssues_Key = $_GET['rikey'];
 
 //ACTION PLANS TEMPORARY
-$sql_act_plan = "select* from (select * from RI_Mgt.fn_GetListOfAllActionPlanStatusForRiskAndIssueKey($RiskAndIssues_Key)) a order by Min_Last_Update_Ts DESC";
+$sql_act_plan = "select* from (select * from RI_Mgt.fn_GetListOfAllActionPlanStatusForRiskAndIssueKey($RiskAndIssues_Key)) a order by Created_Ts";
 $stmt_act_plan = sqlsrv_query( $data_conn, $sql_act_plan );
 // $row_act_plan = sqlsrv_fetch_array($stmt_risk_issue__assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_act_plan['ActionPlanStatus]; 
-
+// $sql_act_plan;
 ?>
 <!doctype html>
 <html>
@@ -33,15 +33,19 @@ $stmt_act_plan = sqlsrv_query( $data_conn, $sql_act_plan );
 	<table class="table table-bordered table-striped table-hover" width="90%">
   <thead>
     <tr>
-      <th>DATE</th>
-      <th>ACTION PLAN</th>
+      <th width="10%">DATE</th>
+      <th width="65%">ACTION PLAN</th>
+      <th>POC NAME</th>
+      <th>POC GROUP</th>
     </tr>
 </thead>
   <tbody>
   <?php while($row_act_plan = sqlsrv_fetch_array($stmt_act_plan, SQLSRV_FETCH_ASSOC)) { ?>
     <tr>
-      <td width="20%"><?php convtimex($row_act_plan['Min_Last_Update_Ts']); ?></td>
+      <td><?php convtimex($row_act_plan['Created_Ts']); ?></td>
       <td><?php echo $row_act_plan['ActionPlanStatus_Cd']; ?></td>
+      <td><?php echo $row_act_plan['POC_Nm']; ?></td>
+      <td><?php echo $row_act_plan['POC_Department']; ?></td>
     </tr>
   <?php } ?>
   </tbody>

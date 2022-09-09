@@ -4,7 +4,8 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
-echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+include ("../sql/update-time.php");
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 
 session_start();
 $backhome = "";
@@ -76,7 +77,7 @@ $project_nm ="";
     if ($_POST['DateClosed'] == NULL) {
         $DateClosed = NULL;
     }
-    $riskRealized = 0; // $_POST['riskRealized'];
+    $riskRealized = $_POST['riskRealized'];
 
     $region = NULL; // ONLY FOR PROGRAM
     if (!empty($_POST['assocRegions'])){
@@ -136,6 +137,8 @@ if(!empty($row_poc ['POC_Email'])){
 $pocEmail = $row_poc ['POC_Email'];
 }
 
+if($global == 1) { include ("../includes/menu.php"); }
+
     //$unknown = $_POST['Unknown']; // IF UNKNOWN IS CHECKED SEND NULL TO FORCASTED RESOLUTION DATE
     //$createdFrom = $_POST['CreatedFrom']; // THE RISK THE ISSUE WAS CREATED FROM - FOR ISSUE ONLY
     //$SPCode = '@SPCode' ;
@@ -193,7 +196,7 @@ $pocEmail = $row_poc ['POC_Email'];
         $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
-    echo json_encode($params);
+    //echo json_encode($params);
     //exit();
 
    //EXECUTE PROCEDDURE
@@ -221,7 +224,7 @@ $pocEmail = $row_poc ['POC_Email'];
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
     <link rel="stylesheet" href="steps/style.css" type="text/css"> 
-    
+
     <div class="container">       
             <div class="row bs-wizard" style="border-bottom:0;">
                 <div class="col-xs-3 bs-wizard-step complete">
@@ -310,7 +313,7 @@ $pocEmail = $row_poc ['POC_Email'];
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
             }
@@ -356,7 +359,7 @@ $pocEmail = $row_poc ['POC_Email'];
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
             }

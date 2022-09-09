@@ -56,11 +56,11 @@ $subprogram = $list_subprogram;
 }
 // REGION
 $region = '-1';
-if (!empty($_POST['Region'])) {
-	$region = $_POST['Region'];
+if (!empty($_POST['region'])) {
+	$region = $_POST['region'];
 
-	//$list_region = implode('|', $region);
-	//$region = $list_region;
+	$list_region = implode('|', $region);
+	$region = $list_region;
 }
 
 // MARKET

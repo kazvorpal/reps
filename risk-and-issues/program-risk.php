@@ -629,10 +629,10 @@ function toggle(source) {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0">
+                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0">
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="No" id="RiskRelized_1" checked>
+                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" checked>
                     No</label></td>
                   </tr>
                 </table>

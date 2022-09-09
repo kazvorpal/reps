@@ -6,60 +6,138 @@
 <?php 
 //$action = $_GET['action'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
-//$ass_project = $row_projID['PROJ_NM'];
+$ri_id = $_GET['id'];
 
-//PROGRAM
-function fixutf8($target) {
-  return (gettype($target) == "string") ? (utf8_encode($target)) : ($target);
-}  
+//GET GLOBAL PROGRAM BY ID
+$sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue](1) WHERE RiskAndIssue_Key = $ri_id";
+$stmt_glb_prog   = sqlsrv_query( $data_conn, $sql_glb_prog ); 
+$row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
+// $row_glb_prog[''];
+//echo $sql_glb_prog;
 
-$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
-$stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
-if($stmt_prog === false) {
-  if(($error = sqlsrv_errors()) != null) {
-    foreach($error as $errors) {
-      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-      echo "code: ".$error[ 'code']."<br />";
-      echo "message: ".$error[ 'message']."<br />";
-    }
-  }
-} else {
-  $programrows = array();
-  $count = 1;
-  while($programrow = sqlsrv_fetch_array($stmt_prog, SQLSRV_FETCH_ASSOC)) {
-    $programrows[] = array_map("fixutf8", $programrow);
-  }
+if(empty($row_glb_prog)){
+  echo "No Risk/issue found.";
+  exit();
 }
 
-$sql_sub = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = 2022";
-$stmt_sub   = sqlsrv_query( $data_conn, $sql_sub ); 
-if($stmt_sub === false) {
-  if(($error = sqlsrv_errors()) != null) {
-    foreach($error as $errors) {
-      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-      echo "code: ".$error[ 'code']."<br />";
-      echo "message: ".$error[ 'message']."<br />";
-    }
-  }
+//DELARE
+$RiskAndIssueLog_Key = $row_glb_prog['RiskAndIssueLog_Key'];
+
+$RILevel_Cd = $row_glb_prog['RILevel_Cd']; 
+$RIPortfolio_Key = $row_glb_prog['PortfolioType_Key']; 
+$RIType_Cd = $row_glb_prog['RIType_Cd'];
+
+$RI_Nm = $row_glb_prog['RI_Nm'];
+$MLMProgram_Nm = $row_glb_prog['MLMProgram_Nm'];
+$Fiscal_Year = $row_glb_prog['Fiscal_Year'];
+
+$ScopeDescriptor_Txt = $row_glb_prog['ScopeDescriptor_Txt'];
+//$SubProgram = "CB Funding For Growth"; // GET FROM FUNCTION
+//$MLMRegion_Key = $row_glb_prog['MLMRegion_Key'];// NEED THE REGIONS - MULTIPLE KEYS
+
+$ImpactLevel_Key = $row_glb_prog['ImpactLevel_Key'];
+$ImpactArea_Key = $row_glb_prog['ImpactArea_Key'];
+$RiskProbability_Key = $row_glb_prog['RiskProbability_Key'];
+
+$RIDescription_Txt = $row_glb_prog['RIDescription_Txt'];
+$Drivers = "";//NEED THE DRIVERS
+
+$POC_Nm = $row_glb_prog['POC_Nm'];
+$POC_Department = $row_glb_prog['POC_Department'];
+$ForecastedResolution_Dt = $row_glb_prog['ForecastedResolution_Dt']; //echo $ForecastedResolution_Dt;
+$transfer2prgManager = $row_glb_prog['TransferredPM_Flg']; 
+$ResponseStrategy_Cd = $row_glb_prog['ResponseStrategy_Cd'];
+
+$ActionPlanStatus_Cd = $row_glb_prog['ActionPlanStatus_Cd'];
+
+$RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
+$AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
+$RaidLog_Flg = $row_glb_prog['RaidLog_Flg'];
+
+$global = 1;
+
+//MAX AND MIN FOR CLOSING DATE
+$createDT = date_format($row_glb_prog['Created_Ts'],'Y-m-d');
+
+if(!empty($row_glb_prog['ForecastedResolution_Dt'])) {
+  $forecastMin = date_format($ForecastedResolution_Dt, "Y-m-d");
 } else {
-  $subprogramrows = array();
-  $count = 1;
-  while($subprogramrow = sqlsrv_fetch_array($stmt_sub, SQLSRV_FETCH_ASSOC)) {
-    $subprogramrows[] = array_map("fixutf8", $subprogramrow);
-  }
+  $forecastMin = $closeDateMax;
 }
 
-//$row_prog   = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
-// $row_prog ['Program_Nm'];
-$programout = json_encode($programrows);
-$subprogramout = json_encode($subprogramrows);
+if($RILevel_Cd == "Program") {
+  //PROGRAM FOR PROGRAM RI (SINGLE PRGRAM)
+  $sql_prog = "select * from mlm.fn_getlistofPrograms($Fiscal_Year) where Program_Nm = '$MLMProgram_Nm' ";
+  $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
+  //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
+  // $row_prog['Program_Nm'];
+  //echo "<br>" . $sql_prog . "HERE";
+
+  //PROGRAM FROM RIKEY (ARRAY)(0 Non Global or 1 Global )
+  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
+  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
+  FROM [RI_MGT].[fn_GetListOfProgramsForRI_Key] ($ri_id, 1) 
+  SELECT @PROG_IDs AS Program_Key";
+  $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
+  $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
+  $Programkeys = $row_rikey_prg['Program_Key'];
+  $Program_Key = explode(",", $Programkeys); 
+
+} else { 
+
+  //PROGRAM FOR PORTFOLIO RI (MULTIPUL PROGRAMS)
+  $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
+  $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
+  //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
+  // $row_prog['Program_Nm'];
+  //echo "<br>" . $sql_prog . "NO";
+
+  //PROGRAM FROM PORTFOLIO RIKEY (ARRAY)(0 Non Global or 1 Global )
+  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
+  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
+  FROM [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] ($ri_id) 
+  SELECT @PROG_IDs AS Program_Key";
+  $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
+  $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
+  $Programkeys = $row_rikey_prg['Program_Key'];
+  $Program_Key = explode(",", $Programkeys); 
+}
 
 //SUBPROGRAM 
-$sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = 2022";
-$stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog ); 
-//$row_subprog   = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC);
-// $row_subprog ['SubProgram_Nm'];
+$sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where Program_Nm = '$MLMProgram_Nm' and LRPYear = $Fiscal_Year";
+$stmt_subprog = sqlsrv_query( $data_conn, $sql_subprog ); 
+//$row_subprog = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC);
+// $row_subprog['SubProgram_Nm'];
+//echo "<br>" . $sql_subprog;
 
+//SUBPROGRAM FROM RIKEY
+$sql_rikey_subprog = "DECLARE @SUB_IDs VARCHAR(100)
+    SELECT @SUB_IDs = COALESCE(@SUB_IDs+',','')+ CAST(SubProgram_Key AS VARCHAR(100))
+    FROM [RI_MGT].[fn_GetListSubProgramsforRIKey] ($ri_id,1)
+    SELECT @SUB_IDs AS SubProgram_Key";
+$stmt_rikey_subprog = sqlsrv_query( $data_conn, $sql_rikey_subprog ); 
+$row_rikey_subprog = sqlsrv_fetch_array( $stmt_rikey_subprog , SQLSRV_FETCH_ASSOC);
+$SubProgramkeys = $row_rikey_subprog['SubProgram_Key'];
+$SubProgram = explode(",", $SubProgramkeys);
+//echo "<br>" . $sql_rikey_subprog;
+
+//DRIVERS
+$sql_driver= "select * from [RI_MGT].[fn_GetListOfDriversForRILogKey](1) where RiskAndIssueLog_Key = $RiskAndIssueLog_Key";
+$stmt_driver = sqlsrv_query( $data_conn, $sql_driver ); 
+$row_driver = sqlsrv_fetch_array( $stmt_driver , SQLSRV_FETCH_ASSOC);
+
+$Driver_Key = $row_driver['Driver_Key'];
+
+//REGIONS
+$sql_regions = "DECLARE @EPS_IDs VARCHAR(100)
+    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(MLMRegion_Key AS VARCHAR(100))
+    FROM RI_MGT.fn_GetListOfAllRiskAndIssue(1) where RiskAndIssue_Key = $ri_id
+    SELECT @EPS_IDs AS MLMRegion_Key";
+$stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
+$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
+
+$MLMRegion_Key = $row_regions['MLMRegion_Key'];
+$RegionArr = explode(",", $MLMRegion_Key);
 ?>
 <!doctype html>
 <html lang="en">
@@ -114,8 +192,6 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
             return false;
           });
         });
-        programs = <?= $programout ?>;
-        subprograms = <?= $subprogramout ?>;
   </script> 
 
 <script language="JavaScript">
@@ -126,10 +202,26 @@ function toggle(source) {
   }
 }
 </script>
+<script language="javascript">
+	$(document).ready(function() {
+    $('#subprogram').multiselect({
+          includeSelectAllOption: true,
+        });
+
+    $('#program').multiselect({
+          includeSelectAllOption: true,
+        });
+  
+  });
+</script>
 
 </head>
 <body style=" font-family:Mulish, serif;">
-<?php include ("../../includes/menu.php");?>
+<?php 
+  if($global != 1) {
+    include ("../../includes/menu.php");
+  } 
+?>
 <main align="center">
   <!-- PROGRESS BAR -->
   <div class="container">       
@@ -158,25 +250,38 @@ function toggle(source) {
   </div>
   <!-- END PROGRESS BAR -->
 <div align="center">
-  <h3>CREATE GLOBAL RISK OR ISSUE</h3>
-  Enter the details of your Risk/Issue
+  <h3>UPDATE GLOBAL RISK OR ISSUE</h3>
+  <h4><?php echo "<b>ID: </b>" . $ri_id . " | " .  $RI_Nm ?></h4>
 </div>
 
 <div style="padding: 20px;">
-  <form action="../confirm.php" method="post" id="programRisk" oninputD="nameevent()">
+  <form action="../update-confirm.php" method="post" id="programRisk">
 
-  <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
+  <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $ri_id ?>">
+  <input name="changeLogKey" type="hidden" id="changeLogKey" value="4">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="formName" type="hidden" id="formName" value=""> <!--DETERMINED IN LOOKUP-->
-  <input name="formType" type="hidden" id="formType" value="New">
+  <input name="formName" type="hidden" id="formName" value="PRGR"> <!--this needs to be prgi or prgr-->
+  <input name="formType" type="hidden" id="formType" value="Update">
   <input name="CreatedFrom" type="hidden" id="Created From" value="">
   <input name="RIName" type="hidden" id="RIName" value="">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
   <input name="global" type="hidden" id="global" value="1">
-
-  <div class="container">
+  <input name="RILevel" type="hidden" id="RILevel" value="<?php echo $RILevel_Cd ?>">
+  <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $RIPortfolio_Key ?>">
+  <input name="RIType" type="hidden" id="RIType" value="<?php echo $RIType_Cd ?>">
+  <input name="global"  type="hidden" id="global" value="<?php echo $global ?>">
+  <input name="formaction" type="hidden" id="formaction" value="update">
+  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $Fiscal_Year; ?>">
+  <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $RIPortfolio_Key; ?>">
+  
+  <?php if($RILevel_Cd == "Portfolio") {?>
+    <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key; ?>">
+    <input name="subprogram" type="hidden" id="subprogramx" value="<?php echo $SubProgramkeys; ?>">
+  <?php } ?>
+  
+   <div class="container">
   <!--ROW 1 -->
   <div class="row row-eq-height">
     <div class="col-md-4" align="left">
@@ -185,8 +290,8 @@ function toggle(source) {
           <h3 class="panel-title">RISK/ISSUE LEVEL</h3>
         </div>
         <div class="panel-body">
-          <label for="RILevel"><input type="radio" name="RILevel" value="Program" required> Program </label> 
-          <label for="RILevel"><input type="radio" name="RILevel" value="Portfolio" required> Portfolio </label>
+          <label for="RILevel"><input type="radio" name="RILevel" value="Program" required <?php if($RILevel_Cd == "Program") { echo 'checked';} ?> disabled> Program </label> 
+          <label for="RILevel"><input type="radio" name="RILevel" value="Portfolio" required <?php if($RILevel_Cd == "Portfolio") { echo 'checked';} ?> disabled> Portfolio </label>
         </div>
       </div>
     </div>
@@ -196,8 +301,8 @@ function toggle(source) {
           <h3 class="panel-title">PORTFOLIO TYPE</h3>
         </div>
         <div class="panel-body">
-        <label for="portfolioType"><input type="radio" name="portfolioType" value="1" required> NT 2.0 </label> 
-        <label for="portfolioType1"><input type="radio" name="portfolioType" value="2" required> BAU </label>
+        <label for="portfolioType"><input type="radio" name="portfolioType" value="nt 2.0" required <?php if($RIPortfolio_Key == 1) { echo 'checked';} ?> disabled> NT 2.0 </label> 
+        <label for="portfolioType1"><input type="radio" name="portfolioType" value="bau" required <?php if($RIPortfolio_Key == 2) { echo 'checked';} ?> disabled> BAU </label>
         </div>
     </div>
     </div>
@@ -207,8 +312,8 @@ function toggle(source) {
         <h3 class="panel-title">RISK/ISSUE TYPE</h3>
       </div>
       <div class="panel-body">
-      <label for="RIType"><input type="radio" name="RIType" value="Risk" required> Risk </label> 
-      <label for="RIType"><input type="radio" name="RIType" value="Issue" required> Issue </label>
+      <label for="RIType"><input type="radio" name="RIType" value="Risk" required <?php if($RIType_Cd == "Risk") { echo 'checked';} ?> disabled> Risk </label> 
+      <label for="RIType"><input type="radio" name="RIType" value="Issue" required <?php if($RIType_Cd == "Issue") { echo 'checked';} ?> disabled> Issue </label>
       </div>
     </div>
     </div>
@@ -221,7 +326,7 @@ function toggle(source) {
           <h4 class="panel-title">NAME (Autofill)</h4>
         </div>
         <div class="panel-body">
-        <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >
+        <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" value="<?php echo $RI_Nm ?>" >
         </div>
       </div>
     </div>
@@ -230,12 +335,12 @@ function toggle(source) {
         <div class="panel-heading">
           <h3 class="panel-title">PROGRAM</h3>
         </div>
-        <div class="panel-body" id="programdiv">
-          <!-- <select name="program" id="program" class="form-control">
-            <?php //while($row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC)) { ?>
-            <option value="<?php //echo $row_prog ['Program_Nm']; ?>"><?php //echo $row_prog ['Program_Nm']; ?></option>
-            <?php //} ?>
-          </select> -->
+        <div class="panel-body">
+          <select name="program[]" id="program" class="form-control" multiple="multiple" readonly>
+            <?php while($row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC)) { ?>
+            <option value="<?php echo $row_prog ['Program_Key']; ?>" <?php if(in_array($row_prog ['Program_Key'], $Program_Key)) { echo "selected"; } ?>><?php echo $row_prog ['Program_Nm']; ?></option>
+            <?php } ?>
+          </select>
         </div>
       </div>
     </div>
@@ -245,9 +350,9 @@ function toggle(source) {
           <h3 class="panel-title">LRP YEAR</h3>
         </div>
         <div class="panel-body">
-          <select name="fiscalYer" id="fiscalYer" class="form-control">
-            <option value="2022" <?php if(date('Y') == "2022") { echo " selected ";} ?>>2022</option>
-            <option value="2023" <?php if(date('Y') == "2023") { echo " selected ";} ?>>2023</option>
+          <select name="fiscalYer" id="fiscalYer" class="form-control" disabled>
+            <option value="2022" <?php if($Fiscal_Year == "2022") { echo " selected ";} ?>>2022</option>
+            <option value="2023" <?php if($Fiscal_Year == "2023") { echo " selected ";} ?>>2023</option>
           </select>
         </div>
       </div>
@@ -258,10 +363,10 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RISK DESCRIPTOR</h3>
+          <h3 class="panel-title">DESCRIPTOR</h3>
         </div>
         <div class="panel-body">
-          <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()"> 
+          <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()" value="<?php echo $ScopeDescriptor_Txt ?>" readonly> 
         </div>
       </div>
     </div>
@@ -270,9 +375,11 @@ function toggle(source) {
         <div class="panel-heading">
           <h3 class="panel-title">SUBPROGRAM</h3>
         </div>
-        <div class="panel-body" id="subdiv">
-          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
-          <option>Select Program first
+        <div class="panel-body">
+          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required <?php if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>>
+            <?php while($row_subprog = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC)) { ?>
+              <option value="<?php echo $row_subprog ['SubProgram_Key']; ?>" <?php if(in_array($row_subprog['SubProgram_Key'], $SubProgram)) { echo "selected";} ?>><?php echo $row_subprog ['SubProgram_Nm']; ?></option>
+            <?php } ?>
           </select>
         </div>
       </div>
@@ -280,21 +387,21 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">REGION</h3>
+          <h3 class="panel-title">REGION (Concat to Name, Require)</h3>
         </div>
         <div class="panel-body">
-          <table width="100%">
+          <table width="100%" style="font-size: 12px;">
           <tr>
-            <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California"> California </label> </td>
-            <td><label for="Central"><input type="checkbox" name="Region[]" value="Central"> Central </label></td>
-            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="Corporate"> Corporate </label></td>
-            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="Northeast"> Northeast </label></td>
+            <td><label for="California"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?> > California </label> </td>
+            <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
+            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="1" <?php if(in_array("1", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Corporate </label></td>
+            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="4" <?php if(in_array("4", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Northeast </label></td>
           </tr>
           <tr>
-            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="Southeast"> Southeast </label> </td>
-            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="Southwest"> Southwest </label></td>
-            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="Virginia"> Virginia </label></td>
-            <td><label for="All"><input type="checkbox" name="Region[]" value="All" onClick="toggle(this)"> All </label></td>
+            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southeast </label> </td>
+            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southwest </label></td>
+            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Virginia </label></td>
+            <td><label for="All"><input type="checkbox" name="Region[]" value="" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
           </tr>
         </table>
         </div>
@@ -309,7 +416,7 @@ function toggle(source) {
           <h3 class="panel-title">DESCRIPTION</h3>
         </div>
         <div class="panel-body">
-        <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"></textarea>
+        <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"><?php echo $RIDescription_Txt ?></textarea>
         </div>
       </div>      
     </div>
@@ -322,42 +429,42 @@ function toggle(source) {
           <table width="100%" border="0">
                   <tr>
                     <td width="50%"><label>
-                      <input type="radio" name="Drivers[]" value="Material Delay"  id="Drivers_0" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="1"  id="Drivers_0" class="required_group" required <?php if($Driver_Key == 1) { echo "checked";} ?>>
                       Material Delay</label></td>
                       <td><label>
-                      <input type="radio" name="Drivers[]" value="Project Dependency" id="Drivers_1" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="6" id="Drivers_1" class="required_group" required <?php if($Driver_Key == 6) { echo "checked";} ?>>
                       Project Dependency</label></td>
                   </tr>
                   <tr>
                       <td width="49%"><label>
-                      <input type="radio" name="Drivers[]" value="Shipping/Receiving Delay" id="Drivers_10" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="2" id="Drivers_10" class="required_group" required <?php if($Driver_Key == 2) { echo "checked";} ?>>
                       Shipping/Receiving Delay</label></td>
                     <td><label>
-                      <input type="radio" name="Drivers[]" value="Budget/Funding" id="Drivers_6" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="7" id="Drivers_6" class="required_group" required <?php if($Driver_Key == 7) { echo "checked";} ?>>
                       Budget/Funding</label></td>
                   </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="Drivers[]" value="Ordering Error" id="Drivers_2" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="3" id="Drivers_2" class="required_group" required <?php if($Driver_Key == 3) { echo "checked";} ?>>
                       Ordering Error</label></td>
                       <td><label>
-                      <input type="radio" name="Drivers[]" value="Design/Scope Change" id="Drivers_7" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="8" id="Drivers_7" class="required_group" required <?php if($Driver_Key == 8) { echo "checked";} ?>>
                       Design/Scope Change</label></td>
                   </tr>
                   <tr>
                     <td><label>
-                      <input type="radio" name="Drivers[]" value="People Resource" id="Drivers_3" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="4" id="Drivers_3" class="required_group" required <?php if($Driver_Key == 4) { echo "checked";} ?>>
                       People Resource</label></td>
                     <td><label title="">
-                      <input type="radio" name="Drivers[]" value="Admin Error" id="Drivers_8" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="9" id="Drivers_8" class="required_group" required <?php if($Driver_Key == 9) { echo "checked";} ?>>
                       Admin Error</label></td>
                     </tr>
                   <tr>
                     <td><label title="">
-                      <input type="radio" name="Drivers[]" value="3PL Resource" id="Drivers_4" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="5" id="Drivers_4" class="required_group" required <?php if($Driver_Key == 5) { echo "checked";} ?>>
                       3PL Resource</label></td>
                     <td><label title="">
-                      <input type="radio" name="Drivers[]" value="External Forces" id="Drivers_9" class="required_group" required>
+                      <input type="radio" name="Drivers[]" value="10" id="Drivers_9" class="required_group" required <?php if($Driver_Key == 10) { echo "checked";} ?>>
                       External Forces</label></td>
                   </tr>
         </table>
@@ -391,7 +498,7 @@ function toggle(source) {
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                     <td><label>
-                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($row_impArea['ImpactArea_Key'] == $ImpactArea_Key){ echo "checked";} ?>>
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
                   <?php } ?>
@@ -405,14 +512,15 @@ function toggle(source) {
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required <?php if($row_imLevel['ImpactLevel_Key'] == $ImpactLevel_Key){ echo "checked";} ?>>
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
                     <?php } ?>                    
                     </table>
                   </td>
                 <td valign="top">
-				<div id="myDIV2">
+                <div id="myDIV2">
+                  <?php if($RIType_Cd == "risk") { ?>
                     <table width="200" border="0">
                         <tr>
                           <td>
@@ -421,11 +529,12 @@ function toggle(source) {
                         <?php while($row_probability= sqlsrv_fetch_array( $stmt_probability , SQLSRV_FETCH_ASSOC)) { ?>
                         <tr>
                         <td><label>
-                          <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required>
+                          <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required <?php if($row_probability['RiskProbability_Key'] == $RiskProbability_Key){ echo "checked";} ?>>
                           <?php echo $row_probability['RiskProbability_Nm'] ?></label></td>
                         </tr>
                         <?php } ?>
                     </table>
+                  <?php } ?>
                 </div>
             </td>
             <td>
@@ -438,7 +547,7 @@ function toggle(source) {
     </div>
   </div>
   <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATIGY -->
-  <div class="row row-eq-height">
+  <div class="row equal">
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -446,14 +555,14 @@ function toggle(source) {
         </div>
         <div class="panel-body">
           <label for="Individual">Individual POC *<br></label>
-            <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required/>
+            <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required value="<?php echo $POC_Nm ?>"/>
               <datalist id="Individual">
                 <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                   <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
                 <?php } ?>
               </datalist>
           <label for="Individual3">Team/Group POC *<br></label>
-            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required/>
+            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required value="<?php echo $POC_Department ?>" />
         </div>
       </div>
     </div>
@@ -479,8 +588,19 @@ function toggle(source) {
                 <input type="checkbox" 
                     name="Unknown" 
                     id="Unknown" 
-                    onChange="unKnownX()">
+                    onChange="unKnownX()"
+                    <?php if(empty($ForecastedResolution_Dt)){ echo "checked";} ?>
+                >
                 <label for="Unknown">Unknown</label> - Overrides Resolution Date
+          </div>
+          <hr>
+          <div id="trans2prgman">
+                <input type="checkbox" 
+                    name="TransfertoProgramManager" 
+                    id="TransfertoProgramManager"
+                    <?php if($transfer2prgManager == 1){ echo "checked";} ?>
+                    >
+                <label for="TransfertoProgramManager"> Transfer to Program Manager</label>
           </div>
         </div>
       </div>
@@ -495,25 +615,25 @@ function toggle(source) {
                 <tr>
                   <td>&nbsp;</td>
                   <td><label>
-                    <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required>
+                    <input type="radio" name="ResponseStrategy" value="1" id="Response_Strategy_0" required <?php if($ResponseStrategy_Cd == "AVD"){ echo "checked";} ?>>
                     Avoid</label></td>
                   </tr>
                 <tr>
                   <td>&nbsp;</td>
                   <td><label>
-                    <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required>
+                    <input type="radio" name="ResponseStrategy" value="2" id="Response_Strategy_1" required <?php if($ResponseStrategy_Cd == "MIT"){ echo "checked";} ?>>
                     Mitigate</label></td>
                   </tr>
                 <tr>
                   <td width="16">&nbsp;</td>
                   <td width="195"><label>
-                    <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required>
+                    <input type="radio" name="ResponseStrategy" value="3" id="Response_Strategy_2" required <?php if($ResponseStrategy_Cd == "TRN"){ echo "checked";} ?>>
                     Transfer</label></td>
                   </tr>
                 <tr>
                   <td>&nbsp;</td>
                   <td><label>
-                    <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required>
+                    <input type="radio" name="ResponseStrategy" value="4" id="Response_Strategy_3" required <?php if($ResponseStrategy_Cd == "ACP"){ echo "checked";} ?>>
                     Accept</label></td>
                   </tr>
             </table>
@@ -529,14 +649,14 @@ function toggle(source) {
           <h3 class="panel-title">ACTION PLAN</h3>
         </div>
         <div class="panel-body">
-        <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea>
+        <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $ActionPlanStatus_Cd ?></textarea>
         </div>
       </div>
     </div>
   </div>
   <!--ROW 8 - RISK REALIZED | ASSOC CR | NOTIFY PORT TEAM-->
   <div class="row row-eq-height">
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">RISK REALIZED</h3>
@@ -545,27 +665,27 @@ function toggle(source) {
           <table width="50%" border="0">
             <tr>
               <td><label>
-                  <input type="radio" name="riskRealized" value="Yes" id="RiskRelized_0">
+                  <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php if($RiskRealized_Flg == 1) { echo "checked"; }?>>
                   Yes</label></td>
               <td><label>
-                  <input type="radio" name="riskRealized" value="No" id="RiskRelized_1" checked>
+                  <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php if($RiskRealized_Flg == 0) { echo "checked"; }?>>
                   No</label></td>
             </tr>
           </table>
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">ASSOCIATED CR ID</h3>
         </div>
         <div class="panel-body">
-          <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10">
+          <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10" value="<?php echo $AssociatedCR_Key ?>">
         </div>
       </div>       
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">NOTIFY PORTFOLIO TEAM</h3>
@@ -573,13 +693,23 @@ function toggle(source) {
         <div class="panel-body">
           <table width="50%" border="0">
             <tr>
-              <td><label><input type="radio" name="raidLog" value="Yes" id="raid_0" checked> Yes </label>
+              <td><label><input type="radio" name="raidLog" value="Yes" id="raid_0" <?php if($RaidLog_Flg == 1) { echo "checked"; }?>> Yes </label>
               </td>
             <td>
-              <label><input type="radio" name="raidLog" value="No" id="raid_1"> No </label>
+              <label><input type="radio" name="raidLog" value="No" id="raid_1" <?php if($RaidLog_Flg == 0) { echo "checked"; }?>> No </label>
             </td>
             </tr>
           </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">CLOSING DATE</h3>
+        </div>
+        <div class="panel-body">
+          <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>">
         </div>
       </div>
     </div>
@@ -587,13 +717,12 @@ function toggle(source) {
 </div>
 <!--end container -->
   <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
-  <button type="submit" class="btn btn-primary" onmouseoverD="nameevent()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
 
 <script>
-
 function myFunction() {
   var x = document.getElementById("myDIV");
   if (x.style.display === "none") {
@@ -687,6 +816,27 @@ jQuery(function ($) {
 </script>
 
 <script>
+function validateGrp() {
+  let things = document.querySelectorAll('.required_group')
+  let checked = 0;
+  for (let thing of things) {
+    thing.checked && checked++
+  }
+  if (checked) {
+    things[things.length - 1].setCustomValidity("");
+    document.getElementById('checkGroup').submit();
+  } else {
+    things[things.length - 1].setCustomValidity("You must select at least one Driver");
+    things[things.length - 1].reportValidity();
+  }
+}
+
+document.querySelector('[name=submit]').addEventListener('click', () => {
+  validateGrp()
+});
+</script>
+
+<script>
   var date = new Date();
   var day = date.getDate();
   var month = date.getMonth() + 1;
@@ -698,10 +848,12 @@ jQuery(function ($) {
   var today = year + "-" + month + "-" + day;
 
   document.getElementById('date').value = today;
+  </script>
+  <script>
   document.getElementById("indy").addEventListener("change", function(){
-    const v = this.value.split(" : ");
-    this.value = v[0];
-    document.getElementById("InternalExternal").value = v[1];
+  const v = this.value.split(" : ");
+  this.value = v[0];
+  document.getElementById("InternalExternal").value = v[1];
   });
 </script>
 
@@ -716,202 +868,13 @@ $('.subscriber :checkbox').change(function () {
 
 <script language="javascript">
 document.getElementById("dateUnknown").addEventListener("change", function(){
-  document.getElementById("Unknown").checked = false;
+document.getElementById("Unknown").checked = false;
 })
 </script>
 
 <script>
-
-  const getuniques = (list, field) => {
-    return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
-  }
-  const makeselect = (o) => {
-    const select = makeelement(o);
-      list = o.l;
-      select.appendChild(makeelement({e: "option", v: "", t: ""}));
-      for (option in list) 
-        if(list[option].Program_Nm != ""&& list[option].Program_Nm != null)
-          select.appendChild(makeelement({e: "option", v: list[option].Program_Nm, t: list[option].Program_Nm}));
-    return select;
-  }
-
-  const makeelement = (o) => {
-
-    // o is an (o)bject with these optional properties:
-    // o.e is the (e)lement, like "td" or "tr"
-    // o.c is the (i)d
-    // o.c is the (c)lasses, separated by spaces like usual
-    // o.t is the innerHTML (t)ext
-    // o.s is the col(s)pan
-
-    const t = document.createElement(o.e);
-    t.id = (typeof o.i == "undefined") ? "" : o.i;
-    t.name = (typeof o.n == "undefined") ? "" : o.n + "[]";
-    t.className = (typeof o.c == "undefined") ? "" : o.c;
-    t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-    t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
-    t.multiple = (typeof o.m == "undefined") ? "" : o.m;
-    t.value = (typeof o.v == "undefined") ? "" : o.v;
-    if (typeof o.j != "undefined") {
-      t.onclick = o.j;
-    }
-    return t;
-  }
-
-// Event functions to be used later
-
-const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
-const nameevent = () => {
-  // console.log("nameevent");
-  let locations = "";
-  if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
-    locations = "ALL ";
-  } else {
-    document.getElementsByName("Region[]").forEach((e) => {
-      locations += (e.checked) ? regions[e.value] + " " : "";
-    });
-    // console.log(locations)
-    if (locations.length > 4) {
-      locations = "MULTI ";
-    }
-  }
-  let p = (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) ? "PORTFOLIO " : "";
-  Namex.value = p + program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
-  return(locations)
-}
-
-const subevent = () => {
-  console.log("subevent");
-  let p = document.getElementById("program");
-  let s = document.getElementById("subprogram");
-  let p0 = p.options[0];
-  if (p0.value == '') p0.remove();
-  s.options.length = 0;
-  let target = p.options[p.selectedIndex].text;
-  console.log(target);
-  let sublist = {};
-  subprograms.forEach(subtarget => {
-    // console.log(subtarget)
-    if (subtarget.Program_Nm == target && 
-        !sublist[subtarget.SubProgram_Nm] &&
-        subtarget.LRPYear == '2022') {
-      console.log(subtarget.SubProgram_Nm)
-      sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
-    } else {
-      if (subtarget.Program_Nm == target && 
-        !sublist[subtarget.SubProgram_Nm])
-        console.log(subtarget.LRPYear);
-      // console.log(subtarget.Program_Nm +"==" + target + "&&" +sublist.includes(subtarget.SubProgram_Nm))
-      console.log("none")
-    }
-  });
-  console.log(typeof sublist);
-  if (sublist.length == 0) {
-    s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
-  } else {
-    Object.entries(sublist).forEach(([o, k]) => {
-      console.log(o)
-      s.appendChild(makeelement({e: "option", t: o, v: k}));
-    });
-  }
-  $('#subprogram').multiselect("destroy").multiselect({
-      includeSelectAllOption: true,
-  });
-  // document.getElementById("subprogram").  
-}
-
-const levelevent = (e) => {
-  // console.log("levelevent");
-  if (document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
-    // console.log("portfolio");
-    document.getElementById("program").multiple = true;
-    $('#program').multiselect("destroy").multiselect({
-        includeSelectAllOption: true,
-    });
-  } else {
-    // console.log("program");
-    document.getElementById("program").multiple = true;
-    $('#program').multiselect("destroy")
-    setsubprogramevent();
-  }
-}
-
-// Event creators
-
-const setregionevent = () => {
-  console.log("regionevent");
-  document.getElementsByName("Region[]").forEach((target) => {
-    target.addEventListener("click", (e) => {
-      nameevent();
-    });
-  });
-};
-
-var prog;
-const setsubprogramevent = () => {
-  console.log("setsubprogramevent")
-  prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
-  document.getElementById("programdiv").innerHTML = ""
-  document.getElementById("programdiv").appendChild(prog);
-  // $('#program').multiselect({
-  //     includeSelectAllOption: true,
-  // });
-  console.log("setsub");
-  // document.getElementById("program").addEventListener("change", (e) => subevent())
-  document.getElementById("program").addEventListener("change", (e) => subevent());
-};
-
-const setlevelevent = () => {
-  document.getElementsByName("RILevel").forEach((target) =>  {
-    target.addEventListener("click", (e) => {
-      levelevent();
-    });
-  })
-};
-
-nameparts = ["program", "Descriptor", "fiscalYer"]
-const setnameevent = () => {
-  nameparts.forEach((target) => {
-    document.getElementById(target).addEventListener("change", (e) => nameevent());
-  });
-};
-
-setInterval(nameevent, 1000);
-
-const disabler = (o) => {
-  document.getElementsByName(o.t).forEach((target) =>  {
-    target.addEventListener("click", (e) => {
-      const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
-      // console.log(document.querySelector(`input[name="${o.t}"]:checked`).value);
-      console.log("d")
-      o.d.forEach(field => {
-        // console.log(field)
-        if(document.getElementsByName(field).length == 0) {
-          $(`#${field}`).multiselect(disable ? "disable" : "enable");
-        } else {
-          document.getElementsByName(field).forEach(t2 => {
-            t2.disabled = disable;
-            t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
-          })
-        }
-      })
-    })
-  })
-}
-
-$(document).ready(function() {
-  document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
-  document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
-  document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
-  disabler({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-  disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
-  disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
-  setregionevent();
-  setsubprogramevent();
-  setlevelevent();
-});
-
+document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 </script>
 
 <script src="includes/ri-functions.js"></script>
