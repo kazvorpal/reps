@@ -100,12 +100,17 @@ const jq = `
     } else if (o.i == "category") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
       select.appendChild(makeelement({e: "option", v: 0, t: "No Project Association"}));
+    } else if (o.i == "risk_issue") {
+      select.appendChild(makeelement({e: "option", v: "Risk", t: "Risk"}));
+      select.appendChild(makeelement({e: "option", v: "Issue", t: "Issue"}));
     } else if (o.i == "program" || o.i == "subprogram") {
       for (option in o.l) 
         if(o.l[option] != ""&& o.l[option] != null)
           select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
     } else {
       const list = getuniques(o.l, o.f);
+      console.log(list)
+      console.log(o.i)
       for (option in list) 
         if(list[option] != ""&& list[option] != null)
           select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
@@ -117,7 +122,7 @@ const jq = `
   const makefilters = () => {
     document.getElementById("row").innerHTML = "";
     const programnames = (ispp(mode)) ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
-    console.log(programnames)
+    // console.log(programnames)
     const menuitems = {};
 
     selectors = {fiscalyear: {l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", e: "select", c: "form-control", m: "multiple"}, riskissue: {l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", e: "select", c: "form-control", m: "multiple"}, impactlevel: {l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", e: "select", c: "form-control", m: "multiple"}, "resolutiondate": function() {document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}))} }

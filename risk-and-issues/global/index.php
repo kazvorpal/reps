@@ -838,6 +838,10 @@ const subevent = () => {
 
 const levelevent = (e) => {
   // console.log("levelevent");
+  programlevel();
+}
+
+const programlevel = () => {
   if (document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
     // console.log("portfolio");
     document.getElementById("program").multiple = true;
@@ -851,6 +855,7 @@ const levelevent = (e) => {
     setsubprogramevent();
   }
 }
+
 
 // Event creators
 
@@ -920,11 +925,12 @@ $(document).ready(function() {
   document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
   document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
   disabler({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-  disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
-  disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+  disabler({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
+  disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Program"})
   setregionevent();
   setsubprogramevent();
   setlevelevent();
+  programlevel();
 });
 
 </script>

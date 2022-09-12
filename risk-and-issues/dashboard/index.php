@@ -58,7 +58,7 @@
         portfolioopen[key].MLMProgram_Nm = ps;
       }
       let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
-        portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nmg;
+        portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nm;
       portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
     }    
     const portfolioclosed = portfoliofull = portfolioopen;
@@ -158,24 +158,24 @@
     //   document.getElementById("myDiv").style.display = "block";
     }
     const populate = (rilist) => {
-      console.log("rilist");
-      console.log(rilist);
+      // console.log("rilist");
+      // console.log(rilist);
       resultcounter(rilist);
       window.ricount = [];
       const main = document.getElementById("main");
       initexcel();
       if (ispp(mode)) {
-        console.log(mode)
+        // console.log(mode)
         if (mode == "portfolio") {
-            p = "Programs";
+            p = "";
             n = "Raid Log";
         } else {
-            p = "Projects";
-            n = capitalize(mode)
+            p = ", Projects";
+            n = capitalize(mode);
         }
-        main.innerHTML = `<div class="header">${n} Name (Risks, Issues, ${p})</div>`;
+        main.innerHTML = `<div class="header">Program Name (Risks, Issues${p})</div>`;
       } else {
-          console.log("project")
+          // console.log("project")
           main.innerHTML = '';
           main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
           var mt = document.getElementById("maintable");
@@ -193,7 +193,7 @@
     const makerow = (target, risks, issues) => {
 
         // Runs once per Program
-        console.log(target);
+        // console.log(target);
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
         const banner = makebanner(safename);
@@ -215,9 +215,9 @@
     function listri(target, type) {
     
         // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-        console.log("target");
+        // console.log("target");
         pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target);
-        console.log(pre);
+        // console.log(pre);
         post = pre.filter(filterfunction);
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
         return uni;
@@ -249,16 +249,15 @@
         ){
             let list = listri(name, type);
             document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
-            console.log(1)
             if (list.length != 0) {
-                console.log(2)
                 document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
                 for (ri of list) {
-                    console.log(ri)
+                    // console.log(ri)
                     window.ricount.push(true);
                     rowcolor++;
                     makedata(ri, type, name);
                     program = getprogrambykey(ri, name);
+                    // console.log(program)
                     projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
                 }
             }
@@ -386,61 +385,63 @@
         },
         category: function() {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            return (projects != undefined && projects.length>0) ? "Projects" : "Global";
+            return (projects != undefined && projects.length>0) ? "Project Association" : "No Project Association";
         }
         };
         // console.log(program);
-        console.log("program");
+        // console.log("program");
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
-        const url = `/risk-and-issues/details-prg.php?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null`;
-        const text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
+        let url = text = "";
         if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
-        const trid = "tr" + type + saferi + Math.random();
-        let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
-        document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
-        const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) ? "▶" : "" : "";
-        console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "]")
-        // console.log("arrow");
-        // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"']");
-        const c = (arrow == "") ? "plainbox" : "namebox";
-        const header = makeelement({
-            "e": "th", 
-            "i": "th" + type + saferi, 
-            "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-            "c":"p-4 " + c
-        });
-        const tridobj = document.getElementById(trid);
-        if (arrow != "") {
-            tridobj.onclick = function() {
-            toggler(document.getElementById("projects" + saferi), this.children[0]);
-            };
-        }
-        for (field of Object.keys(rifields)) {
-            (function(test) {
-            const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-            tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter)}));
-            })(field);
-            if (rifields[field].name == "ID") {
-            tridobj.appendChild(header);
-            }
-        }
-        var rowValues = [];
-        for (field in excelfields) {
-            (function(test) {
-                let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
-                rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
-            })(field);
-        }
-        let newrow = document.worksheet.addRow(rowValues);
-        processcells();
-        if(arrow != "") {
-        // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "']");
-        // console.log(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]);
-        makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
-            }
+          const trid = "tr" + type + saferi + Math.random();
+          let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
+          document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
+          const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
+            ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
+            ? "▶" : "" : "";
+          const file = (arrow == "") ? "details.php" : "details-prg.php";
+          url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null`;
+          text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
+          // console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "]")
+          // console.log("arrow");
+          // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"']");
+          const c = (arrow == "") ? "plainbox" : "namebox";
+          const header = makeelement({
+              "e": "th", 
+              "i": "th" + type + saferi, 
+              "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+              "c":"p-4 " + c
+          });
+          const tridobj = document.getElementById(trid);
+          if (arrow != "") {
+              tridobj.onclick = function() {
+              toggler(document.getElementById("projects" + saferi), this.children[0]);
+              };
+          }
+          for (field of Object.keys(rifields)) {
+              (function(test) {
+              const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter)}));
+              })(field);
+              if (rifields[field].name == "ID") {
+              tridobj.appendChild(header);
+              }
+          }
+          var rowValues = [];
+          for (field in excelfields) {
+              (function(test) {
+                  let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+                  t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
+                  rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
+              })(field);
+          }
+          let newrow = document.worksheet.addRow(rowValues);
+          processcells();
+          if(arrow != "") {
+            makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
+          }
         }
     }    
 
