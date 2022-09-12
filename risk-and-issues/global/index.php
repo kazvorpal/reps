@@ -182,6 +182,19 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
+          <h3 class="panel-title">LRP YEAR</h3>
+        </div>
+        <div class="panel-body">
+          <select name="fiscalYer" id="fiscalYer" class="form-control">
+            <option value="2022" <?php if(date('Y') == "2022") { echo " selected ";} ?>>2022</option>
+            <option value="2023" <?php if(date('Y') == "2023") { echo " selected ";} ?>>2023</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
           <h3 class="panel-title">RISK/ISSUE LEVEL</h3>
         </div>
         <div class="panel-body">
@@ -239,15 +252,14 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-4 " align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">LRP YEAR</h3>
+          <h3 class="panel-title">SUBPROGRAM</h3>
         </div>
-        <div class="panel-body">
-          <select name="fiscalYer" id="fiscalYer" class="form-control">
-            <option value="2022" <?php if(date('Y') == "2022") { echo " selected ";} ?>>2022</option>
-            <option value="2023" <?php if(date('Y') == "2023") { echo " selected ";} ?>>2023</option>
+        <div class="panel-body" id="subdiv">
+          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
+          <option>Select Program first
           </select>
         </div>
       </div>
@@ -265,19 +277,8 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4 " align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">SUBPROGRAM</h3>
-        </div>
-        <div class="panel-body" id="subdiv">
-          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
-          <option>Select Program first
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" align="left">
+    
+    <div class="col-md-8" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">REGION</h3>
@@ -301,7 +302,7 @@ function toggle(source) {
       </div>
     </div>
   </div>
-  <!-- ROW 4 -->
+  <!-- ROW 4 --><hr>
   <div class="row row-eq-height">
     <div class="col-md-6" align="left">
       <div class="panel panel-default">

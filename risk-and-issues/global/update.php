@@ -287,6 +287,19 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
+          <h3 class="panel-title">LRP YEAR</h3>
+        </div>
+        <div class="panel-body">
+          <select name="fiscalYer" id="fiscalYer" class="form-control" disabled>
+            <option value="2022" <?php if($Fiscal_Year == "2022") { echo " selected ";} ?>>2022</option>
+            <option value="2023" <?php if($Fiscal_Year == "2023") { echo " selected ";} ?>>2023</option>
+          </select>
+        </div>
+      </div>
+    </div>  
+    <div class="col-md-4" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
           <h3 class="panel-title">RISK/ISSUE LEVEL</h3>
         </div>
         <div class="panel-body">
@@ -344,15 +357,16 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-4 " align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">LRP YEAR</h3>
+          <h3 class="panel-title">SUBPROGRAM</h3>
         </div>
         <div class="panel-body">
-          <select name="fiscalYer" id="fiscalYer" class="form-control" disabled>
-            <option value="2022" <?php if($Fiscal_Year == "2022") { echo " selected ";} ?>>2022</option>
-            <option value="2023" <?php if($Fiscal_Year == "2023") { echo " selected ";} ?>>2023</option>
+          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required <?php if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>>
+            <?php while($row_subprog = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC)) { ?>
+              <option value="<?php echo $row_subprog ['SubProgram_Key']; ?>" <?php if(in_array($row_subprog['SubProgram_Key'], $SubProgram)) { echo "selected";} ?>><?php echo $row_subprog ['SubProgram_Nm']; ?></option>
+            <?php } ?>
           </select>
         </div>
       </div>
@@ -370,27 +384,13 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4 " align="left">
+    <div class="col-md-8" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">SUBPROGRAM</h3>
+          <h3 class="panel-title">REGION</h3>
         </div>
         <div class="panel-body">
-          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required <?php if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>>
-            <?php while($row_subprog = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC)) { ?>
-              <option value="<?php echo $row_subprog ['SubProgram_Key']; ?>" <?php if(in_array($row_subprog['SubProgram_Key'], $SubProgram)) { echo "selected";} ?>><?php echo $row_subprog ['SubProgram_Nm']; ?></option>
-            <?php } ?>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">REGION (Concat to Name, Require)</h3>
-        </div>
-        <div class="panel-body">
-          <table width="100%" style="font-size: 12px;">
+          <table width="100%">
           <tr>
             <td><label for="California"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?> > California </label> </td>
             <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
@@ -408,7 +408,7 @@ function toggle(source) {
       </div>
     </div>
   </div>
-  <!-- ROW 4 -->
+  <!-- ROW 4 --><hr>
   <div class="row row-eq-height">
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
@@ -520,7 +520,7 @@ function toggle(source) {
                   </td>
                 <td valign="top">
                 <div id="myDIV2">
-                  <?php if($RIType_Cd == "risk") { ?>
+                  <?php if($RIType_Cd == "Risk") { ?>
                     <table width="200" border="0">
                         <tr>
                           <td>
@@ -555,14 +555,17 @@ function toggle(source) {
         </div>
         <div class="panel-body">
           <label for="Individual">Individual POC *<br></label>
-            <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required value="<?php echo $POC_Nm ?>"/>
-              <datalist id="Individual">
-                <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
-                <?php } ?>
-              </datalist>
-          <label for="Individual3">Team/Group POC *<br></label>
-            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required value="<?php echo $POC_Department ?>" />
+              <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+                
+                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                    <option value=""></option>
+                    <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
+                  <?php } ?>
+              </select>  
+            <hr>
+              <div align="center">
+                <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
+              </div>
         </div>
       </div>
     </div>
