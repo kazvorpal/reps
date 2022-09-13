@@ -70,16 +70,15 @@ if (isset($_POST['groupID'])) {
 }
 
 $disble_it = "";
-
 if (isset($_POST['del_proj_select'])){
   $del_proj_select = implode(",", $_POST['del_proj_select']);
   $disble_it = " disable";
 }
 
 if(!empty($_POST['proj_select'])) {
-$assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
+  $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
 } else {
-$assocProject = $RiskAndIssue_Key;
+  $assocProject = $RiskAndIssue_Key;
 }
 
 //ASSOCIATED RISK AND ISSUES
@@ -457,20 +456,18 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left">
           <div class="box <?php echo $disble_it;?>">
-              <label for="Individual">Individual POC<br>
-                </label>
-              
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value = "<?php echo $individual; ?>" required/>
-              
-                <datalist id="Individual">
-                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
-                  <?php } ?>
-                </datalist>
-
-              <label for="Individual3">Team/Group POC<br>
-                </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" value = "<?php echo $department; ?>" required/>
+            <label for="Individual">Individual POC *<br></label>
+                <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+                  
+                    <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                      <option value=""></option>
+                      <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
+                    <?php } ?>
+                </select>  
+              <hr>
+                <div align="center">
+                  <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
+                </div>
           </div>
           </td>
           </tr>
