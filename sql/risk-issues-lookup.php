@@ -300,10 +300,13 @@ $row_imp_lvl = sqlsrv_fetch_array( $stmt_imp_lvl, SQLSRV_FETCH_ASSOC);
 $impactLevel2 = $row_imp_lvl['ImpactLevel_Nm'];
 
 //RISK PROBABILITY
+if($riTypeCode == "Risk") {
 $sql_prob = "SELECT * FROM [RI_MGT].[Risk_Probability] WHERE RiskProbability_Key = $riskProbability";
 $stmt_prob = sqlsrv_query( $data_conn, $sql_prob );  
 $row_prob = sqlsrv_fetch_array( $stmt_prob, SQLSRV_FETCH_ASSOC);
 $riskProbability2 = $row_prob['RiskProbability_Nm'];
+//echo $sql_prob;
+}
 
 //RESPONSE STRATIGY
 $sql_resp_strg = "SELECT* FROM RI_MGT.Response_Strategy WHERE ResponseStrategy_Key = $responseStrategy";

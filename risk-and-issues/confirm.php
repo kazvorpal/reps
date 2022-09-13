@@ -129,7 +129,8 @@ include ("../sql/update-time.php");
       <td><?php echo $assCRID; ?></td>
     </tr>
 <?php } ?>
-<?php if(!empty($program)) { ?>
+
+<?php if($program !="" && $programs != "")  { if(!empty($program)) { ?>
     <tr>
       <td>Program</td>
       <td><?php echo $program ; ?></td>
@@ -139,7 +140,7 @@ include ("../sql/update-time.php");
       <td>Program</td>
       <td><?php echo $programs ; ?></td>
     </tr>
-<?php } ?>
+<?php }} ?>
 
 <?php if(!empty($subprogram) && $global != 1) { ?>
     <tr>

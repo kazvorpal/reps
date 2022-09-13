@@ -49,6 +49,8 @@ $transfer2prgManager = $row_glb_prog['TransferredPM_Flg'];
 $ResponseStrategy_Cd = $row_glb_prog['ResponseStrategy_Cd'];
 
 $ActionPlanStatus_Cd = $row_glb_prog['ActionPlanStatus_Cd'];
+$actionPlan = "";
+$actionPlan_b = $row_glb_prog['ActionPlanStatus_Cd'];
 
 $RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
 $AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
@@ -551,7 +553,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">CURRENT TASK POC (Send Dept. Key)</h3>
+          <h3 class="panel-title">CURRENT TASK POC</h3>
         </div>
         <div class="panel-body">
           <label for="Individual">Individual POC *<br></label>
@@ -649,10 +651,21 @@ function toggle(source) {
     <div class="col-md-12" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ACTION PLAN</h3>
+          <h3 class="panel-title">ACTION PLAN </h3>
         </div>
         <div class="panel-body">
-        <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $ActionPlanStatus_Cd ?></textarea>
+          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+          <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
+          <input type="hidden" name="user" value="<?php echo $user_id ?>">
+          <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
+          <div align="right" style="margin-top:10px; margin-bottom:10px;">  
+              <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+          </div>
+          <div class="collapse" id="collapseExample">
+            <div class="well">
+              <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
+            </div>
+          </div>
         </div>
       </div>
     </div>

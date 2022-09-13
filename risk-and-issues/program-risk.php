@@ -477,29 +477,25 @@ function toggle(source) {
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a></h4></td>
           <td align="left">
-			  
-		  </td>
+          </td>
         </tr>
         <tr>
           <td colspan="2" align="left">
-          <div class="box">
-              <label for="Individual">Individual POC *<br>
-                </label>
-              
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required/>
-              
-                <datalist id="Individual">
-                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
-                  <?php } ?>
-                </datalist>
-
-              <label for="Individual3">Team/Group POC *<br>
-                </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required/>
-          </div>
+            <div class="box">
+            <label for="Individual">Individual POC *<br></label>
+                <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+                  
+                    <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                      <option value=""></option>
+                      <option value="<?php echo $row_internal['POC_Nm'] ;?>"><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
+                    <?php } ?>
+                </select>  
+                <hr>
+                <div align="left">
+                <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
+            </div>
           </td>
-          </tr>
+        </tr>
         <tr>
           <td colspan="2" align="left"></hr></td>
         </tr>

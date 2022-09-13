@@ -223,7 +223,7 @@
   $DateClosed = $row_risk_issue['RIClosed_Dt'];
   $driverList = rtrim($_GET['drivertime'], ",");
   $driverArr = explode(",", $driverList);
-
+  $actionPlan_b = $row_risk_issue['ActionPlanStatus_Cd'];
   $regionList = rtrim($_GET['regions'], ","); //echo $regionList;
   $regionArr = explode(",", $regionList);
 
@@ -233,6 +233,7 @@
   $assCRID = ""; //$row_risk_issue['AssociatedCR_Key'];
   $probability = $row_risk_issue['RiskProbability_Key'];
   $formName = $_GET['formName'];
+  $POC_Nm = $row_risk_issue['POC_Nm'];
 
   $regionkeyUp = $row_region_update['Region_Cd']; //echo "<b></br></br>Regions to update: </b>" .  $regionkeyUp . "</br>";
   $regionkeyUpArray = explode(",", $regionkeyUp); //echo "" . print_r($regionkeyUpArray);
@@ -694,26 +695,23 @@ if($formaction == "update") {
         <tr>
           <td align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4></td>
           <td align="left">
-			  
 		  </td>
         </tr>
         <tr>
           <td colspan="2" align="left">
           <div class="box">
-              <label for="Individual">Individual POC<br>
-                </label>
-              
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value = "<?php echo $individual; ?>" required/>
-              
-                <datalist id="Individual">
-                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
-                  <?php } ?>
-                </datalist>
-
-              <label for="Individual3">Team/Group POC<br>
-                </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" value = "<?php echo $department; ?>" required/>
+            <label for="Individual">Individual POC *<br></label>
+                <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+                  
+                    <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                      <option value=""></option>
+                      <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
+                    <?php } ?>
+                </select>  
+              <hr>
+                <div align="center">
+                  <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
+                </div>
           </div>
               </div>
           </td>
@@ -793,7 +791,10 @@ if($formaction == "update") {
               <tbody>
                   <tr>
                     <td width="100%">
-                      <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>
+                          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php //echo $actionPlan; ?></textarea>  
+                          <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
+                          <input type="hidden" name="user" value="<?php echo $user_id ?>">
+                          <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
                     </td>
                   </tr>
                   <tr>

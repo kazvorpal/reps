@@ -1,11 +1,11 @@
 <?php 
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
-include ("../includes/functions.php");?>
-<?php include ("../includes/big_bro_functions.php");?>
-<?php include ("../db_conf.php");?>
-<?php include ("../data/emo_data.php");?>
-<?php include ("../sql/RI_Internal_External.php");?>
-<?php 
+include ("../includes/functions.php");
+include ("../includes/big_bro_functions.php");
+include ("../db_conf.php");
+include ("../data/emo_data.php");
+include ("../sql/RI_Internal_External.php");
+
   //$action = $_GET['action']; //new
   //$temp_id = $_GET['tempid'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
@@ -221,7 +221,7 @@ function toggle(source) {
   <input name="formName" type="hidden" id="formName" value="PRJR">
   <input name="formType" type="hidden" id="formType" value="New">
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $fscl_year; ?>">
-  <input name="RIType" type="hidden" id="RIType" value="Risk">
+  <input name="RIType" type="hidden" id="RIType" value="<?php echo $RIType; ?>">
   <input name="RILevel" type="hidden" id="RILevel" value="Project">
   <input name="frcstDt_temp" type="hidden" id="frcstDt_temp" value="<?php if(!empty($date)){ echo convDate($date);} ?>">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php //echo $assocProject; ?>">
@@ -420,7 +420,7 @@ function toggle(source) {
                   </td>
                 <td colspan="2" valign="top">
                   <div id="myDIV2">
-                  <?php if($RIType == "issue") { ?>  
+                  <?php if($RIType == "Risk") { ?>  
                   <table width="200" border="0">
                       <tr>
                         <td>
@@ -437,7 +437,7 @@ function toggle(source) {
                         <?php } ?>
                   </table>
                   <?php } ?>
-                  <?php if($RIType != "issue"){ ?>
+                  <?php if($RIType == "Issue"){ ?>
                     <input name="RiskProbability" type="hidden" id="RiskProbability" value="">
                   <?php } ?>
                     </div>
