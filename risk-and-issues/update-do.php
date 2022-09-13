@@ -6,11 +6,18 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users.php");
 include ("../sql/MS_Users_prg.php");
+include ("../sql/update-time.php");
 
 session_start();
+
 $backhome= "";
 if(isset($_SESSION["homebase"])) {
 $backhome = $_SESSION["homebase"];
+}
+
+$unframe = "";
+if(isset($_SESSION['unframe'])) {
+$unframe = $_SESSION['unframe'];
 }
 
     //DECLARE
@@ -229,6 +236,10 @@ $backhome = $_SESSION["homebase"];
         die( print_r( sqlsrv_errors(), true));
     }
 
+    if($global == 1 && $unframe == "0") {
+        include ("../includes/menu.php");
+    } 
+    
     //$row_pcount = sqlsrv_fetch_array( $stmt3, SQLSRV_FETCH_ASSOC);
     //echo $stmt3['SPMessage'];
 
@@ -280,6 +291,7 @@ $backhome = $_SESSION["homebase"];
 
         if($backhome != "" && $global != 1) {
             echo '<br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
+            session_destroy();
         }
 
         //EMAIL PM AND RI CREATOR

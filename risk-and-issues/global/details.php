@@ -4,6 +4,9 @@ include ("../../db_conf.php");
 include ("../../data/emo_data.php");
 include ("../../sql/MS_Users.php");
 
+session_start();
+$_SESSION['unframe'] = $_GET['unframe'];
+
 //GET GLOBAL PROGRAM BY ID
 $ri_id = $_GET['rikey'];
 
@@ -88,7 +91,7 @@ if($riskRealized_Raw == 1){
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Global Risk and Issues Details</title>
 </head>
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
@@ -219,7 +222,7 @@ if($riskRealized_Raw == 1){
 
         <div class="collapse" id="collapseExample">
           <div class="well">
-          <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
+          <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
           </div>
         </div>
 

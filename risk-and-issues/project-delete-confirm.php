@@ -1,11 +1,11 @@
 <?php 
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
-include ("../includes/functions.php");?>
-<?php include ("../includes/big_bro_functions.php");?>
-<?php include ("../db_conf.php");?>
-<?php include ("../data/emo_data.php");?>
-<?php include ("../sql/RI_Internal_External.php");?>
-<?php 
+include ("../includes/functions.php");
+include ("../includes/big_bro_functions.php");
+include ("../db_conf.php");
+include ("../data/emo_data.php");
+include ("../sql/RI_Internal_External.php");
+
   //$action = $_GET['action']; //new
   //$temp_id = $_GET['tempid'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
@@ -63,6 +63,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized =  $row_risk_issue['RiskRealized_Flg']; 
 $department = $row_risk_issue['POC_Department'];
 $del_proj_select = $_POST['del_proj_select'];
+$POC_Nm = $row_risk_issue['POC_Nm'];
 
 $groupID = "";
 if (isset($_POST['groupID'])) {
@@ -70,16 +71,15 @@ if (isset($_POST['groupID'])) {
 }
 
 $disble_it = "";
-
 if (isset($_POST['del_proj_select'])){
   $del_proj_select = implode(",", $_POST['del_proj_select']);
   $disble_it = " disable";
 }
 
 if(!empty($_POST['proj_select'])) {
-$assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
+  $assocProject = implode(",",$_POST['proj_select']) . "," . $RiskAndIssue_Key ;
 } else {
-$assocProject = $RiskAndIssue_Key;
+  $assocProject = $RiskAndIssue_Key;
 }
 
 //ASSOCIATED RISK AND ISSUES
@@ -221,7 +221,7 @@ function toggle(source) {
   <input name="formName" type="hidden" id="formName" value="PRJR">
   <input name="formType" type="hidden" id="formType" value="New">
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $fscl_year; ?>">
-  <input name="RIType" type="hidden" id="RIType" value="Risk">
+  <input name="RIType" type="hidden" id="RIType" value="<?php echo $RIType; ?>">
   <input name="RILevel" type="hidden" id="RILevel" value="Project">
   <input name="frcstDt_temp" type="hidden" id="frcstDt_temp" value="<?php if(!empty($date)){ echo convDate($date);} ?>">
   <input name="assocProjects" type="hidden" id="assocProjects" value="<?php //echo $assocProject; ?>">
@@ -420,7 +420,7 @@ function toggle(source) {
                   </td>
                 <td colspan="2" valign="top">
                   <div id="myDIV2">
-                  <?php if($RIType == "issue") { ?>  
+                  <?php if($RIType == "Risk") { ?>  
                   <table width="200" border="0">
                       <tr>
                         <td>
@@ -437,7 +437,7 @@ function toggle(source) {
                         <?php } ?>
                   </table>
                   <?php } ?>
-                  <?php if($RIType != "issue"){ ?>
+                  <?php if($RIType == "Issue"){ ?>
                     <input name="RiskProbability" type="hidden" id="RiskProbability" value="">
                   <?php } ?>
                     </div>
@@ -457,20 +457,17 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left">
           <div class="box <?php echo $disble_it;?>">
-              <label for="Individual">Individual POC<br>
-                </label>
-              
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" value = "<?php echo $individual; ?>" required/>
-              
-                <datalist id="Individual">
-                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
-                  <?php } ?>
-                </datalist>
-
-              <label for="Individual3">Team/Group POC<br>
-                </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" value = "<?php echo $department; ?>" required/>
+            <label for="Individual">Individual POC *<br></label>
+                <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+                    <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
+                      <option value=""></option>
+                      <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
+                    <?php } ?>
+                </select>  
+              <hr>
+                <div align="left">
+                  <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
+                </div>
           </div>
           </td>
           </tr>

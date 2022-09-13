@@ -49,6 +49,8 @@ $transfer2prgManager = $row_glb_prog['TransferredPM_Flg'];
 $ResponseStrategy_Cd = $row_glb_prog['ResponseStrategy_Cd'];
 
 $ActionPlanStatus_Cd = $row_glb_prog['ActionPlanStatus_Cd'];
+$actionPlan = "";
+$actionPlan_b = $row_glb_prog['ActionPlanStatus_Cd'];
 
 $RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
 $AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
@@ -284,10 +286,10 @@ function toggle(source) {
    <div class="container">
   <!--ROW 1 -->
   <div class="row row-eq-height">
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">LRP YEAR</h3>
+          <h3 class="panel-title">LRP YEAR*</h3>
         </div>
         <div class="panel-body">
           <select name="fiscalYer" id="fiscalYer" class="form-control" disabled>
@@ -297,10 +299,10 @@ function toggle(source) {
         </div>
       </div>
     </div>  
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RISK/ISSUE LEVEL</h3>
+          <h3 class="panel-title">RISK/ISSUE LEVEL*</h3>
         </div>
         <div class="panel-body">
           <label for="RILevel"><input type="radio" name="RILevel" value="Program" required <?php if($RILevel_Cd == "Program") { echo 'checked';} ?> disabled> Program </label> 
@@ -308,10 +310,10 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PORTFOLIO TYPE</h3>
+          <h3 class="panel-title">PORTFOLIO TYPE*</h3>
         </div>
         <div class="panel-body">
         <label for="portfolioType"><input type="radio" name="portfolioType" value="nt 2.0" required <?php if($RIPortfolio_Key == 1) { echo 'checked';} ?> disabled> NT 2.0 </label> 
@@ -319,10 +321,10 @@ function toggle(source) {
         </div>
     </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">RISK/ISSUE TYPE</h3>
+        <h3 class="panel-title">RISK/ISSUE TYPE*</h3>
       </div>
       <div class="panel-body">
       <label for="RIType"><input type="radio" name="RIType" value="Risk" required <?php if($RIType_Cd == "Risk") { echo 'checked';} ?> disabled> Risk </label> 
@@ -346,7 +348,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PROGRAM</h3>
+          <h3 class="panel-title">PROGRAM*</h3>
         </div>
         <div class="panel-body">
           <select name="program[]" id="program" class="form-control" multiple="multiple" readonly>
@@ -360,7 +362,7 @@ function toggle(source) {
     <div class="col-md-4 " align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">SUBPROGRAM</h3>
+          <h3 class="panel-title">SUBPROGRAM*</h3>
         </div>
         <div class="panel-body">
           <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required <?php if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>>
@@ -377,7 +379,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">DESCRIPTOR</h3>
+          <h3 class="panel-title">DESCRIPTOR*</h3>
         </div>
         <div class="panel-body">
           <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()" value="<?php echo $ScopeDescriptor_Txt ?>" readonly> 
@@ -387,20 +389,20 @@ function toggle(source) {
     <div class="col-md-8" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">REGION</h3>
+          <h3 class="panel-title">REGION*</h3>
         </div>
         <div class="panel-body">
           <table width="100%">
           <tr>
             <td><label for="California"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?> > California </label> </td>
-            <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
-            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="1" <?php if(in_array("1", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Corporate </label></td>
-            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="4" <?php if(in_array("4", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Northeast </label></td>
+            <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?> > Central </label></td>
+            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="1" <?php if(in_array("1", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?> > Corporate </label></td>
+            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="4" <?php if(in_array("4", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?> > Northeast </label></td>
           </tr>
           <tr>
-            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southeast </label> </td>
-            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southwest </label></td>
-            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Virginia </label></td>
+            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?> > Southeast </label> </td>
+            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?> > Southwest </label></td>
+            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?> > Virginia </label></td>
             <td><label for="All"><input type="checkbox" name="Region[]" value="" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
           </tr>
         </table>
@@ -413,7 +415,7 @@ function toggle(source) {
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">DESCRIPTION</h3>
+          <h3 class="panel-title">DESCRIPTION*</h3>
         </div>
         <div class="panel-body">
         <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"><?php echo $RIDescription_Txt ?></textarea>
@@ -423,7 +425,7 @@ function toggle(source) {
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">DRIVERS</h3>
+          <h3 class="panel-title">DRIVERS*</h3>
         </div>
         <div class="panel-body">
           <table width="100%" border="0">
@@ -546,19 +548,17 @@ function toggle(source) {
       </div>
     </div>
   </div>
-  <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATIGY -->
+  <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATEGY -->
   <div class="row equal">
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">CURRENT TASK POC (Send Dept. Key)</h3>
+          <h3 class="panel-title">CURRENT TASK POC</h3>
         </div>
         <div class="panel-body">
           <label for="Individual">Individual POC *<br></label>
               <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
-                
                   <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                    <option value=""></option>
                     <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                   <?php } ?>
               </select>  
@@ -611,7 +611,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RESPONSE STRATIGY</h3>
+          <h3 class="panel-title">RESPONSE STRATEGY*</h3>
         </div>
         <div class="panel-body">
           <table width="246" border="0" cellpadding="5" cellspacing="5">
@@ -649,10 +649,21 @@ function toggle(source) {
     <div class="col-md-12" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ACTION PLAN</h3>
+          <h3 class="panel-title">ACTION PLAN* </h3>
         </div>
         <div class="panel-body">
-        <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $ActionPlanStatus_Cd ?></textarea>
+          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+          <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
+          <input type="hidden" name="user" value="<?php echo $user_id ?>">
+          <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
+          <div align="right" style="margin-top:10px; margin-bottom:10px;">  
+              <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+          </div>
+          <div class="collapse" id="collapseExample">
+            <div class="well">
+              <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -662,7 +673,7 @@ function toggle(source) {
     <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RISK REALIZED</h3>
+          <h3 class="panel-title">RISK REALIZED*</h3>
         </div>
         <div class="panel-body">
           <table width="50%" border="0">
@@ -691,7 +702,7 @@ function toggle(source) {
     <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">NOTIFY PORTFOLIO TEAM</h3>
+          <h3 class="panel-title">NOTIFY PORTFOLIO TEAM*</h3>
         </div>
         <div class="panel-body">
           <table width="50%" border="0">
@@ -719,76 +730,11 @@ function toggle(source) {
   </div>
 </div>
 <!--end container -->
-  <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+  <!--<button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button> -->
   <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
-
-<script>
-function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
-  
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
-
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
-
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
-
-}
-
-function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
-  
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
-  
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
-
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
-
-}
-
-</script>
 <script>
 function forCasted() {
   var x = document.getElementById("forcastedDate");

@@ -2,7 +2,10 @@
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
-include("../sql/risk-issues-lookup.php"); 
+include ("../sql/risk-issues-lookup.php"); 
+include ("../sql/update-time.php");
+ 
+session_start();
 
 //ASSOCIATED RISK AND ISSUES FROM KEYS
 //$ri_name = $row_risk_issue['RI_Nm'];
@@ -19,7 +22,7 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 //GET DRIVERS FROM ID'S
 $sql_risk_issue_driver = "SELECT * FROM [RI_MGT].[Driver] where Driver_Key in ($Driversx)";
 $stmt_risk_issue_driver = sqlsrv_query( $data_conn, $sql_risk_issue_driver );
-// $row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
+$row_risk_issue_driver = sqlsrv_fetch_array($stmt_risk_issue_driver, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_driver['Driver_Nm]; 			
 //echo  "<br>" . $sql_risk_issue_driver;
 //exit();
@@ -48,6 +51,11 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
 
 <body style="font-family:Mulish, serif;">
+<?php 
+  if($global == 1 && $_SESSION['unframe'] == '0') {
+    include ("../includes/menu.php");
+  } 
+?>
     <!-- PROGRESS BAR -->
 <div class="container">       
             <div class="row bs-wizard" style="border-bottom:0;">
@@ -181,18 +189,21 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
       <td><?php echo $assCRID; ?></td>
     </tr>
 <?php } ?>
+
 <?php if(!empty($program)) { ?>
     <tr>
       <td>Program</td>
-      <td><?php if($global==1){echo $program_glb;} else { echo $Program; }?></td>
+      <td><?php if($global==1){echo $program_glb;} else { echo $program; }?></td>
     </tr>
 <?php } ?>
+
 <?php if(!empty($subprogram)) { ?>
     <tr>
       <td>Subprograms</td>
       <td><?php if($global==1){echo $subprogram_glb;} else { echo $subprogram; }?></td>
     </tr>
 <?php } ?>
+
     <tr>
       <td>Descriptor</td>
       <td><?php echo $descriptor ; ?></td>
@@ -211,7 +222,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <tr>
       <td>Drivers</td>
       <td>
-        <?php if($global==1){echo $Drivers_glb;} else { echo $Driversx; }?>
+        <?php if($global==1){echo $Drivers_glb;} else { echo $row_risk_issue_driver['Driver_Nm']; }?>
       </td>
     </tr>
     <tr>

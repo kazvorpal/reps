@@ -348,20 +348,17 @@ Enter the details of your Project Issue
         <tr>
           <td colspan="3" align="left">
           <div class="box">
-              <label for="Individual">Individual POC *<br>
-                </label>
-              
-              <input type="text" list="Individual" name="Individual" class="form-control" id="indy" required/>
-              
-                <datalist id="Individual">
+            <label for="Individual">Individual POC *<br></label>
+              <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
+                
                   <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                    <option value="<?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?>"><span style="font-size:8px;"> <?php echo $row_internal['POC_Department'];?></span>
+                    <option value=""></option>
+                    <option value="<?php echo $row_internal['POC_Nm'] ;?>"><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                   <?php } ?>
-                </datalist>
-
-              <label for="Individual3">Team/Group POC *<br>
-                </label>
-              <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" required/>
+              </select>  
+              <hr>
+              <div align="left">
+              <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
           </div>
           </td>
           </tr>
