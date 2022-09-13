@@ -63,6 +63,7 @@ $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized =  $row_risk_issue['RiskRealized_Flg']; 
 $department = $row_risk_issue['POC_Department'];
 $del_proj_select = $_POST['del_proj_select'];
+$POC_Nm = $row_risk_issue['POC_Nm'];
 
 $groupID = "";
 if (isset($_POST['groupID'])) {
@@ -458,14 +459,13 @@ function toggle(source) {
           <div class="box <?php echo $disble_it;?>">
             <label for="Individual">Individual POC *<br></label>
                 <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
-                  
                     <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                       <option value=""></option>
                       <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                     <?php } ?>
                 </select>  
               <hr>
-                <div align="center">
+                <div align="left">
                   <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
                 </div>
           </div>
