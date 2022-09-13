@@ -792,7 +792,7 @@ const nameevent = () => {
     }
   }
   let p = (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) ? "PORTFOLIO " : "";
-  Namex.value = p + program.value + ' ' + locations +  Descriptor.value + ' POR' + fiscalYer.value.slice(2)
+  Namex.value = p + program.value + ' ' + locations + Descriptor.value + ' POR' + fiscalYer.value.slice(2)
   return(locations)
 }
 
@@ -810,7 +810,7 @@ const subevent = () => {
     // console.log(subtarget)
     if (subtarget.Program_Nm == target && 
         !sublist[subtarget.SubProgram_Nm] &&
-        subtarget.LRPYear == '2022') {
+        subtarget.LRPYear == document.getElementById('fiscalYer').value) {
       console.log(subtarget.SubProgram_Nm)
       sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
     } else {
@@ -842,7 +842,7 @@ const levelevent = (e) => {
 }
 
 const programlevel = () => {
-  if (document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
+  if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
     // console.log("portfolio");
     document.getElementById("program").multiple = true;
     $('#program').multiselect("destroy").multiselect({

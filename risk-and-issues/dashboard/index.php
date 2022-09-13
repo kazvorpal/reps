@@ -50,36 +50,52 @@
     }
 
     for (key in portfolioopen) {
-      let ps = "";
-      for (lokey in portfolioprograms) {
-        if (portfolioprograms[lokey].RiskAndIssue_Key == portfolioopen[key].RiskAndIssue_Key) {
-          ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
+      // console.log(portfolioopen[key].MLMProgram_Nm)
+      if(!portfolioopen[key].MLMProgram_Nm) {
+        let ps = "";
+        for (lokey in portfolioprograms) {
+          if (portfolioprograms[lokey].RiskAndIssue_Key == portfolioopen[key].RiskAndIssue_Key) {
+            ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
+          }
+          portfolioopen[key].MLMProgram_Nm = ps;
         }
-        portfolioopen[key].MLMProgram_Nm = ps;
+        let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
+        if (typeof pp[0] != 'undefined') {
+          portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nm;
+          portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
+        } else if(!portfolioopen[key].MLMProgram_Nm) {
+          delete portfolioopen[key];
+        }
       }
-      let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
-        portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nm;
-      portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
     }    
     const portfolioclosed = portfoliofull = portfolioopen;
 
-    const portfolioopenDisabled =[{"Fiscal_Year":2022,"RiskAndIssue_Key":4,"RiskAndIssueLog_Key":7,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Risk","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"CB Funding for Growth","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Corporate","MLMRegion_Key":1,"AssociatedCR_Key":null,"MLMProgramRI_Key":1,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"},{"Fiscal_Year":2022,"RiskAndIssue_Key":7,"RiskAndIssueLog_Key":7,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Issue","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"CB Funding for Growth","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Corporate","MLMRegion_Key":1,"AssociatedCR_Key":null,"MLMProgramRI_Key":1,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"},{"Fiscal_Year":2022,"RiskAndIssue_Key":5,"RiskAndIssueLog_Key":6,"RIIncrement_Num":2,"RILevel_Cd":"Program","RIType_Cd":"Risk","RI_Nm":"CB Funding for Growth Multi PROGRAMIO POR22","RIDescription_Txt":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","ScopeDescriptor_Txt":"PROGRAMIO","ImpactLevel_Nm":"Moderate","ImpactLevel_Key":2,"ImpactArea_Nm":"Budget (Cost Change)","ImpactArea_Key":3,"RiskRealized_Flg":0,"EPSProject_Key":null,"EPSProject_Id":null,"EPSProject_Nm":null,"EPSProgram_Nm":null,"EPSSubprogram_Nm":null,"EPSRegion_Key":null,"EPSRegion_Cd":null,"EPSRegion_Abb":null,"EPSMarket_Key":null,"EPSMarket_Cd":null,"EPSMarket_Abb":null,"EPSFacility_Key":null,"EPSFacility_Abb":null,"EPSFacility_Cd":null,"MLMProgram_Key":54,"MLMProgram_Nm":"Bandwidth Management","MLMProgram_Abb":"CBFFG","MLMRegion_Cd":"Central","MLMRegion_Key":3,"AssociatedCR_Key":null,"MLMProgramRI_Key":2,"CurrentTaskPOC_Key":165,"POC_Nm":"Gilbert Carolino","POC_Department":"IDK","ResponseStrategy_Nm":"Avoid","ResponseStrategy_Cd":"AVD","ActionPlanStatus_Cd":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, ","TransferredPM_Flg":1,"Opportunity_Txt":"","RaidLog_Flg":0,"RiskProbability_Nm":"99% - Almost Certain","RiskProbability_Key":4,"Created_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"RIClosed_Dt":null,"RIOpen_Flg":1,"RIOpen_Hours":806,"RIActive_Flg":1,"RILogActive_Flg":1,"ForecastedResolution_Dt":null,"Last_Update_Ts":{"date":"2022-07-12 15:21:34.847000","timezone_type":3,"timezone":"UTC"},"LastUpdate_By":"gcarolin","LastUpdateBy_Nm":"Gilbert Carolino"}];
-
-        var ridata, d1, d1;
-        const setdata = () => {
-            if (mode == "program") {
-                ridata = programfull;
-                d1 = programopen;
-                d2 = programclosed;
-            } else if (mode == "portfolio") {
-                ridata = d1 = d2 = portfolioopen;
-            } else {
-                ridata = projectfull;
-                d1 = projectopen;
-                d2 = projectclosed;
-            }
+    const cleandata = (list) => {
+      Object.keys(list).forEach(key => {
+        if(list[key].RiskAndIssue_Key == "undefined") {
+          delete list[key];
         }
-        setdata();
+      })
+      return(list);
+    }
+
+
+      var ridata, d1, d1;
+      const setdata = () => {
+          if (mode == "program") {
+              ridata = programfull;
+              d1 = programopen;
+              d2 = programclosed;
+          } else if (mode == "portfolio") {
+              ridata = d1 = d2 = cleandata(portfolioopen);
+          } else {
+              ridata = projectfull;
+              d1 = projectopen;
+              d2 = projectclosed;
+          }
+      }
+      // ridata.forEach(o => {console.log(o.RiskAndIssue_Key)})
+      setdata();
 
       $(document).ready(function(){
           //Examples of how to assign the Colorbox event to elements
@@ -348,7 +364,8 @@
         regioncount: function() {
             let counter = 0;
             for(r of ridata) {
-                if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
+              // console.log(r)
+                if (typeof r != "undefined" && r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
                 counter++;
                 }
             }
@@ -390,6 +407,7 @@
         };
         // console.log(program);
         // console.log("program");
+        // console.log(id);
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);

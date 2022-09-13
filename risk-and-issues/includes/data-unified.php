@@ -78,7 +78,8 @@
     }
   }
 
-  $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
+  //    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
+  $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio', 'program')";
   // print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
   $portfolioquery = sqlsrv_query($data_conn, $sqlstr);
@@ -98,7 +99,8 @@
       $portfoliorows[] = array_map("fixutf8", $portfoliorow);
     }
 
-    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'portfolio'";
+    //     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'portfolio'";
+    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio', 'program')";
     ini_set('mssql.charset', 'UTF-8');
     $closedportfolio = sqlsrv_query($data_conn, $sqlstr);
     if($closedportfolio === false) {
