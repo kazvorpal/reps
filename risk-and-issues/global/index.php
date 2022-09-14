@@ -284,17 +284,17 @@ function toggle(source) {
           <h3 class="panel-title">REGION</h3>
         </div>
         <div class="panel-body">
-          <table width="100%">
+          <table width="100%" class="checkbox_group required" required>
           <tr>
-            <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California"> California </label> </td>
-            <td><label for="Central"><input type="checkbox" name="Region[]" value="Central"> Central </label></td>
-            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="Corporate"> Corporate </label></td>
-            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="Northeast"> Northeast </label></td>
+            <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California" required> California </label> </td>
+            <td><label for="Central"><input type="checkbox" name="Region[]" value="Central" required> Central </label></td>
+            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="Corporate" required> Corporate </label></td>
+            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="Northeast" required> Northeast </label></td>
           </tr>
           <tr>
-            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="Southeast"> Southeast </label> </td>
-            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="Southwest"> Southwest </label></td>
-            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="Virginia"> Virginia </label></td>
+            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="Southeast" required> Southeast </label> </td>
+            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="Southwest" required> Southwest </label></td>
+            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="Virginia" required> Virginia </label></td>
             <td><label for="All"><input type="checkbox" name="Region[]" value="All" onClick="toggle(this)"> All </label></td>
           </tr>
         </table>
@@ -693,7 +693,7 @@ function unKnown() {
 }
 
 jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
+    let $inputs = $('input[name=date],input[name=unknown]');
     $inputs.on('input', function () {
         // Set the required property of the other input to false if this input is not empty.
         $inputs.not(this).prop('required', !$(this).val().length);
@@ -744,7 +744,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const makeselect = (o) => {
     const select = makeelement(o);
       list = o.l;
-      select.appendChild(makeelement({e: "option", v: "", t: ""}));
+      select.appendChild(makeelement({e: "option", v: "", t: "None selected"}));
       for (option in list) 
         if(list[option].Program_Nm != ""&& list[option].Program_Nm != null)
           select.appendChild(makeelement({e: "option", v: list[option].Program_Nm, t: list[option].Program_Nm}));
@@ -775,151 +775,76 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     return t;
   }
 
-// Event functions to be used later
+  // Event functions to be used later
 
-const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
-const nameevent = () => {
-  // console.log("nameevent");
-  let locations = "";
-  if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
-    locations = "ALL ";
-  } else {
-    document.getElementsByName("Region[]").forEach((e) => {
-      locations += (e.checked) ? regions[e.value] + " " : "";
-    });
-    // console.log(locations)
-    if (locations.length > 4) {
-      locations = "MULTI ";
-    }
-  }
-  let p = (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) ? "PORTFOLIO " : "";
-  Namex.value = p + program.value + ' ' + locations + Descriptor.value + ' POR' + fiscalYer.value.slice(2)
-  return(locations)
-}
-
-const subevent = () => {
-  // console.log("subevent");
-  let p = document.getElementById("program");
-  let s = document.getElementById("subprogram");
-  let p0 = p.options[0];
-  if (p0.value == '') p0.remove();
-  s.options.length = 0;
-  let target = p.options[p.selectedIndex].text;
-  // console.log(target);
-  let sublist = {};
-  subprograms.forEach(subtarget => {
-    // console.log(subtarget)
-    if (subtarget.Program_Nm == target && 
-        !sublist[subtarget.SubProgram_Nm] &&
-        subtarget.LRPYear == document.getElementById('fiscalYer').value) {
-      // console.log(subtarget.SubProgram_Nm)
-      sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
+  const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
+  const nameevent = () => {
+    // console.log("nameevent");
+    let locations = "";
+    if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
+      locations = "ALL ";
     } else {
-      // if (subtarget.Program_Nm == target && 
-      //   !sublist[subtarget.SubProgram_Nm])
-        // console.log(subtarget.LRPYear);
-      // console.log(subtarget.Program_Nm +"==" + target + "&&" +sublist.includes(subtarget.SubProgram_Nm))
-      // console.log("none")
+      document.getElementsByName("Region[]").forEach((e) => {
+        locations += (e.checked) ? regions[e.value] + " " : "";
+      });
+      let required = (!locations.length > 0);
+      console.log(locations);
+      document.getElementsByName("Region[]").forEach((o) => {
+        o.required = required;
+      });
+      // console.log(locations)
+      if (locations.length > 4) {
+        locations = "MULTI ";
+      }
     }
-  });
-  // console.log(typeof sublist);
-  if (sublist.length == 0) {
-    s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
-  } else {
-    Object.entries(sublist).forEach(([o, k]) => {
-      // console.log(o)
-      s.appendChild(makeelement({e: "option", t: o, v: k}));
-    });
+    let p = (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) ? "PORTFOLIO " : "";
+    Namex.value = p + program.value + ' ' + locations + Descriptor.value + ' POR' + fiscalYer.value.slice(2)
+    return(locations)
   }
-  $('#subprogram').multiselect("destroy").multiselect({
-      includeSelectAllOption: true,
-  });
-  // document.getElementById("subprogram").  
-}
 
-const levelevent = (e) => {
-  // console.log("levelevent");
-  programlevel();
-}
-
-const programlevel = () => {
-  if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
-    // console.log("portfolio");
-    document.getElementById("program").multiple = true;
-    $('#program').multiselect("destroy").multiselect({
+  const subevent = () => {
+    // console.log("subevent");
+    let p = document.getElementById("program");
+    let s = document.getElementById("subprogram");
+    let p0 = p.options[0];
+    if (p0.value == '') p0.remove();
+    s.options.length = 0;
+    let target = p.options[p.selectedIndex].text;
+    // console.log(target);
+    let sublist = {};
+    subprograms.forEach(subtarget => {
+      // console.log(subtarget)
+      if (subtarget.Program_Nm == target && 
+          !sublist[subtarget.SubProgram_Nm] &&
+          subtarget.LRPYear == document.getElementById('fiscalYer').value) {
+        // console.log(subtarget.SubProgram_Nm)
+        sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
+      } 
+    });
+    // console.log(typeof sublist);
+    if (sublist.length == 0) {
+      s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
+    } else {
+      Object.entries(sublist).forEach(([o, k]) => {
+        // console.log(o)
+        s.appendChild(makeelement({e: "option", t: o, v: k}));
+      });
+    }
+    $('#subprogram').multiselect("destroy").multiselect({
         includeSelectAllOption: true,
     });
-  } else {
-    // console.log("program");
-    document.getElementById("program").multiple = true;
-    $('#program').multiselect("destroy")
-    setsubprogramevent();
+    // document.getElementById("subprogram").  
   }
-}
 
-// Event creators
+  const levelevent = (e) => {
+    // console.log("levelevent");
+    programlevel();
+  }
 
-const setregionevent = () => {
-  // console.log("regionevent");
-  document.getElementsByName("Region[]").forEach((target) => {
-    target.addEventListener("click", (e) => {
-      nameevent();
-    });
-  });
-};
-
-var prog;
-const setsubprogramevent = () => {
-  // console.log("setsubprogramevent")
-  prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
-  document.getElementById("programdiv").innerHTML = ""
-  document.getElementById("programdiv").appendChild(prog);
-  // $('#program').multiselect({
-  //     includeSelectAllOption: true,
-  // });
-  // console.log("setsub");
-  // document.getElementById("program").addEventListener("change", (e) => subevent())
-  document.getElementById("program").addEventListener("change", (e) => subevent());
-};
-
-const setlevelevent = () => {
-  document.getElementsByName("RILevel").forEach((target) =>  {
-    target.addEventListener("click", (e) => {
-      levelevent();
-    });
-  })
-};
-
-nameparts = ["program", "Descriptor", "fiscalYer"]
-const setnameevent = () => {
-  nameparts.forEach((target) => {
-    document.getElementById(target).addEventListener("change", (e) => nameevent());
-  });
-};
-
-
-const disabler = (o) => {
-  document.getElementsByName(o.t).forEach((target) =>  {
-    target.addEventListener("click", (e) => {
-      const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
-      o.d.forEach(field => {
-        if(document.getElementsByName(field).length == 0) {
-          $(`#${field}`).multiselect(disable ? "disable" : "enable");
-        } else {
-          document.getElementsByName(field).forEach(t2 => {
-            t2.disabled = disable;
-            t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
-          })
-        }
-      })
-    })
-  })
-}
-
-const redisable = (o) => {
-  if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
-  console.log(`input[name="${o.t}"]:checked`)
-  const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
+  const disableevent = (o) => {
+    if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
+    console.log(`input[name="${o.t}"]:checked`)
+    const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
     o.d.forEach(field => {
       if(document.getElementsByName(field).length == 0) {
         $(`#${field}`).multiselect(disable ? "disable" : "enable");
@@ -930,35 +855,98 @@ const redisable = (o) => {
         })
       }
     })
-}
+  }
+
+  const programlevel = () => {
+    if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
+      // console.log("portfolio");
+      document.getElementById("program").multiple = true;
+      $('#program').multiselect("destroy").multiselect({
+          includeSelectAllOption: true, nonSelectedText: 'None Selected'
+      });
+    } else {
+      // console.log("program");
+      document.getElementById("program").multiple = true;
+      $('#program').multiselect("destroy")
+      setsubprogramevent();
+    }
+  }
+
+  // Event creators
+
+  const setregionevent = () => {
+    // console.log("regionevent");
+    document.getElementsByName("Region[]").forEach((target) => {
+      target.addEventListener("click", (e) => {
+        nameevent();
+      });
+    });
+  };
+
+  var prog;
+  const setsubprogramevent = () => {
+    // console.log("setsubprogramevent")
+    prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
+    document.getElementById("programdiv").innerHTML = ""
+    document.getElementById("programdiv").appendChild(prog);
+    // $('#program').multiselect({
+    //     includeSelectAllOption: true,
+    // });
+    // console.log("setsub");
+    // document.getElementById("program").addEventListener("change", (e) => subevent())
+    document.getElementById("program").addEventListener("change", (e) => subevent());
+  };
+
+  const setlevelevent = () => {
+    document.getElementsByName("RILevel").forEach((target) =>  {
+      target.addEventListener("click", (e) => {
+        levelevent();
+      });
+    })
+  };
+
+  nameparts = ["program", "Descriptor", "fiscalYer"]
+  const setnameevent = () => {
+    nameparts.forEach((target) => {
+      document.getElementById(target).addEventListener("change", (e) => nameevent());
+    });
+  };
+
+  const setdisableevent = (o) => {
+    document.getElementsByName(o.t).forEach((target) =>  {
+      target.addEventListener("click", (e) => {
+        disableevent(o);
+      });
+    })
+  }
 
 
-const conditionals = () => {
-  levelevent()
-  subevent();
-  nameevent();
-  redisable({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-  redisable({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
-  redisable({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
-}
+  const conditionals = () => {
+    levelevent()
+    subevent();
+    nameevent();
+    disableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
+    disableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
+    disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+  }
 
 
-$(document).ready(function() {
-  document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
-  document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
-  document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
-  disabler({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-  disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
-  disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
-  setsubprogramevent();
-  setregionevent();
-  setlevelevent();
-});
+  $(document).ready(function() {
+    document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
+    document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+    document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+    setdisableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
+    setdisableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
+    setdisableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+    setsubprogramevent();
+    setregionevent();
+    setlevelevent();
+  });
 
-// setInterval(conditionals, 1000);
-window.onpageshow = (e) => {
-  conditionals();
-}
+  // setInterval(conditionals, 1000);
+  window.onpageshow = (e) => {
+    conditionals();
+  }
 
 </script>
 
