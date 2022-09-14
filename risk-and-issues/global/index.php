@@ -943,7 +943,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     setlevelevent();
   });
 
-  // setInterval(conditionals, 1000);
+  setInterval(nameevent, 1000);
   window.onpageshow = (e) => {
     conditionals();
   }
