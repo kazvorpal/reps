@@ -273,7 +273,7 @@ function toggle(source) {
           <h3 class="panel-title">RISK DESCRIPTOR</h3>
         </div>
         <div class="panel-body">
-          <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()"> 
+          <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="//updatebox()"> 
         </div>
       </div>
     </div>
@@ -478,7 +478,7 @@ function toggle(source) {
                     class="form-control" 
                     id="date" 
                     value="2022-01-01"
-                    onChange="forCastedX()"  
+                    onChange="//forCastedX()"  
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -716,7 +716,8 @@ jQuery(function ($) {
   document.getElementById("indy").addEventListener("change", function(){
     const v = this.value.split(" : ");
     this.value = v[0];
-    document.getElementById("InternalExternal").value = v[1];
+    // document.getElementById("InternalExternal").value = v[1];
+    // ^^^^ This refers to an element that's commented out
   });
 </script>
 
@@ -797,36 +798,36 @@ const nameevent = () => {
 }
 
 const subevent = () => {
-  console.log("subevent");
+  // console.log("subevent");
   let p = document.getElementById("program");
   let s = document.getElementById("subprogram");
   let p0 = p.options[0];
   if (p0.value == '') p0.remove();
   s.options.length = 0;
   let target = p.options[p.selectedIndex].text;
-  console.log(target);
+  // console.log(target);
   let sublist = {};
   subprograms.forEach(subtarget => {
     // console.log(subtarget)
     if (subtarget.Program_Nm == target && 
         !sublist[subtarget.SubProgram_Nm] &&
         subtarget.LRPYear == document.getElementById('fiscalYer').value) {
-      console.log(subtarget.SubProgram_Nm)
+      // console.log(subtarget.SubProgram_Nm)
       sublist[subtarget.SubProgram_Nm] = subtarget.SubProgram_Key;
     } else {
-      if (subtarget.Program_Nm == target && 
-        !sublist[subtarget.SubProgram_Nm])
-        console.log(subtarget.LRPYear);
+      // if (subtarget.Program_Nm == target && 
+      //   !sublist[subtarget.SubProgram_Nm])
+        // console.log(subtarget.LRPYear);
       // console.log(subtarget.Program_Nm +"==" + target + "&&" +sublist.includes(subtarget.SubProgram_Nm))
-      console.log("none")
+      // console.log("none")
     }
   });
-  console.log(typeof sublist);
+  // console.log(typeof sublist);
   if (sublist.length == 0) {
     s.appendChild(makeelement({e: "option", t: "No Subprograms Available", v: ""}));
   } else {
     Object.entries(sublist).forEach(([o, k]) => {
-      console.log(o)
+      // console.log(o)
       s.appendChild(makeelement({e: "option", t: o, v: k}));
     });
   }
@@ -859,7 +860,7 @@ const programlevel = () => {
 // Event creators
 
 const setregionevent = () => {
-  console.log("regionevent");
+  // console.log("regionevent");
   document.getElementsByName("Region[]").forEach((target) => {
     target.addEventListener("click", (e) => {
       nameevent();
@@ -869,14 +870,14 @@ const setregionevent = () => {
 
 var prog;
 const setsubprogramevent = () => {
-  console.log("setsubprogramevent")
+  // console.log("setsubprogramevent")
   prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
   document.getElementById("programdiv").innerHTML = ""
   document.getElementById("programdiv").appendChild(prog);
   // $('#program').multiselect({
   //     includeSelectAllOption: true,
   // });
-  console.log("setsub");
+  // console.log("setsub");
   // document.getElementById("program").addEventListener("change", (e) => subevent())
   document.getElementById("program").addEventListener("change", (e) => subevent());
 };
@@ -896,16 +897,12 @@ const setnameevent = () => {
   });
 };
 
-setInterval(nameevent, 1000);
 
 const disabler = (o) => {
   document.getElementsByName(o.t).forEach((target) =>  {
     target.addEventListener("click", (e) => {
       const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
-      // console.log(document.querySelector(`input[name="${o.t}"]:checked`).value);
-      console.log("d")
       o.d.forEach(field => {
-        // console.log(field)
         if(document.getElementsByName(field).length == 0) {
           $(`#${field}`).multiselect(disable ? "disable" : "enable");
         } else {
@@ -919,6 +916,33 @@ const disabler = (o) => {
   })
 }
 
+const redisable = (o) => {
+  if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
+  console.log(`input[name="${o.t}"]:checked`)
+  const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
+    o.d.forEach(field => {
+      if(document.getElementsByName(field).length == 0) {
+        $(`#${field}`).multiselect(disable ? "disable" : "enable");
+      } else {
+        document.getElementsByName(field).forEach(t2 => {
+          t2.disabled = disable;
+          t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
+        })
+      }
+    })
+}
+
+
+const conditionals = () => {
+  levelevent()
+  subevent();
+  nameevent();
+  redisable({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
+  redisable({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
+  redisable({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+}
+
+
 $(document).ready(function() {
   document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
   document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
@@ -926,10 +950,15 @@ $(document).ready(function() {
   disabler({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
   disabler({t: "RILevel", v: "Program", d: ["portfolioType"], e: "Portfolio"})
   disabler({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
-  setregionevent();
   setsubprogramevent();
+  setregionevent();
   setlevelevent();
 });
+
+// setInterval(conditionals, 1000);
+window.onpageshow = (e) => {
+  conditionals();
+}
 
 </script>
 
