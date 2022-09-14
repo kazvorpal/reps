@@ -228,7 +228,7 @@ function toggle(source) {
   </div>
   <!--ROW 2 -->
   <div class="row row-eq-height">
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">NAME (Autofill)</h4>
@@ -238,7 +238,7 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">PROGRAM*</h3>
