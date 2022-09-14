@@ -179,10 +179,10 @@ function toggle(source) {
   <div class="container">
   <!--ROW 1 -->
   <div class="row row-eq-height">
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">LRP YEAR</h3>
+          <h3 class="panel-title">LRP YEAR*</h3>
         </div>
         <div class="panel-body">
           <select name="fiscalYer" id="fiscalYer" class="form-control">
@@ -192,10 +192,10 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RISK/ISSUE LEVEL</h3>
+          <h3 class="panel-title">RISK/ISSUE LEVEL*</h3>
         </div>
         <div class="panel-body">
           <label for="RILevel"><input type="radio" name="RILevel" value="Program" required> Program </label> 
@@ -203,10 +203,10 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PORTFOLIO TYPE</h3>
+          <h3 class="panel-title">PORTFOLIO TYPE*</h3>
         </div>
         <div class="panel-body">
         <label for="portfolioType"><input type="radio" name="portfolioType" value="1" required> NT 2.0 </label> 
@@ -214,10 +214,10 @@ function toggle(source) {
         </div>
     </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">RISK/ISSUE TYPE</h3>
+        <h3 class="panel-title">RISK/ISSUE TYPE*</h3>
       </div>
       <div class="panel-body">
       <label for="RIType"><input type="radio" name="RIType" value="Risk" required> Risk </label> 
@@ -228,7 +228,7 @@ function toggle(source) {
   </div>
   <!--ROW 2 -->
   <div class="row row-eq-height">
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4 class="panel-title">NAME (Autofill)</h4>
@@ -238,10 +238,10 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-3" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PROGRAM</h3>
+          <h3 class="panel-title">PROGRAM*</h3>
         </div>
         <div class="panel-body" id="programdiv">
           <!-- <select name="program" id="program" class="form-control">
@@ -255,7 +255,7 @@ function toggle(source) {
     <div class="col-md-4 " align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">SUBPROGRAM</h3>
+          <h3 class="panel-title">SUBPROGRAM*</h3>
         </div>
         <div class="panel-body" id="subdiv">
           <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
@@ -270,7 +270,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RISK DESCRIPTOR</h3>
+          <h3 class="panel-title">RISK DESCRIPTOR*</h3>
         </div>
         <div class="panel-body">
           <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="//updatebox()"> 
@@ -281,7 +281,7 @@ function toggle(source) {
     <div class="col-md-8" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">REGION</h3>
+          <h3 class="panel-title">REGION*</h3>
         </div>
         <div class="panel-body">
           <table width="100%" class="checkbox_group required" required>
@@ -307,7 +307,7 @@ function toggle(source) {
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">DESCRIPTION</h3>
+          <h3 class="panel-title">DESCRIPTION*</h3>
         </div>
         <div class="panel-body">
         <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"></textarea>
@@ -317,7 +317,7 @@ function toggle(source) {
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">DRIVERS</h3>
+          <h3 class="panel-title">DRIVERS*</h3>
         </div>
         <div class="panel-body">
           <table width="100%" border="0">
@@ -449,9 +449,8 @@ function toggle(source) {
 
           <label for="Individual">Individual POC *<br></label>
             <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
-              
-                <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                   <option value=""></option>
+                <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                   <option value="<?php echo $row_internal['POC_Nm'] ;?>"><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                 <?php } ?>
             </select>  
@@ -503,7 +502,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RESPONSE STRATEGY</h3>
+          <h3 class="panel-title">RESPONSE STRATEGY*</h3>
         </div>
         <div class="panel-body">
           <table width="246" border="0" cellpadding="5" cellspacing="5">
@@ -541,7 +540,7 @@ function toggle(source) {
     <div class="col-md-12" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ACTION PLAN</h3>
+          <h3 class="panel-title">ACTION PLAN*</h3>
         </div>
         <div class="panel-body">
         <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"></textarea>
@@ -554,7 +553,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RISK REALIZED</h3>
+          <h3 class="panel-title">RISK REALIZED*</h3>
         </div>
         <div class="panel-body">
           <table width="50%" border="0">
@@ -583,7 +582,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">NOTIFY PORTFOLIO TEAM</h3>
+          <h3 class="panel-title">NOTIFY PORTFOLIO TEAM*</h3>
         </div>
         <div class="panel-body">
           <table width="50%" border="0">
@@ -601,7 +600,6 @@ function toggle(source) {
   </div>
 </div>
 <!--end container -->
-  <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
   <button type="submit" class="btn btn-primary" onmouseoverD="nameevent()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
