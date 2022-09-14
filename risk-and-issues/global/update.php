@@ -649,7 +649,7 @@ function toggle(source) {
     <div class="col-md-12" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">ACTION PLAN* </h3>
+          <h3 class="panel-title">ACTION PLAN</h3>
         </div>
         <div class="panel-body">
           <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
