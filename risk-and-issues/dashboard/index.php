@@ -419,6 +419,7 @@
           const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
+          // https://catl0dwas11208.corp.cox.com/risk-and-issues/global/update.php?id=24&unframe=1
           const file = (arrow == "") ? "details.php" : "details-prg.php";
           url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;

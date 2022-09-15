@@ -599,6 +599,7 @@ function toggle(source) {
     </div>
   </div>
 </div>
+<input type="hidden" id="programcache" value=""/>
 <!--end container -->
   <button type="submit" class="btn btn-primary" onmouseoverD="nameevent()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
@@ -757,6 +758,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     // o.c is the (c)lasses, separated by spaces like usual
     // o.t is the innerHTML (t)ext
     // o.s is the col(s)pan
+    // o.a is a list of (a)ttributes
 
     const t = document.createElement(o.e);
     t.id = (typeof o.i == "undefined") ? "" : o.i;
@@ -767,6 +769,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
     t.multiple = (typeof o.m == "undefined") ? "" : o.m;
     t.value = (typeof o.v == "undefined") ? "" : o.v;
+    if (o.a) {
+      o.a.forEach((a) => {
+        t[a] = true;
+      })
+    }
     if (typeof o.j != "undefined") {
       t.onclick = o.j;
     }
@@ -786,7 +793,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         locations += (e.checked) ? regions[e.value] + " " : "";
       });
       let required = (!locations.length > 0);
-      console.log(locations);
+      // console.log(locations);
       document.getElementsByName("Region[]").forEach((o) => {
         o.required = required;
       });
@@ -831,6 +838,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     $('#subprogram').multiselect("destroy").multiselect({
         includeSelectAllOption: true,
     });
+    setTimeout(function() {
+      if (!document.backbutton)
+        document.getElementById("programcache").value = document.getElementById("program").value;
+    }, 1000);
     // document.getElementById("subprogram").  
   }
 
@@ -864,7 +875,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       });
     } else {
       // console.log("program");
-      document.getElementById("program").multiple = true;
+      if (!document.backbutton) 
+        document.getElementById("program").multiple = true;
       $('#program').multiselect("destroy")
       setsubprogramevent();
     }
@@ -884,7 +896,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   var prog;
   const setsubprogramevent = () => {
     // console.log("setsubprogramevent")
-    prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control"});
+    prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control", a: ["required"]});
     document.getElementById("programdiv").innerHTML = ""
     document.getElementById("programdiv").appendChild(prog);
     // $('#program').multiselect({
@@ -920,8 +932,9 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
 
   const conditionals = () => {
-    levelevent()
-    subevent();
+    console.log("running conditionals");
+    // levelevent()
+    // subevent();
     nameevent();
     disableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
     disableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
@@ -942,9 +955,16 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   });
 
   setInterval(nameevent, 1000);
-  window.onpageshow = (e) => {
-    conditionals();
-  }
+
+  if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+    document.backbutton = true;
+    setTimeout(conditionals, 1000);
+  } else 
+    document.backbutton = false;
+
+  // window.onpageshow = (e) => {
+  //   conditionals();
+  // }
 
 </script>
 
