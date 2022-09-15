@@ -3,9 +3,17 @@ include ("../../includes/functions.php");
 include ("../../db_conf.php");
 include ("../../data/emo_data.php");
 include ("../../sql/MS_Users.php");
+include ("../../sql/update-time.php");
 
 session_start();
-$_SESSION['unframe'] = $_GET['unframe'];
+
+$unframe = "0";
+$_SESSION['unframe'] = $unframe;
+
+if(isset($_GET['unframe'])) {
+  $unframe = $_GET['unframe'];
+  $_SESSION['unframe'] = $unframe;
+} 
 
 //GET GLOBAL PROGRAM BY ID
 $ri_id = $_GET['rikey'];
@@ -102,6 +110,10 @@ if($riskRealized_Raw == 1){
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;">
+<?php if($unframe == "0") {
+  include ("../../includes/menu.php");
+}
+?>
 <div id='dlist'></div> 
 	<div align="center"><h3>PROJECT <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
