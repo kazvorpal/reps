@@ -113,7 +113,7 @@ if($riskRealized_Raw == 1){
   $riskRealized = "No";
 }
 
-$link = urldecode("https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=false");
+$link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=false");
 //echo $link; 
 ?>
 <!doctype html>

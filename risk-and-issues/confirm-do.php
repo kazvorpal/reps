@@ -268,11 +268,13 @@ if($global == 1) { include ("../includes/menu.php"); }
         }
         
         //EMAIL PM AND RI CREATOR
+        //LINK FOR EMAIL
+            
             //LINK PROGRAM OR PROJECT
             if($riLevel == "Project"){
-                $link = "https://catl0dwas10222.corp.cox.com/risk-and-issues/details.php?au=true&rikey=";
+                $link = $menu_root . "/risk-and-issues/details.php?au=true&rikey=";
             } else {
-                $link = "https://catl0dwas10222.corp.cox.com/risk-and-issues/details-prg.php?au=true&rikey=";
+                $link = $menu_root . "/risk-and-issues/details-prg.php?au=true&rikey=";
             }
 
             //PROJECT NAME IN EMAIL LINK
@@ -314,7 +316,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
             }
@@ -360,7 +362,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
             }
