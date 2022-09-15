@@ -15,6 +15,7 @@ $proj_name = $_GET['proj_name'];
 
 $prog_name = $_GET['program'];
 
+$uid = "";
 if(isset($_GET['uid'])) {
 $uid = $_GET['uid'];
 }
