@@ -258,7 +258,7 @@ function toggle(source) {
           <h3 class="panel-title">SUBPROGRAM*</h3>
         </div>
         <div class="panel-body" id="subdiv">
-          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required>
+          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required oninvalid="alert('You must select a subprogram');return false">
           <option>Select Program first
           </select>
         </div>
@@ -478,8 +478,8 @@ function toggle(source) {
                     id="date" 
                     value="2022-01-01"
                     onChange="//forCastedX()"  
-                    oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-                    oninput="this.setCustomValidity('')">
+                    oninvalidDisabled="this.setCustomValidity('You must select a date or check Unknown ')"
+                    oninputDisabled="this.setCustomValidity('')">
           </div>
         <hr>
           <div id="forcastedDate">
@@ -793,9 +793,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         locations += (e.checked) ? regions[e.value] + " " : "";
       });
       let required = (!locations.length > 0);
-      // console.log(locations);
+      console.log(locations);
       document.getElementsByName("Region[]").forEach((o) => {
         o.required = required;
+        o.setCustomValidity((required) ? "You must select a region" : "");
       });
       // console.log(locations)
       if (locations.length > 4) {
@@ -878,7 +879,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       // console.log("program");
       if (!document.backbutton) 
         document.getElementById("program").multiple = true;
-      $('#program').multiselect("destroy")
+      setTimeout(function() {$('#program').multiselect("destroy").multiselect()}, 100);
       setsubprogramevent();
     }
   }
@@ -960,6 +961,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     setsubprogramevent();
     setregionevent();
     setlevelevent();
+    $("#program").multiselect();
   });
 
   setInterval(nameevent, 1000);
