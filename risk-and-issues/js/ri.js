@@ -90,11 +90,11 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
         ((document.getElementById("pStatus") == null && o.RIActive_Flg == '1') || (document.getElementById("pStatus").value == '' && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&
         (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) &&
-        (mode == "project" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
+        (mode == "project" || mode == "portfolio" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
         (ispp(mode) || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
         ((ispp(mode) || document.getElementById("market").value == '' || ($('#market').val().includes(o.Market_Cd) || $('#market').val().includes(o.EPSMarket_Cd)))) &&
         ((ispp(mode) || document.getElementById("facility").value == '' || ($('#facility').val().includes(o.Facility_Cd) || $('#facility').val().includes(o.EPSFacility_Cd)))) &&
-        (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date)))
+        (mode != "portfolio" && (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))
     );
   }
 

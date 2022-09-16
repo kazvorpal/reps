@@ -286,7 +286,7 @@ function toggle(source) {
         <div class="panel-body">
           <table width="100%" class="checkbox_group required" required>
           <tr>
-            <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California" required> California </label> </td>
+            <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California" required oninvalid="this.setCustomValidity('Please choose at least one region')"> California </label> </td>
             <td><label for="Central"><input type="checkbox" name="Region[]" value="Central" required> Central </label></td>
             <td><label for="Corporate"><input type="checkbox" name="Region[]" value="Corporate" required> Corporate </label></td>
             <td><label for="Northeast"><input type="checkbox" name="Region[]" value="Northeast" required> Northeast </label></td>
@@ -884,6 +884,13 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   // Event creators
 
+
+  $("#subprogram").change(() => {
+    console.log("sub")
+    localStorage.setItem("subprogram", $("#subprogram").val());
+  })
+
+
   const setregionevent = () => {
     // console.log("regionevent");
     document.getElementsByName("Region[]").forEach((target) => {
@@ -958,6 +965,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
     document.backbutton = true;
+    document.subprogram = localStorage.getItem("subprogram");
     setTimeout(conditionals, 1000);
   } else 
     document.backbutton = false;
@@ -965,6 +973,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   // window.onpageshow = (e) => {
   //   conditionals();
   // }
+  let test = localStorage.getItem("test");
+  console.log("test:" + test);
+  test = (test)? test++:1
+  localStorage.setItem("test", test);
+
 
 </script>
 

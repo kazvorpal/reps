@@ -148,7 +148,7 @@
     <div class="row" align="center">
       <div style="width:98%">
         <div class="col-xs-12 text-center">
-        <h1 id="title"><?= ucfirst($mode) ?> R&I Dashboard</h1>
+        <h1 id="title">R&I Dashboard</h1>
         <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
 
       <?php 
@@ -184,7 +184,7 @@
         // console.log(mode)
         if (mode == "portfolio") {
             p = "";
-            n = "Raid Log";
+            n = "RAID Log";
         } else {
             p = ", Projects";
             n = capitalize(mode);
@@ -420,8 +420,8 @@
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
           // https://catl0dwas11208.corp.cox.com/risk-and-issues/global/update.php?id=24&unframe=1
-          const file = (arrow == "") ? "details.php" : "details-prg.php";
-          url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null`;
+          const file = (arrow == "") ? "details-prg.php" : "global/details.php";
+          url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
           // console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "]")
           // console.log("arrow");
@@ -709,7 +709,7 @@
 
 
     var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": (target == "portfolio") ? "Raid Log" : capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
+        return makeelement({"i": target + "mode", "t": (target == "portfolio") ? "RAID Log" : capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
@@ -732,7 +732,7 @@
     }  
     const makeheadline = () => {
         console.log("headline");
-        document.getElementById("title").innerHTML = (mode == "portfolio") ? "Raid Log" : `${capitalize(mode)} R&I Dashboard`;
+        document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
     }
 
     const init = (target) => {
