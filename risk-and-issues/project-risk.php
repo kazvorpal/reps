@@ -349,9 +349,8 @@ function toggle(source) {
             <div class="box">
               <label for="Individual">Individual POC *<br></label>
               <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
-                
-                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                     <option value=""></option>
+                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                     <option value="<?php echo $row_internal['POC_Nm'] ;?>"><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                   <?php } ?>
               </select>  

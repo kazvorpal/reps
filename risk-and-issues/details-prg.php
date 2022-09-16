@@ -15,6 +15,7 @@ $proj_name = $_GET['proj_name'];
 
 $prog_name = $_GET['program'];
 
+$uid = "";
 if(isset($_GET['uid'])) {
 $uid = $_GET['uid'];
 }
@@ -160,7 +161,7 @@ $dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
 $dateClosed = "---";
 }
 
-$link = urlencode("https://catl0dwas10222.corp.cox.com/risk-and-issues/details-prg.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&program=" . $prog_name . "&status=1&popup=false&uid=" . $uid);
+$link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&program=" . $prog_name . "&status=1&popup=false&uid=" . $uid);
 //echo $link;
 ?>
 <!doctype html>

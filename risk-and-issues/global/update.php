@@ -4,6 +4,13 @@
 <?php include ("../../sql/RI_Internal_External.php");?>
 <?php include ("../../sql/update-time.php");?>
 <?php 
+session_start();
+
+$unframe = "0";
+if(isset($_SESSION['unframe'])) {
+$unframe = $_SESSION['unframe'];
+}
+
 //$action = $_GET['action'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
 $ri_id = $_GET['id'];
@@ -220,7 +227,7 @@ function toggle(source) {
 </head>
 <body style=" font-family:Mulish, serif;">
 <?php 
-  if($global != 1) {
+  if($unframe == "0") {
     include ("../../includes/menu.php");
   } 
 ?>

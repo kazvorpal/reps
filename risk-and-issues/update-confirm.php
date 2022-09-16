@@ -7,6 +7,11 @@ include ("../sql/update-time.php");
  
 session_start();
 
+$unframe = 0;
+if(isset($_SESSION['unframe'])){
+  $unframe = $_SESSION['unframe'];
+}
+
 //ASSOCIATED RISK AND ISSUES FROM KEYS
 //$ri_name = $row_risk_issue['RI_Nm'];
 $sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd 
@@ -52,7 +57,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 
 <body style="font-family:Mulish, serif;">
 <?php 
-  if($global == 1 && $_SESSION['unframe'] == '0') {
+  if($global == 1 && $unframe == '0') {
     include ("../includes/menu.php");
   } 
 ?>
@@ -233,6 +238,12 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
       <td>Impact Level</td>
       <td><?php echo $impactLevel2; ?></td>
     </tr>
+<?php if($RIType == "Risk"){ ?>
+    <tr>
+      <td>Risk Probability</td>
+      <td><?php echo $riskProbability2; ?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td>Individual POC</td>
       <td><?php echo $individual; ?></td>

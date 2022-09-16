@@ -3,12 +3,26 @@ include ("../../includes/functions.php");
 include ("../../db_conf.php");
 include ("../../data/emo_data.php");
 include ("../../sql/MS_Users.php");
+include ("../../sql/update-time.php");
 
 session_start();
-$_SESSION['unframe'] = $_GET['unframe'];
+
+$unframe = "0";
+$_SESSION['unframe'] = $unframe;
+
+if(isset($_GET['unframe'])) {
+  $unframe = $_GET['unframe'];
+  $_SESSION['unframe'] = $unframe;
+} 
 
 //GET GLOBAL PROGRAM BY ID
+if(isset($_GET['rikey'])){
 $ri_id = $_GET['rikey'];
+}
+
+if(isset($_GET['id'])){
+  $ri_id = $_GET['id'];
+}
 
 $sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue](1) WHERE RiskAndIssue_Key = $ri_id";
 $stmt_glb_prog   = sqlsrv_query( $data_conn, $sql_glb_prog ); 
@@ -86,6 +100,9 @@ if($riskRealized_Raw == 1){
 } else {
   $riskRealized = "No";
 }
+
+//LINK FOR EMAIL
+$mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id; 
 ?>
 <!doctype html>
 <html>
@@ -102,6 +119,10 @@ if($riskRealized_Raw == 1){
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;">
+<?php if($unframe == "0") {
+  include ("../../includes/menu.php");
+}
+?>
 <div id='dlist'></div> 
 	<div align="center"><h3>PROJECT <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
@@ -261,7 +282,6 @@ if($riskRealized_Raw == 1){
     </tr>   
   </tbody>
 </table>
-
 <div align="center">
       <?php// if($popup=="false"){?>
         <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
@@ -286,7 +306,7 @@ if($riskRealized_Raw == 1){
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-            %0D%0ALink: <?php echo "https://catl0dwas10222.corp.cox.com/risk-and-issues/global/details.php?rikey=" . $ri_id;?>
+            %0D%0ALink: <?php echo $mailLink;?>
             " 
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
             <?php// } ?>

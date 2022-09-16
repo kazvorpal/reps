@@ -465,9 +465,8 @@ function toggle(source) {
           <div class="box">
           <label for="Individual">Individual POC *<br></label>
               <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
-                
-                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                     <option value=""></option>
+                  <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
                     <option value="<?php echo $row_internal['POC_Nm'] ;?>"><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
                   <?php } ?>
               </select>  
@@ -596,7 +595,8 @@ function toggle(source) {
         </tr>
 
         <tr>
-          <td colspan="2" align="left"><h4 style="color: #00aaf5">RELATED DATES *</h4></td>
+          <td align="left"><h4 style="color: #00aaf5">RELATED DATES *</h4></td>
+          <td align="left"><h4 style="color: #00aaf5">ASSOCIATED CR ID</h4></td>
         </tr>
         <tr>
           <td align="left">
@@ -627,7 +627,7 @@ function toggle(source) {
           </td>
           <td align="left" valign="top" style="padding-left: 10px">
             <div class="box">
-              <label for="Created From">Associated CR ID</label>
+              <label for="Created From">CR ID</label>
               <input name="assCRID" type="text" class="form-control" id="assCRID">
             </div>
           </td>
