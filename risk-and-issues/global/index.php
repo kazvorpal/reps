@@ -812,6 +812,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     let p = document.getElementById("program");
     let s = document.getElementById("subprogram");
     let p0 = p.options[0];
+    localStorage.setItem("program", $("#program").val());
     if (p0.value == '') p0.remove();
     s.options.length = 0;
     let target = p.options[p.selectedIndex].text;

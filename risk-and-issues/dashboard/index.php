@@ -232,10 +232,16 @@
     
         // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
         // console.log("target");
+        // console.log(target);
         pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target);
+        // console.log("pre");
         // console.log(pre);
         post = pre.filter(filterfunction);
+        console.log("post")
+        console.log(post)
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
+        console.log("uni");
+        console.log(uni);
         return uni;
     }
 
@@ -258,12 +264,14 @@
         // Create a Risk or Issue section
         name = ri.MLMProgram_Nm;
         safename = makesafe(name);
+        // console.log("makeri")
         // program = getribykey(name);
         if (
             (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
                 (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(ri.ImpactLevel_Nm))
         ){
             let list = listri(name, type);
+            // console.log("listri('" + name + "','" + type+"');");
             document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
             if (list.length != 0) {
                 document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
