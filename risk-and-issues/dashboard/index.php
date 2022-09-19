@@ -745,6 +745,9 @@
 
     const init = (target) => {
         mode = target;
+        let url = new URL(window.location);
+        url.searchParams.set("mode", mode);
+        window.history.pushState({}, '', url);
         setlists();
         makefilters();
         dofilters();

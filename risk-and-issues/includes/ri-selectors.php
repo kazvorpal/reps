@@ -148,7 +148,7 @@ const jq = `
     }
     // $('select').selectpicker();
     document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary">', c: "filtercol"}));
-    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="reload()" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="location.reload()" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
     
     $('.daterange').daterangepicker({
       autoUpdateInput: false,
