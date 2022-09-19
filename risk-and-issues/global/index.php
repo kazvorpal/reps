@@ -733,12 +733,14 @@ jQuery(function ($) {
   var today = year + "-" + month + "-" + day;
 
   document.getElementById('date').value = today;
+  /*** This whole item is commented out, now/
   document.getElementById("indy").addEventListener("change", function(){
     const v = this.value.split(" : ");
     this.value = v[0];
     // document.getElementById("InternalExternal").value = v[1];
     // ^^^^ This refers to an element that's commented out
   });
+  */
 </script>
 
 <script>
@@ -814,7 +816,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         locations += (e.checked) ? regions[e.value] + " " : "";
       });
       let required = (!locations.length > 0);
-      console.log(locations);
+      // console.log(locations);
       document.getElementsByName("Region[]").forEach((o) => {
         o.required = required;
         o.setCustomValidity((required) ? "You must select a region" : "");
@@ -879,13 +881,19 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const disableevent = (o) => {
     if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
-    console.log(`input[name="${o.t}"]:checked`)
+    // console.log(`input[name="${o.t}"]:checked`)
+    // console.log(!document.querySelector(`input[name="${o.t}"]:checked`))
     const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
     o.d.forEach(field => {
+      console.log(field)
+      console.log(document.getElementsByName(field).length)
       if(document.getElementsByName(field).length == 0) {
-        $(`#${field}`).multiselect(disable ? "disable" : "enable");
+        $(`#${field}`).val("").multiselect(disable ? "disable" : "enable");
+        $('#subprogram').multiselect("destroy").multiselect();
       } else {
         document.getElementsByName(field).forEach(t2 => {
+          console.log(disable);
+          t2.checked = (disable) ? false : t2.checked;
           t2.disabled = disable;
           t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
         })
@@ -1011,6 +1019,16 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
     document.backbutton = true;
     document.subprogram = localStorage.getItem("subprogram");
+    document.program = localStorage.getItem("program");
+    // document.getElementById("program").value = document.program;
+    console.log(document.program)
+    setTimeout(function(){
+      $('#program').val(document.program).multiselect("destroy").multiselect();
+      subevent();
+      // setTimeout(function() {
+        $('#subprogram').val(document.subprogram.split(",")).multiselect("destroy").multiselect();
+      // }, 100);
+    }, 100);
     setTimeout(conditionals, 1000);
   } else 
     document.backbutton = false;
@@ -1018,10 +1036,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   // window.onpageshow = (e) => {
   //   conditionals();
   // }
-  let test = localStorage.getItem("test");
-  console.log("test:" + test);
-  test = (test)? test++:1
-  localStorage.setItem("test", test);
+  // let test = localStorage.getItem("test");
+  // console.log("test:" + test);
+  // test = (test)? test++:1
+  // localStorage.setItem("test", test);
 
 
 </script>
