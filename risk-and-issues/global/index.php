@@ -76,6 +76,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js">
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
   <link rel="stylesheet" href="../includes/ri-styles.css" />
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
@@ -113,6 +114,18 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
             $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
             return false;
           });
+          // $("#programRisk").validate()
+          // $.validator.addMethod("needsSelection", function(value, element) {
+          //   return $(element).multiselect("getChecked").length > 0;
+          // })
+          // $.validator.messages.needsSelection = "You gotta pick something";
+          // $('#programRisk').validate({
+          //   rules: {
+          //     program: "required needsSelection",
+          //   },
+          //   ignore: ':hidden:not("#program")', 
+          //   errorClass: "invalid"
+          // });
         });
         programs = <?= $programout ?>;
         subprograms = <?= $subprogramout ?>;
@@ -258,7 +271,7 @@ function toggle(source) {
           <h3 class="panel-title">SUBPROGRAM*</h3>
         </div>
         <div class="panel-body" id="subdiv">
-          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required oninvalid="alert('You must select a subprogram');return false">
+          <select name="subprogram[]" id="subprogram" class="form-control" multiple="multiple" required oninvalid="//alert('You must select a subprogram');return false">
           <option>Select Program first
           </select>
         </div>
@@ -844,6 +857,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       if (!document.backbutton)
         document.getElementById("programcache").value = document.getElementById("program").value;
     }, 1000);
+    $('#subprogram').removeAttr('style')
+    document.getElementById("subprogram").style.height = "0px";
+    document.getElementById("subprogram").style.width = "0px";
+    document.getElementById("subprogram").style.position= "absolute";
     // document.getElementById("subprogram").  
   }
 
@@ -872,14 +889,14 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
       // console.log("portfolio");
       document.getElementById("program").multiple = true;
-      $('#program').multiselect("destroy").multiselect({
-          includeSelectAllOption: true, nonSelectedText: 'None Selected'
-      });
+      // $('#program').multiselect("destroy").multiselect({
+      //     includeSelectAllOption: true, nonSelectedText: 'None Selected'
+      // });
     } else {
       // console.log("program");
       if (!document.backbutton) 
         document.getElementById("program").multiple = true;
-      setTimeout(function() {$('#program').multiselect("destroy").multiselect()}, 100);
+      // setTimeout(function() {$('#program').multiselect("destroy").multiselect()}, 100);
       setsubprogramevent();
     }
   }
@@ -913,7 +930,12 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     // });
     // console.log("setsub");
     // document.getElementById("program").addEventListener("change", (e) => subevent())
-    document.getElementById("program").addEventListener("change", (e) => subevent());
+    // $('#program').multiselect("destroy").multiselect()
+    $('#subprogram').removeAttr('style')
+    document.getElementById("subprogram").style.height = "0px";
+    document.getElementById("subprogram").style.width = "0px";
+    document.getElementById("subprogram").style.position= "absolute";
+    $("#program").change(subevent);
   };
 
   const setlevelevent = () => {
@@ -962,6 +984,18 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     setregionevent();
     setlevelevent();
     $("#program").multiselect();
+    $("#subprogram").multiselect();
+    $('#program').removeAttr('style')
+    // document.getElementById("program").style.visibility = "hidden";
+    document.getElementById("program").style.height = "1px";
+    document.getElementById("program").style.width = "1px";
+    document.getElementById("program").style.position= "absolute";
+    $('#subprogram').removeAttr('style')
+    // document.getElementById("subprogram").style.visibility = "hidden";
+    document.getElementById("subprogram").style.height = "0px";
+    document.getElementById("subprogram").style.width = "0px";
+    document.getElementById("subprogram").style.position= "absolute";
+        // document.getElementById("subprogram").style.display = "block"
   });
 
   setInterval(nameevent, 1000);
