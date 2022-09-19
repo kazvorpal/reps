@@ -192,9 +192,9 @@ $(function(){
         items: {
             "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global"},
             "sep1": "---------",
-            "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?portfolio"},
-            "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?program"},
-            "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?project"}
+            "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?mode=portfolio"},
+            "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?mode=program"},
+            "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?mode=project"}
         }
     });
 }); 
