@@ -35,17 +35,19 @@ $stmt_act_plan = sqlsrv_query( $data_conn, $sql_act_plan );
     <tr>
       <th width="10%">DATE</th>
       <th width="65%">ACTION PLAN</th>
-      <th>POC NAME</th>
-      <th>POC GROUP</th>
+      <!--<th>POC NAME</th>
+      <th>POC GROUP</th>-->
     </tr>
 </thead>
   <tbody>
   <?php while($row_act_plan = sqlsrv_fetch_array($stmt_act_plan, SQLSRV_FETCH_ASSOC)) { ?>
     <tr>
-      <td><?php convtimex($row_act_plan['Created_Ts']); ?></td>
+      <td><?php convtimex($row_act_plan['Min_Last_Update_Ts']); ?></td>
       <td><?php echo $row_act_plan['ActionPlanStatus_Cd']; ?></td>
-      <td><?php echo $row_act_plan['POC_Nm']; ?></td>
-      <td><?php echo $row_act_plan['POC_Department']; ?></td>
+      <!--
+      <td><?php //echo $row_act_plan['POC_Nm']; ?></td>
+      <td><?php //echo $row_act_plan['POC_Department']; ?></td>
+  -->
     </tr>
   <?php } ?>
   </tbody>

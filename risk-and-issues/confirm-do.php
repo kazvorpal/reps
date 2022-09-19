@@ -285,7 +285,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             }
 
             //DISTRO
-            $to = $userEmail . "," . $pocEmail;
+            $to = $userEmail . ","; //. $pocEmail;
             $subject = $riLevel . " " .$riTypeCode . ' Created';
             $from = 'CCI-EESolutionsTeam@cox.com';
 
@@ -309,7 +309,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
             $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
-            $message .="<br><b>POC Name & Group: </b>"; $message .= $individual . " : ". $internalExternal ;
+            //$message .="<br><b>POC Name & Group: </b>"; $message .= $individual . " : ". $internalExternal ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
             $message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;
@@ -355,7 +355,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
             $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
-            $message .="<br><b>POC Name & Group: </b>"; $message .= $individual . " : " . $internalExternal ;
+            //$message .="<br><b>POC Name & Group: </b>"; $message .= $individual . " : " . $internalExternal ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
             $message .="<br><b>Associated Projects: </b>"; $message .= $assocProject ;

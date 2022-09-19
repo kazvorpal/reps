@@ -333,6 +333,7 @@ Enter the details of your Project Issue
 		</div> 
         </td>
         </tr>
+        <!--
         <tr>
           <td colspan="3" align="left"></td>
         </tr>
@@ -360,9 +361,9 @@ Enter the details of your Project Issue
               <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
           </div>
           </td>
-          </tr>
+          </tr>-->
         <tr>
-          <td colspan="3" align="left">&nbsp;</td>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RELATED DATES</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left">

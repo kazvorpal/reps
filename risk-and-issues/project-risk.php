@@ -142,6 +142,7 @@ function toggle(source) {
     <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
     <input name="DateClosed" type="hidden" id="DateClosed" value="">
     <input name="raidLog" type="hidden" value="No" id="raidLog">
+    <input name="Individual" type="hidden" id="Individual" value="">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -335,6 +336,7 @@ function toggle(source) {
 		</div> 
         </td>
         </tr>
+        <!--
         <tr>
           <td colspan="3" align="left"></td>
         </tr>
@@ -362,9 +364,11 @@ function toggle(source) {
           </tr>
         <tr>
           <td colspan="3" align="left">
-          </td></tr>
+          </td>
+        </tr>
+                  -->
         <tr>
-          <td colspan="3" align="left">&nbsp;</td>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RELATED DATES</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left">
@@ -399,7 +403,7 @@ function toggle(source) {
 					id="Unknown" 
 					onChange="unKnownX()"
 			  >
-        <label for="Unknown">Unknown</label> - Overides Resolution Date
+        <label for="Unknown">Unknown</label> - Overrides Resolution Date
         </div> 
 				</td>
         <td>

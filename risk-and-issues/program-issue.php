@@ -238,6 +238,7 @@ function toggle(source) {
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
+  <input name="Individual" type="hidden" id="Individual" value="">
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -443,7 +444,6 @@ function toggle(source) {
                 <td>
               	</td>
                 <td>
-                
 				        </td>
                 </tr>
               </tbody>
@@ -454,6 +454,7 @@ function toggle(source) {
         <tr>
           <td colspan="2" align="left"></td>
         </tr>
+<!--
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">CURRENT TASK POC * <a href="includes/definitions.php?tooltipkey=CPOC" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -475,7 +476,8 @@ function toggle(source) {
               <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
           </div>
           </td>
-          </tr>
+        </tr>
+                  -->
         <tr>
           <td colspan="2" align="left"></hr></td>
         </tr>

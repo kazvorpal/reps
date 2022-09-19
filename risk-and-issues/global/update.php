@@ -557,10 +557,10 @@ function toggle(source) {
   </div>
   <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATEGY -->
   <div class="row equal">
-    <div class="col-md-4" align="left">
+    <!--<div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">CURRENT TASK POC</h3>
+          -<h3 class="panel-title">CURRENT TASK POC</h3>
         </div>
         <div class="panel-body">
           <label for="Individual">Individual POC *<br></label>
@@ -575,7 +575,7 @@ function toggle(source) {
               </div>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -593,7 +593,7 @@ function toggle(source) {
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
-        <hr>
+                  </br>
           <div id="forcastedDate">
                 <input type="checkbox" 
                     name="Unknown" 
@@ -603,7 +603,15 @@ function toggle(source) {
                 >
                 <label for="Unknown">Unknown</label> - Overrides Resolution Date
           </div>
-          <hr>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">TRANSFER</h3>
+        </div>
+        <div class="panel-body">
           <div id="trans2prgman">
                 <input type="checkbox" 
                     name="TransfertoProgramManager" 
@@ -611,7 +619,7 @@ function toggle(source) {
                     <?php if($transfer2prgManager == 1){ echo "checked";} ?>
                     >
                 <label for="TransfertoProgramManager"> Transfer to Program Manager</label>
-          </div>
+          </div><hr>
         </div>
       </div>
     </div>

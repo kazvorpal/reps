@@ -244,14 +244,16 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
       <td><?php echo $riskProbability2; ?></td>
     </tr>
 <?php } ?>
+<!--
     <tr>
       <td>Individual POC</td>
-      <td><?php echo $individual; ?></td>
+      <td><?php //echo $individual; ?></td>
     </tr>
     <tr>
       <td>Team POC</td>
-      <td><?php echo $internalExternal; ?></td>
+      <td><?php //echo $internalExternal; ?></td>
     </tr>
+-->
     <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>

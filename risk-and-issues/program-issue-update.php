@@ -368,6 +368,7 @@ if($formaction == "update") {
   <input name="riskRealized" type="hidden" value="0">
   <input name="CreatedFrom" type="hidden" class="form-control" id="Created From" value="">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
+  <input name="Individual" type="hidden" id="Individual" value="">
 
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">
@@ -597,6 +598,7 @@ if($formaction == "update") {
 		</div> 
         </td>
         </tr>
+        <!--
         <tr>
           <td colspan="2" align="left"></td>
         </tr>
@@ -623,7 +625,8 @@ if($formaction == "update") {
           </div>
               </div>
           </td>
-          </tr>
+        </tr>
+                    -->
         <tr>
           <td colspan="2" align="left"></hr></td>
         </tr>
@@ -742,13 +745,12 @@ if($formaction == "update") {
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="left"></td>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">ASSOCIATED CR ID</h4></td>
         </tr>
         <tr>
           <td colspan="2" align="left">
-            <br>
             <div class="box">
-              <label for="assCRID">Associated CR ID</label> (Numbers Only)
+              <label for="assCRID">CR ID</label>
               <input name="assCRID" type="text" class="form-control" id="assCRID" value="<?php echo $assCRID;?>">
             </div>
           </td>

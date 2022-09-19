@@ -266,6 +266,7 @@ function toggle(source) {
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="project_nm" type="hidden" id="project_nm" value="<?php echo $project_nm?>">
   <input name="assCRID" type="hidden" id="assCRID" value="">
+  <input name="Individual" type="hidden" id="Individual" value="">
 
   <?php if(!empty($add_proj_select)) { ?>
   <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>
@@ -466,6 +467,7 @@ function toggle(source) {
 		</div> 
         </td>
         </tr>
+        <!--
         <tr>
           <td colspan="3" align="left"></td>
         </tr>
@@ -498,14 +500,11 @@ function toggle(source) {
             });
           </script>
         <tr>
-
           <td colspan="3" align="left">
-              
           </td>
-
-          </tr>
+        </tr> -->
         <tr>
-          <td colspan="3" align="left">&nbsp;</td>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RELATED DATES</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left">

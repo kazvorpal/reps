@@ -188,6 +188,7 @@ include ("../sql/update-time.php");
       <td><?php echo $riskProbability2; ?></td>
     </tr>
 <?php } ?>
+<!--
     <tr>
       <td>Individual POC</td>
       <td><?php echo $individual; ?></td>
@@ -196,6 +197,7 @@ include ("../sql/update-time.php");
       <td>POC Team</td>
       <td><?php echo $internalExternal; ?></td>
     </tr>
+-->
     <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
