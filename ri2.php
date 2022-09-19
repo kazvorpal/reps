@@ -161,7 +161,7 @@ ProjectID: <?php echo $projID?>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
     <tr cellpadding="5px">
-      <th><strong>ID</strong></th>
+      <th aling="center"><strong>ID</strong></th>
       <!--<th><strong>GID</strong></th>-->
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
@@ -208,7 +208,7 @@ ProjectID: <?php echo $projID?>
 <table width="98%" border="0" class="table table-bordered table-striped table-hover">
   <tbody>
     <tr cellpadding="5px">
-      <th><strong>ID</strong></th>
+      <th align="center"><strong>ID</strong></th>
       <th width="35%"><strong>Project Risk or Issue Name</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>

@@ -183,9 +183,9 @@ function toggle(source) {
       <?php
       if($ri_type == "risk" && $ri_level == "prj"){
         echo "ADD/REMOVE PROJECT RISK ASSOCIATED PROJECTS";
-      } elseif ($ri_type == "risk" && $ri_level == "prg"){
+      } elseif ($ri_type == "Risk" && $ri_level == "prg"){
         echo "ADD/REMOVE PROGRAM RISK ASSOCIATED PROJECTS";
-      } elseif ($ri_type == "issue" && $ri_level == "prj"){
+      } elseif ($ri_type == "Issue" && $ri_level == "prj"){
         echo "ADD/REMOVE PROJECT ISSUE ASSOCIATED PROJECTS";
       } else {
         echo "ADD/REMOVE PROGRAM ISSUE ASSOCIATED PROJECTS";
