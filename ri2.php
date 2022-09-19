@@ -178,10 +178,10 @@ ProjectID: <?php echo $projID?>
     <tr>
       <td align="center"><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
       <!--<td align="center"><?php//echo $row_risk_issue['RIIncrement_Num']; ?></td>-->
-      <td><?php echo $row_risk_issue['RI_Nm']; ?></td>
+      <td width="35%"><?php echo $row_risk_issue['RI_Nm']; ?></td>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
-      <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
-      <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
+      <td width="35%"><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
+      <td width="7%"><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td>
       <td><?php echo date_format($row_risk_issue['Created_Ts'], 'm-d-Y'); ?></td>
       <td align="center">
         <a title="Action Plan History" href="risk-and-issues/action_plan.php?rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']?>" class="iframe"><span class="glyphicon glyphicon-calendar"></span></a>
