@@ -866,7 +866,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const levelevent = (e) => {
     // console.log("levelevent");
-    programlevel();
+    // programlevel();
   }
 
   const disableevent = (o) => {
@@ -897,7 +897,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       if (!document.backbutton) 
         document.getElementById("program").multiple = true;
       // setTimeout(function() {$('#program').multiselect("destroy").multiselect()}, 100);
-      setsubprogramevent();
+      // setsubprogramevent();
     }
   }
 
