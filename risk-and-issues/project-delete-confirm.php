@@ -237,6 +237,7 @@ function toggle(source) {
   <input name="DateClosed"type="hidden" id="DateClosed" value="<?php echo date('Y-m-d') ?>">
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="delete" type="hidden" id="delete" value="1">
+  <input name="Individual" type="hidden" id="Individual" value="">
 
   <div class="alert alert-danger">
   <div align="left">
@@ -448,6 +449,7 @@ function toggle(source) {
 		</div> 
         </td>
         </tr>
+        <!--
         <tr>
           <td colspan="3" align="left"></td>
         </tr>
@@ -479,14 +481,12 @@ function toggle(source) {
             });
           </script>
         <tr>
-
-          <td colspan="3" align="left">
-              
+          <td colspan="3" align="left">             
           </td>
-
-          </tr>
+        </tr>
+          -->
         <tr>
-          <td colspan="3" align="left">&nbsp;</td>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">RELATED DATES</h4></td>
         </tr>
         <tr>
           <td colspan="3" align="left">

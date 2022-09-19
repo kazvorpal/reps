@@ -453,7 +453,7 @@ function toggle(source) {
   </div>
   <!--ROW 6 | POC | FORCAST DATE | RESPONSE STRATIGY -->
   <div class="row eq-height">
-    <div class="col-md-4" align="left">
+    <!--<div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">CURRENT TASK POC</h3>
@@ -471,12 +471,12 @@ function toggle(source) {
             <div align="center">
             <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
             </div>
-            <!--<hr>
+            <hr>
           <label for="Individual3">Team/Group POC *<br></label>
-            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" readonly/>-->
+            <input type="text" name="InternalExternal" class="form-control" id="InternalExternal" onclick="myFunction()" readonly/>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -494,7 +494,7 @@ function toggle(source) {
                     oninvalidDisabled="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninputDisabled="this.setCustomValidity('')">
           </div>
-        <hr>
+        <br>
           <div id="forcastedDate">
                 <input type="checkbox" 
                     name="Unknown" 
@@ -502,13 +502,21 @@ function toggle(source) {
                     onChange="unKnownX()">
                 <label for="Unknown"> Unknown</label> - Overrides Resolution Date
           </div>
-        <hr>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">TRANSFER</h3>
+        </div>
+        <div class="panel-body">
           <div id="trans2prgman">
                 <input type="checkbox" 
                     name="TransfertoProgramManager" 
                     id="TransfertoProgramManager">
                 <label for="TransfertoProgramManager"> Transfer to Program Manager</label>
-          </div>
+          </div><hr>
         </div>
       </div>
     </div>

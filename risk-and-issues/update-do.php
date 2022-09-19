@@ -297,7 +297,7 @@ $unframe = $_SESSION['unframe'];
         //EMAIL PM AND RI CREATOR
         if($changeLogKey == 3 || $changeLogKey == 4){
             //DISTRO
-            $to = $userEmail . ",". $pocEmail;
+            $to = $userEmail; // . ",". $pocEmail;
             $subject = 'Risk and Issue ' . $changeLogName;
             $from = 'CCI-EESolutionsTeam@cox.com';
 
@@ -320,7 +320,7 @@ $unframe = $_SESSION['unframe'];
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
             $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
-            $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
+            //$message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
             if($formName == "PRJR" || $formName == "PRJI"){$message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;}
@@ -366,7 +366,7 @@ $unframe = $_SESSION['unframe'];
             $message .="<br><b>Drivers: </b>"; $message .= $emailDrivers ;
             $message .="<br><b>Impact Area: </b>"; $message .= $impactArea2 ;
             $message .="<br><b>Impact Level: </b>"; $message .= $impactLevel2 ;
-            $message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
+            //$message .="<br><b>POC Group/Name: </b>"; $message .= $poc ;
             $message .="<br><b>Response Strategy: </b>"; $message .= $responseStrategy2 ;
             $message .="<br><b>Forecasted Resolution Date: </b>"; $message .= $date ;
             if($formName == "PRJR" || $formName == "PRJI"){$message .="<br><b>Associated Projects: </b>"; $message .= $assocProject;}

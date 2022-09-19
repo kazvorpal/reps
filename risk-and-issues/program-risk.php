@@ -245,6 +245,7 @@ function toggle(source) {
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
   <!--<input name="riskRealized" type="hidden" class="form-control" id="riskRealized" value="0">-->
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
+  <input name="Individual" type="hidden" id="Individual" value="">
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -468,6 +469,7 @@ function toggle(source) {
 		</div> 
         </td>
         </tr>
+<!--
         <tr>
           <td colspan="2" align="left"></td>
         </tr>
@@ -495,6 +497,7 @@ function toggle(source) {
             </div>
           </td>
         </tr>
+-->
         <tr>
           <td colspan="2" align="left"></hr></td>
         </tr>

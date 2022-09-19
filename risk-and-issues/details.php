@@ -211,14 +211,16 @@ $link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
       <td><?php echo $riskProbability; ?></td>
     </tr>
     <?php } ?>
+    <!--
     <tr>
       <td>Individual POC</td>
-      <td><?php echo $individual; ?></td>
+      <td><?php //echo $individual; ?></td>
     </tr>
     <tr>
       <td>Team POC</td>
-      <td><?php echo $department; ?></td>
+      <td><?php //echo $department; ?></td>
     </tr>
+    -->
     <tr>
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
@@ -316,8 +318,6 @@ $link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
             %0D%0ADriver: <?php echo $Driversx?>
             %0D%0AImpact Area: <?php echo $impactArea2?>
             %0D%0AImpact Level: <?php echo $impactLevel2?>
-            %0D%0AIndividual POC: <?php echo $individual?>
-            %0D%0ATeam POC: <?php echo $department?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject)?>

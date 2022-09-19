@@ -1475,3 +1475,29 @@
 [12-Sep-2022 18:25:23 UTC] PHP Notice:  Undefined index: ActionPlan in C:\inetpub\wwwroot\sql\risk-issues-lookup.php on line 157
 [12-Sep-2022 19:08:35 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\sql\risk-issues-lookup.php on line 306
 [12-Sep-2022 19:13:42 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\sql\risk-issues-lookup.php on line 306
+[13-Sep-2022 18:12:25 UTC] PHP Notice:  Undefined index: unframe in C:\inetpub\wwwroot\risk-and-issues\update-confirm.php on line 55
+[13-Sep-2022 18:13:04 UTC] PHP Notice:  Undefined index: unframe in C:\inetpub\wwwroot\risk-and-issues\update-confirm.php on line 55
+[13-Sep-2022 18:14:54 UTC] PHP Notice:  Undefined index: unframe in C:\inetpub\wwwroot\risk-and-issues\update-confirm.php on line 55
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: proj_name in C:\inetpub\wwwroot\sql\project_by_name.php on line 3
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: rikey in C:\inetpub\wwwroot\risk-and-issues\details.php on line 9
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: fscl_year in C:\inetpub\wwwroot\risk-and-issues\details.php on line 10
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: proj_name in C:\inetpub\wwwroot\risk-and-issues\details.php on line 11
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: status in C:\inetpub\wwwroot\risk-and-issues\details.php on line 12
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: popup in C:\inetpub\wwwroot\risk-and-issues\details.php on line 13
+[15-Sep-2022 18:08:04 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\details.php on line 17
+[15-Sep-2022 18:08:04 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\details.php on line 25
+[15-Sep-2022 18:08:04 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\details.php on line 35
+[15-Sep-2022 18:08:04 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\details.php on line 40
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: au in C:\inetpub\wwwroot\risk-and-issues\details.php on line 103
+[15-Sep-2022 18:08:04 UTC] PHP Notice:  Undefined index: status in C:\inetpub\wwwroot\risk-and-issues\details.php on line 104
+[15-Sep-2022 18:08:05 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\action_plan.php on line 43
+[15-Sep-2022 18:08:26 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\action_plan.php on line 43
+[15-Sep-2022 18:08:39 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\action_plan.php on line 43
+[15-Sep-2022 18:09:08 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\action_plan.php on line 43
+[15-Sep-2022 18:09:52 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\action_plan.php on line 43
+[16-Sep-2022 16:04:11 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\program-risk-update.php on line 110
+[16-Sep-2022 16:04:11 UTC] PHP Notice:  Undefined variable: regionCD in C:\inetpub\wwwroot\risk-and-issues\program-risk-update.php on line 487
+[16-Sep-2022 16:04:19 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\program-risk-update.php on line 110
+[16-Sep-2022 16:04:19 UTC] PHP Notice:  Undefined variable: regionCD in C:\inetpub\wwwroot\risk-and-issues\program-risk-update.php on line 487
+[16-Sep-2022 16:14:26 UTC] PHP Warning:  sqlsrv_fetch_array() expects parameter 1 to be resource, bool given in C:\inetpub\wwwroot\risk-and-issues\program-risk-update.php on line 110
+[16-Sep-2022 16:14:26 UTC] PHP Notice:  Undefined variable: regionCD in C:\inetpub\wwwroot\risk-and-issues\program-risk-update.php on line 487
