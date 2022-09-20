@@ -669,8 +669,8 @@
             for(r of ridata) {
                 if (r.EPSProject_Nm == ri.EPSProject_Nm) {
                   console.log(r.EPSProject_Nm)
-                console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
-                counter++;
+                // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
+                // counter++;
               }
             }
             return (counter > 1) ? "Associated" : "Single";

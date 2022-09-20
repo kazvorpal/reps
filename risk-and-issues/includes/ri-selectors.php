@@ -95,7 +95,7 @@ const jq = `
     const td = makeelement({e: "div", c: "filtercol", t: o.t});
     const select = makeelement(o);
     if (o.i == "pStatus") {
-      select.appendChild(makeelement({e: "option", v: 1, t: "Open"}));
+      select.appendChild(makeelement({e: "option", v: 1, t: "Open", d: true}));
       select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
     } else if (o.i == "category") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
@@ -167,41 +167,21 @@ const jq = `
   makefilters();
 
   const dofilters = () => {
-    document.getElementById("fiscal_year").value = new Date().getFullYear();
-    $('#fiscal_year').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#pStatus').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#category').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#owner').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#program').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#subprogram').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#region').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#market').multiselect({
-          includeSelectAllOption: true,
-        });
-    	$('#facility').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#risk_issue').multiselect({
-          includeSelectAllOption: true,
-        });
-		$('#impact_level').multiselect({
-          includeSelectAllOption: true,
-        });
-        document.getElementById("Go").onclick = function() {
+    let prop = {includeSelectAllOption: true}
+    $('#fiscal_year').val(new Date().getFullYear()).multiselect({
+      includeSelectAllOption: true,
+    });
+    $("#pStatus").val(1).multiselect("destroy").multiselect();
+		$('#category').multiselect(prop);
+		$('#owner').multiselect(prop);
+		$('#program').multiselect(prop);
+		$('#subprogram').multiselect(prop);
+		$('#region').multiselect(prop);
+		$('#market').multiselect(prop);
+    $('#facility').multiselect(prop);
+		$('#risk_issue').multiselect(prop);
+		$('#impact_level').multiselect(prop);
+    document.getElementById("Go").onclick = function() {
       // filter form button
       populate(filtration(ridata));
       colorboxschtuff();
@@ -210,9 +190,10 @@ const jq = `
   }
 
   const resetform = () => {
-    document.getElementById("formfilter").reset();
-    document.getElementById("fiscal_year").value = new Date().getFullYear();
-    $("select").multiselect("rebuild");
+    location.href = window.location.href.split('?')[0] + "?mode=" + mode;
+    // document.getElementById("formfilter").reset();
+    // document.getElementById("fiscal_year").value = new Date().getFullYear();
+    // $("select").multiselect("rebuild");
   }
 </script>
 <script language="javascript">
