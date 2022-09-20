@@ -124,7 +124,7 @@ $mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id;
 }
 ?>
 <div id='dlist'></div> 
-	<div align="center"><h3>PROJECT <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
+	<div align="center"><h3><?php echo strtoupper($RILevel) . " " . strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
 
