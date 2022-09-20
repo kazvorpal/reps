@@ -109,8 +109,8 @@ const jq = `
           select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
     } else {
       const list = getuniques(o.l, o.f);
-      console.log(list)
-      console.log(o.i)
+      // console.log(list)
+      // console.log(o.i)
       for (option in list) 
         if(list[option] != ""&& list[option] != null)
           select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
@@ -119,9 +119,10 @@ const jq = `
     document.getElementById("row").appendChild(td);
   }
 
+  var programnames;
   const makefilters = () => {
     document.getElementById("row").innerHTML = "";
-    const programnames = (ispp(mode)) ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
+    programnames = (ispp(mode)) ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
     // console.log(programnames)
     const menuitems = {};
 
@@ -148,7 +149,7 @@ const jq = `
     }
     // $('select').selectpicker();
     document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary">', c: "filtercol"}));
-    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="location.reload()" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="resetform();return false" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
     
     $('.daterange').daterangepicker({
       autoUpdateInput: false,
@@ -206,6 +207,12 @@ const jq = `
       colorboxschtuff();
       return false;
     }  
+  }
+
+  const resetform = () => {
+    document.getElementById("formfilter").reset();
+    document.getElementById("fiscal_year").value = new Date().getFullYear();
+    $("select").multiselect("rebuild");
   }
 </script>
 <script language="javascript">

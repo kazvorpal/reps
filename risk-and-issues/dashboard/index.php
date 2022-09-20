@@ -401,14 +401,14 @@
         subprogram: function() {
             let list = "";
             let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            console.log(prog)
+            // console.log(prog)
             if (prog != undefined) {
               for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
                   list += r.Subprogram_nm + ", ";
               } 
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
-            console.log(ret)
+            // console.log(ret)
             return ret;
         },
         category: function() {
@@ -752,8 +752,10 @@
         url.searchParams.set("mode", mode);
         window.history.pushState({}, '', url);
         setlists();
-        makefilters();
-        dofilters();
+        setTimeout(function(){
+          makefilters();
+          dofilters();
+        })
         setdata();
         makeheadline();
         // ridata = d1.concat(d2);
@@ -762,6 +764,7 @@
         // console.log(uniques());
         colorboxschtuff();
         makemodebuttons(mode);
+        console.log(mode)
     }
 
     init(mode);
