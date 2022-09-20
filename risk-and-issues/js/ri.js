@@ -81,10 +81,14 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("category").value == '' || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
         (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
         ((document.getElementById("pStatus") == null && o.RIActive_Flg == '1') || (document.getElementById("pStatus").value == '' && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&
         (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) &&
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("subprogram") == null || document.getElementById("subprogram").value == '' 
+          || ((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") && $('#subprogram').val().includes(p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0].Subprogram_nm)) 
+          || $('#subprogram').val().includes(o.EPSProgram_Nm)) &&
         (mode == "project" || mode == "portfolio" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
         (ispp(mode) || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
         ((ispp(mode) || document.getElementById("market").value == '' || ($('#market').val().includes(o.Market_Cd) || $('#market').val().includes(o.EPSMarket_Cd)))) &&
