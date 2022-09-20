@@ -31,7 +31,7 @@ if($stmt_prog === false) {
   }
 }
 
-$sql_sub = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = 2022";
+$sql_sub = "select * from mlm.fn_getlistofsubprogramforprogram(-1)";
 $stmt_sub   = sqlsrv_query( $data_conn, $sql_sub ); 
 if($stmt_sub === false) {
   if(($error = sqlsrv_errors()) != null) {
@@ -876,7 +876,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const levelevent = (e) => {
     // console.log("levelevent");
-    programlevel();
+    // programlevel();
   }
 
   const disableevent = (o) => {
@@ -1000,8 +1000,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     setsubprogramevent();
     setregionevent();
     setlevelevent();
-    $("#program").multiselect();
-    $("#subprogram").multiselect();
+    $("#program").val(false).attr("multiple", true).multiselect();
+    $("#subprogram").val(false).attr("multiple", true).multiselect();
     $('#program').removeAttr('style')
     // document.getElementById("program").style.visibility = "hidden";
     document.getElementById("program").style.height = "1px";
@@ -1033,14 +1033,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     setTimeout(conditionals, 1000);
   } else 
     document.backbutton = false;
-
-  // window.onpageshow = (e) => {
-  //   conditionals();
-  // }
-  // let test = localStorage.getItem("test");
-  // console.log("test:" + test);
-  // test = (test)? test++:1
-  // localStorage.setItem("test", test);
 
 
 </script>
