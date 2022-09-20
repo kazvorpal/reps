@@ -237,11 +237,11 @@
         // console.log("pre");
         // console.log(pre);
         post = pre.filter(filterfunction);
-        console.log("post")
-        console.log(post)
+        // console.log("post")
+        // console.log(post)
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
-        console.log("uni");
-        console.log(uni);
+        // console.log("uni");
+        // console.log(uni);
         return uni;
     }
 
@@ -401,12 +401,15 @@
         subprogram: function() {
             let list = "";
             let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            // console.log(prog)
             if (prog != undefined) {
               for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
                   list += r.Subprogram_nm + ", ";
               } 
             }
-            return (list != "") ? list.slice(0, -2) : "";
+            let ret = (list != "") ? list.slice(0, -2) : ""
+            // console.log(ret)
+            return ret;
         },
         category: function() {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
@@ -428,7 +431,7 @@
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
           // https://catl0dwas11208.corp.cox.com/risk-and-issues/global/update.php?id=24&unframe=1
-          const file = (arrow == "") ? "details-prg.php" : "global/details.php";
+          const file = (mode == "program" && arrow == "") ? "details-prg.php" : "global/details.php";
           url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
           // console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "]")
@@ -749,16 +752,21 @@
         url.searchParams.set("mode", mode);
         window.history.pushState({}, '', url);
         setlists();
-        makefilters();
-        dofilters();
+        setTimeout(function(){
+          makefilters();
+          dofilters();
+        })
         setdata();
         makeheadline();
         // ridata = d1.concat(d2);
-        populate(uniques());
-        console.log("uniques()");
-        console.log(uniques());
+        setTimeout(function() {
+          populate(uniques())
+        });
+        // console.log("uniques()");
+        // console.log(uniques());
         colorboxschtuff();
         makemodebuttons(mode);
+        console.log(mode)
     }
 
     init(mode);

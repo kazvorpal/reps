@@ -78,18 +78,17 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
-      // console.log(o);
-    //   console.log(o.RIActive_Flg);
-    //   console.log(o.Facility_Cd);
-    //   console.log($('#facility').val().includes(o.Facility_Cd));
-    //   console.log(($("#pStatus").val() != null) ? $("#pStatus").val().includes(o.RIActive_Flg.toString()): "bah");
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("category").value == '' || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
         (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
         ((document.getElementById("pStatus") == null && o.RIActive_Flg == '1') || (document.getElementById("pStatus").value == '' && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&
         (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) &&
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("subprogram") == null || document.getElementById("subprogram").value == '' 
+          || ((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") && $('#subprogram').val().includes(p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0].Subprogram_nm)) 
+          || $('#subprogram').val().includes(o.EPSProgram_Nm)) &&
         (mode == "project" || mode == "portfolio" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
         (ispp(mode) || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
         ((ispp(mode) || document.getElementById("market").value == '' || ($('#market').val().includes(o.Market_Cd) || $('#market').val().includes(o.EPSMarket_Cd)))) &&
@@ -239,7 +238,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
          : ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "SubMLMProgram_Nm"];
       projectfieldnames = (mode == "program") ? [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}]
          : ["Project Name", "Facility", "Owner", "Subprogram"];
-      rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: "3"}, "category": {name: "category", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "MLMProgram_Nm": {name: "Program", width: "9"}, "subprogram": {name: "Subprogram", width: "9"}, "MLMRegion_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Plan", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}, "RIActive_Flg": {name: "Open", width: "6"}} : (mode == "portfolio") ? {"Fiscal_Year": "FY", "RIType_Cd": "Type", "RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "EPSProgram_Nm": "Program", "LastUpdateBy_Nm": "Owner", "ImpactLevel_Nm": "Impact", "Description": "Description", "ResponseStrategy_Nm": "Response Strategy", "ActionPlanStatus_Cd": "Action Plan", "Status": "Status", "ForecastedResolution_Dt": "Forecast Res Date", "RIOpen_Hours": "Open Duration"}
+      rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: "3"}, "category": {name: "category", width: "3"}, "Fiscal_Year": {name: "FY", width: "4"}, "MLMProgram_Nm": {name: "Program", width: "9"}, "subprogram": {name: "Subprogram", width: "9"}, "MLMRegion_Cd": {name: "Region", width: "6"}, "LastUpdateBy_Nm": {name: "Owner", width: "10"}, "ImpactLevel_Nm": {name: "Impact Level", width: "10"}, "ActionPlanStatus_Cd": {name: "Action Plan", width: "27"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: "6"}, "ResponseStrategy_Cd": {name: "Response Strategy", width: "5"}, "RIOpen_Hours": {name: "Open Duration", width: "6"}, "RIActive_Flg": {name: "Open", width: "6"}} : (mode == "portfolio") ? {"Fiscal_Year": "FY", "RIType_Cd": "Type", "RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "MLMProgram_Nm": "Program", "LastUpdateBy_Nm": "Owner", "ImpactLevel_Nm": "Impact", "RIDescription_Txt": "Description", "ResponseStrategy_Nm": "Response Strategy", "ActionPlanStatus_Cd": "Action Plan", "Status": "Status", "ForecastedResolution_Dt": "Forecast Res Date", "RIOpen_Hours": "Open Duration"}
          : {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
       excelfields = (mode == "program") ? {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"}
          : {"Fiscal_Year": "Fiscal Year", "RIActive_Flg": "Status", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Sub-Program", "owner": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "EPSRegion_Abb": "Region", "regioncount": "Region Count", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "TransferredPM_Flg": "Transferred to PDM", "AssociatedCR_Key": "CR", "AssociatedCR_Key": "CR", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdate_By": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"};
@@ -260,10 +259,14 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
  }  
 
  const betweendate = (dates, tween) => {
-  spanner = splitdate(dates);
-   let first = new Date(spanner[0]);
-   let middle = new Date(tween);
-   let last = new Date(spanner[1]);
+   let s = splitdate(dates);
+   let m = new Date(tween)
+   let first = new Date(s[0]);
+   let middle = new Date(m.setDate(m.getDate()+1));
+   let last = new Date(s[1]);
+  //  console.log(first);
+  //  console.log(middle);
+  //  console.log(last);
    r = ((middle >= first && middle <= last));
    return r;
  }  
