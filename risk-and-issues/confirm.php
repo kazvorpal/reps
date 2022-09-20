@@ -130,7 +130,8 @@ include ("../sql/update-time.php");
     </tr>
 <?php } ?>
 
-<?php if($program !="" && $programs != "")  { if(!empty($program)) { ?>
+<?php 
+  if($program != "") { ?>
     <tr>
       <td>Program</td>
       <td><?php echo $program ; ?></td>
@@ -140,7 +141,7 @@ include ("../sql/update-time.php");
       <td>Program</td>
       <td><?php echo $programs ; ?></td>
     </tr>
-<?php }} ?>
+<?php } ?>
 
 <?php if(!empty($subprogram) && $global != 1) { ?>
     <tr>
