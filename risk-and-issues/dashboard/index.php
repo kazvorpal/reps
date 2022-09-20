@@ -225,7 +225,8 @@
         projectcount = 0;
         makeri(target, "Risk");
         makeri(target, "Issue");
-        document.getElementById("banner" + safename).innerHTML += ` <span title="Project Count">P: ${projectcount} )</span>`;
+        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ''
+        document.getElementById("banner" + safename).innerHTML += p + ' )';
     }  
 
     function listri(target, type) {
