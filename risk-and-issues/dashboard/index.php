@@ -174,8 +174,8 @@
     //   document.getElementById("myDiv").style.display = "block";
     }
     const populate = (rilist) => {
-      // console.log("rilist");
-      // console.log(rilist);
+      console.log("rilist");
+      console.log(rilist);
       resultcounter(rilist);
       window.ricount = [];
       const main = document.getElementById("main");
@@ -225,7 +225,8 @@
         projectcount = 0;
         makeri(target, "Risk");
         makeri(target, "Issue");
-        document.getElementById("banner" + safename).innerHTML += ` <span title="Project Count">P: ${projectcount} )</span>`;
+        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ''
+        document.getElementById("banner" + safename).innerHTML += p + ' )';
     }  
 
     function listri(target, type) {
@@ -313,10 +314,6 @@
         EPSSubprogram_Nm: function() {
             return getlocationbykey(program.EPSProject_Key)
         },
-        // category: function() {
-        //     let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-        //     return (projects != undefined && projects.length>0) ? "Projects" : "No Projects";
-        // },
         owner: function() {
             return program.LastUpdateBy_Nm;
         },
@@ -416,9 +413,6 @@
             return (projects != undefined && projects.length>0) ? "Project Association" : "No Project Association";
         }
         };
-        // console.log(program);
-        // console.log("program");
-        // console.log(id);
         const program = getprogrambykey(id, name);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
@@ -430,13 +424,9 @@
           const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
-          // https://catl0dwas11208.corp.cox.com/risk-and-issues/global/update.php?id=24&unframe=1
           const file = (mode == "program" && arrow == "") ? "details-prg.php" : "global/details.php";
           url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
-          // console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key + "]")
-          // console.log("arrow");
-          // console.log("p4plist['" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"']");
           const c = (arrow == "") ? "plainbox" : "namebox";
           const header = makeelement({
               "e": "th", 
@@ -666,7 +656,7 @@
           },
           EPSProject_Nm: function() {
               const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
-              return "<a href='" + url + "'>" + ri.EPSProject_Nm + "</a>";
+              return "<a href='" + url + "' class='miframe cboxElement'>" + ri.EPSProject_Nm + "</a>";
           },
           driver: function() {
             return (driverlist[ri.RiskAndIssueLog_Key]) 
@@ -680,8 +670,8 @@
             for(r of ridata) {
                 if (r.EPSProject_Nm == ri.EPSProject_Nm) {
                   console.log(r.EPSProject_Nm)
-                console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
-                counter++;
+                // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
+                // counter++;
               }
             }
             return (counter > 1) ? "Associated" : "Single";

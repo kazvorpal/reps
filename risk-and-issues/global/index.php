@@ -876,7 +876,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const levelevent = (e) => {
     // console.log("levelevent");
-    // programlevel();
+    programlevel();
   }
 
   const disableevent = (o) => {
@@ -903,11 +903,12 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const programlevel = () => {
     if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
-      // console.log("portfolio");
-      document.getElementById("program").multiple = true;
-      // $('#program').multiselect("destroy").multiselect({
-      //     includeSelectAllOption: true, nonSelectedText: 'None Selected'
-      // });
+      console.log("portfolio");
+      // document.getElementById("program").multiple = true;
+      $("#program").attr('multiple', true).attr("required", true).multiselect("destroy").multiselect({
+            includeSelectAllOption: true, nonSelectedText: 'None Selected'
+      }).attr("display", "block");
+
     } else {
       // console.log("program");
       if (!document.backbutton) 
