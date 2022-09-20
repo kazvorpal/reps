@@ -78,11 +78,6 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
-      // console.log(o);
-    //   console.log(o.RIActive_Flg);
-    //   console.log(o.Facility_Cd);
-    //   console.log($('#facility').val().includes(o.Facility_Cd));
-    //   console.log(($("#pStatus").val() != null) ? $("#pStatus").val().includes(o.RIActive_Flg.toString()): "bah");
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
@@ -260,10 +255,14 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
  }  
 
  const betweendate = (dates, tween) => {
-  spanner = splitdate(dates);
-   let first = new Date(spanner[0]);
-   let middle = new Date(tween);
-   let last = new Date(spanner[1]);
+   let s = splitdate(dates);
+   let m = new Date(tween)
+   let first = new Date(s[0]);
+   let middle = new Date(m.setDate(m.getDate()+1));
+   let last = new Date(s[1]);
+  //  console.log(first);
+  //  console.log(middle);
+  //  console.log(last);
    r = ((middle >= first && middle <= last));
    return r;
  }  

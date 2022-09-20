@@ -237,11 +237,11 @@
         // console.log("pre");
         // console.log(pre);
         post = pre.filter(filterfunction);
-        console.log("post")
-        console.log(post)
+        // console.log("post")
+        // console.log(post)
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
-        console.log("uni");
-        console.log(uni);
+        // console.log("uni");
+        // console.log(uni);
         return uni;
     }
 
@@ -401,12 +401,15 @@
         subprogram: function() {
             let list = "";
             let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            console.log(prog)
             if (prog != undefined) {
               for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
                   list += r.Subprogram_nm + ", ";
               } 
             }
-            return (list != "") ? list.slice(0, -2) : "";
+            let ret = (list != "") ? list.slice(0, -2) : ""
+            console.log(ret)
+            return ret;
         },
         category: function() {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
@@ -755,8 +758,8 @@
         makeheadline();
         // ridata = d1.concat(d2);
         populate(uniques());
-        console.log("uniques()");
-        console.log(uniques());
+        // console.log("uniques()");
+        // console.log(uniques());
         colorboxschtuff();
         makemodebuttons(mode);
     }
