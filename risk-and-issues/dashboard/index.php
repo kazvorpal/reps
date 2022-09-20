@@ -759,7 +759,9 @@
         setdata();
         makeheadline();
         // ridata = d1.concat(d2);
-        populate(uniques());
+        setTimeout(function() {
+          populate(uniques())
+        });
         // console.log("uniques()");
         // console.log(uniques());
         colorboxschtuff();
