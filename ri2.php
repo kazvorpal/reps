@@ -26,7 +26,12 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
               
                 // CHECK IF THE USER AND OWNER MATCH
                 $ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
-                $authUser = trim($_GET['winuser']);
+
+                $authUser = "";
+                if(isset($_GET['winuser'])) {
+                $authUser = trim($_GET['winuser']); // kaz needs to send this from project dashboard
+                }
+
                 $alias = trim($row_winuser['CCI_Alias']);
                 $tempID = uniqid();
                 $projectOwner = $row_projID['PROJ_OWNR_NM'];
