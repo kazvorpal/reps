@@ -876,7 +876,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const levelevent = (e) => {
     // console.log("levelevent");
-    // programlevel();
+    programlevel();
   }
 
   const disableevent = (o) => {
@@ -905,14 +905,17 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
       console.log("portfolio");
       // document.getElementById("program").multiple = true;
-      $("#program").attr('multiple', true).attr("required", true).multiselect("destroy").multiselect({
-            includeSelectAllOption: true, nonSelectedText: 'None Selected'
-      }).attr("display", "block");
+      $("#program").val(false).attr("required", true).attr("multiple", true).multiselect("destroy").multiselect().attr("display", "block");;
+      // $("#program").val(false).attr('multiple', true).attr("required", true).multiselect("destroy").multiselect({
+      //       includeSelectAllOption: true, nonSelectedText: 'None Selected'
+      // }).attr("display", "block");
 
     } else {
       // console.log("program");
-      if (!document.backbutton) 
-        document.getElementById("program").multiple = true;
+      if (!document.backbutton) {
+        $("#program").val(false).attr("required", true).attr("multiple", false).multiselect("destroy").multiselect().attr("display", "block");;
+        // $("#program").val(false).attr('multiple', false).attr("required", true).multiselect("destroy").multiselect().attr("display", "block");
+      }
       // setTimeout(function() {$('#program').multiselect("destroy").multiselect()}, 100);
       // setsubprogramevent();
     }
@@ -1015,7 +1018,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         // document.getElementById("subprogram").style.display = "block"
   });
 
-  setInterval(nameevent, 1000);
+  setInterval(function() {
+    nameevent();
+    document.getElementById("program").style.display = "block";
+    document.getElementById("subprogram").style.display = "block";
+  }, 1000);
 
   if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
     document.backbutton = true;

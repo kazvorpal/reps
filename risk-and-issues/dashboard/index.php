@@ -232,17 +232,9 @@
     function listri(target, type) {
     
         // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-        // console.log("target");
-        // console.log(target);
         pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target);
-        // console.log("pre");
-        // console.log(pre);
         post = pre.filter(filterfunction);
-        // console.log("post")
-        // console.log(post)
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
-        // console.log("uni");
-        // console.log(uni);
         return uni;
     }
 
