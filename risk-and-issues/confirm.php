@@ -214,6 +214,7 @@ include ("../sql/update-time.php");
         ?>
         </td>
     </tr>
+<?php if($global != 1) { ?>
     <tr>
       <td>Tranfer to Program Manager</td>
       <td>
@@ -227,6 +228,7 @@ include ("../sql/update-time.php");
         ?>
     </td>
     </tr>
+<?php } ?>
 <?php if(isset($_POST['opportunity'])) { ?>
     <tr>
       <td>Opportunity</td>

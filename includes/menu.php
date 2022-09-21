@@ -46,9 +46,9 @@
       <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Risks and Issues<span class="caret"></span><span class="sr-only">(current)</span></a>
         <ul class="dropdown-menu" role="menu">
           <li><a href="/risk-and-issues/global/">Create Global Risk or Issue</a></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?mode=program">Program Dashboard</a></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?mode=project">Project Dashboard</a></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?mode=portfolio">RAID Log</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?portfolio">RAID Log</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?program">Program Dashboard</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/">Project Dashboard</a></li>
         </ul>
       </li>
 
