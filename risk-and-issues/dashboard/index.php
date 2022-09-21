@@ -183,7 +183,7 @@
       if (ispp(mode)) {
         // console.log(mode)
         if (mode == "portfolio") {
-            p = ", Portfolios";
+            p = ", Portfolio";
             n = "RAID Log";
         } else {
             p = ", Projects";
