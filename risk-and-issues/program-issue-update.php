@@ -2,7 +2,7 @@
 include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
-include ("../sql/project_by_id.php");
+//include ("../sql/project_by_id.php");
 include ("../sql/RI_Internal_External.php");
  
   $RiskAndIssue_Key = $_GET['rikey'];
@@ -19,6 +19,11 @@ include ("../sql/RI_Internal_External.php");
   $assc_prj_update = $_GET['assc_prj_update'];
   }
     
+  $projFromURL ="";
+  if(isset($_GET['assoc_prj'])) {
+    $projFromURL = "'" . str_replace(",", "','", $_GET['assoc_prj']) . "'"; 
+  }
+
   $sql_risk_issue = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue(-1) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
   $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
   $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
@@ -28,14 +33,15 @@ include ("../sql/RI_Internal_External.php");
   //$action = $_GET['action']; //new
   //$temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
-  $ass_project = $row_projID['PROJ_NM'];
+  //$ass_project = $row_projID['PROJ_NM'];
+  $ass_project = $projFromURL;
 
   if(!empty($_POST['proj_select'])) { 
     $ass_project_regions = implode("','", $_POST['proj_select']); 
     $ass_project_regionsx = $ass_project_regions; 
     $regionIN = "'" . $ass_project_regions . "','" . $ass_project . "'"; 
       } else { 
-    $regionIN = "'" . $ass_project . "'"; 
+    $regionIN = "" . $ass_project . ""; 
       }
   
   //GET ASSOCIATED PROJECTS FROM 
@@ -115,7 +121,7 @@ include ("../sql/RI_Internal_External.php");
                     SELECT @EPS_IDs AS eps_proj_key";
   $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );
   $row_epsProjKey = sqlsrv_fetch_array( $stmt_epsProjKey, SQLSRV_FETCH_ASSOC);
-  
+  echo $sql_epsProjKey;
   $eps_proj_keys = $row_epsProjKey['eps_proj_key'];
 
   if($numRows == 7){
@@ -339,10 +345,10 @@ if($formaction == "update") {
   <form action="<?php echo $action ?>" method="post" id="programRisk">
 
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 4 update, 3 close, 2 create, 1 initialize -->
-  <input name="programs" type="hidden" id="programs" value="<?php echo $row_projID['PRGM'] ?>">
+  <input name="programs" type="hidden" id="programs" value="<?php echo $row_risk_issue['MLMProgram_Nm'] ?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
   <input name="formName" type="hidden" id="formName" value="PRGI">
-  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
+  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_risk_issue['Fiscal_Year'] ?>">
   <input name="RIType" type="hidden" id="RIType" value="Issue">
   <input name="RILevel" type="hidden" id="RILevel" value="Program">
 
@@ -357,8 +363,8 @@ if($formaction == "update") {
   <?php } ?>
 
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
-  <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
-  <input name="RIName" type="hidden" id="RIName" value=''>
+  <input name="program" type="hidden" id="program" value='<?php echo $row_risk_issue['MLMProgram_Nm']; ?>'> <!-- EPS PROGRAM -->
+  <input name="RIName" type="hidden" id="RIName" value='<?php echo $_GET['name'] ?>'>
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value='<?php echo $RiskAndIssue_Key ?>'>
   <input name="programKeys" type="hidden" id="programKeys" value='<?php echo $progkey ?>'>
   <input name="regionKeys" type="hidden" id="regionKeys" value="<?php while ($row_regions_f= sqlsrv_fetch_array($stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region_key'] . ',';} ?>">

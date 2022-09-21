@@ -94,16 +94,12 @@ $stmt_assoc_proj_cnt = sqlsrv_query( $data_conn, $sql_assoc_proj_cnt );
 $row_assoc_proj_cnt = sqlsrv_fetch_array($stmt_assoc_proj_cnt, SQLSRV_FETCH_ASSOC);
 $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
 
-//USER AUTHORIZATION
+//USER AUTHORIZATION - NOT USED-DELETE
 $authProg = $row_risk_issue['MLMProgram_Nm'];
 $sql_authorize = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('gcarolin', 2022) WHERE Program_Nm = '$authProg'";
 $stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
 $row_authorize = sqlsrv_fetch_array($stmt_authorize, SQLSRV_FETCH_ASSOC);
-if(is_null($row_authorize)) { 
-  $lock = "yes";
-} else { 
-  $lock = "no";
-}
+
 //echo $row_authorize['Program_Nm'];
 
 //old authorizarion
@@ -126,7 +122,7 @@ if(is_null($row_winuser_prg)) {
   $lock = "yes";
 } else { 
   $lock = "no";
-} echo $lock;
+} 
 
 //exit;
 //DECLARE

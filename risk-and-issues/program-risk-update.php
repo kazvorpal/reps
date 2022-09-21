@@ -1,7 +1,7 @@
 <?php include ("../includes/functions.php");?>
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
-<?php include ("../sql/project_by_id.php");?>
+<?php //include ("../sql/project_by_id.php");?>
 <?php include ("../sql/RI_Internal_External.php");?>
 <?php 
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
@@ -410,9 +410,9 @@ if($formaction == "update") {
   <form action="<?php echo $action ?>" method="post" id="programRisk">
 
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 4 update, 3 close, 2 create, 1 initialize -->
-  <input name="programs" type="hidden" id="programs" value="<?php echo $row_projID['PRGM'] ?>">
+  <input name="programs" type="hidden" id="programs" value="<?php echo $row_risk_issue['MLMProgram_Nm'] ?>">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
-  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
+  <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_risk_issue['Fiscal_Year'] ?>">
   <input name="formName" type="hidden" id="formName" value="<?php echo $formName ?>">
   <input name="RIType" type="hidden" id="RIType" value="<?php echo $RIType?>">
   <input name="RILevel" type="hidden" id="RILevel" value="<?php echo $RILevel ?>">
@@ -423,7 +423,7 @@ if($formaction == "update") {
 
   <input name="CreatedFrom" type="hidden" id="Created From" value=''>
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
-  <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
+  <input name="program" type="hidden" id="program" value='<?php echo $row_risk_issue['MLMProgram_Nm']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value=''>
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value='<?php echo $RiskAndIssue_Key ?>'>
   <input name="programKeys" type="hidden" id="programKeys" value='<?php echo $progkey ?>'>
@@ -483,10 +483,10 @@ if($formaction == "update") {
                 <td width="50%"><label for="Created From">Name</label>
                 <br>
                 <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" value="<?php echo $name ?>">
-                <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'];?>">
-                <input name="NameA1" type="hidden" id="NameA1" value="<?php echo $row_projID['SCOP_DESC'];?>">
+                <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_risk_issue['MLMProgram_Nm'];?>">
+                <input name="NameA1" type="hidden" id="NameA1" value="<?php //echo $row_projID['SCOP_DESC'];?>">
                 <input name="NameB" type="hidden" id="NameB" value="<?php echo $regionCD; ?>"> <!-- Region -->
-                <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
+                <input name="NameC" type="hidden" id="NameC" value="<?php //echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
               </tr>
               <tr>
                 <td><label for="Descriptor">Descriptor<br>
