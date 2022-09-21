@@ -484,9 +484,9 @@ if($formaction == "update") {
                 <br>
                 <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" value="<?php echo $name ?>">
                 <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_risk_issue['MLMProgram_Nm'];?>">
-                <input name="NameA1" type="hidden" id="NameA1" value="<?php echo $row_projID['SCOP_DESC'];?>">
+                <input name="NameA1" type="hidden" id="NameA1" value="<?php //echo $row_projID['SCOP_DESC'];?>">
                 <input name="NameB" type="hidden" id="NameB" value="<?php echo $regionCD; ?>"> <!-- Region -->
-                <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
+                <input name="NameC" type="hidden" id="NameC" value="<?php //echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
               </tr>
               <tr>
                 <td><label for="Descriptor">Descriptor<br>
