@@ -82,6 +82,10 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     console.log(o.EPSRegion_Cd)
     console.log($('#region').val().includes(o.EPSRegion_Cd))
     return (
+        (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
+        (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("category").value == '' || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
+
         ((["portfolio"].includes(mode)) || document.getElementById("subprogram") == null || document.getElementById("subprogram").value == '' 
           || ((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") && $('#subprogram').val().includes(p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0].Subprogram_nm)) 
           || $('#subprogram').val().includes(o.EPSSubprogram_Nm)) &&
