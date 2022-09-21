@@ -190,6 +190,8 @@ function toggle(source) {
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
   <input name="global" type="hidden" id="global" value="1">
+  <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
+  
 
   <div class="container">
   <!--ROW 1 -->
@@ -479,7 +481,7 @@ function toggle(source) {
         </div>
       </div>
     </div>-->
-    <div class="col-md-4" align="left">
+    <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">FORCASTED RESOLUTION DATE</h3>
@@ -507,22 +509,8 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-4" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">TRANSFER</h3>
-        </div>
-        <div class="panel-body">
-          <div id="trans2prgman">
-                <input type="checkbox" 
-                    name="TransfertoProgramManager" 
-                    id="TransfertoProgramManager">
-                <label for="TransfertoProgramManager"> Transfer to Program Manager</label>
-          </div><hr>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4" align="left">
+                          
+    <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">RESPONSE STRATEGY*</h3>
