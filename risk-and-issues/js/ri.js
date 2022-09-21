@@ -28,7 +28,9 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     t.className = (typeof o.c == "undefined") ? "" : o.c;
     t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
     t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-    t.width = (typeof o.w == "undefined") ? "" : o.w + "%";
+    if (typeof o.w != "undefined" && o.w != "") {
+      t.width =  o.w + "%";
+    }
     t.multiple = (typeof o.m == "undefined") ? "" : o.m;
     t.value = (typeof o.v == "undefined") ? "" : o.v;
     t.selected = (typeof o.d == "undefined") ? "" : o.d;

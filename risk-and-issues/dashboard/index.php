@@ -139,7 +139,7 @@
       const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
       const fieldlist = ["Program", "Region", "Program Manager", "ID", "Impact Level", "Action Plan", "Forecast Resol. Date", "Response Strat", "Open Duration"];
       const datafields = ["MLMProgram_Nm", "MLMRegion_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
-      const hiddenfields = ["AssociatedCR_Key", "MLMRegion_Key", "MLMProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key"];
+      const hiddenfields = ["AssociatedCR_Key", "MLMRegion_Key", "MLMProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key", "POC_Nm", "POC_Department"];
       const modes = ["project", "program", "portfolio"];
       var projectfields, projectfieldnames, rifields, excelfields, centerfields;
   </script>
@@ -183,7 +183,7 @@
       if (ispp(mode)) {
         // console.log(mode)
         if (mode == "portfolio") {
-            p = "";
+            p = ", Portfolios";
             n = "RAID Log";
         } else {
             p = ", Projects";
@@ -225,7 +225,7 @@
         projectcount = 0;
         makeri(target, "Risk");
         makeri(target, "Issue");
-        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ''
+        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ` <span title="Project Count">Portfolio: ${projectcount}</span>`
         document.getElementById("banner" + safename).innerHTML += p + ' )';
     }  
 
@@ -420,11 +420,12 @@
           url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
           const c = (arrow == "") ? "plainbox" : "namebox";
+          const w = (mode == "portfolio") ? 7 : "";
           const header = makeelement({
-              "e": "th", 
-              "i": "th" + type + saferi, 
-              "t": "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-              "c":"p-4 " + c
+            e: "th", 
+            i: "th" + type + saferi, 
+            t: "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+            c:"p-4 " + c,
           });
           const tridobj = document.getElementById(trid);
           if (arrow != "") {
@@ -435,7 +436,7 @@
           for (field of Object.keys(rifields)) {
               (function(test) {
               const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter)}));
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
               })(field);
               if (rifields[field].name == "ID") {
               tridobj.appendChild(header);
