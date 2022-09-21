@@ -95,6 +95,18 @@ $row_assoc_proj_cnt = sqlsrv_fetch_array($stmt_assoc_proj_cnt, SQLSRV_FETCH_ASSO
 $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
 
 //USER AUTHORIZATION
+$authProg = $row_risk_issue['MLMProgram_Nm'];
+$sql_authorize = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('gcarolin', 2022) WHERE Program_Nm = '$authProg'";
+$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
+$row_authorize = sqlsrv_fetch_array($stmt_authorize, SQLSRV_FETCH_ASSOC);
+if(is_null($row_authorize)) { 
+  $lock = "yes";
+} else { 
+  $lock = "no";
+}
+//echo $row_authorize['Program_Nm'];
+
+//old authorizarion
 $authUser = strtolower($windowsUser);
 $alias = "";
   if(!empty($row_winuser_prg['User_UID'])) {
@@ -108,6 +120,13 @@ $uaccess = "false";
 if($alias == $authUser){
   $uaccess = "true";
 } 
+
+//USE THIS LOCK FOR EDIT BUTTON 
+if(is_null($row_winuser_prg)) {
+  $lock = "yes";
+} else { 
+  $lock = "no";
+} echo $lock;
 
 //exit;
 //DECLARE
@@ -317,7 +336,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 <?php if($alias == $authUser){ ?> 
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
     <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
-<?php if($au == "true")  {?>  
+<?php if($lock == "no")  {?>  
 <?php if($status == 1){ ?>
     <a href="<?php echo $formType ?>?formName=<?php echo $formName?>&action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
