@@ -189,7 +189,7 @@
             p = ", Projects";
             n = capitalize(mode);
         }
-        main.innerHTML = `<div class="header">Program Name (Risks, Issues${p})</div>`;
+        main.innerHTML = `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})</div>`;
       } else {
           // console.log("project")
           main.innerHTML = '';
