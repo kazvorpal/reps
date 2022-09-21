@@ -416,7 +416,7 @@
           const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
-          const file = (mode == "program" && arrow == "") ? "details-prg.php" : "global/details.php";
+          const file = (mode == "program" && arrow == "") ? "global/details.php" : "details-prg.php";
           url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
           const c = (arrow == "") ? "plainbox" : "namebox";
