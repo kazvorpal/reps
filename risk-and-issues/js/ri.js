@@ -78,10 +78,13 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
-    console.log($('#region').val())
-    console.log(o.EPSRegion_Cd)
-    console.log($('#region').val().includes(o.EPSRegion_Cd))
+    // console.log($('#region').val())
+    // console.log(o.EPSRegion_Cd)
+    // console.log($('#region').val().includes(o.EPSRegion_Cd))
     return (
+        (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
+        (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("category").value == '' || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&//
         (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
         ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (document.getElementById("pStatus").value == '' && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&

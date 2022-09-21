@@ -742,7 +742,10 @@
         makeheadline();
         // ridata = d1.concat(d2);
         setTimeout(function() {
-          populate(uniques())
+          if (mode == "portfolio")
+            populate(uniques())
+          else 
+            populate(filtration(ridata));
         });
         // console.log("uniques()");
         // console.log(uniques());
