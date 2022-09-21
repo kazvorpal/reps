@@ -80,6 +80,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   const filterfunction = (o) => {
     console.log($('#region').val())
     console.log(o.EPSRegion_Cd)
+    console.log($('#region').val().includes(o.EPSRegion_Cd))
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
