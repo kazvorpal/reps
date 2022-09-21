@@ -222,10 +222,10 @@
         item.appendChild(collapse).appendChild(body).appendChild(table);
         document.getElementById("main").appendChild(item);
         document.getElementById("banner" + safename).innerHTML += " (";
-        projectcount = 0;
+        projectcount = portfoliocount = 0;
         makeri(target, "Risk");
         makeri(target, "Issue");
-        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ` <span title="Project Count">Portfolio: ${projectcount}</span>`
+        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ` <span title="Project Count">Portfolio: ${portfoliocount}</span>`
         document.getElementById("banner" + safename).innerHTML += p + ' )';
     }  
 
@@ -269,13 +269,16 @@
             if (list.length != 0) {
                 document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
                 for (ri of list) {
-                    // console.log(ri)
-                    window.ricount.push(true);
-                    rowcolor++;
-                    makedata(ri, type, name);
-                    program = getprogrambykey(ri, name);
+                  console.log(ri)
+                  window.ricount.push(true);
+                  rowcolor++;
+                  makedata(ri, type, name);
+                  program = getprogrambykey(ri, name);
+                  // console.log("ri")
+                  console.log(program.RI_Nm.toLowerCase().indexOf("portfolio"))
+                  portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
                     // console.log(program)
-                    projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
+                  projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
                 }
             }
         }
