@@ -93,7 +93,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
           || ((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") && $('#subprogram').val().includes(p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0].Subprogram_nm)) 
           || $('#subprogram').val().includes(o.EPSSubprogram_Nm)) &&
         (mode == "project" || mode == "portfolio" || document.getElementById("region").value == '' || $('#region').val().includes(o.MLMRegion_Cd)) &&
-        (ispp(mode) || (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
+        (ispp(mode) || (o.EPSRegion_Cd == "Southwest")|| (document.getElementById("region").value == '' || $('#region').val().includes(o.EPSRegion_Cd))) &&
         ((ispp(mode) || document.getElementById("market").value == '' || ($('#market').val().includes(o.Market_Cd) || $('#market').val().includes(o.EPSMarket_Cd)))) &&
         ((ispp(mode) || document.getElementById("facility").value == '' || ($('#facility').val().includes(o.Facility_Cd) || $('#facility').val().includes(o.EPSFacility_Cd)))) &&
         (mode == "portfolio" || (document.getElementById("dateranger").value == '' || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))
