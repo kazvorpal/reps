@@ -657,11 +657,11 @@
           },
           category: function() {
             let counter = 0;
-            console.log("::::::::::::::::");
-            console.log(ri.EPSProject_Nm);
+            // console.log("::::::::::::::::");
+            // console.log(ri.EPSProject_Nm);
             for(r of ridata) {
                 if (r.EPSProject_Nm == ri.EPSProject_Nm) {
-                  console.log(r.EPSProject_Nm)
+                  // console.log(r.EPSProject_Nm)
                 // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
                 // counter++;
               }
