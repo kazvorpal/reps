@@ -1,6 +1,9 @@
 <?php 
 //DECLARE
+$projID = "";
+if(isset($_GET['uid'])) { 
 $projID = $_GET['uid'];
+}
 
 //GET PROJECT BY ID
 $sql_projID = "SELECT * FROM [EPS].[ProjectStage] WHERE PROJ_ID = '$projID'";
