@@ -137,6 +137,8 @@ function toggle(source) {
   for(var i=0, n=checkboxes.length;i<n;i++) {
     checkboxes[i].checked = source.checked;
   }
+  document.getElementById("Region").checked = false;
+  document.getElementById("Region").click();
 }
 </script>
 
@@ -811,6 +813,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     let locations = "";
     if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
       locations = "ALL ";
+      document.getElementsByName("Region[]").forEach((o) => {
+        o.required = false;
+        o.setCustomValidity("");
+      });
     } else {
       document.getElementsByName("Region[]").forEach((e) => {
         locations += (e.checked) ? regions[e.value] + " " : "";
