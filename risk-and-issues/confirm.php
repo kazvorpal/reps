@@ -98,9 +98,21 @@ include ("../sql/update-time.php");
 <!-- new for global portfolio/program-->
     <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $portfolioType?>"> 
     <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
-    <input name="global" type="hidden" id="global" value="<?php echo $global?>"> 
+    <input name="global" type="hidden" id="global" value="<?php echo $global?>">
 
-    
+<?php if($_POST['formaction'] == "update") { ?>
+  <div class="alert alert-success">
+    <div align="left">
+      <span class="glyphicon glyphicon-warning-sign"></span> 
+      You are about to add the following project(s) to this <?php echo $RILevel . " " . $RIType; ?>.  If you need to edit this list, please use the edit button.
+    </div>
+<hr>
+    <div>
+      <?php echo $assocProject_dsply; ?>
+    </div>
+  </div>
+<?php } ?>
+
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
     <tr>

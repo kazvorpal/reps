@@ -15,9 +15,9 @@ if(isset($_GET['unframe'])) {
   $_SESSION['unframe'] = $unframe;
 } 
 
-//GET GLOBAL PROGRAM BY ID
+//GET GLOBAL PROGRAM BY ID OR RIKEY
 if(isset($_GET['rikey'])){
-$ri_id = $_GET['rikey'];
+  $ri_id = $_GET['rikey'];
 }
 
 if(isset($_GET['id'])){

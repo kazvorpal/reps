@@ -803,9 +803,9 @@ if($formaction == "update") {
                   <tr>
                     <td>
                     <div align="right" style="margin-top:10px; margin-bottom:10px;">  
-                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">History</a>
                     </div>
-                        <div class="collapse" id="collapseExample">
+                        <div class="collapse in" id="collapseExample">
                           <div class="well">
                             <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
                           </div>
