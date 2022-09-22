@@ -240,7 +240,8 @@
       $driverrows = array();
       $count = 1;
       while($driverrow = sqlsrv_fetch_array($driverquery, SQLSRV_FETCH_ASSOC)) {
-        $driverrows[] = array_map("fixutf8", $driverrow);
+        $driverrows[$driverrow["RiskAndIssueLog_Key"]] = array_map("fixutf8", $driverrow);
+        // $driverrows[] = array_map("fixutf8", $driverrow);
       }
     }
 
