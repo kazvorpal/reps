@@ -209,8 +209,8 @@
       }
       for (loop of rilist) {
         // creates all the programs
-        console.log("loop")
-        console.log(loop)
+        // console.log("loop")
+        // console.log(loop)
         if(loop != null) {
             (ispp(mode)) ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
             // (mode == "program") ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
@@ -221,8 +221,9 @@
     const makerow = (target, risks, issues) => {
 
         // Runs once per Program
-        console.log("target");
-        console.log(target);
+        if (typeof target == null) return false;
+        // console.log("target");
+        // console.log(target);
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
         const banner = makebanner(safename);
@@ -285,7 +286,7 @@
             if (list.length != 0) {
                 document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
                 for (ri of list) {
-                  console.log(ri)
+                  // console.log(ri)
                   window.ricount.push(true);
                   rowcolor++;
                   makedata(ri, type, name);
@@ -745,7 +746,7 @@
         // init();
     }  
     const makeheadline = () => {
-        console.log("headline");
+        // console.log("headline");
         document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
     }
 
@@ -767,7 +768,7 @@
         });
         colorboxschtuff();
         makemodebuttons(mode);
-        console.log(mode)
+        // console.log(mode)
     }
 
     init(mode);
