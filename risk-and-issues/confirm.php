@@ -100,7 +100,7 @@ include ("../sql/update-time.php");
     <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
     <input name="global" type="hidden" id="global" value="<?php echo $global?>">
 
-<?php if($_POST['formaction'] == "update") { ?>
+<?php if($messaging  == "update") { ?>
   <div class="alert alert-success">
     <div align="left">
       <span class="glyphicon glyphicon-warning-sign"></span> 

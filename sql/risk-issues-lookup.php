@@ -283,8 +283,11 @@ if(isset($_POST['del_proj_select'])) {
 $del_proj_select = $_POST['del_proj_select'];
 }
 
-//echo $changeLogKey . " - ";
-//echo $DateClosed;
+//FORM ACTION HANDLER
+$messaging = "";
+if(isset($_POST['formaction'])) {
+  $messaging = $_POST['formaction'];
+}
 
 // LOOKUP KEY VALUES 
 //IMPACT AREA
