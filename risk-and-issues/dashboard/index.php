@@ -425,6 +425,7 @@
         }
         };
         const program = getprogrambykey(id, name);
+        console.log(program);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
         let url = text = "";
