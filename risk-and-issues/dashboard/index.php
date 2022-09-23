@@ -225,8 +225,8 @@
           console.log("aborting makerow");
           return false;
         }
-        // console.log("target");
-        // console.log(target);
+        console.log("target");
+        console.log(target);
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
         const banner = makebanner(safename);
