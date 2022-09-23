@@ -24,7 +24,7 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
                 $sql_risk_issue;
 
                 //CLOSED PROGRAM RISK AND ISSUES
-                $sql_risk_issue_cls = "select distinct RI_Nm, RIType_Cd,RIDescription_Txt, RIClosed_Dt, Last_Update_Ts, RiskAndIssue_Key
+                $sql_risk_issue_cls = "select distinct Global_Flg, RI_Nm, RIType_Cd,RIDescription_Txt, RIClosed_Dt, Last_Update_Ts, RiskAndIssue_Key
                                       from(
                                       select * from RI_MGT.fn_GetListOfAllInactiveRiskAndIssue ('Program') 
                                       where MLMProgram_Nm = '$ri_program' and RIOpen_Flg = 0
@@ -155,7 +155,8 @@ Program Manager is: <?php echo $alias; ?>
     <tbody>
     <tr>
     <th><strong>ID</strong></th>
-      <th width="35%"><strong>Program Risk or Issue Name</strong></th>
+      <th width="25%"><strong>Program Risk or Issue Name</strong></th>
+      <th><strong>Global</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
       <th><strong>Impact</strong></th>
@@ -166,10 +167,18 @@ Program Manager is: <?php echo $alias; ?>
         <?php } ?>
       <th align="center"><strong>Details<br>Update</strong></th>
     </tr>
-    <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ ?>
-      <tr>
+    <?php while ($row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC)){ 
+
+      $globalFlg = $row_risk_issue['Global_Flg'];
+      $globalIcon = "<span class='glyphicon glyphicon-check' style='color:#ECECEC;' title='Not Global''></span>";
+      if($globalFlg == "1") {
+        $globalIcon = "<span class='glyphicon glyphicon-check' title='Global'></span>";
+      }
+    ?>
+    <tr>
       <td><?php echo $row_risk_issue['RiskAndIssue_Key']; ?></td>
       <td><?php echo $row_risk_issue['RI_Nm']; ?></td>
+      <td align="center"><?php echo $globalIcon ?></td>
       <td><?php echo $row_risk_issue['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
       <td><?php echo $row_risk_issue['ImpactLevel_Nm']; ?></td> 
@@ -204,7 +213,8 @@ Program Manager is: <?php echo $alias; ?>
   <tbody>
     <tr cellpadding="5px">
       <th><strong>ID</strong></th>
-      <th width="35%"><strong>Project Risk or Issue Name</strong></th>
+      <th width="25%"><strong>Project Risk or Issue Name</strong></th>
+      <th><strong>Global</strong></th>
       <th><strong>Type</strong></th>
       <th width="35%"><strong>Description</strong></th>
       <th><strong>Closed Date</strong></th>
@@ -212,10 +222,18 @@ Program Manager is: <?php echo $alias; ?>
       <th><div align="center"><strong>Action Plan</strong></div></th>
       <th align="center"><strong>Details</strong></th>
     </tr>
-    <?php while ($row_risk_issue_cls = sqlsrv_fetch_array($stmt_risk_issue_cls, SQLSRV_FETCH_ASSOC)){ ?>
+    <?php while ($row_risk_issue_cls = sqlsrv_fetch_array($stmt_risk_issue_cls, SQLSRV_FETCH_ASSOC)){ 
+
+          $globalFlgC = $row_risk_issue_cls['Global_Flg'];
+          $globalIconC = "<span class='glyphicon glyphicon-check' style='color:#ECECEC;' title='Not Global'></span>";
+          if($globalFlgC == "1") {
+            $globalIconC = "<span class='glyphicon glyphicon-check' title='Global'></span>";
+          }  
+    ?>
     <tr>
       <td><?php echo $row_risk_issue_cls['RiskAndIssue_Key']; ?></td>
       <td><?php echo $row_risk_issue_cls['RI_Nm']; ?></td>
+      <td align="center"><?php echo $globalIconC; ?></td>
       <td><?php echo $row_risk_issue_cls['RIType_Cd']; ?></td>
       <td><?php echo $row_risk_issue_cls['RIDescription_Txt']; ?></td>
       <td><?php if(!empty($row_risk_issue_cls['RIClosed_Dt'])) { echo date_format($row_risk_issue_cls['RIClosed_Dt'], 'm-d-Y'); } ?></td>
