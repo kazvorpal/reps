@@ -245,7 +245,7 @@
     function listri(target, type) {
     
         // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-        pre = ridata.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target); // list of all data with the right program name and risk or issue
+        pre = rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target); // list of all data with the right program name and risk or issue
         post = pre.filter(filterfunction); // run it through the filters
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
         // pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target.MLMProgram_Nm);
@@ -683,7 +683,7 @@
                 if (r.EPSProject_Nm == ri.EPSProject_Nm) {
                   // console.log(r.EPSProject_Nm)
                 // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
-                // counter++;
+                counter++;
               }
             }
             return (counter > 1) ? "Associated" : "Single";
@@ -760,24 +760,17 @@
         })
         setdata();
         makeheadline();
-        // ridata = d1.concat(d2);
+        let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
         setTimeout(function() {
-          // if (mode == "portfolio")
-            // populate(uniques())
-          // else 
-            populate(rifiltered);
+            populate(riseed);
         });
-        // console.log("uniques()");
-        // console.log(uniques());
         colorboxschtuff();
         makemodebuttons(mode);
         console.log(mode)
     }
 
     init(mode);
-    // setTimeout(function(){populate(uniques)}, 5000);
-
-    
+   
   </script>
   </body>
 </html>
