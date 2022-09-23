@@ -275,7 +275,10 @@
 
     const makeri = (ri, type) => {
         // Create a Risk or Issue section
+        console.log("ri")
+        console.log(ri)
         name = ri.MLMProgram_Nm;
+        if (name == "") return false;
         safename = makesafe(name);
         // console.log("makeri")
         // program = getribykey(name);
