@@ -1,6 +1,6 @@
   // Takes a program key and name and returns the row object
-const getprogrambyname = (target) =>  mlm = ridata.find(o => o.MLMProgram_Nm == target);
-const getprogrambykey = (target, name) =>  mlm = ridata.find(o => o && o.RiskAndIssue_Key == target && o.MLMProgram_Nm == name);
+const getprogrambyname = (target) =>  mlm = rifiltered.find(o => o.MLMProgram_Nm == target);
+const getprogrambykey = (target, name) =>  mlm = rifiltered.find(o => o && o.RiskAndIssue_Key == target && o.MLMProgram_Nm == name);
 const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
 // mode = (window.location.href.indexOf("program")>=0) ? "program" : "project";
 
@@ -109,7 +109,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     // console.log("filtered");
     // console.log(filtered);
     results = (mode == "program") ? removenullproperty(getwholeuniques(filtered, "MLMProgram_Nm"), "MLMProgram_Nm") 
-      : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+      : (mode == "portfolio") ? filtered
       : getwholeuniques(filtered, "RiskAndIssue_Key");
     // console.log(results)
     return results;
@@ -255,10 +255,18 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
       centerfield = ["Fiscal_Year", "ID", "regioncount", "projectcount", "RIIncrement_Num"];
  }
 
+//  const uniques = () => (mode == "program") 
+//     ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+//     : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+//     : getwholeuniques(d1, "RiskAndIssue_Key");
+
  const uniques = () => (mode == "program") 
     ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
     : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
     : getwholeuniques(d1, "RiskAndIssue_Key");
+
+
+
 
 //  const uniques = () => (mode == "program") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm")
                       //  : (mode == "portfolio") ? getwholeuniques(d1, "RiskAndIssue_Key") 

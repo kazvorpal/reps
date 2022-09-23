@@ -37,11 +37,14 @@
     const programclosed =<?= $closedprogramout ?>;
     const programfull = programopen.concat(programclosed);  
     const portfolioopen =<?= $portfolioout ?>;
+    const portfolioclosed =<?= $closedportfolioout ?>;
+    const portfoliofull = portfolioopen.concat(portfolioclosed);
     const mangerlist = <?= $mangerout ?>;
     const driverlist = <?= $driverout ?>;
     const locationlist = <?= $locationout ?>;
     const p4plist = <?= $p4pout ?>;
     const portfolioprograms = <?= $portfolioprogramsout ?>;
+
 
     const ffpp = (target) => {
         return portfolioprograms.filter(o => {
@@ -68,7 +71,7 @@
         }
       }
     }    
-    const portfolioclosed = portfoliofull = portfolioopen;
+    // const portfolioclosed = portfoliofull = portfolioopen;
 
     const cleandata = (list) => {
       Object.keys(list).forEach(key => {
@@ -80,14 +83,20 @@
     }
 
 
-      var ridata, d1, d1;
+      var ridata, d1, d1, rifiltered;
       const setdata = () => {
           if (mode == "program") {
               ridata = programfull;
               d1 = programopen;
               d2 = programclosed;
           } else if (mode == "portfolio") {
-              ridata = d1 = d2 = cleandata(portfolioopen);
+              const globalprograms = programfull.filter(o => {
+                return o.RaidLog_Flg == 1;
+              })
+              // console.log(portfolioopen)
+              ridata = cleandata(portfolioopen).concat(globalprograms)
+              d1 = portfolioopen;
+              d1 = portfolioclosed;
           } else {
               ridata = projectfull;
               d1 = projectopen;
@@ -135,7 +144,6 @@
           const finder = (target, objective) => (target.find(o => o.MLMProgram_Nm == objective));
       
       // Names of Data for program fields
-
       const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
       const fieldlist = ["Program", "Region", "Program Manager", "ID", "Impact Level", "Action Plan", "Forecast Resol. Date", "Response Strat", "Open Duration"];
       const datafields = ["MLMProgram_Nm", "MLMRegion_Cd", "mangerlist", "RiskAndIssue_Key", "ImpactLevel_Nm", "ActionPlanStatus_Cd", "ForecastedResolution_Dt", "POC_Nm", "ResponseStrategy_Cd", "RIOpen_Hours"];
@@ -173,6 +181,8 @@
       document.getElementById("loader").style.display = "none";
     //   document.getElementById("myDiv").style.display = "block";
     }
+    rifiltered = filtration(ridata);
+
     const populate = (rilist) => {
       console.log("rilist");
       console.log(rilist);
@@ -199,6 +209,8 @@
       }
       for (loop of rilist) {
         // creates all the programs
+        console.log("loop")
+        console.log(loop)
         if(loop != null) {
             (ispp(mode)) ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
             // (mode == "program") ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
@@ -209,7 +221,8 @@
     const makerow = (target, risks, issues) => {
 
         // Runs once per Program
-        // console.log(target);
+        console.log("target");
+        console.log(target);
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
         const banner = makebanner(safename);
@@ -232,9 +245,12 @@
     function listri(target, type) {
     
         // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-        pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target);
-        post = pre.filter(filterfunction);
+        pre = rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target); // list of all data with the right program name and risk or issue
+        post = pre.filter(filterfunction); // run it through the filters
         uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
+        // pre = ridata.filter(o => o.RILevel_Cd == capitalize(mode) && o.RIType_Cd == type && o.MLMProgram_Nm == target.MLMProgram_Nm);
+        // post = pre.filter(filterfunction);
+        // uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
         return uni;
     }
 
@@ -409,6 +425,7 @@
         }
         };
         const program = getprogrambykey(id, name);
+        console.log(program);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
         let url = text = "";
@@ -667,7 +684,7 @@
                 if (r.EPSProject_Nm == ri.EPSProject_Nm) {
                   // console.log(r.EPSProject_Nm)
                 // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++")
-                // counter++;
+                counter++;
               }
             }
             return (counter > 1) ? "Associated" : "Single";
@@ -744,24 +761,17 @@
         })
         setdata();
         makeheadline();
-        // ridata = d1.concat(d2);
+        let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
         setTimeout(function() {
-          if (mode == "portfolio")
-            populate(uniques())
-          else 
-            populate(filtration(ridata));
+            populate(riseed);
         });
-        // console.log("uniques()");
-        // console.log(uniques());
         colorboxschtuff();
         makemodebuttons(mode);
         console.log(mode)
     }
 
     init(mode);
-    // setTimeout(function(){populate(uniques)}, 5000);
-
-    
+   
   </script>
   </body>
 </html>
