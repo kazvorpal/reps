@@ -85,6 +85,7 @@
 
       var ridata, d1, d1, rifiltered;
       const setdata = () => {
+        ridata = d1 = d1 = rifiltered = "";
           if (mode == "program") {
               ridata = programfull;
               d1 = programopen;
@@ -766,17 +767,18 @@
         let url = new URL(window.location);
         url.searchParams.set("mode", mode);
         window.history.pushState({}, '', url);
+        setdata();
         setlists();
         setTimeout(function(){
           makefilters();
           dofilters();
-        })
-        setdata();
-        makeheadline();
-        let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
-        setTimeout(function() {
+          rifiltered = filtration(ridata);
+          let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
+          setTimeout(function() {
             populate(riseed);
+          });
         });
+        makeheadline();
         colorboxschtuff();
         makemodebuttons(mode);
         // console.log(mode)
