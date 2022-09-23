@@ -5,7 +5,10 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
 // mode = (window.location.href.indexOf("program")>=0) ? "program" : "project";
 
   // Sanitize a string
-  const makesafe = (target) => target.replace(/\s/g,'');
+  const makesafe = (target) => {
+    console.log(target);
+    target.replace(/\s/g,'');
+  }
   
   const makeelement = (o) => {
 

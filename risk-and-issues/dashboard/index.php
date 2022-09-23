@@ -209,8 +209,8 @@
       }
       for (loop of rilist) {
         // creates all the programs
-        console.log("loop")
-        console.log(loop)
+        // console.log("loop")
+        // console.log(loop)
         if(loop != null) {
             (ispp(mode)) ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
             // (mode == "program") ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
@@ -221,6 +221,10 @@
     const makerow = (target, risks, issues) => {
 
         // Runs once per Program
+        if (typeof target == null) {
+          console.log("aborting makerow");
+          return false;
+        }
         console.log("target");
         console.log(target);
         const safename = makesafe(target.MLMProgram_Nm);
@@ -285,7 +289,7 @@
             if (list.length != 0) {
                 document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
                 for (ri of list) {
-                  console.log(ri)
+                  // console.log(ri)
                   window.ricount.push(true);
                   rowcolor++;
                   makedata(ri, type, name);
@@ -745,7 +749,7 @@
         // init();
     }  
     const makeheadline = () => {
-        console.log("headline");
+        // console.log("headline");
         document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
     }
 
@@ -767,7 +771,7 @@
         });
         colorboxschtuff();
         makemodebuttons(mode);
-        console.log(mode)
+        // console.log(mode)
     }
 
     init(mode);
