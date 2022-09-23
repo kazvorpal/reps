@@ -109,7 +109,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     // console.log("filtered");
     // console.log(filtered);
     results = (mode == "program") ? removenullproperty(getwholeuniques(filtered, "MLMProgram_Nm"), "MLMProgram_Nm") 
-      : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+      : (mode == "portfolio") ? filtered
       : getwholeuniques(filtered, "RiskAndIssue_Key");
     // console.log(results)
     return results;
@@ -255,10 +255,18 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
       centerfield = ["Fiscal_Year", "ID", "regioncount", "projectcount", "RIIncrement_Num"];
  }
 
+//  const uniques = () => (mode == "program") 
+//     ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+//     : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+//     : getwholeuniques(d1, "RiskAndIssue_Key");
+
  const uniques = () => (mode == "program") 
     ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
     : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
     : getwholeuniques(d1, "RiskAndIssue_Key");
+
+
+
 
 //  const uniques = () => (mode == "program") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm")
                       //  : (mode == "portfolio") ? getwholeuniques(d1, "RiskAndIssue_Key") 
