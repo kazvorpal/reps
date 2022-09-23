@@ -7,7 +7,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   // Sanitize a string
   const makesafe = (target) => {
     console.log(target);
-    target.replace(/\s/g,'');
+    return (target == null) ? "" : target.replace(/\s/g,'');
   }
   
   const makeelement = (o) => {
