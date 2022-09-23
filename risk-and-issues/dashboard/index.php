@@ -290,6 +290,8 @@
                 (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(ri.ImpactLevel_Nm))
         ){
             let list = listri(name, type);
+            console.log("list")
+            console.log(list)
             // console.log("listri('" + name + "','" + type+"');");
             document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
             if (list.length != 0) {

@@ -183,7 +183,8 @@ const jq = `
 		$('#impact_level').multiselect(prop);
     document.getElementById("Go").onclick = function() {
       // filter form button
-      populate(filtration(ridata));
+      let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : rifiltered;
+      populate(filtration(riseed));
       colorboxschtuff();
       return false;
     }  
