@@ -22,97 +22,68 @@ include ("../sql/update-time.php");
 <body style="font-family:Mulish, serif;">
 <?php include ("../includes/menu.php");?>
 
-<div class="container-fluid">
-  <div align="center"><h2>RISKS AND ISSUES</h2></div>
+<div class="container">
+  <div align="center"><h2>RISKS AND ISSUES</h2></div><hr>
   <div class="row row-eq-height">
-    <div class="col-md-3" align="left">
+    <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Create Global Risk or Issue</h3>
+          <h3 class="panel-title">CREATE GLOBAL RISK OR ISSUE</h3>
         </div>
         <div class="panel-body">
-          content
-          <hr><button type="button" class="btn btn-info">Info</button>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          <hr><div align="center"><a href="/risk-and-issues/global/"><button type="button" class="btn btn-info">Create Risk or Issue</button></a></div>
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Create Project or Program R/I via DPR</h3>
+          <h3 class="panel-title">CREATE PROGRAM OR PORJECT R/I via DPR</h3>
         </div>
         <div class="panel-body">
-          content
-          <hr><button type="button" class="btn btn-info">Info</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Program R/I Dashboard</h3>
-        </div>
-        <div class="panel-body">
-          content
-          <hr><button type="button" class="btn btn-info">Info</button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Project R/I Dashboard</h3>
-        </div>
-        <div class="panel-body">
-          content
-          <hr><button type="button" class="btn btn-info">Info</button>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          <hr><div align="center"><a href="../esp-status-details-index.php"><button type="button" class="btn btn-info">Create Risk or Issue</button></a></div>
         </div>
       </div>
     </div>
   </div>
-  <!--ROW 2-->
+  <!--ROW 2--><hr>
   <div class="row row-eq-height">
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RAID Log</h3>
+          <h3 class="panel-title">RAID LOG</h3>
         </div>
         <div class="panel-body">
-          content
-          <hr><button type="button" class="btn btn-info">Info</button>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?portfolio"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">--</h3>
+          <h3 class="panel-title">PROGRAM R/I DASHBOARD</h3>
         </div>
         <div class="panel-body">
-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?program"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">--</h3>
+          <h3 class="panel-title">PROJECT R/I DASHBOARD</h3>
         </div>
         <div class="panel-body">
-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">--</h3>
-        </div>
-        <div class="panel-body">
-
-        </div>
-      </div>
-    </div>
+    
   </div>
 </div>
 </body>

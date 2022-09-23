@@ -149,12 +149,15 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
     <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $portfolioType_Key?>"> 
 
-
 <?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
     <div align="left">
       <span class="glyphicon glyphicon-warning-sign"></span> 
-      You are about to CLOSE this Program Risk/Issue.  If you do not intend to close it, please use the Edit button at the bottom of the page and clear the Date Closed.
+      You are about to CLOSE this <?php echo $RILevel . " " . $RIType; ?>.  If you do not intend to close it, please use the Edit button at the bottom of the page and clear the Date Closed.
+    </div>
+<hr>
+    <div>
+      <?php echo str_replace(",", "<br>", $_POST['assocProjects']); ?>
     </div>
   </div>
 <?php } ?>
@@ -164,6 +167,8 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <div align="left">
       <span class="glyphicon glyphicon-warning-sign"></span> 
       Project(s) selected for removal will have their associated risks/issues deleted. If removal of this project association was unintentional, do NOT submit this form.
+      <hr>
+      <?php echo $_POST['dispAssocProj']; ?>
     </div>
   </div>
 <?php } ?>

@@ -84,11 +84,15 @@ if(!empty($_POST['proj_select'])) {
 
 //ASSOCIATED RISK AND ISSUES
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "SELECT* FROM [RI_MGT].[fn_GetListOfAssociatedProjectsForProjectRINm]('$name',1) WHERE RiskAndIssue_Key IN ($del_proj_select)";
+$sql_risk_issue_assoc_proj = "DECLARE @PROJS VARCHAR(100)
+    SELECT @PROJS = COALESCE(@PROJS+',','')+ CAST(Proj_Nm AS VARCHAR(100))
+    FROM [RI_MGT].[fn_GetListOfAssociatedProjectsForProjectRINm]('$name',1) 
+    WHERE RiskAndIssue_Key IN ($del_proj_select)
+    SELECT @PROJS AS Proj_Nm";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
-// $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
-// echo $row_risk_issue_assoc_proj['RI_Nm]; 			
-//echo "<br>" . $sql_risk_issue_assoc_proj; //exit();
+ $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+// echo $row_risk_issue_assoc_proj['Proj_Nm']; 			
+echo "<br>" . $sql_risk_issue_assoc_proj; //exit();
 
 ?>
 <!doctype html>
@@ -238,6 +242,7 @@ function toggle(source) {
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="delete" type="hidden" id="delete" value="1">
   <input name="Individual" type="hidden" id="Individual" value="">
+  <input name="dispAssocProj" type="hidden" id="dispAssocProj" value="<?php echo str_replace(",", "<br>",$row_risk_issue_assoc_proj['Proj_Nm']) ?>">
 
   <div class="alert alert-danger">
   <div align="left">
@@ -252,7 +257,7 @@ function toggle(source) {
           <td colspan="3">
             <div class="box <?php echo $disble_it;?>" align="left" style="font-size: 12px;">
               <?php 
-                while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { echo $row_risk_issue_assoc_proj['Proj_Nm'] . '<br>'; } ?>
+                echo str_replace(",", "<br>",$row_risk_issue_assoc_proj['Proj_Nm']);?>
             </div>
 		      </td>
         </tr>

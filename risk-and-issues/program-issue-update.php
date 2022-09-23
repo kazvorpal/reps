@@ -121,7 +121,7 @@ include ("../sql/RI_Internal_External.php");
                     SELECT @EPS_IDs AS eps_proj_key";
   $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );
   $row_epsProjKey = sqlsrv_fetch_array( $stmt_epsProjKey, SQLSRV_FETCH_ASSOC);
-  echo $sql_epsProjKey;
+  //echo $sql_epsProjKey;
   $eps_proj_keys = $row_epsProjKey['eps_proj_key'];
 
   if($numRows == 7){
@@ -715,9 +715,9 @@ if($formaction == "update") {
                 <tr>
                     <td>
                     <div align="right" style="margin-top:10px; margin-bottom:10px;">  
-                    <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
+                      <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">History</a>
                     </div>
-                        <div class="collapse" id="collapseExample">
+                        <div class="collapse in" id="collapseExample" >
                           <div class="well">
                             <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
                           </div>

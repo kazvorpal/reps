@@ -191,6 +191,7 @@ $(function(){
         },
         items: {
             "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global"},
+			"dpr": {name: "Create Project R/I via DPR", icon: "edit", url: "/esp-status-details-index.php"},
             "sep1": "---------",
             "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?mode=portfolio"},
             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?mode=program"},
