@@ -225,8 +225,9 @@
           console.log("aborting makerow");
           return false;
         }
-        console.log("target");
+        console.log("target...........");
         console.log(target);
+        if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null") return false;
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
         const banner = makebanner(safename);
@@ -278,8 +279,10 @@
         console.log("ri")
         console.log(ri)
         name = ri.MLMProgram_Nm;
-        if (name == "") return false;
+        if (name == "null" || name == null) return false;
         safename = makesafe(name);
+        console.log("safename")
+        console.log(safename)
         // console.log("makeri")
         // program = getribykey(name);
         if (
