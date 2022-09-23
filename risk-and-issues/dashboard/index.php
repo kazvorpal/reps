@@ -221,7 +221,10 @@
     const makerow = (target, risks, issues) => {
 
         // Runs once per Program
-        if (typeof target == null) return false;
+        if (typeof target == null) {
+          console.log("aborting makerow");
+          return false;
+        }
         // console.log("target");
         // console.log(target);
         const safename = makesafe(target.MLMProgram_Nm);
