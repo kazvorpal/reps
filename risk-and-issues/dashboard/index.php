@@ -471,7 +471,7 @@
                 const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
                 tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
               })(field);
-              if (rifields[field].programname == "ID") {
+              if (rifields[field].name == "ID") {
                 tridobj.appendChild(header);
               }
           }
