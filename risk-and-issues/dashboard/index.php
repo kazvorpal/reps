@@ -279,30 +279,30 @@
         // Create a Risk or Issue section
         console.log("ri")
         console.log(ri)
-        name = ri.MLMProgram_Nm;
-        if (name == "null" || name == null) return false;
-        safename = makesafe(name);
+        programname = ri.MLMProgram_Nm;
+        if (programname == "null" || programname == null) return false;
+        safename = makesafe(programname);
         console.log("safename")
         console.log(safename)
         // console.log("makeri")
-        // program = getribykey(name);
-        if (
-            (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
-                (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(ri.ImpactLevel_Nm))
-        ){
-            let list = listri(name, type);
+        // program = getribykey(programname);
+        // if (
+        //     (document.getElementById('risk_issue').value == "" || $('#risk_issue').val().includes(type)) &&
+        //         (typeof document.getElementById('impact_level').value != "undefined" || document.getElementById('impact_level').value == "" || $('#impact').val().includes(ri.ImpactLevel_Nm))
+        // ){
+            let list = listri(programname, type);
             console.log("list")
             console.log(list)
-            // console.log("listri('" + name + "','" + type+"');");
+            // console.log("listri('" + programname + "','" + type+"');");
             document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
             if (list.length != 0) {
-                document.getElementById("table"+makesafe(name)).appendChild(makeheader(name, type));
+                document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
                 for (ri of list) {
                   // console.log(ri)
                   window.ricount.push(true);
                   rowcolor++;
-                  makedata(ri, type, name);
-                  program = getprogrambykey(ri, name);
+                  makedata(ri, type, programname);
+                  program = getprogrambykey(ri, programname);
                   // console.log("ri")
                   console.log(program.RI_Nm.toLowerCase().indexOf("portfolio"))
                   portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
@@ -310,10 +310,10 @@
                   projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
                 }
             }
-        }
+        // }
     }
 
-    const makedata = (id, type, name) => {            
+    const makedata = (id, type, programname) => {            
 
         // Make all the data inside a risk or issue
         const fieldswitch = {
@@ -437,7 +437,7 @@
             return (projects != undefined && projects.length>0) ? "Project Association" : "No Project Association";
         }
         };
-        const program = getprogrambykey(id, name);
+        const program = getprogrambykey(id, programname);
         console.log(program);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
@@ -468,11 +468,11 @@
           }
           for (field of Object.keys(rifields)) {
               (function(test) {
-              const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
+                const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+                tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
               })(field);
-              if (rifields[field].name == "ID") {
-              tridobj.appendChild(header);
+              if (rifields[field].programname == "ID") {
+                tridobj.appendChild(header);
               }
           }
           var rowValues = [];
