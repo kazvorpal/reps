@@ -1,4 +1,6 @@
 //BACK BUTTON WARNING
+
+/*
 function myConfirmation() {
     let text = "If you go back, you will lose the information you have entered or changed on this form.";
     if (confirm(text) == true) {
@@ -31,3 +33,7 @@ const validateForm = () => {
     return true;
   }
 }
+
+*/
+
+// This wasn't even being used

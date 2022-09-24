@@ -74,9 +74,9 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <script src="../../colorbox-master/jquery.colorbox.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js">
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
   <link rel="stylesheet" href="../includes/ri-styles.css" />
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
@@ -1038,6 +1038,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
 </script>
 
-<script src="includes/ri-functions.js"></script>
+<script src="../includes/ri-functions.js"></script>
 </body>
 </html>

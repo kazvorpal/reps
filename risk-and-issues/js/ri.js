@@ -114,7 +114,7 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     let filtered = data.filter(filterfunction);
     // console.log("filtered");
     // console.log(filtered);
-    results = (mode == "program") ? removenullproperty(getwholeuniques(filtered, "MLMProgram_Nm"), "MLMProgram_Nm") 
+    results = (mode == "program") ? filtered 
       : (mode == "portfolio") ? filtered
       : getwholeuniques(filtered, "RiskAndIssue_Key");
     // console.log(results)
