@@ -38,39 +38,43 @@
     const programfull = programopen.concat(programclosed);  
     const portfolioopen =<?= $portfolioout ?>;
     const portfolioclosed =<?= $closedportfolioout ?>;
-    const portfoliofull = portfolioopen.concat(portfolioclosed);
     const mangerlist = <?= $mangerout ?>;
     const driverlist = <?= $driverout ?>;
     const locationlist = <?= $locationout ?>;
     const p4plist = <?= $p4pout ?>;
     const portfolioprograms = <?= $portfolioprogramsout ?>;
-
+    
 
     const ffpp = (target) => {
-        return portfolioprograms.filter(o => {
+      return portfolioprograms.filter(o => {
             return o.RiskAndIssue_Key == target;
-        })
+          })
     }
-
-    for (key in portfolioopen) {
-      // console.log(portfolioopen[key].MLMProgram_Nm)
-      if(!portfolioopen[key].MLMProgram_Nm) {
-        let ps = "";
-        for (lokey in portfolioprograms) {
-          if (portfolioprograms[lokey].RiskAndIssue_Key == portfolioopen[key].RiskAndIssue_Key) {
-            ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
+    
+    const syncportfolio = (target) => {
+      for (key in target) {
+        // console.log(target[key].MLMProgram_Nm)
+        if(!target[key].MLMProgram_Nm) {
+          let ps = "";
+          for (lokey in portfolioprograms) {
+            if (portfolioprograms[lokey].RiskAndIssue_Key == target[key].RiskAndIssue_Key) {
+              ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
+            }
+            target[key].MLMProgram_Nm = ps;
           }
-          portfolioopen[key].MLMProgram_Nm = ps;
-        }
-        let pp = ffpp(portfolioopen[key].RiskAndIssue_Key);
-        if (typeof pp[0] != 'undefined') {
-          portfolioopen[key].MLMProgram_Nm = pp[0].Program_Nm;
-          portfolioopen[key].MLMProgram_Key = pp[0].Program_Key;
-        } else if(!portfolioopen[key].MLMProgram_Nm) {
-          delete portfolioopen[key];
+          let pp = ffpp(target[key].RiskAndIssue_Key);
+          if (typeof pp[0] != 'undefined') {
+            target[key].MLMProgram_Nm = pp[0].Program_Nm;
+            target[key].MLMProgram_Key = pp[0].Program_Key;
+          } else if(!target[key].MLMProgram_Nm) {
+            delete target[key];
+          }
         }
       }
-    }    
+      return target;
+    }
+    
+    const portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(portfolioclosed));
     // const portfolioclosed = portfoliofull = portfolioopen;
 
     const cleandata = (list) => {
