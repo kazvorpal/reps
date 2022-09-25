@@ -183,9 +183,14 @@ const jq = `
 		$('#impact_level').multiselect(prop);
     document.getElementById("Go").onclick = function() {
       // filter form button
-      let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : ridata;
-      populate(filtration(riseed));
-      colorboxschtuff();
+      // let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : ridata;
+      // populate(filtration(ridata));
+      // colorboxschtuff();
+      rifiltered = filtration(ridata);
+      let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
+      setTimeout(function() {
+        populate(riseed);
+      });
       return false;
     }  
   }

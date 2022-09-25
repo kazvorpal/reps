@@ -91,7 +91,10 @@
       const setdata = () => {
         ridata = d1 = d1 = rifiltered = "";
           if (mode == "program") {
-              ridata = programfull;
+            const localportfolios = portfoliofull.filter(o => {
+                return o.RaidLog_Flg == 0;
+              })
+              ridata = programfull.concat(localportfolios);
               d1 = programopen;
               d2 = programclosed;
           } else if (mode == "portfolio") {
@@ -99,7 +102,7 @@
                 return o.RaidLog_Flg == 1;
               })
               // console.log(portfolioopen)
-              ridata = cleandata(portfolioopen).concat(globalprograms)
+              ridata = cleandata(portfoliofull).concat(globalprograms)
               d1 = portfolioopen;
               d1 = portfolioclosed;
           } else {
