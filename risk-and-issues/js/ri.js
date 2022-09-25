@@ -47,8 +47,10 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   }
 
   const resultcounter = (results) => {
-    const s = (results.length == 1) ? "" : "s";
-    document.getElementById("resultcount").innerHTML = `${results.length} Result${s} Found`
+    console.log(typeof results)
+    let r = (typeof results == "object") ? results.length : results;
+    const s = (r == 1) ? "" : "s";
+    document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`
   }
 
   const padTo2Digits = (num) => num.toString().padStart(2, '0');

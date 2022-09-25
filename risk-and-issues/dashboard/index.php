@@ -195,6 +195,7 @@
       console.log("rilist");
       console.log(rilist);
       resultcounter(rilist);
+      result = 0;
       window.ricount = [];
       const main = document.getElementById("main");
       initexcel();
@@ -223,6 +224,7 @@
             (ispp(mode)) ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
             // (mode == "program") ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
         }
+        resultcounter((ispp(mode)) ? result : rilist);
       }
     }
 
@@ -306,6 +308,7 @@
                 document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
                 for (ri of list) {
                   // console.log(ri)
+                  result++;
                   window.ricount.push(true);
                   rowcolor++;
                   makedata(ri, type, programname);
