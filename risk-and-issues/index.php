@@ -23,15 +23,17 @@ include ("../sql/update-time.php");
 <?php include ("../includes/menu.php");?>
 
 <div class="container">
-  <div align="center"><h2>RISKS AND ISSUES</h2></div><hr>
+  <div align="center"><h2>RISKS AND ISSUES</h2></div>
+  <div align="center">Risks and Issues allow users to ceate, view, update, and close risk and issues for projects and programs.</div>
+  <hr>
   <div class="row row-eq-height">
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">CREATE GLOBAL RISK OR ISSUE</h3>
+          <h3 class="panel-title"><span class="glyphicon glyphicon-globe"></span> CREATE GLOBAL RISK OR ISSUE</h3>
         </div>
         <div class="panel-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        If a risk or issue is not associated with an active project in EPS, click this link to ceate a program or portolio Risk and issue using global forms.
           <hr><div align="center"><a href="/risk-and-issues/global/"><button type="button" class="btn btn-info">Create Risk or Issue</button></a></div>
         </div>
       </div>
@@ -39,10 +41,10 @@ include ("../sql/update-time.php");
     <div class="col-md-6" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">CREATE PROGRAM OR PORJECT R/I via DPR</h3>
+          <h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span> CREATE PROGRAM OR PORJECT RISKS & ISSUES via DPR</h3>
         </div>
         <div class="panel-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        If a risk or issue is associated with an active project in EPS, click this link to ceate a program or portolio Risk and issue using global forms.
           <hr><div align="center"><a href="../esp-status-details-index.php"><button type="button" class="btn btn-info">Create Risk or Issue</button></a></div>
         </div>
       </div>
@@ -53,10 +55,10 @@ include ("../sql/update-time.php");
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">RAID LOG</h3>
+          <h3 class="panel-title"><span class="glyphicon glyphicon-dashboard"></span> RAID LOG</h3>
         </div>
         <div class="panel-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        A report containg all Program Risks and Issues.<br><br>
           <hr><div align="center"><a href="/risk-and-issues/dashboard/?portfolio"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
@@ -64,10 +66,10 @@ include ("../sql/update-time.php");
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PROGRAM R/I DASHBOARD</h3>
+          <h3 class="panel-title"><span class="glyphicon glyphicon-dashboard"></span> PROGRAM RISKS & ISSUES DASHBOARD</h3>
         </div>
         <div class="panel-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        A report containing all Project Risk and Issues.<br><br>
           <hr><div align="center"><a href="/risk-and-issues/dashboard/?program"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
@@ -75,10 +77,10 @@ include ("../sql/update-time.php");
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PROJECT R/I DASHBOARD</h3>
+          <h3 class="panel-title"><span class="glyphicon glyphicon-dashboard"></span> PROJECT RISKS & ISSUES DASHBOARD</h3>
         </div>
         <div class="panel-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        A report containing all Program and Portfolio Risks and Issues. 
           <hr><div align="center"><a href="/risk-and-issues/dashboard/"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
