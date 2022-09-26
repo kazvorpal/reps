@@ -21,7 +21,7 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
                                     Where Region_Cd='$ri_region'
                                     ORDER BY RiskAndIssue_Key DESC";
 								$stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
-                $sql_risk_issue;
+                //echo $sql_risk_issue;
 
                 //CLOSED PROGRAM RISK AND ISSUES
                 $sql_risk_issue_cls = "select distinct Global_Flg, RI_Nm, RIType_Cd,RIDescription_Txt, RIClosed_Dt, Last_Update_Ts, RiskAndIssue_Key
