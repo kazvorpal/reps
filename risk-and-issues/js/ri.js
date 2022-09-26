@@ -204,7 +204,12 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     }
     document.cbrun = false;
     const colorboxschtuff = () => {
-      $(".miframe").colorbox({iframe:true, width:"80%", height:"70%", scrolling:true});
+      $(".miframe").colorbox({
+        iframe:true, 
+        width:"80%", 
+        height:"70%", 
+        scrolling:true,
+      });
       $(".callbacks").colorbox({
           onOpen:function(){ alert('onOpen: colorbox is about to open'); },
           onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },

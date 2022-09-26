@@ -744,7 +744,7 @@
           });
         });
         makeheadline();
-        colorboxschtuff();
+        setTimeout(colorboxschtuff, 2000);
         makemodebuttons(mode);
     }
 
