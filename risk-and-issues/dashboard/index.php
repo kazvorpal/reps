@@ -414,7 +414,7 @@
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
         let url = text = "";
-        if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
+        // if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
           const trid = "tr" + type + saferi + Math.random();
           let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
           document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
@@ -440,6 +440,8 @@
           }
           for (field of Object.keys(rifields)) {
               (function(test) {
+                console.log(1)
+                console.log(test)
                 const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
                 tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
               })(field);
@@ -450,6 +452,8 @@
           var rowValues = [];
           for (field in excelfields) {
               (function(test) {
+                console.log(2)
+                console.log(test)
                   let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
                   t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
                   rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
@@ -460,7 +464,7 @@
           if(arrow != "") {
             makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
           }
-        }
+        // }
     }    
 
 
