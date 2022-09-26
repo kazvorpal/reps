@@ -2,15 +2,10 @@
 const getprogrambyname = (target) =>  mlm = rifiltered.find(o => o.MLMProgram_Nm == target);
 const getprogrambykey = (target, name) =>  mlm = rifiltered.find(o => o && o.RiskAndIssue_Key == target && o.MLMProgram_Nm == name);
 const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
-// mode = (window.location.href.indexOf("program")>=0) ? "program" : "project";
 
   // Sanitize a string
   const makesafe = (target) => {
-    console.log(target)
-    console.log(target == "null");
-    whatever = (target == "null" || target == null) ? "whatever" : target.replace(/\s/g,'');
-    console.log(whatever)
-    return whatever
+    return  (target in ["null", null]) ? "whatever" : target.replace(/\s/g,'');
   }
   
   const makeelement = (o) => {
@@ -47,7 +42,6 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
   }
 
   const resultcounter = (results) => {
-    console.log(typeof results)
     let r = (typeof results == "object") ? results.length : results;
     const s = (r == 1) ? "" : "s";
     document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`
@@ -81,24 +75,19 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
     return character.repeat(size-tl.length) + target.toString();
   }
 
-
-
 //   const mapper = (mode == "project") ? "EPSProject_Key" : "MLMProgram_Nm";
   const mapper = "RiskAndIssue_Key";
   const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
   const filterfunction = (o) => {
-    // console.log($('#region').val())
-    // console.log(o.EPSRegion_Cd)
-    // console.log($('#region').val().includes(o.EPSRegion_Cd))
     return (
         (document.getElementById("fiscal_year").value == '' || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
         (document.getElementById("risk_issue").value == '' || $('#risk_issue').val().includes(o.RIType_Cd)) &&
-        ((["project", "portfolio"].includes(mode)) || document.getElementById("category").value == '' || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&//
+        ((["project", "portfolio"].includes(mode)) || document.getElementById("category").value == '' || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
         (document.getElementById("impact_level").value == '' || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
         ((document.getElementById("owner").value == '' || $('#owner').val().includes(o.LastUpdateBy_Nm))) &&
-        ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (document.getElementById("pStatus").value == '' && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&
-        (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) && //
+        ((document.getElementById("pStatus").value in [null, ''] && o.RIActive_Flg == '1') || ($("#pStatus").val() != null && $("#pStatus").val().includes(o.RIActive_Flg.toString()))) &&
+        (document.getElementById("program") == null || document.getElementById("program").value == '' || $('#program').val().includes(o.MLMProgram_Nm) || $('#program').val().includes(o.EPSProgram_Nm)) && 
         ((["portfolio"].includes(mode)) || document.getElementById("subprogram") == null || document.getElementById("subprogram").value == '' 
           || ((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") && $('#subprogram').val().includes(p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0].Subprogram_nm)) 
           || $('#subprogram').val().includes(o.EPSSubprogram_Nm)) &&
@@ -112,22 +101,16 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
 
 
   const filtration = (data) => {
-    console.log(data)
     let filtered = data.filter(filterfunction);
-    // console.log("filtered");
-    // console.log(filtered);
     results = (mode == "program") ? filtered 
       : (mode == "portfolio") ? filtered
       : getwholeuniques(filtered, "RiskAndIssue_Key");
-    // console.log(results)
     return results;
   }  
-  const searchproperty = (list, field, value) => {
 
+  const reload = () => {
+      document.getElementById("formfilter").reset();
   }
-    const reload = () => {
-        document.getElementById("formfilter").reset();
-    }
 
 
     const exporter = () => {
@@ -187,10 +170,8 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
       document.worksheet.eachRow(function(row, rowNumber) {
         if (row._number != 1) {
           row.eachCell(function(cell, colNumber) {
-              // console.log(cell);
-              let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
-              // console.log(alignment)
-              cell.alignment = {"horizontal": alignment}
+              // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
+              cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
           })
         }
       })
@@ -293,9 +274,6 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
    let first = new Date(s[0]);
    let middle = new Date(m.setDate(m.getDate()+1));
    let last = new Date(s[1]);
-  //  console.log(first);
-  //  console.log(middle);
-  //  console.log(last);
    r = ((middle >= first && middle <= last));
    return r;
  }  
@@ -309,7 +287,6 @@ const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key
    const dates = {};
    dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
    dates.end = daterange.substring(daterange.indexOf(" - ")+4);
-   return dates;
- } 
+   return dates; } 
 
 
