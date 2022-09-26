@@ -472,31 +472,30 @@
 
         // Make the rows of projects inside the program
         document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
-        document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
-        document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
+        document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"})).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
         if (projects.length != 0) {
-        const table = document.createElement("table");
-        table.id = "table" + saferi;
-        table.className = "projecttable";
-        table.appendChild(projectheader());
-        document.getElementById("td" + saferi).appendChild(table);
-        let p = [];
-        for(project of projects) {
-            const tr = document.createElement("tr");
-            tr.id = "tr" + project.PROJECT_key;
-            for (field of projectfields) {
-                locale = getlocationbykey(project.PROJECT_key);
-                txt = (field == "MLMRegion_Cd" && locale != undefined) ? locale.Region_Cd 
-                : (field == "Subprogram" && locale != undefined) ? locale.Subprogram_nm 
-                : (field == "Market_Cd" && locale != undefined) ? locale.Market_Cd 
-                : (field == "EPS_Location_Cd" && locale != undefined)  ? locale.Facility_Cd 
-                : project[field];
-                tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
-            }
-            document.getElementById("table" + saferi).appendChild(tr);
-            p.push(project.EPSProject_Key);
-            // }
-        }
+          const table = document.createElement("table");
+          table.id = "table" + saferi;
+          table.className = "projecttable";
+          table.appendChild(projectheader());
+          document.getElementById("td" + saferi).appendChild(table);
+          let p = [];
+          for(project of projects) {
+              const tr = document.createElement("tr");
+              tr.id = "tr" + project.PROJECT_key;
+              for (field of projectfields) {
+                  locale = getlocationbykey(project.PROJECT_key);
+                  txt = (field == "MLMRegion_Cd" && locale != undefined) ? locale.Region_Cd 
+                  : (field == "Subprogram" && locale != undefined) ? locale.Subprogram_nm 
+                  : (field == "Market_Cd" && locale != undefined) ? locale.Market_Cd 
+                  : (field == "EPS_Location_Cd" && locale != undefined)  ? locale.Facility_Cd 
+                  : project[field];
+                  tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
+              }
+              document.getElementById("table" + saferi).appendChild(tr);
+              p.push(project.EPSProject_Key);
+              // }
+          }
         } else {
             let empty = document.createTextNode("No Associated Projects");
             document.getElementById("td" + saferi).appendChild(empty);

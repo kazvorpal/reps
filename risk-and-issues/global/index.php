@@ -992,7 +992,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
     document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
     setdisableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-    setdisableevent({t: "RILevel", v: "Program", d: ["TransfertoProgramManager"], e: "Portfolio"})
+    setdisableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
     setdisableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
     setsubprogramevent();
     setregionevent();
