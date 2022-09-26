@@ -157,7 +157,7 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     </div>
 <hr>
     <div>
-      <?php echo str_replace(",", "<br>", $_POST['assocProjects']); ?>
+      <?php if($global != 1)  { echo str_replace(",", "<br>", $_POST['assocProjects']);} ?>
     </div>
   </div>
 <?php } ?>
