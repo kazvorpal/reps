@@ -440,8 +440,6 @@
           }
           for (field of Object.keys(rifields)) {
               (function(test) {
-                console.log(1)
-                console.log(test)
                 const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
                 tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
               })(field);
@@ -452,8 +450,6 @@
           var rowValues = [];
           for (field in excelfields) {
               (function(test) {
-                console.log(2)
-                console.log(test)
                   let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
                   t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
                   rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);

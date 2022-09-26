@@ -14,9 +14,33 @@ function fixutf8($target) {
 }  
 
 $sql_port_user = "SELECT * FROM [RI_MGT].[RiskandIssues_Users] WHERE Username = '$user_id'";
+// echo "$sql_port_user <br/>";
 $stmt_port_user   = sqlsrv_query( $data_conn, $sql_port_user );
 $row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
 
+// print("row_port_user: '<pre>");
+// print(json_encode($row_port_user, JSON_PRETTY_PRINT));
+// print("'</pre>, uid=$user_id");
+
+$thisyear = date('Y');
+$sqluseraccess = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', $thisyear)";
+// echo $sqluseraccess;
+$sqluserresults = sqlsrv_query($data_conn, $sqluseraccess);
+$userrows = array();
+$count = 1;
+if($sqluserresults === false) {
+  if(($error = sqlsrv_errors()) != null) {
+    foreach($error as $errors) {
+      echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+      echo "code: ".$error[ 'code']."<br />";
+      echo "message: ".$error[ 'message']."<br />";
+    }
+  }
+} else {
+  while($userrow = sqlsrv_fetch_array($sqluserresults, SQLSRV_FETCH_ASSOC)) {
+    $userrows[] = array_map("fixutf8", $userrow);
+  }
+}
 $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
 if($stmt_prog === false) {
@@ -59,7 +83,7 @@ $programout = json_encode($programrows);
 $subprogramout = json_encode($subprogramrows);
 
 //SUBPROGRAM 
-$sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = 2022";
+$sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where LRPYear = $thisyear";
 $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog ); 
 //$row_subprog   = sqlsrv_fetch_array( $stmt_subprog , SQLSRV_FETCH_ASSOC);
 // $row_subprog ['SubProgram_Nm'];
@@ -133,23 +157,36 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         });
         programs = <?= $programout ?>;
         subprograms = <?= $subprogramout ?>;
-  </script> 
+        </script> 
 
 <script language="JavaScript">
-function toggle(source) {
-  checkboxes = document.getElementsByName('Region[]');
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = source.checked;
+  function toggle(source) {
+    checkboxes = document.getElementsByName('Region[]');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = source.checked;
+    }
+    document.getElementById("Region").checked = false;
+    document.getElementById("Region").click();
   }
-  document.getElementById("Region").checked = false;
-  document.getElementById("Region").click();
-}
-var user  = <?= json_encode($row_port_user, JSON_PRETTY_PRINT) ?>
+  var user  = <?= json_encode($row_port_user, JSON_PRETTY_PRINT) ?>
+  ;
+  var useraccess  = <?= json_encode($userrows, JSON_PRETTY_PRINT) ?>
+  ;
+  if (useraccess == null) {
+    alert("You dont have access to Create a Global Risk or Issue. Please contact EES Support to request access.");
+    document.location.href="/"
+  };
 </script>
 
 </head>
 <body style=" font-family:Mulish, serif;">
-<?php include ("../../includes/menu.php");?>
+<?php 
+  include ("../../includes/menu.php");
+  if ($userrows == null) {
+    echo "<h2 align='center'>You dont have access to Create a Global Risk or Issue.<br/> Please contact <a href='https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx' target='_New'>EES Support</a> to request access.</h2>";
+    exit();
+  }
+?>
 <main align="center">
   <!-- PROGRESS BAR -->
   <div class="container">       
@@ -617,7 +654,7 @@ var user  = <?= json_encode($row_port_user, JSON_PRETTY_PRINT) ?>
 </div>
 <input type="hidden" id="programcache" value=""/>
 <!--end container -->
-  <button type="submit" class="btn btn-primary" onmouseoverD="nameevent()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary" id="review" onmouseover="prescreen()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
@@ -1052,7 +1089,15 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   } else 
     document.backbutton = false;
 
-
+  const prescreen = () => {
+    document.querySelectorAll("input[type=text], textarea").forEach(o => { 
+      console.log(o);
+      o.value = o.value.trim()
+    })
+  }
+  // document.getElementById("review").addEventListener("mouseover", {
+  //   prescreen();
+  // })
 </script>
 
 <script src="../includes/ri-functions.js"></script>
