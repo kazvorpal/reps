@@ -1,9 +1,9 @@
-<?php include ("../../includes/functions.php");?>
-<?php include ("../../db_conf.php");?>
-<?php include ("../../data/emo_data.php");?>
-<?php include ("../../sql/RI_Internal_External.php");?>
-<?php include ("../../sql/update-time.php");?>
-<?php 
+<?php include ("../../includes/functions.php");
+ include ("../../db_conf.php");
+ include ("../../data/emo_data.php");
+ include ("../../sql/RI_Internal_External.php");
+ include ("../../sql/update-time.php");
+
 session_start();
 
 $unframe = "0";
