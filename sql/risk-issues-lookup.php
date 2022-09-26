@@ -14,7 +14,12 @@ $formType = $_POST['formType']; // NEW OR DELETE
 $lrpYear = $_POST['fiscalYer']; // FISCAL YEAR OF THE PROJECT
 $riTypeCode = $_POST['RIType']; // RISK OR ISSUE
 $riLevel = $_POST['RILevel']; // PRJECT OR PROGRAM
+
+$createdFrom = "";
+if(isset($_POST['CreatedFrom'])){
 $createdFrom = $_POST['CreatedFrom']; // THE RISK THE ISSUE WAS CREATED FROM - FOR ISSUE ONLY
+}
+
 $descriptor = str_replace("'","",$_POST['Descriptor']);  // DESCRIPTOR
 $description = $_POST['Description']; 
 $impactArea = $_POST['ImpactArea']; 
@@ -33,6 +38,8 @@ if(isset($_POST['assCRID'])){
 $portfolioType = "";
 if(isset($_POST['portfolioType'])) {
   $portfolioType = $_POST['portfolioType'];
+} else if($riLevel = "Program"){
+  $portfolioType = "";
 }
 
 $portfolioType_Key = "";
