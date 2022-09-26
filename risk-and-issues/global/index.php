@@ -943,12 +943,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   // Event creators
 
-
   $("#subprogram").change(() => {
     console.log("sub")
     localStorage.setItem("subprogram", $("#subprogram").val());
   })
-
 
   const setregionevent = () => {
     document.getElementsByName("Region[]").forEach((target) => {
