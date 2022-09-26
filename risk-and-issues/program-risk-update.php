@@ -421,7 +421,7 @@ if($formaction == "update") {
     <input name="formType" type="hidden" id="formType" value="<?php echo $formType?>">
     <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php echo $eps_proj_keys?>">
 
-  <!--<input name="CreatedFrom" type="hidden" id="Created From" value=''>-->
+  <input name="CreatedFrom" type="hidden" id="Created From" value=''>
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
   <input name="program" type="hidden" id="program" value='<?php echo $row_risk_issue['MLMProgram_Nm']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value=''>

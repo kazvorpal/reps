@@ -102,18 +102,22 @@ if($riskRealized_Raw == 1){
   $riskRealized = "No";
 }
 
-//EDIT AUTHIRIZATION - SHOW OR HIDE EDIT BUTON
+//EDIT AUTHIRIZATION - SHOW OR HIDE EDIT BUTTON
 $sql_port_user = "SELECT * FROM [RI_MGT].[RiskandIssues_Users] WHERE Username = '$windowsUser' and [RI_MGT].[RiskandIssues_Users].[Group] = 'PORT'";
 $stmt_port_user   = sqlsrv_query( $data_conn, $sql_port_user ); 
 $row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
 //echo $row_port_user['Username'];
 
 $portUser = 0; //HIDE BUTTONS
-if(!empty($row_port_user && $RILevel == "Portfolio")){
+if(!empty($row_port_user)){
   $portUser = 1; //SHOW BUTTONS
 }
+//echo $portUser;
+//echo $sql_port_user;
 
-
+//if($RILevel == "Program"){
+  //$portUser = 1; //SHOW BUTTONS
+//}
 
 //LINK FOR EMAIL
 $mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id; 
