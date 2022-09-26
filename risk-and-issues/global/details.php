@@ -5,9 +5,10 @@ include ("../../data/emo_data.php");
 include ("../../sql/MS_Users.php");
 include ("../../sql/update-time.php");
 
+//SEESION STATE FOR MENU SHOW = 0 / NO SHOW = 1
 session_start();
 
-$unframe = "0";
+$unframe = "0"; // NO COLOR BOX
 $_SESSION['unframe'] = $unframe;
 
 if(isset($_GET['unframe'])) {
@@ -93,13 +94,26 @@ $ri_list = "";
 $department = $row_glb_prog['POC_Department'];
 $raidLog = $row_glb_prog['RaidLog_Flg'];
 $riskRealized_Raw = $row_glb_prog['RiskRealized_Flg'];
-
+$popup = "true";
 
 if($riskRealized_Raw == 1){
   $riskRealized = "Yes";
 } else {
   $riskRealized = "No";
 }
+
+//EDIT AUTHIRIZATION - SHOW OR HIDE EDIT BUTON
+$sql_port_user = "SELECT * FROM [RI_MGT].[RiskandIssues_Users] WHERE Username = '$windowsUser' and [RI_MGT].[RiskandIssues_Users].[Group] = 'PORT'";
+$stmt_port_user   = sqlsrv_query( $data_conn, $sql_port_user ); 
+$row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
+//echo $row_port_user['Username'];
+
+$portUser = 0; //HIDE BUTTONS
+if(!empty($row_port_user && $RILevel == "Portfolio")){
+  $portUser = 1; //SHOW BUTTONS
+}
+
+
 
 //LINK FOR EMAIL
 $mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id; 
@@ -119,9 +133,12 @@ $mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id;
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
 
 <body style="font-family:Mulish, serif;">
-<?php if($unframe == "0") {
+
+<?php // SHOW MENU IF OPENING DIRECT
+if($unframe == "0") { //NO COLORBOX
   include ("../../includes/menu.php");
 }
+
 ?>
 <div id='dlist'></div> 
 	<div align="center"><h3><?php echo strtoupper($RILevel) . " " . strtoupper($RIType) ?> DETAILS</h3></div>
@@ -285,11 +302,11 @@ $mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id;
   </tbody>
 </table>
 <div align="center">
-      <?php// if($popup=="false"){?>
+      <?php if($popup=="false"){?>
         <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
-      <?php// } ?>
+      <?php } ?>
 
-        <?php// if($access=="true"){?>  
+        <?php if($portUser == 1){?>  
             <?php// if($status == 1){ ?>
             <a href="../global/update.php?&id=<?php echo $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
@@ -310,7 +327,7 @@ $mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id;
             " 
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
             <?php// } ?>
-        <?php// } ?>
+        <?php } ?>
     </div>
   </form>
 </div>
