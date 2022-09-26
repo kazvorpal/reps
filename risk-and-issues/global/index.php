@@ -13,6 +13,10 @@ function fixutf8($target) {
   return (gettype($target) == "string") ? (utf8_encode($target)) : ($target);
 }  
 
+$sql_port_user = "SELECT * FROM [RI_MGT].[RiskandIssues_Users] WHERE Username = '$user_id'";
+$stmt_port_user   = sqlsrv_query( $data_conn, $sql_port_user );
+$row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
+
 $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
 if($stmt_prog === false) {
@@ -140,6 +144,7 @@ function toggle(source) {
   document.getElementById("Region").checked = false;
   document.getElementById("Region").click();
 }
+var user  = <?= json_encode($row_port_user, JSON_PRETTY_PRINT) ?>
 </script>
 
 </head>
@@ -215,8 +220,8 @@ function toggle(source) {
           <h3 class="panel-title">RISK/ISSUE LEVEL*</h3>
         </div>
         <div class="panel-body">
-          <label for="RILevel"><input type="radio" name="RILevel" value="Program" required> Program </label> 
-          <label for="RILevel"><input type="radio" name="RILevel" value="Portfolio" required> Portfolio </label>
+          <label for="RILevel"><input type="radio" id="RILevel.Program" name="RILevel" value="Program" required> Program </label> 
+          <label for="RILevel"><input type="radio" id="RILevel.Portfolio" name="RILevel" value="Portfolio" required> Portfolio </label>
         </div>
       </div>
     </div>
@@ -1009,6 +1014,18 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.getElementById("subprogram").style.height = "0px";
     document.getElementById("subprogram").style.width = "0px";
     document.getElementById("subprogram").style.position= "absolute";
+    if (user == null || user.Group != "PORT")  {
+      console.log("port")
+      document.getElementById("RILevel.Portfolio").disabled = true;
+      document.getElementById("RILevel.Portfolio").title = "Your account does not have Portfolio access. Please request access if you need it.";
+      document.getElementsByName("portfolioType").forEach(t2 => {
+        t2.disabled = true;
+        t2.title = `Only available for Portfolios`;
+      })
+      document.getElementById("TransfertoProgramManager").disabled = true;
+    } else {
+      console.log("starboard")
+    }
         // document.getElementById("subprogram").style.display = "block"
   });
 
