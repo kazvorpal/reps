@@ -1,9 +1,9 @@
-<?php include ("../../includes/functions.php");?>
-<?php include ("../../db_conf.php");?>
-<?php include ("../../data/emo_data.php");?>
-<?php include ("../../sql/RI_Internal_External.php");?>
-<?php include ("../../sql/update-time.php");?>
-<?php 
+<?php include ("../../includes/functions.php");
+ include ("../../db_conf.php");
+ include ("../../data/emo_data.php");
+ include ("../../sql/RI_Internal_External.php");
+ include ("../../sql/update-time.php");
+
 session_start();
 
 $unframe = "0";
@@ -674,7 +674,7 @@ function toggle(source) {
           <div align="right" style="margin-top:10px; margin-bottom:10px;">  
               <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">History</a>
           </div>
-          <div class="collapse" id="collapseExample">
+          <div class="collapse in" id="collapseExample">
             <div class="well">
               <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
             </div>
