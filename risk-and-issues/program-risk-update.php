@@ -230,7 +230,7 @@
   $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
   $raid = $row_risk_issue['RaidLog_Flg'];
   $riskRealized = $row_risk_issue['RiskRealized_Flg'];
-  $assCRID = ""; //$row_risk_issue['AssociatedCR_Key'];
+  $assCRID = $row_risk_issue['AssociatedCR_Key'];
   $probability = $row_risk_issue['RiskProbability_Key'];
   $formName = $_GET['formName'];
   $POC_Nm = $row_risk_issue['POC_Nm'];
@@ -421,7 +421,7 @@ if($formaction == "update") {
     <input name="formType" type="hidden" id="formType" value="<?php echo $formType?>">
     <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php echo $eps_proj_keys?>">
 
-  <input name="CreatedFrom" type="hidden" id="Created From" value=''>
+  <!--<input name="CreatedFrom" type="hidden" id="Created From" value=''>-->
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
   <input name="program" type="hidden" id="program" value='<?php echo $row_risk_issue['MLMProgram_Nm']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value=''>
@@ -431,7 +431,7 @@ if($formaction == "update") {
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
   <input type="hidden" name="riskRealized" value="1" id="riskRealized" value="0">
-  <input name="CreatedFrom" type="hidden" id="Created From" value="<?php echo $assCRID;?>">
+  <!--<input name="CreatedFrom" type="hidden" id="Created From" value="<?php //echo $assCRID;?>"-->
   <input name="Individual" type="hidden" id="Individual" value="">
 
   <?php if($assc_prj_update == "yes"){ ?>
@@ -834,7 +834,7 @@ if($formaction == "update") {
         </div>
       </td>
         </tr>
-<!--
+
         <tr>
           <td colspan="2" align="left"><h4 style="color: #00aaf5">RISK REALIZED</h4></td>
         </tr>
@@ -863,19 +863,18 @@ if($formaction == "update") {
           </td>
           </tr>
         <tr>
-        -->
           <td colspan="2" align="left"></td>
         </tr>
-        <!--
+        <tr>
+          <td colspan="2" align="left"><h4 style="color: #00aaf5">ASSOCIATED CR ID</h4></td>
+        </tr>
         <tr>
           <td colspan="2" align="left">
-            <br>
             <div class="box">
-              <label for="Created From">Associated CR ID</label>
-              <input name="CreatedFrom" type="text" class="form-control" id="Created From" value="<?php echo $assCRID;?>">
+              <label for="assCRID">CR ID</label>
+              <input name="assCRID" type="text" class="form-control" id="assCRID" value="<?php echo $assCRID;?>">
             </div>
           </td>
-        -->
         </tr>
         <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
