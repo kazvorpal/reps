@@ -472,7 +472,8 @@
 
         // Make the rows of projects inside the program
         document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
-        document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"})).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
+        document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
+        document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
         if (projects.length != 0) {
           const table = document.createElement("table");
           table.id = "table" + saferi;
@@ -745,9 +746,10 @@
         makeheadline();
         setTimeout(colorboxschtuff, 2000);
         makemodebuttons(mode);
-    }
-
-    init(mode);
+      }
+      
+      init(mode);
+      setInterval(colorboxschtuff, 2000);
    
   </script>
   </body>

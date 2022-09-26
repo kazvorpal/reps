@@ -190,6 +190,9 @@ const jq = `
       let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
       setTimeout(function() {
         populate(riseed);
+        setTimeout(() => {
+          colorboxschtuff
+        }, 2000);
       });
       return false;
     }  
