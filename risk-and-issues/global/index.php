@@ -654,7 +654,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
 </div>
 <input type="hidden" id="programcache" value=""/>
 <!--end container -->
-  <button type="submit" class="btn btn-primary" id="review" onmouseover="prescreen()">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary" id="review" >Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
@@ -839,7 +839,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
   const nameevent = () => {
-    // console.log("nameevent");
     let locations = "";
     if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
       locations = "ALL ";
@@ -852,12 +851,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         locations += (e.checked) ? regions[e.value] + " " : "";
       });
       let required = (!locations.length > 0);
-      // console.log(locations);
       document.getElementsByName("Region[]").forEach((o) => {
         o.required = required;
         o.setCustomValidity((required) ? "You must select a region" : "");
       });
-      // console.log(locations)
       if (locations.length > 4) {
         locations = "MULTI ";
       }
@@ -907,18 +904,14 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.getElementById("subprogram").style.height = "0px";
     document.getElementById("subprogram").style.width = "0px";
     document.getElementById("subprogram").style.position= "absolute";
-    // document.getElementById("subprogram").  
   }
 
   const levelevent = (e) => {
-    // console.log("levelevent");
     programlevel();
   }
 
   const disableevent = (o) => {
     if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
-    // console.log(`input[name="${o.t}"]:checked`)
-    // console.log(!document.querySelector(`input[name="${o.t}"]:checked`))
     const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
     o.d.forEach(field => {
       console.log(field)
@@ -940,20 +933,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const programlevel = () => {
     if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
       console.log("portfolio");
-      // document.getElementById("program").multiple = true;
       $("#program").val(false).attr("required", true).attr("multiple", true).multiselect("destroy").multiselect().attr("display", "block");;
-      // $("#program").val(false).attr('multiple', true).attr("required", true).multiselect("destroy").multiselect({
-      //       includeSelectAllOption: true, nonSelectedText: 'None Selected'
-      // }).attr("display", "block");
-
     } else {
-      // console.log("program");
       if (!document.backbutton) {
         $("#program").val(false).attr("required", true).attr("multiple", false).multiselect("destroy").multiselect().attr("display", "block");;
-        // $("#program").val(false).attr('multiple', false).attr("required", true).multiselect("destroy").multiselect().attr("display", "block");
       }
-      // setTimeout(function() {$('#program').multiselect("destroy").multiselect()}, 100);
-      // setsubprogramevent();
     }
   }
 
@@ -967,7 +951,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
 
   const setregionevent = () => {
-    // console.log("regionevent");
     document.getElementsByName("Region[]").forEach((target) => {
       target.addEventListener("click", (e) => {
         nameevent();
@@ -977,16 +960,9 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   var prog;
   const setsubprogramevent = () => {
-    // console.log("setsubprogramevent")
     prog = makeselect({l: programs, f: "Program_Nm", i: "program", n: "program", t: "Programs", e: "select", c: "form-control", a: ["required"]});
     document.getElementById("programdiv").innerHTML = ""
     document.getElementById("programdiv").appendChild(prog);
-    // $('#program').multiselect({
-    //     includeSelectAllOption: true,
-    // });
-    // console.log("setsub");
-    // document.getElementById("program").addEventListener("change", (e) => subevent())
-    // $('#program').multiselect("destroy").multiselect()
     $('#subprogram').removeAttr('style')
     document.getElementById("subprogram").style.height = "0px";
     document.getElementById("subprogram").style.width = "0px";
@@ -1020,8 +996,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const conditionals = () => {
     console.log("running conditionals");
-    // levelevent()
-    // subevent();
     nameevent();
     disableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
     disableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
@@ -1042,12 +1016,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     $("#program").val(false).attr("multiple", true).multiselect();
     $("#subprogram").val(false).attr("multiple", true).multiselect();
     $('#program').removeAttr('style')
-    // document.getElementById("program").style.visibility = "hidden";
     document.getElementById("program").style.height = "1px";
     document.getElementById("program").style.width = "1px";
     document.getElementById("program").style.position= "absolute";
     $('#subprogram').removeAttr('style')
-    // document.getElementById("subprogram").style.visibility = "hidden";
     document.getElementById("subprogram").style.height = "0px";
     document.getElementById("subprogram").style.width = "0px";
     document.getElementById("subprogram").style.position= "absolute";
@@ -1063,7 +1035,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     } else {
       console.log("starboard")
     }
-        // document.getElementById("subprogram").style.display = "block"
   });
 
   setInterval(function() {
@@ -1091,13 +1062,12 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   const prescreen = () => {
     document.querySelectorAll("input[type=text], textarea").forEach(o => { 
-      console.log(o);
       o.value = o.value.trim()
     })
   }
-  // document.getElementById("review").addEventListener("mouseover", {
-  //   prescreen();
-  // })
+  document.getElementById("review").addEventListener("mouseover", () => {
+    prescreen();
+  })
 </script>
 
 <script src="../includes/ri-functions.js"></script>
