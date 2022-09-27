@@ -124,7 +124,6 @@ if(is_null($row_winuser_prg)) {
   $lock = "no";
 } 
 
-//exit;
 //DECLARE
 $ri_id = $row_risk_issue['RiskAndIssue_Key'];
 $name = $row_risk_issue['RI_Nm'];
@@ -183,7 +182,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title><?php echo $name ?></title>
 </head>
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
@@ -331,7 +330,9 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 <div align="center">
 <?php if($alias == $authUser){ ?> 
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
+<?php if($popup=="false"){?>
     <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+    <?php } ?>
 <?php if($lock == "no")  {?>  
 <?php if($status == 1){ ?>
     <a href="<?php echo $formType ?>?formName=<?php echo $formName?>&action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
