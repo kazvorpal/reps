@@ -318,7 +318,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
+                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=true&program=" . urlencode($assocProgram) ;
             }
             
             // SEND EMAIL USING MAIL FUNCION 
@@ -364,7 +364,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $SPMaxRI_Id;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false&program=" . urlencode($assocProgram) ;
+                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=true&program=" . urlencode($assocProgram) ;
             }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){

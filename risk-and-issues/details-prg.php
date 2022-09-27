@@ -330,7 +330,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 <div align="center">
 <?php if($alias == $authUser){ ?> 
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
-<?php if($popup !="false"){?>
+<?php if($popup == "false"){?>
     <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
     <?php } ?>
 <?php if($lock == "no")  {?>  
