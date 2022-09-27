@@ -293,7 +293,7 @@
 
     const makedata = (id, type, programname) => {            
         
-        // Make all the data inside a risk or issue
+        // Make all the data inside a risk or issue, Program and Portfolio
         const fieldswitch = {
         //    Specific fields that need extra calculation
         //    Add any field to rifields that you want to be a column,
@@ -302,10 +302,10 @@
         //    If, instead, you need to do some calculation to produce it,
         //    add its fieldname to this "switch" object, fieldswitch,
         //    with an anonymous function to handle the changes.
-        RiskAndIssue_Key: function() {
+        RiskAndIssue_Key: () => {
             return `<span style='font-weight:900'>${text}</span>`;
         },
-        mangerlist: function() {
+        mangerlist: () => {
             const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
             let mangers = [];
             for (man of manger) {
@@ -313,53 +313,53 @@
             }  
             return mangers.join().replace(",", ", ");
         },
-        global: function() {
+        global: () => {
             return  (program.Global_Flg) ? "Y" : "N";
         },
-        EPSSubprogram_Nm: function() {
+        EPSSubprogram_Nm: () => {
             return getlocationbykey(program.EPSProject_Key)
         },
-        owner: function() {
+        owner: () => {
             return program.LastUpdateBy_Nm;
         },
-        ForecastedResolution_Dt: function() {
+        ForecastedResolution_Dt: () => {
             return (program.ForecastedResolution_Dt == null) ? "Unknown" : makestringdate(program.ForecastedResolution_Dt);
         },
-        RIActive_Flg: function() {
+        RIActive_Flg: () => {
             return (program.RIActive_Flg) ? "Open" : "Closed";
         },
-        Created_Ts: function() {
+        Created_Ts: () => {
             return makestringdate(program.Created_Ts);
         },
-        monthcreated: function() {
+        monthcreated: () => {
             return new Date(program.Created_Ts.date).toLocaleString('default', { month: 'long' });
         },
-        monthclosed: function() {
+        monthclosed: () => {
             return (program.RIClosed_Dt != null) ? Date(program.RIClosed_Dt.date).toLocaleString('default', { month: 'long' }) : "";
         },
-        quartercreated: function() {
+        quartercreated: () => {
             const m = new Date(program.Created_Ts.date).getMonth();
             return  (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
         },
-        quarterclosed: function() {
+        quarterclosed: () => {
             const m = new Date(program.Last_Update_Ts.date).getMonth();
             return  (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
         },
-        duration: function() {
+        duration: () => {
             const enddate = (program.RIActive_Flg == 1 || program.Created_Ts.date < program.RIClosed_Dt) ? program.Last_Update_Ts.date : program.RIClosed_Dt;
             const d = Math.floor((new Date(enddate) - new Date(program.Created_Ts.date))/(1000 * 60 * 60 * 24));
             return  d + " days";
         },
-        Last_Update_Ts: function() {
+        Last_Update_Ts: () => {
             return  makestringdate(program.Last_Update_Ts);
         },
-        RIClosed_Dt: function() {
+        RIClosed_Dt: () => {
             return  (program.RIClosed_Dt != null) ? formatDate(new Date(program.RIClosed_Dt.date)) : "";
         },
-        AssociatedCR_Key: function() {
+        AssociatedCR_Key: () => {
             return  (program.AssociatedCR_Key) ? "Y" : "N";
         },
-        MLMRegion_Cd: function() {
+        MLMRegion_Cd: () => {
             let list = ""
             let counter = 0;
             for(r of ridata) {
@@ -370,7 +370,7 @@
             }
             return (list.slice(0, -2));
         },
-        regioncount: function() {
+        regioncount: () => {
             let counter = 0;
             for(r of ridata) {
                 if (typeof r != "undefined" && r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
@@ -379,25 +379,25 @@
             }
             return counter;
         },
-        RaidLog_Flg: function() {
+        RaidLog_Flg: () => {
             return  (program.RaidLog_Flg) ? "Y" : "N";
         },
-        RiskRealized_Flg: function() {
+        RiskRealized_Flg: () => {
             return  (program.RiskRealized_Flg) ? "Y" : "N";
         },
-        RIOpen_Hours: function() {
+        RIOpen_Hours: () => {
             return Math.floor(program.RIOpen_Hours/24) + " days";
         },
-        driver: function() {
+        driver: () => {
             return (driverlist[program.RiskAndIssueLog_Key]) 
             ? (driverlist[program.RiskAndIssueLog_Key]) 
             ? driverlist[program.RiskAndIssueLog_Key].Driver_Nm : "" : "";
         },
-        projectcount: function() {
+        projectcount: () => {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             return (projects != undefined && projects.length>0) ? projects.length : "";
         }, 
-        subprogram: function() {
+        subprogram: () => {
             let list = "";
             let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             if (prog != undefined) {
@@ -408,7 +408,7 @@
             let ret = (list != "") ? list.slice(0, -2) : ""
             return ret;
         },
-        category: function() {
+        category: () => {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             return (projects != undefined && projects.length>0) ? "Project Association" : "No Project Association";
         }
@@ -437,7 +437,7 @@
           });
           const tridobj = document.getElementById(trid);
           if (arrow != "") {
-              tridobj.onclick = function() {
+              tridobj.onclick = () => {
               toggler(document.getElementById("projects" + saferi), this.children[0]);
               };
           }
@@ -559,7 +559,7 @@
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
       const fieldswitch = {
           //    Specific fields that need extra calculation
-          mangerlist: function() {
+          mangerlist: () => {
               if (ri["MLMProgram_Key"]) {
                   const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
                   let mangers = [ri["Fiscal_Year"]];
@@ -570,45 +570,45 @@
               } else
               return "";
           },
-          RIActive_Flg: function() {
+          RIActive_Flg: () => {
             return (ri.RIActive_Flg) ? "Open" : "Closed";
           },
-          owner: function() {
+          owner: () => {
             return ri.LastUpdateBy_Nm;
           },
-          ForecastedResolution_Dt: function() {
+          ForecastedResolution_Dt: () => {
             if (ri.ForecastedResolution_Dt != undefined)
               return formatDate(new Date(ri.ForecastedResolution_Dt.date));
             else 
               return "Unknown";
           },
-          Created_Ts: function() {
+          Created_Ts: () => {
             return  formatDate(new Date(ri.Created_Ts.date));
           },
-          Last_Update_Ts: function() {
+          Last_Update_Ts: () => {
             return  formatDate(new Date(ri.Last_Update_Ts.date));
           },
-          RIClosed_Dt: function() {
+          RIClosed_Dt: () => {
             return  (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "";
           },
-          RiskRealized_Flg: function() {
+          RiskRealized_Flg: () => {
             return  (ri.RiskRealized_Flg) ? "Y" : "N";
           },
-          RaidLog_Flg: function() {
+          RaidLog_Flg: () => {
             return  (ri.RaidLog_Flg) ? "Y" : "N";
           },
-          RIOpen_Hours: function() {
+          RIOpen_Hours: () => {
             return Math.floor(ri.RIOpen_Hours/24) + " days";
           },
-          market: function() {
+          market: () => {
             const m = getlocationbykey(ri.EPSProject_Key);
             return (m != undefined) ? m.Market_Cd : "";
           },
-          facility: function() {
+          facility: () => {
             const f = getlocationbykey(ri.EPSProject_Key);
             return (f != undefined) ? f.Facility_Cd : "";
           },
-          EPSRegion_Cd: function() {
+          EPSRegion_Cd: () => {
             let counter = 0;
             let list = "";
             for(rr of ridata) {
@@ -620,7 +620,7 @@
             return ri.EPSRegion_Cd;
             return list.slice(0, -2);
           },
-          regioncount: function() {
+          regioncount: () => {
             let counter = 0;
             for(r of ridata) {
               if (r.RI_Nm == ri.RI_Nm) {
@@ -629,41 +629,41 @@
             }
             return counter;
           },
-          monthcreated: function() {
+          monthcreated: () => {
             return new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' });
           },
-          monthclosed: function() {
+          monthclosed: () => {
             return (ri.RIClosed_Dt != null) ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "";
           },
-          RIIncrement_Num: function() {
+          RIIncrement_Num: () => {
             return (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "";
           },
-          quartercreated: function() {
+          quartercreated: () => {
             const m = new Date(ri.Created_Ts.date).getMonth();
             return (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
           },
-          quarterclosed: function() {
+          quarterclosed: () => {
             const m = new Date(ri.Last_Update_Ts.date).getMonth();
             return (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
           },
-          duration: function() {
+          duration: () => {
             const d = Math.floor((new Date(ri.Last_Update_Ts.date) - new Date(ri.Created_Ts.date))/(1000 * 60 * 60 * 24));
             return  d + " days";
           },
-          RI_Nm: function() {
+          RI_Nm: () => {
               const url = `/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
               return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
-          EPSProject_Nm: function() {
+          EPSProject_Nm: () => {
               const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
               return "<a href='" + url + "' class='miframe cboxElement'>" + ri.EPSProject_Nm + "</a>";
           },
-          driver: function() {
+          driver: () => {
             return (driverlist[ri.RiskAndIssueLog_Key]) 
             ? (driverlist[ri.RiskAndIssueLog_Key]) 
             ? driverlist[ri.RiskAndIssueLog_Key].Driver_Nm : "" : "";
           },
-          category: function() {
+          category: () => {
             let counter = 0;
             for(r of ridata) {
               if (r.EPSProject_Nm == ri.EPSProject_Nm) {
@@ -672,7 +672,7 @@
             }
             return (counter > 1) ? "Associated" : "Single";
           },
-          projectcount: function() {
+          projectcount: () => {
             let counter = 0;
             for(r of ridata) {
               if (r.EPSProject_Nm == ri.EPSProject_Nm) {
@@ -681,7 +681,7 @@
             }
             return counter;
           },
-          subprogram: function() {
+          subprogram: () => {
             if (ri.MLMProgramRI_Key != null) {
               p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgram_Key]
             }
@@ -723,7 +723,8 @@
         });
     }  
     const makeheadline = () => {
-        document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
+      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
+        
     }
 
     const init = (target) => {
