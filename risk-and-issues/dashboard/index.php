@@ -313,6 +313,9 @@
             }  
             return mangers.join().replace(",", ", ");
         },
+        global: function() {
+            return  (program.Global_Flg) ? "Y" : "N";
+        },
         EPSSubprogram_Nm: function() {
             return getlocationbykey(program.EPSProject_Key)
         },
