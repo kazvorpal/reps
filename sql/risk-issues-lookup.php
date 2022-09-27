@@ -333,7 +333,6 @@ if($portfolioType != "") {
 }
 
 //GLOBAL ID TO NAME CONVERSIONS
-
 if($global == 1 && $formType == "Update") {
   //CONVERT ARRAYS
   if($riLevel == "Portfolio") {
