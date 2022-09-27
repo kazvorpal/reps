@@ -92,7 +92,7 @@ $sql_risk_issue_assoc_proj = "DECLARE @PROJS VARCHAR(100)
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
  $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['Proj_Nm']; 			
-echo "<br>" . $sql_risk_issue_assoc_proj; //exit();
+//echo "<br>" . $sql_risk_issue_assoc_proj; //exit();
 
 ?>
 <!doctype html>

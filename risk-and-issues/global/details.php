@@ -318,6 +318,8 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AID: <?php echo $ri_id;?>
             %0D%0AName: <?php echo $name;?>
             %0D%0AType: <?php echo $RILevel . " " . $RIType?>
+            %0D%0AProgram: <?php echo $programs;?>
+            %0D%0ARegion(s): <?php echo $regionx;?>
             %0D%0ADescriptor: <?php echo $descriptor ?>
             %0D%0ADescription: <?php echo $description?>
             %0D%0ADriver: <?php echo $Driversx?>
@@ -325,6 +327,7 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AImpact Level: <?php echo $impactLevel2?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
+            %0D%0ATransfer to Program Manager: <?php echo $transProgMan;?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?php echo $mailLink;?>

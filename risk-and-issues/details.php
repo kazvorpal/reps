@@ -120,7 +120,7 @@ $link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title><?php echo $name ?></title>
 </head>
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>

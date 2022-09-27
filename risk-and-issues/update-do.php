@@ -45,7 +45,7 @@ $unframe = $_SESSION['unframe'];
     $riTypeCode = $_POST['RIType']; // RISK OR ISSUE
     $name = $_POST['name']; // PROJECT NAME
     $drivers = $_POST['drivers'];
-    $riLevel = $_POST['RILevel']; // PRJECT OR PROGRAM
+    $riLevel = $_POST['RILevel']; // PROJECT OR PROGRAM
     $impactArea = (int)$_POST['impactArea']; 
     $impactLevel = (int)$_POST['impactLevel'];
     $responseStrategy = $_POST['responseStrategy'];
@@ -117,17 +117,28 @@ $unframe = $_SESSION['unframe'];
     }
     
     //echo $regionKeys . "<br> . $assocProjectsKeys . <br>"; 
+    $programs = $_POST['programs']; //program name
 
     $programKeys = $_POST['programKeys']; //single key
     if($global == 1) {
         $programKeys = $_POST['program'];
     }
     
-    $riKeys = $_POST['RiskAndIssue_Key']; //single key
-    $programs = $_POST['programs']; //program name
+    $riKeys = $_POST['RiskAndIssue_Key']; //Multiple keys seperated by comma
+    $firstRIkeyx = explode(",",$_POST['RiskAndIssue_Key']); //create array for keys
+    $firstRIkey = array_values($firstRIkeyx)[0]; //call first position of arrra
+    //echo $firstRIkey; exit();
+
+   
 
     $subprogram = $_POST['subprogram']; // array keys
     $portfolioType_Key = $_POST['portfolioType_Key'];
+
+    if($riLevel == "Program") {
+        $detailPage = "details-prg";
+    } else {
+        $detailPage = "details";
+    }
 
     //LOOK UP KEY VALUES 
     // IMPACT AREA
@@ -327,9 +338,9 @@ $unframe = $_SESSION['unframe'];
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global-program/details.php?rikey=" . $riKeys;
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $riKeys;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $riKeys ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/" . $detailPage . ".php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
             }
                            
             // SEND EMAIL USING MAIL FUNCION 
@@ -375,7 +386,7 @@ $unframe = $_SESSION['unframe'];
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $riKeys;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $riKeys ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=false";
             }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
