@@ -175,7 +175,7 @@ $dateClosed = date_format($row_risk_issue['RIClosed_Dt'], 'Y-m-d');
 $dateClosed = "---";
 }
 
-$link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&program=" . $prog_name . "&status=1&popup=false&uid=" . $uid);
+$link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&program=" . $prog_name . "&status=1&popup=true&uid=" . $uid);
 //echo $link;
 ?>
 <!doctype html>

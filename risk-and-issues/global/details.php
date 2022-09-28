@@ -84,7 +84,13 @@ $responseStrategy2 = $row_glb_prog['ResponseStrategy_Nm'];
 $date = $row_glb_prog['ForecastedResolution_Dt'];
 $unknown = ""; // IF DATE IS EMPTY
 $transProgMan = $row_glb_prog['TransferredPM_Flg'];
+
 $opportunity = $row_glb_prog['Opportunity_Txt'];
+
+if(!empty($row_glb_prog['TransferredPM_Flg'])) {
+  $opportunityIndicator = "Yes";
+}
+
 $actionPlan = $row_glb_prog['ActionPlanStatus_Cd'];
 $dateClosed = $row_glb_prog['RIClosed_Dt'];
 $driver_list = "";
@@ -327,7 +333,7 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AImpact Level: <?php echo $impactLevel2?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
-            %0D%0ATransfer to Program Manager: <?php echo $transProgMan;?>
+            %0D%0ATransfer to Program Manager: <?php echo $opportunityIndicator;?>
             %0D%0AAction Plan: <?php echo $actionPlan?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?php echo $mailLink;?>
