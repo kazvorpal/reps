@@ -690,7 +690,7 @@ function toggle(source) {
     </div>
   </form>
     <div align="left" style="margin-top:-45px;">  
-    <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+    <button class="btn btn-primary" onclick="history.back()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
     </div>
 </div>
 </main>
