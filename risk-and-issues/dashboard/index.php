@@ -425,7 +425,7 @@
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
           const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
-          url = `/risk-and-issues/${file}?au=false&status=1&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
+          url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
           const c = (arrow == "") ? "plainbox" : "namebox";
           const w = (mode == "portfolio") ? 7 : "";
@@ -651,7 +651,7 @@
             return  d + " days";
           },
           RI_Nm: () => {
-              const url = `/risk-and-issues/details.php?au=false&status=1&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
+              const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}1&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
               return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
           EPSProject_Nm: () => {
