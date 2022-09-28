@@ -39,7 +39,7 @@ $row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
 //DRIVER FROM LOG KEY
 $RiskAndIssueLog_Key = $row_glb_prog['RiskAndIssueLog_Key'];
 
-$sql_glb_drv = "SELECT* FROM [RI_MGT].[fn_GetListOfDriversForRILogKey](1) WHERE RiskAndIssueLog_Key = $RiskAndIssueLog_Key";
+$sql_glb_drv = "SELECT* FROM [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) WHERE RiskAndIssueLog_Key = $RiskAndIssueLog_Key";
 $stmt_glb_drv   = sqlsrv_query( $data_conn, $sql_glb_drv ); 
 $row_glb_drv   = sqlsrv_fetch_array( $stmt_glb_drv , SQLSRV_FETCH_ASSOC);
 //echo $sql_glb_drv;
