@@ -257,8 +257,8 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
           <h3 class="panel-title">RISK/ISSUE LEVEL*</h3>
         </div>
         <div class="panel-body">
-          <label for="RILevel"><input type="radio" id="RILevel.Program" name="RILevel" value="Program" required> Program </label> 
-          <label for="RILevel"><input type="radio" id="RILevel.Portfolio" name="RILevel" value="Portfolio" required> Portfolio </label>
+          <label for="RILevel"><input type="radio" id="RILevel.Program" name="RILevel" value="Program" required > Program </label> 
+          <label for="RILevel"><input type="radio" id="RILevel.Portfolio" name="RILevel" value="Portfolio" required <?php if(empty($row_port_user)){ echo " disabled";} ?>> Portfolio </label>
         </div>
       </div>
     </div>
