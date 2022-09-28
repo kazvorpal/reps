@@ -113,7 +113,7 @@ if($riskRealized_Raw == 1){
   $riskRealized = "No";
 }
 
-$link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=false");
+$link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=true");
 //echo $link; 
 ?>
 <!doctype html>
@@ -301,7 +301,7 @@ $link = urldecode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 </table>
 
 <div align="center">
-      <?php if($popup=="false"){?>
+      <?php if($popup =="false"){?>
         <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
       <?php } ?>
         <?php if($access=="true"){?>  

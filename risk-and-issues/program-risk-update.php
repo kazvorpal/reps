@@ -430,7 +430,7 @@ if($formaction == "update") {
   <input name="regionKeys" type="hidden" id="regionKeys" value="<?php echo $regionKeys?>">
   <input name="Region" type="hidden" id="Region" value="<?php echo $regions ?>">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
-  <input type="hidden" name="riskRealized" value="1" id="riskRealized" value="0">
+  <!--<input type="hidden" name="riskRealized" value="1" id="riskRealized" value="0">-->
   <!--<input name="CreatedFrom" type="hidden" id="Created From" value="<?php //echo $assCRID;?>"-->
   <input name="Individual" type="hidden" id="Individual" value="">
 
@@ -851,10 +851,10 @@ if($formaction == "update") {
                   </tr>
                 <tr>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php //if($riskRealized == 1){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="1" id="RiskRelized_0" <?php if($riskRealized == 1){ echo "checked";} ?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php //if($riskRealized == 0){ echo "checked";} ?>>
+                    <input type="radio" name="riskRealized" value="0" id="RiskRelized_1" <?php if($riskRealized == 0){ echo "checked";} ?>>
                     No</label></td>
                   </tr>
                 </table>
@@ -917,7 +917,7 @@ if($formaction == "update") {
     </div>
   </form>
     <div align="left" style="margin-top:-33px;">  
-    <button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+    <button class="btn btn-primary" onclick="history.back()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
     </div>
   </form>
 </div>
