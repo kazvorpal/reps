@@ -93,6 +93,7 @@ const jq = `
 
   const makeselect = (o) => {
     const td = makeelement({e: "div", c: "filtercol", t: o.t});
+    o.e = "select"
     const select = makeelement(o);
     if (o.i == "pStatus") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Open", d: true}));
@@ -125,27 +126,34 @@ const jq = `
     programnames = (ispp(mode)) ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
     // console.log(programnames)
     const menuitems = {};
+    dc = "form-control";
+    dm = "multiple";
 
-    selectors = {fiscalyear: {l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", e: "select", c: "form-control", m: "multiple"}, riskissue: {l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", e: "select", c: "form-control", m: "multiple"}, impactlevel: {l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", e: "select", c: "form-control", m: "multiple"}, "resolutiondate": function() {document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}))} }
+    selectors = {
+      Fiscal_Year: {l: ridata, i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", c: dc, m: dm}, 
+      RIType_Cd: {l: ridata, i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", c: dc, m: dm}, 
+      ImpactLevel_Nm: {l: ridata, i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", c: dc, m: dm}, 
+      }
 
-    makeselect({l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", e: "select", c: "form-control", m: "multiple"});
-    makeselect({l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", e: "select", c: "form-control", m: "multiple"});
-    makeselect({l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", e: "select", c: "form-control", m: "multiple"});
+
+    makeselect({l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", c: dc, m: dm});
+    makeselect({l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", c: dc, m: dm});
+    makeselect({l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", c: dc, m: dm});
     if (mode != "portfolio") 
       document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
-    makeselect({l: ridata, f: "RIActive_Flg", i: "pStatus", n: "pStatus", t: "Status<br/>", e: "select", c: "form-control", m: "multiple"});
+    makeselect({l: ridata, f: "RIActive_Flg", i: "pStatus", n: "pStatus", t: "Status<br/>", c: dc, m: dm});
     if (mode == "program") 
-      makeselect({l: ridata, f: "MLMRegion_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
+      makeselect({l: ridata, f: "MLMRegion_Cd", i: "region", n: "region", t: "Region<br/>", c: dc, m: dm});
     if (mode == "program")
-      makeselect({l: ridata, f: "category", i: "category", n: "category", t: "Category<br/>", e: "select", c: "form-control", m: "multiple"});
-    makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", e: "select", c: "form-control", m: "multiple"});
-    makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", e: "select", c: "form-control", m: "multiple"});
+      makeselect({l: ridata, f: "category", i: "category", n: "category", t: "Category<br/>", c: dc, m: dm});
+    makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", c: dc, m: dm});
+    makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", c: dc, m: dm});
     if (mode != "portfolio") 
-      makeselect({l: subp, f: "Subprogram_Nm", i: "subprogram", n: "subprogram", t: "Subprogram<br/>", e: "select", c: "form-control", m: "multiple"});
+      makeselect({l: subp, f: "Subprogram_Nm", i: "subprogram", n: "subprogram", t: "Subprogram<br/>", c: dc, m: dm});
     if (mode == "project") {
-      makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", e: "select", c: "form-control", m: "multiple"});
-      makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", e: "select", c: "form-control", m: "multiple"});
-      makeselect({l: locationlist, f: "Facility_Cd", i: "facility", n: "facility", t: "Facility<br/>", e: "select", c: " selectpicker", m: "multiple"});
+      makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", c: dc, m: dm});
+      makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", c: dc, m: dm});
+      makeselect({l: locationlist, f: "Facility_Cd", i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", m: dm});
     }
     // $('select').selectpicker();
     document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary">', c: "filtercol"}));
@@ -199,7 +207,9 @@ const jq = `
   }
 
   const resetform = () => {
-    location.href = window.location.href.split('?')[0] + "?mode=" + mode;
+    document.getElementById("formfilter").reset();
+    init(mode);
+    // location.href = window.location.href.split('?')[0] + "?mode=" + mode;
     // document.getElementById("formfilter").reset();
     // document.getElementById("fiscal_year").value = new Date().getFullYear();
     // $("select").multiselect("rebuild");
