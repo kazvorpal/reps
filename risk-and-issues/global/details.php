@@ -87,6 +87,7 @@ $transProgMan = $row_glb_prog['TransferredPM_Flg'];
 
 $opportunity = $row_glb_prog['Opportunity_Txt'];
 
+$opportunityIndicator = "";
 if(!empty($row_glb_prog['TransferredPM_Flg'])) {
   $opportunityIndicator = "Yes";
 }
