@@ -132,7 +132,7 @@ const filtration = (data) => {
 
 const exporter = () => {
     document.workbook.xlsx.writeBuffer().then((buf) => {
-      saveAs(new Blob([buf]), 'ri-' + mode + "-dashboard-" + formatDate(new Date()) + '.xlsx');
+      saveAs(new Blob([buf]), 'ri-' + ((mode == "portfolio") ? "raid-log" : mode) + "-dashboard-" + formatDate(new Date()) + '.xlsx');
     });
 }
 
@@ -269,7 +269,7 @@ const setlists = () => {
     : {"Fiscal_Year": "Fiscal Year", "RiskAndIssue_Key": "ID", "RI_Nm": "Name", "RIType_Cd": "Type", "RIIncrement_Num": "Group ID", groupcount: "Proj Group Count", grouptype: "Group Type", "EPSProject_Nm": "Project Name", "EPSRegion_Abb": "Region", "RIActive_Flg": "Status", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Sub-Program", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "owner": "Owner", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "TransferredPM_Flg": "Transferred to PDM", "AssociatedCR_Key": "CR", "AssociatedCR_Key": "CR", "RiskRealized_Flg": "Risk Realized", "ActionPlanStatus_Cd": "Action Plan", "RIOpen_Hours": "Duration", "Created_Ts": "Creation Date", "quartercreated": "Quarter Created", "monthcreated": "Month Created", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "ForecastedResolution_Dt": "Resolution Date", "RIClosed_Dt": "Date Closed", "quarterclosed": "Quarter Closed", "monthclosed": "Month Closed"};
   centerfield = ["Fiscal_Year", "ID", "regioncount", "projectcount", "RIIncrement_Num"];
 }
-
+//
 const uniques = () => (mode == "program") 
   ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
   : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
