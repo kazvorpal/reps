@@ -675,7 +675,7 @@
             return  d + " days";
           },
           RI_Nm: () => {
-              const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}1&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
+              const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
               return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
           EPSProject_Nm: () => {
