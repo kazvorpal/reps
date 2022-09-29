@@ -51,7 +51,7 @@
         // echo "IN";
         // Get PROJECTS //
         $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", -1)";
-        // echo $sqlstr . "<br/>";
+         //echo $sqlstr . "<br/>";
         ini_set('mssql.charset', 'UTF-8');
         $p4pquery = sqlsrv_query($data_conn, $sqlstr);
         if($p4pquery === false) {
