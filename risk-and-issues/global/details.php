@@ -24,7 +24,7 @@ if(isset($_GET['unframe'])) {
 //GET GLOBAL PROGRAM BY ID OR RIKEY
 if(isset($_GET['rikey'])){
   $ri_id = $_GET['rikey'];
-}
+} 
 
 if(isset($_GET['id'])){
   $ri_id = $_GET['id'];
@@ -52,6 +52,16 @@ $sql_rikey_prg = "DECLARE @PROG_NMs VARCHAR(100)
 $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
 $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
 //echo $sql_glb_drv;
+
+//SUBPROGRAM FROM RIKEY
+$sql_rikey_subprg = "DECLARE @SPROG_NMs VARCHAR(100)
+    SELECT @SPROG_NMs = COALESCE(@SPROG_NMs+'<br>','')+ CAST(SubProgram_Nm AS VARCHAR(100))
+    FROM RI_Mgt.fn_GetListSubProgramsforRIKey($ri_id,$status)
+    SELECT @SPROG_NMs AS SubProgram_Nm";
+$stmt_rikey_subprg = sqlsrv_query( $data_conn, $sql_rikey_subprg); 
+$row_rikey_subprg = sqlsrv_fetch_array( $stmt_rikey_subprg , SQLSRV_FETCH_ASSOC);
+$subprograms = $row_rikey_subprg['SubProgram_Nm'];
+
 
 //DECLARE
 $ri_id = $row_glb_prog['RiskAndIssue_Key'];
@@ -132,7 +142,8 @@ if(!empty($row_port_user)){
 //}
 
 //LINK FOR EMAIL
-$mailLink = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id; 
+$mailLinkx = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id . "&status=" . urlencode($status) ; 
+$mailLink = urlencode($mailLinkx);
 ?>
 <!doctype html>
 <html>
@@ -192,6 +203,12 @@ if($unframe == "0") { //NO COLORBOX
       <td width="20%">Program</td>
       <td><?php echo $programs ?></td>
     </tr>
+<?php if(!empty($subprograms)) {?>
+    <tr>
+      <td width="20%">Subprograms</td>
+      <td><?php echo $subprograms ?></td>
+    </tr>
+<?php } ?>
 <?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>

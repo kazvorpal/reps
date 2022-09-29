@@ -343,7 +343,7 @@ $unframe = $_SESSION['unframe'];
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $riKeys;
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=" . $riOpenFlg . "&rikey=" . $riKeys;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/" . $detailPage . ".php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true";
             }
@@ -389,7 +389,7 @@ $unframe = $_SESSION['unframe'];
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?rikey=" . $riKeys;
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=" . $riOpenFlg . "&rikey=" . $riKeys;
             } else {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true";
             }
