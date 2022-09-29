@@ -588,7 +588,7 @@ Enter the details of your Project Issue
         </tr>
         <tr>
           <td colspan="3" align="right" valign="middle">
-            <button class="btn btn-primary" onclick="history.back()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+            <button type="button" class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
             <button type="submit" class="btn btn-primary" onmouseover="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">Review <span class="glyphicon glyphicon-step-forward"></span></button>
          </td>
         </tr>

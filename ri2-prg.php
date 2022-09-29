@@ -197,7 +197,7 @@ Program Manager is: <?php echo $alias; ?>
       <?php if($row_risk_issue['Global_Flg'] == 0) { ?>
           <a href="risk-and-issues/details-prg.php?au=<?php echo $uaccess ?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&program=<?php echo $ri_program;?>&fscl_year=<?php echo $ri_fscl_yr;?>&proj_name=<?php echo $ri_proj_nm;?>&uid=<?php echo $uid; ?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></span></a>
         <?php } else { ?>
-          <a href="risk-and-issues/global/details.php?unframe=1&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></a>
+          <a href="risk-and-issues/global/details.php?status=1&unframe=1&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>"><span class="glyphicon glyphicon-zoom-in" style="font-size:12px;"></a>
         <?php } ?>
       </td>
     </tr>
