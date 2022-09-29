@@ -168,7 +168,7 @@ if($unframe == "0") { //NO COLORBOX
 
 ?>
 <div id='dlist'></div> 
-	<div align="center"><h3><?php echo strtoupper($RILevel) . " " . strtoupper($RIType) ?> DETAILS</h3></div>
+	<div align="center"><h3>GLOBAL <?php echo strtoupper($RILevel) . " " . strtoupper($RIType) ?> DETAILS</h3></div>
 	<div align="center"><?php echo $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
 
