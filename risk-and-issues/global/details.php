@@ -11,6 +11,11 @@ session_start();
 $unframe = "0"; // NO COLOR BOX
 $_SESSION['unframe'] = $unframe;
 
+$status = 0;
+if(isset($_GET['status'])) {
+  $status = $_GET['status']; //0=closed , 1=open
+}
+
 if(isset($_GET['unframe'])) {
   $unframe = $_GET['unframe'];
   $_SESSION['unframe'] = $unframe;
@@ -25,7 +30,7 @@ if(isset($_GET['id'])){
   $ri_id = $_GET['id'];
 }
 
-$sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue](1) WHERE RiskAndIssue_Key = $ri_id";
+$sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue]($status) WHERE RiskAndIssue_Key = $ri_id";
 $stmt_glb_prog   = sqlsrv_query( $data_conn, $sql_glb_prog ); 
 $row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
 // $row_glb_prog[''];
@@ -34,7 +39,7 @@ $row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
 //DRIVER FROM LOG KEY
 $RiskAndIssueLog_Key = $row_glb_prog['RiskAndIssueLog_Key'];
 
-$sql_glb_drv = "SELECT* FROM [RI_MGT].[fn_GetListOfDriversForRILogKey](1) WHERE RiskAndIssueLog_Key = $RiskAndIssueLog_Key";
+$sql_glb_drv = "SELECT* FROM [RI_MGT].[fn_GetListOfDriversForRILogKey]($status) WHERE RiskAndIssueLog_Key = $RiskAndIssueLog_Key";
 $stmt_glb_drv   = sqlsrv_query( $data_conn, $sql_glb_drv ); 
 $row_glb_drv   = sqlsrv_fetch_array( $stmt_glb_drv , SQLSRV_FETCH_ASSOC);
 //echo $sql_glb_drv;
