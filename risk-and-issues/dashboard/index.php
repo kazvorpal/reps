@@ -93,7 +93,8 @@
             const localportfolios = portfoliofull.filter(o => {
                 return o.RaidLog_Flg == 0;
               })
-              ridata = programfull.concat(localportfolios);
+              // ridata = programfull.concat(localportfolios);
+              ridata = programfull;
               d1 = programopen;
               d2 = programclosed;
           } else if (mode == "portfolio") {
@@ -335,15 +336,15 @@
             return new Date(program.Created_Ts.date).toLocaleString('default', { month: 'long' });
         },
         monthclosed: () => {
-            return (program.RIClosed_Dt != null) ? Date(program.RIClosed_Dt.date).toLocaleString('default', { month: 'long' }) : "";
+            return (program.RIClosed_Dt != null) ? new Date(program.RIClosed_Dt.date).toLocaleString('default', { month: 'long' }) : "";
         },
         quartercreated: () => {
             const m = new Date(program.Created_Ts.date).getMonth();
-            return  (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            return  (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
         },
         quarterclosed: () => {
-            const m = new Date(program.Last_Update_Ts.date).getMonth();
-            return  (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            const m = (program.RIClosed_Dt != null) ? new Date(program.RIClosed_Dt.date).getMonth():"";
+            return  (program.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
         },
         duration: () => {
             const enddate = (program.RIActive_Flg == 1 || program.Created_Ts.date < program.RIClosed_Dt) ? program.Last_Update_Ts.date : program.RIClosed_Dt;
@@ -399,6 +400,8 @@
         }, 
         subprogram: () => {
             let list = "";
+            console.log("p4plist["+program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"]")
+            console.log(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key])
             let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             if (prog != undefined) {
               for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
@@ -424,6 +427,8 @@
           const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
+            console.log("arrow")
+            console.log(arrow)
           const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
           url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
@@ -437,8 +442,11 @@
           });
           const tridobj = document.getElementById(trid);
           if (arrow != "") {
-              tridobj.onclick = () => {
-              toggler(document.getElementById("projects" + saferi), this.children[0]);
+              tridobj.onclick = (e) => {
+                // console.log(e);
+                // document.p = e;
+                // toggler(document.getElementById("projects" + saferi), this.children[0]);
+                toggler(document.getElementById("projects" + saferi), e.target.children[0]);
               };
           }
           for (field of Object.keys(rifields)) {
@@ -470,6 +478,7 @@
     const makeprojects = (projects, programname, tableid, saferi) => {
 
         // Make the rows of projects inside the program
+        console.log(projects)
         document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
         document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
         document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
@@ -478,6 +487,7 @@
           table.id = "table" + saferi;
           table.className = "projecttable";
           table.appendChild(projectheader());
+          console.log(table);
           document.getElementById("td" + saferi).appendChild(table);
           let p = [];
           for(project of projects) {
@@ -569,6 +579,20 @@
                   return mangers.join().replace(",", ", ");
               } else
               return "";
+          },
+          groupcount: () => {
+            let gc = 0;
+            ridata.forEach(o => {
+              gc += (ri.RIIncrement_Num == o.RIIncrement_Num) ? 1 : 0;
+            })
+            return gc;
+          },
+          grouptype: () => {
+            let gc = 0;
+            ridata.forEach(o => {
+              gc += (ri.RIIncrement_Num == o.RIIncrement_Num) ? 1 : 0;
+            })
+            return (gc > 1) ? "Multi" : "Single";
           },
           RIActive_Flg: () => {
             return (ri.RIActive_Flg) ? "Open" : "Closed";
@@ -695,6 +719,7 @@
         })(field);
       }
       let newrow = document.worksheet.addRow(rowValues);
+      processcells();
       for(field in rifields) {
           (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
