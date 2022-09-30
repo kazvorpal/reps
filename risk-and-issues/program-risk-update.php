@@ -913,11 +913,12 @@ if($formaction == "update") {
         </tr>
       </tbody>
     </table><div align="right">
+    <button type="button" class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
     <button type="submit" class="btn btn-primary" onclick="return validateForm()">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
     </div>
   </form>
     <div align="left" style="margin-top:-33px;">  
-    <button class="btn btn-primary" onclick="history.back()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
+    
     </div>
   </form>
 </div>
