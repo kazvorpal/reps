@@ -581,7 +581,7 @@
           groupcount: () => {
             let gc = 0;
             ridata.forEach(o => {
-              gc += (ri.RIIncrement_Num == o.RIIncrement_Num) ? 1 : 0;
+              gc += (ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0;
             })
             return gc;
           },
