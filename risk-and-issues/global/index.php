@@ -914,8 +914,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
     const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
     o.d.forEach(field => {
-      console.log(field)
-      console.log(document.getElementsByName(field).length)
+      // console.log(field)
+      // console.log(document.getElementsByName(field).length)
       if(document.getElementsByName(field).length == 0) {
         $(`#${field}`).val("").multiselect(disable ? "disable" : "enable");
         $('#subprogram').multiselect("destroy").multiselect();
@@ -996,8 +996,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     console.log("running conditionals");
     nameevent();
     disableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-    disableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
-    disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+    disableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolios"})
+    disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram", "raidLog"], e: "Programs"})
   }
 
 
@@ -1006,8 +1006,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
     document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
     setdisableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
-    setdisableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
-    setdisableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Programs"})
+    setdisableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolios"})
+    setdisableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram", "raidLog"], e: "Programs"})
     setsubprogramevent();
     setregionevent();
     setlevelevent();
