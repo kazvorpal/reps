@@ -42,6 +42,7 @@
     const driverlist = <?= $driverout ?>;
     const locationlist = <?= $locationout ?>;
     const p4plist = <?= $p4pout ?>;
+    const sublist = <?= $subout ?>;
     const portfolioprograms = <?= $portfolioprogramsout ?>;
     
 
@@ -400,12 +401,11 @@
         }, 
         subprogram: () => {
             let list = "";
-            console.log("p4plist["+program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"]")
-            console.log(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key])
-            let prog = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             if (prog != undefined) {
-              for(r of p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key]) {
-                  list += r.Subprogram_nm + ", ";
+              for(r of prog) {
+                console.log((program.Global_Flg)?true:false)
+                  list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
               } 
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
@@ -427,8 +427,8 @@
           const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
             ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
             ? "▶" : "" : "";
-            console.log("arrow")
-            console.log(arrow)
+            // console.log("arrow")
+            // console.log(arrow)
           const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
           url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
@@ -478,7 +478,7 @@
     const makeprojects = (projects, programname, tableid, saferi) => {
 
         // Make the rows of projects inside the program
-        console.log(projects)
+        // console.log(projects)
         document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
         document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
         document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
@@ -487,7 +487,7 @@
           table.id = "table" + saferi;
           table.className = "projecttable";
           table.appendChild(projectheader());
-          console.log(table);
+          // console.log(table);
           document.getElementById("td" + saferi).appendChild(table);
           let p = [];
           for(project of projects) {
@@ -667,8 +667,10 @@
             return (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
           },
           quarterclosed: () => {
-            const m = new Date(ri.Last_Update_Ts.date).getMonth();
-            return (!program.Status) ? "" : (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            const m = (ri.RIClosed_Dt != null) ? new Date(ri.RIClosed_Dt.date).getMonth():"";
+            mx = (!program.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            // console.log(mx)
+            return mx;
           },
           duration: () => {
             const d = Math.floor((new Date(ri.Last_Update_Ts.date) - new Date(ri.Created_Ts.date))/(1000 * 60 * 60 * 24));

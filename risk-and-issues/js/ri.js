@@ -62,7 +62,7 @@ const formatDate = (date) => {
 const makestringdate = (dateobject) => {
   if (dateobject != null) {
     const m = padder(new Date(dateobject.date).getMonth()+1, "0", 2);
-    const d = padder(new Date(dateobject.date).getDate()+1, "0", 2);
+    const d = padder(new Date(dateobject.date).getDate(), "0", 2);
     const y = (new Date(dateobject.date).getFullYear()).toString().substring(2);
     r = (dateobject == null) ? "" : m + "-" + d + "-" + y;
     return r;

@@ -76,7 +76,39 @@
         $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
       }
     }
+    $sublist = array();
+    foreach ($programrows as $row)  {
+      if($row["MLMProgramRI_Key"] != '') {
+        // echo "IN";
+        // Get PROJECTS //
+        $sqlstr = "select * from  RI_Mgt.fn_GetListSubProgramsforRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["RIActive_Flg"] .")";
+        //  echo $sqlstr . "<br/>";
+        ini_set('mssql.charset', 'UTF-8');
+        $subquery = sqlsrv_query($data_conn, $sqlstr);
+        $subrows = array();
+        if($subquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            print_r($error);
+            foreach($error as $errors) {
+              echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
+              echo "code: ".$errors[ 'code']."<br />";
+              echo "message: ".$errors[ 'message']."<br />";
+            }
+          }
+        } else {
+          // echo "OUT";
+          $count = 1;
+          $checker = 0;
+          while($subrow = sqlsrv_fetch_array($subquery, SQLSRV_FETCH_ASSOC)) {
+            $subrows[] = array_map("fixutf8", $subrow);
+            $checker = 1;
+          }
+        }
+        $sublist[$row["RiskAndIssue_Key"]] = $subrows;
+      }
+    }
   }
+  
 
   //    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')";
@@ -245,6 +277,7 @@
       }
     }
 
+    $subout = json_encode($sublist);
     $p4pout = json_encode($p4plist);
     $mangerout = json_encode($mangerlist);
     $driverout = json_encode($driverrows);
