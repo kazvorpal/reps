@@ -214,7 +214,7 @@
           mt.appendChild(makeheader("projects"));
       }
       for (loop of rilist) {
-        // creates all the programs
+        // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
         if(loop != null) {
             (ispp(mode)) ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
         }
@@ -296,6 +296,7 @@
     const makedata = (id, type, programname) => {            
         
         // Make all the data inside a risk or issue, Program and Portfolio
+
         const fieldswitch = {
         //    Specific fields that need extra calculation
         //    Add any field to rifields that you want to be a column,
@@ -320,9 +321,6 @@
         },
         EPSSubprogram_Nm: () => {
             return getlocationbykey(program.EPSProject_Key)
-        },
-        owner: () => {
-            return program.LastUpdateBy_Nm;
         },
         ForecastedResolution_Dt: () => {
             return (program.ForecastedResolution_Dt == null) ? "Unknown" : makestringdate(program.ForecastedResolution_Dt);
@@ -563,7 +561,7 @@
     }
 
     const createrow = (ri) => {
-      // Create a row in the table
+      // Create a row in the Project table
       const name = ri.RI_Nm;
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
@@ -596,9 +594,6 @@
           },
           RIActive_Flg: () => {
             return (ri.RIActive_Flg) ? "Open" : "Closed";
-          },
-          owner: () => {
-            return ri.LastUpdateBy_Nm;
           },
           ForecastedResolution_Dt: () => {
             if (ri.ForecastedResolution_Dt != undefined)
@@ -668,7 +663,7 @@
           },
           quarterclosed: () => {
             const m = (ri.RIClosed_Dt != null) ? new Date(ri.RIClosed_Dt.date).getMonth():"";
-            mx = (!program.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+            mx = (ri.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
             // console.log(mx)
             return mx;
           },

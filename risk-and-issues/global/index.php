@@ -795,6 +795,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const getuniques = (list, field) => {
     return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
   }
+
   const makeselect = (o) => {
     const select = makeelement(o);
       list = o.l;
