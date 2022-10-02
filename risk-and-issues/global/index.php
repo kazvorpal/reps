@@ -1032,7 +1032,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     nameevent();
     disableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
     disableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
-    disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Portfolio"})
+    disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram", "raidLog"], e: "Portfolio"})
   }
 
 
@@ -1042,7 +1042,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
     setdisableevent({t: "RIType", v: "Issue", d: ["RiskProbability", "riskRealized"], e: "risk"})
     setdisableevent({t: "RILevel", v: "Program", d: ["portfolioType", "TransfertoProgramManager"], e: "Portfolio"})
-    setdisableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram"], e: "Programs"})
+    setdisableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram", "raidLog"], e: "Programs"})
     setsubprogramevent();
     setregionevent();
     setlevelevent();
