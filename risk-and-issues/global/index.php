@@ -441,7 +441,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
                 <td width="33%"></td>
                 <td width="1%"></td>
               </tr>
-              <tr>
+              <tr id="impacts">
                 <td  valign="top">
                   <table width="200" border="0">
                   <tr>
@@ -471,7 +471,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
                     <?php } ?>                    
                     </table>
                   </td>
-                <td valign="top">
+                <td valign="top" id="riskprobability">
 				<div id="myDIV2">
                     <table width="200" border="0">
                         <tr>
@@ -914,6 +914,10 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const disableevent = (o) => {
     if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
     const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
+    if (o.v == "Issue") {
+      console.log("Yes")
+      document.getElementById("riskprobability").style.display = (disable) ? "none" : "block";
+    }
     o.d.forEach(field => {
       // console.log(field)
       // console.log(document.getElementsByName(field).length)
