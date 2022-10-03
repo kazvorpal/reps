@@ -100,7 +100,7 @@ const jq = `
       select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
     } else if (o.i == "category") {
       select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
-      select.appendChild(makeelement({e: "option", v: 0, t: "No Project Association"}));
+      select.appendChild(makeelement({e: "option", v: 0, t: "Global"}));
     } else if (o.i == "risk_issue") {
       select.appendChild(makeelement({e: "option", v: "Risk", t: "Risk"}));
       select.appendChild(makeelement({e: "option", v: "Issue", t: "Issue"}));
@@ -133,10 +133,14 @@ const jq = `
       Fiscal_Year: {l: ridata, i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", c: dc, m: dm}, 
       RIType_Cd: {l: ridata, i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", c: dc, m: dm}, 
       ImpactLevel_Nm: {l: ridata, i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", c: dc, m: dm}, 
-      }
+    }
 
 
+    
     makeselect({l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", c: dc, m: dm});
+    if (mode == "portfolio") {
+      makeselect({l: ridata, f: "RILevel_Cd", i: "level", n: "level", t: "Risk or Issue Level<br/>", c: dc, m: dm});
+    }
     makeselect({l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", c: dc, m: dm});
     makeselect({l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", c: dc, m: dm});
     if (mode != "portfolio") 
@@ -179,6 +183,7 @@ const jq = `
     $('#fiscal_year').val(new Date().getFullYear()).multiselect({
       includeSelectAllOption: true,
     });
+    $("#level").multiselect(prop);
     $("#pStatus").val(1).multiselect("destroy").multiselect();
 		$('#category').multiselect(prop);
 		$('#owner').multiselect(prop);

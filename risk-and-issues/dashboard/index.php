@@ -411,7 +411,7 @@
         },
         category: () => {
             let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            return (projects != undefined && projects.length>0) ? "Project Association" : "No Project Association";
+            return (projects != undefined && projects.length>0) ? "Project Association" : "Global";
         }
         };
         const program = getprogrambykey(id, programname);
