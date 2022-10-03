@@ -92,13 +92,16 @@ const filterfunction = (o) => {
           || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
       (isempty("impact_level")
           || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
+      (["program", "project"].includes(mode)
+          || isempty("level")
+          || ($('#level').val().includes(o.RILevel_Cd))) &&
       ((isempty("owner") 
           || isincluded('#owner', o.LastUpdateBy_Nm))) &&
       ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (isempty("pStatus") && o.RIActive_Flg == '1') 
           || ($("#pStatus").val() != null && isincluded("#pStatus", o.RIActive_Flg.toString()))) &&
       (document.getElementById("program") == null 
           || isempty("program") 
-          || isincluded('#program', o.MLMProgram_Nm) || isincluded('#program', o.EPSProgram_Nm)) && 
+          || isincluded('#p rogram', o.MLMProgram_Nm) || isincluded('#program', o.EPSProgram_Nm)) && 
       ((["portfolio"].includes(mode)) 
           || document.getElementById("subprogram") == null 
           || isempty("subprogram") 
