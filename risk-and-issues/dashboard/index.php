@@ -402,7 +402,7 @@
             let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
             if (prog != undefined) {
               for(r of prog) {
-                console.log((program.Global_Flg)?true:false)
+                // console.log((program.Global_Flg)?true:false)
                   list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
               } 
             }
@@ -485,7 +485,6 @@
           table.id = "table" + saferi;
           table.className = "projecttable";
           table.appendChild(projectheader());
-          // console.log(table);
           document.getElementById("td" + saferi).appendChild(table);
           let p = [];
           for(project of projects) {
@@ -664,7 +663,6 @@
           quarterclosed: () => {
             const m = (ri.RIClosed_Dt != null) ? new Date(ri.RIClosed_Dt.date).getMonth():"";
             mx = (ri.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
-            // console.log(mx)
             return mx;
           },
           duration: () => {

@@ -91,74 +91,96 @@ const jq = `
     })
   }
 
-  const makeselect = (o) => {
-    const td = makeelement({e: "div", c: "filtercol", t: o.t});
-    o.e = "select"
-    const select = makeelement(o);
-    if (o.i == "pStatus") {
-      select.appendChild(makeelement({e: "option", v: 1, t: "Open", d: true}));
-      select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
-    } else if (o.i == "category") {
-      select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
-      select.appendChild(makeelement({e: "option", v: 0, t: "Global"}));
-    } else if (o.i == "risk_issue") {
-      select.appendChild(makeelement({e: "option", v: "Risk", t: "Risk"}));
-      select.appendChild(makeelement({e: "option", v: "Issue", t: "Issue"}));
-    } else if (o.i == "program" || o.i == "subprogram") {
-      for (option in o.l) 
-        if(o.l[option] != ""&& o.l[option] != null)
-          select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
+  const makeselect = (o, key) => {
+    // Make a dropdown
+    // Takes a properties object, o
+    // Mostly the same props as makeelement (which it uses)
+    // but also a few extra for its own details
+    // o.p is the mode, like (p)rogram, (p)ortfolio, or (p)roject
+      // m for mode was taken
+
+    if (key == "daterange") {
+      document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
+    } else if((typeof o.p == "undefined" || o.p.includes(mode))) {
+      o.f = (typeof key != "undefined") ? key : o.f;
+      o.l = (typeof o.l == "undefined") ? ridata : o.l;
+      o.c = (typeof o.c == "undefined") ? "form-control" : o.c;
+      o.e = "select";
+      o.m = "multiple";
+      const td = makeelement({e: "div", c: "filtercol", t: o.t});
+      const select = makeelement(o);
+      if (o.i == "pStatus") {
+        select.appendChild(makeelement({e: "option", v: 1, t: "Open", d: true}));
+        select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
+      } else if (o.i == "category") {
+        select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
+        select.appendChild(makeelement({e: "option", v: 0, t: "Global"}));
+      } else if (o.i == "risk_issue") {
+        select.appendChild(makeelement({e: "option", v: "Risk", t: "Risk"}));
+        select.appendChild(makeelement({e: "option", v: "Issue", t: "Issue"}));
+      } else if (o.i == "program" || o.i == "subprogram") {
+        for (option in o.l) 
+          if(o.l[option] != ""&& o.l[option] != null)
+            select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
+      } else {
+        const list = getuniques(o.l, o.f);
+        // console.log(list)
+        // console.log(o.i)
+        for (option in list) 
+          if(list[option] != ""&& list[option] != null)
+            select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+      }
+      td.appendChild(select);
+      document.getElementById("row").appendChild(td);
     } else {
-      const list = getuniques(o.l, o.f);
-      // console.log(list)
-      // console.log(o.i)
-      for (option in list) 
-        if(list[option] != ""&& list[option] != null)
-          select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+      console.log("nothing");
+      // console.log(o)
     }
-    td.appendChild(select);
-    document.getElementById("row").appendChild(td);
   }
 
   var programnames;
   const makefilters = () => {
     document.getElementById("row").innerHTML = "";
     programnames = (ispp(mode)) ? getuniques(ridata, "MLMProgram_Nm") : getuniques(ridata, "EPSProgram_Nm");
-    // console.log(programnames)
     const menuitems = {};
-    dc = "form-control";
-    dm = "multiple";
 
     selectors = {
-      Fiscal_Year: {l: ridata, i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", c: dc, m: dm}, 
-      RIType_Cd: {l: ridata, i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", c: dc, m: dm}, 
-      ImpactLevel_Nm: {l: ridata, i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", c: dc, m: dm}, 
+      Fiscal_Year: {i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>"},
+      RIType_Cd: {i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>"},
+      RILevel_Cd: {i: "level", n: "level", t: "Level<br/>", p: ["portfolio"]},
+      ImpactLevel_Nm: {i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>"},
+      daterange: {},
+      RIActive_Flg: {i: "pStatus", n: "pStatus", t: "Status<br/>"},
+      MLMRegion_Cd: {i: "region", n: "region", t: "Region<br/>", p: ["program"]},
+      category: {i: "category", n: "category", t: "Category<br/>", p: ["program"]},
+      LastUpdateBy_Nm: {i: "owner", n: "Owner", t: "Owner<br/>"},
+      Program_Cd: {i: "program", n: "program", t: "Program<br/>", l: programnames},
+      Subprogram_Nm: {i: "subprogram", n: "subprogram", t: "Subprogram<br/>", p: ["program", "project"], l: subp},
+      Region_Cd: {i: "region", n: "region", t: "Region<br/>", p: ["project"], l: locationlist},
+      Market_Cd: {i: "market", n: "market", t: "Market<br/>", p: ["project"], l: locationlist},
+      Facility_Cd: {i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", p: ["project"], l: locationlist}
     }
 
 
+    Object.entries(selectors).forEach(([key, value]) => {
+      makeselect(value, key);
+    })
     
-    makeselect({l: ridata, f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>", c: dc, m: dm});
-    if (mode == "portfolio") {
-      makeselect({l: ridata, f: "RILevel_Cd", i: "level", n: "level", t: "Risk or Issue Level<br/>", c: dc, m: dm});
-    }
-    makeselect({l: ridata, f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>", c: dc, m: dm});
-    makeselect({l: ridata, f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>", c: dc, m: dm});
-    if (mode != "portfolio") 
-      document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
-    makeselect({l: ridata, f: "RIActive_Flg", i: "pStatus", n: "pStatus", t: "Status<br/>", c: dc, m: dm});
-    if (mode == "program") 
-      makeselect({l: ridata, f: "MLMRegion_Cd", i: "region", n: "region", t: "Region<br/>", c: dc, m: dm});
-    if (mode == "program")
-      makeselect({l: ridata, f: "category", i: "category", n: "category", t: "Category<br/>", c: dc, m: dm});
-    makeselect({l: ridata, f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>", c: dc, m: dm});
-    makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>", c: dc, m: dm});
-    if (mode != "portfolio") 
-      makeselect({l: subp, f: "Subprogram_Nm", i: "subprogram", n: "subprogram", t: "Subprogram<br/>", c: dc, m: dm});
-    if (mode == "project") {
-      makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", c: dc, m: dm});
-      makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", c: dc, m: dm});
-      makeselect({l: locationlist, f: "Facility_Cd", i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", m: dm});
-    }
+    // makeselect({f: "Fiscal_Year", i: "fiscal_year", n: "fiscal_year", t: "Fiscal Year<br/>"});
+    // makeselect({f: "RIType_Cd", i: "risk_issue", n: "risk_issue", t: "Risk/Issue<br/>"});
+    // makeselect({f: "RILevel_Cd", i: "level", n: "level", t: "Level<br/>", p: ["portfolio"]});
+    // makeselect({f: "ImpactLevel_Nm", i: "impact_level", n: "impact_level", t: "Impact&nbsp;Level<br/>"});
+    // if (mode != "portfolio") 
+    //   document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
+    // makeselect({f: "RIActive_Flg", i: "pStatus", n: "pStatus", t: "Status<br/>"});
+    // makeselect({f: "MLMRegion_Cd", i: "region", n: "region", t: "Region<br/>", p: ["program"]});
+    // makeselect({f: "category", i: "category", n: "category", t: "Category<br/>", p: ["program"]});
+    // makeselect({f: "LastUpdateBy_Nm", i: "owner", n: "Owner", t: "Owner<br/>"});
+    // makeselect({l: programnames, f: "Program_Cd", i: "program", n: "program", t: "Program<br/>"});
+    // makeselect({l: subp, f: "Subprogram_Nm", i: "subprogram", n: "subprogram", t: "Subprogram<br/>", p: ["program", "project"]});
+    // makeselect({l: locationlist, f: "Region_Cd", i: "region", n: "region", t: "Region<br/>", p: ["project"]});
+    // makeselect({l: locationlist, f: "Market_Cd", i: "market", n: "market", t: "Market<br/>", p: ["project"]});
+    // makeselect({l: locationlist, f: "Facility_Cd", i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", p: ["project"]});
     // $('select').selectpicker();
     document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary">', c: "filtercol"}));
     document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="resetform();return false" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));

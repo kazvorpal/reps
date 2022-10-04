@@ -19,7 +19,7 @@ const makeelement = (o) => {
   // o.s is the col(s)pan
   // o.w is the (w)idth
   // o.m is whether it's (m)ulti or the like
-  // o.m is any necessary (v)alue, like input.value
+  // o.v is any necessary (v)alue, like input.value
   // o.j is onclick event code in (j)avascript ((c)lick or at least (e)vent was taken)
   // o.d is (d)efault, or selected, or checked
 
