@@ -16,12 +16,16 @@ const closeWarning = () => {
   document.datechanged = true;
 }
 const validateForm = () => {
-  console.log(document.getElementById("assCRID"));
+  console.log(document.getElementById("DateClosed").value != '' );
+  console.log(document.getElementById("ActionPlan").value == '');
+  console.log(document.getElementById("assCRID").value == '');
+  // return false;
   if (document.getElementById("DateClosed").value != '' && 
       (document.getElementById("ActionPlan").value == '' || document.getElementById("assCRID").value == '')) {
     const warning = `Complete these items to close the risk/issue
     Enter the resolution of the risk/issue as the final entry in the Action Plan field
-    Complete the Associated CR ID field.   Enter the CIR # or N/A 
+    Complete the Associated CR ID field.   
+    Enter the CIR # (e.g. SN-394) or N/A 
     If the project risk/issue became a program risk/issue, click the button that says Transfer to Program Manager`;
     alert(warning);
     return false;

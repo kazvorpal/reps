@@ -201,6 +201,12 @@ $RegionArr = explode(",", $MLMRegion_Key);
             return false;
           });
         });
+        // setTimeout(() => {
+        //   console.log(document.getElementById("programRisk"))
+        //   document.getElementById("programRisk").addEventListener("submit", () => {
+        //     return validateForm()
+        //   })
+        // });
   </script> 
 
 <script language="JavaScript">
@@ -264,7 +270,7 @@ function toggle(source) {
 </div>
 
 <div style="padding: 20px;">
-  <form action="../update-confirm.php" method="post" id="programRisk">
+  <form action="../update-confirm.php" onsubmit="return validateForm()" method="post" id="programRisk">
 
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $ri_id ?>">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="4">
@@ -275,7 +281,7 @@ function toggle(source) {
   <input name="RIName" type="hidden" id="RIName" value="">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
-  <input name="DateClosed" type="hidden" id="DateClosed" value="">
+  <!-- <input name="DateClosed" type="hidden" id="DateClosed" value=""> -->
   <input name="global" type="hidden" id="global" value="1">
   <input name="RILevel" type="hidden" id="RILevel" value="<?php echo $RILevel_Cd ?>">
   <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $RIPortfolio_Key ?>">
@@ -795,9 +801,9 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
-});
+// document.querySelector('[name=submit]').addEventListener('click', () => {
+//   // validateGrp()
+// });
 </script>
 
 <script>
@@ -814,11 +820,12 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
   document.getElementById('date').value = today;
   </script>
   <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+    // the indy field is commented out, so I'm commenting this out
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
 
 <script>
@@ -841,6 +848,6 @@ document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDef
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 </script>
 
-<script src="includes/ri-functions.js"></script>
+<script src="/risk-and-issues/includes/ri-functions.js"></script>
 </body>
 </html>
