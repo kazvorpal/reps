@@ -624,7 +624,7 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="left">
             <div class="box">
-              <input type="text" name="assCRID" id="AssCRID" class="form-control" value="<?php echo $assCRID ?>">
+              <input type="text" name="assCRID" id="assCRID" class="form-control" value="<?php echo $assCRID ?>">
             </div>
           </td>
         </tr>

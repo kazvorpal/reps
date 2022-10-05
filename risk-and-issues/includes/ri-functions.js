@@ -16,11 +16,9 @@ const closeWarning = () => {
   document.datechanged = true;
 }
 const validateForm = () => {
+  console.log(document.getElementById("assCRID"));
   if (document.getElementById("DateClosed").value != '' && 
-      (document.getElementById("ActionPlan").value == '' || document.getElementById("AssCRID").value == '')) {
-      // (document.getElementById("ActionPlan").value == '' || document.getElementById("assCRID").value == '')) {
-        console.log((document.getElementById("ActionPlan").value))
-        console.log((document.getElementById("AssCRID").value))
+      (document.getElementById("ActionPlan").value == '' || document.getElementById("assCRID").value == '')) {
     const warning = `Complete these items to close the risk/issue
     Enter the resolution of the risk/issue as the final entry in the Action Plan field
     Complete the Associated CR ID field.   Enter the CIR # or N/A 
@@ -34,5 +32,4 @@ const validateForm = () => {
   }
 }
 
-// This wasn't even being used
 // yes it was.  warning for back button  on all forms

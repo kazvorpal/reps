@@ -1019,7 +1019,7 @@ jQuery(function ($) {
 
 <script>
 function validateGrp() {
-  let things = document.querySelectorAll('.required_group')
+  let things = document.querySelectorAll('.required_group_reg')
   let checked = 0;
   for (let thing of things) {
     thing.checked && checked++
@@ -1028,13 +1028,15 @@ function validateGrp() {
     things[things.length - 1].setCustomValidity("");
     document.getElementById('checkGroup').submit();
   } else {
-    things[things.length - 1].setCustomValidity("type="radio" name="Drivers");
+    // things[things.length - 1].setCustomValidity("type="radio" name="Drivers");
+    things[things.length - 1].setCustomValidity("This is where a validation message goes");
     things[things.length - 1].reportValidity();
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
+document.querySelector('[type=submit]').addEventListener('click', () => {
+  console.log("clicker")
+  // validateGrp()
 });
 </script>
 <script>
@@ -1057,11 +1059,12 @@ var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_enco
 document.getElementById('DateClosed').value = closeday;
 </script>
 <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  // They commented out the indy field
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
 <script>
 $('.subscriber :checkbox').change(function () {

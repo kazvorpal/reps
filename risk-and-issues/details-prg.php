@@ -379,9 +379,13 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 </body>
 <script>
 function copyDiv() {
-    var firstDivContent = document.getElementById('drivers');
-    var secondDivContent = document.getElementById('driversx');
-    secondDivContent.innerHTML = firstDivContent.innerHTML;
+    if (firstDivContent && secondDivContent) {
+      console.log("true")
+      var firstDivContent = document.getElementById('drivers');
+      var secondDivContent = document.getElementById('driversx');
+      secondDivContent.innerHTML = firstDivContent.innerHTML;
+    } else
+    console.log("false")
 }
   </script>
 </html>
