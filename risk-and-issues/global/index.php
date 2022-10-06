@@ -659,7 +659,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         </div>
       </div>       
     </div>
-    <div class="col-md-4" align="left">
+    <div class="col-md-4" align="left" style="display:block" id="npt">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">NOTIFY PORTFOLIO TEAM* <a href="../includes/definitions.php?tooltipkey=NTPT" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -963,6 +963,9 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         })
       }
     })
+    if (o.t == "RILevel" && o.v == "Program") {
+      setTimeout(() => document.getElementById("raid_0").click());
+    }
   }
 
   const programlevel = () => {

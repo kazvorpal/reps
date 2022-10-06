@@ -440,12 +440,11 @@
           });
           const tridobj = document.getElementById(trid);
           if (arrow != "") {
-              tridobj.onclick = (e) => {
-                // console.log(e);
-                // document.p = e;
-                // toggler(document.getElementById("projects" + saferi), this.children[0]);
-                toggler(document.getElementById("projects" + saferi), e.target.children[0]);
-              };
+              if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
+                tridobj.onclick = (e) => {
+                  toggler(document.getElementById("projects" + saferi), e.target.children[0]);
+                };
+              }
           }
           for (field of Object.keys(rifields)) {
               (function(test) {

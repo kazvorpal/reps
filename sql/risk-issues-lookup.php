@@ -278,7 +278,7 @@ if(isset($_POST['riskRealized'])){
   $riskRealized = $_POST['riskRealized'];
 }
 
-$raidLog = $_POST['raidLog'];
+$raidLog = (isset($_POST['raidLog'])) ? $_POST['raidLog'] : "1";
 
 if(isset($_POST['groupID'])){
   $groupID = $_POST['groupID'];
