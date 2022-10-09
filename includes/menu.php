@@ -48,8 +48,8 @@
           <li><a href="<?php echo $menu_root?>/risk-and-issues/global/">Create Global Risk or Issue</a></li>
           <li><a href="<?php echo $menu_root?>/esp-status-details-index.php">Create Project R/I via DPR</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?portfolio">RAID Log</a></li>
-          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?program">Program Dashboard</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?mode=portfolio">RAID Log</a></li>
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/?mode=program">Program Dashboard</a></li>
           <li><a href="<?php echo $menu_root?>/risk-and-issues/dashboard/">Project Dashboard</a></li>
         </ul>
       </li>

@@ -64,7 +64,7 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
     <meta charset="utf-8">
     <title>Project Risk or Issue</title>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
-    <link href='http://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
@@ -72,8 +72,8 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
-    <link rel="stylesheet" href="steps/style.css" type='text/css'> 
-    <link rel="stylesheet" href="includes/ri-styles.css" />
+    <link rel="stylesheet" href="/risk-and-issues/steps/style.css" type='text/css'> 
+    <link rel="stylesheet" href="/risk-and-issues/includes/ri-styles.css" />
     <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
     <script src="../colorbox-master/jquery.colorbox.js"></script>
 <script>
