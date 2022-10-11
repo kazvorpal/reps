@@ -80,7 +80,10 @@ const mapper = "RiskAndIssue_Key";
 const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
 const isempty = (field) => (document.getElementById(field).value == '');
-const isincluded = (filter, field) => ($(filter).val().includes(field));
+const isincluded = (filter, field) => {
+  console.log(filter)
+  return ($(filter).val().includes(field));
+}
 
 const filterfunction = (o) => {
   return (
@@ -101,7 +104,7 @@ const filterfunction = (o) => {
           || ($("#pStatus").val() != null && isincluded("#pStatus", o.RIActive_Flg.toString()))) &&
       (document.getElementById("program") == null 
           || isempty("program") 
-          || isincluded('#p rogram', o.MLMProgram_Nm) || isincluded('#program', o.EPSProgram_Nm)) && 
+          || isincluded('#program', o.MLMProgram_Nm) || isincluded('#program', o.EPSProgram_Nm)) && 
       ((["portfolio"].includes(mode)) 
           || document.getElementById("subprogram") == null 
           || isempty("subprogram") 
