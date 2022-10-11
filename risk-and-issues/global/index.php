@@ -183,7 +183,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
 <?php 
   include ("../../includes/menu.php");
   if ($userrows == null) {
-    echo "<h2 align='center'>You dont have access to Create a Global Risk or Issue.<br/> Please contact <a href='https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx' target='_New'>EES Support</a> to request access.</h2>";
+    echo "<h2 align='center'>You Don't Have Access</h2></h4>The following roles in Master List Management (MLM) are identified to create Global Risks/Issues. <br/>Planning Program Manager, Delivery Program Manager, Forecast Manager, Boundary Program Manager, and Portfolio Lead.</h4>";
     exit();
   }
 ?>
