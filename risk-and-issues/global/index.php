@@ -186,7 +186,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
     echo "<div class='container'>
             <h2>You Don't Have Access</h2>
             <div class='panel panel-default'>
-              <div class='panel-body'>The following roles in Master List Management (MLM) are identified to create Global Risks/Issues. Planning Program Manager, Delivery Program Manager, Forecast Manager, Boundary Program Manager, and Portfolio Lead.<br><br>Thanks,<br>Engineering Enablement Solutions Team</div>
+              <div class='panel-body'>The following roles in Master List Management (MLM) are identified to create Global Risks/Issues. Planning Program Manager, Delivery Program Manager, Forecast Manager, Boundary Program Manager, and Portfolio Lead.<br><br>For any access related questions, please reach out to your manager.<br><br>Thanks,<br>Engineering Enablement Solutions Team</div>
             </div>
           </div>";
     exit();

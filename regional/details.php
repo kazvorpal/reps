@@ -43,11 +43,11 @@ $CPhase = $row_proj_clps['PHASE_NAME'];
   <div class="col-lg-2">
 	<h4>PROJECT INFO</h4>
   <h5>Access Required </h5>
-  <P>
+  <p>
   <a href="https://coxcomminc.sharepoint.com/sites/pwaeng/project detail pages/schedule.aspx?projuid=<?php echo htmlspecialchars($PUid)?>" target="_blank">EPS Project Schedule</a> 
   <br>
 			<?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-            <a href="../ri2.php?uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
+            <a href="../ri2.php?fscl_year=2022&uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
       <?php } else { ?>
             <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
       <?php } ?>
@@ -55,9 +55,9 @@ $CPhase = $row_proj_clps['PHASE_NAME'];
    	  <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
             <a href="../ri2-prg.php?proj_nm=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM'])?>&uid=<?php echo htmlspecialchars($PUid) ?>&region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);;?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']);?>" class="miframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
       <?php } else { ?>
-            <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
+            <?php echo 'Program Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
       <?php } ?>
-															</P>
+  </p>
   
   <h5>
   No Access Required
@@ -65,14 +65,14 @@ $CPhase = $row_proj_clps['PHASE_NAME'];
   <p>
   <a href="level_2_details_all.php?uid=<?php echo htmlspecialchars($PUid)?>" class="mapframe">Project Schedule</a>
   <br>
-      <?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-            <a href="../ri-no_access_proj.php?uid=<?php echo htmlspecialchars($PUid) ?>&proj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="mapframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
+			<?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
+            <a href="../ri2.php?fscl_year=2022&uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
       <?php } else { ?>
             <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
       <?php } ?>
-  <br>
-      <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
-            <a href="../ri-no_access_prog.php?uid=<?php echo htmlspecialchars($PUid) ?>&region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt'])?>" class="mapframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
+  <br>  
+   	  <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
+            <a href="../ri2-prg.php?proj_nm=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM'])?>&uid=<?php echo htmlspecialchars($PUid) ?>&region=<?php echo htmlspecialchars($row_proj_clps['Region']);?>&program=<?php echo htmlspecialchars($row_proj_clps['PRGM']);;?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']);?>" class="miframe">Program Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>)</a>
       <?php } else { ?>
             <?php echo 'Program Risks& Issues (' . htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']) . ')' ;?>
       <?php } ?>
