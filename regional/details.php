@@ -47,7 +47,7 @@ $CPhase = $row_proj_clps['PHASE_NAME'];
   <a href="https://coxcomminc.sharepoint.com/sites/pwaeng/project detail pages/schedule.aspx?projuid=<?php echo htmlspecialchars($PUid)?>" target="_blank">EPS Project Schedule</a> 
   <br>
 			<?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-            <a href="../ri2.php?fscl_year=2022&uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
+            <a href="../ri2.php?fscl_year=<?php echo $row_proj_clps['FISCL_PLAN_YR']?>&uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
       <?php } else { ?>
             <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
       <?php } ?>
@@ -66,7 +66,7 @@ $CPhase = $row_proj_clps['PHASE_NAME'];
   <a href="level_2_details_all.php?uid=<?php echo htmlspecialchars($PUid)?>" class="mapframe">Project Schedule</a>
   <br>
 			<?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-            <a href="../ri2.php?fscl_year=2022&uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
+            <a href="../ri2.php?fscl_year=<?php echo $row_proj_clps['FISCL_PLAN_YR']?>&uid=<?php echo htmlspecialchars($PUid) ?>&prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) ?>" class="miframe">Project Risks& Issues (<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>)</a>
       <?php } else { ?>
             <?php echo 'Project Risks& Issues (' . htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']) . ')'; ?>
       <?php } ?>
