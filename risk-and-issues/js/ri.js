@@ -38,6 +38,12 @@ const makeelement = (o) => {
   if (typeof o.j != "undefined") {
     t.onclick = o.j;
   }
+  if (typeof o.href != "undefined") {
+    t.href = o.href;
+  }
+  if (typeof o.style != "undefined") {
+    t.style = o.style;
+  }
   return t;
 }
 
@@ -90,7 +96,7 @@ const filterfunction = (o) => {
       (isempty("fiscal_year") 
           || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
       (isempty("risk_issue") || isincluded('#risk_issue', o.RIType_Cd)) &&
-      ((["project", "portfolio"].includes(mode)) 
+      ((["project"].includes(mode)) 
           || isempty("category") 
           || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
       (isempty("impact_level")

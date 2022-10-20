@@ -113,7 +113,7 @@ const jq = `
         select.appendChild(makeelement({e: "option", v: 1, t: "Open", d: true}));
         select.appendChild(makeelement({e: "option", v: 0, t: "Closed"}));
       } else if (o.i == "category") {
-        select.appendChild(makeelement({e: "option", v: 1, t: "Project Association"}));
+        select.appendChild(makeelement({e: "option", v: 1, t: "Program"}));
         select.appendChild(makeelement({e: "option", v: 0, t: "Global"}));
       } else if (o.i == "risk_issue") {
         select.appendChild(makeelement({e: "option", v: "Risk", t: "Risk"}));
@@ -153,7 +153,7 @@ const jq = `
       daterange: {},
       RIActive_Flg: {i: "pStatus", n: "pStatus", t: "Status<br/>"},
       MLMRegion_Cd: {i: "region", n: "region", t: "Region<br/>", p: ["program"]},
-      category: {i: "category", n: "category", t: "Category<br/>", p: ["program"]},
+      category: {i: "category", n: "category", t: "Category<br/>", p: ["program", "portfolio"]},
       LastUpdateBy_Nm: {i: "owner", n: "Owner", t: "Owner<br/>"},
       Program_Cd: {i: "program", n: "program", t: "Program<br/>", l: programnames},
       Subprogram_Nm: {i: "subprogram", n: "subprogram", t: "Subprogram<br/>", p: ["program", "project"], l: subp},

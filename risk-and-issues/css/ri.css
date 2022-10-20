@@ -156,3 +156,8 @@ body {
 .btn-group {
   margin-right: 4px;
 }
+.fixedheader {
+  position:sticky;
+  top:65px;
+  z-index: 100000;
+}

@@ -533,10 +533,10 @@
 
     const makeheader = (name, type) => {
       
-      // Make the header. Duh.
+      // Make the header for Projects
       
         const safename = makesafe(name);
-        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
+        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4<?= $headerposition ?>"});
         if (mode == "program") {
             let cells = ["Risk/Issue"];
             rowcolor = 1;
@@ -725,7 +725,9 @@
 
 
     var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": (target == "portfolio") ? "RAID Log" : capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
+        let url = "<a href='" +"/risk-and-issues/dashboard/?mode=" + target + "' style='color:#fff'>";
+        let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
+        return makeelement({"i": target + "mode", "t": url + rest + ",/a>", "e": "div", "c": "btn btn-primary ml-3","j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
@@ -736,7 +738,8 @@
             m.removeChild(m.lastChild);
         }
         modes.forEach(element => {
-            let e = (element != mode) ? modebutton(element) :"";
+          let e = (element != mode) ? modebutton(element) :"";
+          console.log(e);
             (e != "") ? m.appendChild(e):"";
             m.appendChild(document.createTextNode(" "));
         });
