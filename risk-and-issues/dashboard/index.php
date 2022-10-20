@@ -729,7 +729,7 @@
     var modebutton = (target) => {
         let url = "<a href='" +"/risk-and-issues/dashboard/?mode=" + target + "' style='color:#fff' onclick='return false';>";
         let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
-        return makeelement({"i": target + "mode", "t": url + rest + ",</a>", "e": "div", "c": "btn btn-primary ml-3","j": function() {
+        return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-3","j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
