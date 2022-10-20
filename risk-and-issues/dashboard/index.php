@@ -449,7 +449,8 @@
           for (field of Object.keys(rifields)) {
               (function(test) {
                 const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
+                let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < new Date()) ? " hilite" : "";
+                tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
               })(field);
               if (rifields[field].name == "ID") {
                 tridobj.appendChild(header);
@@ -717,7 +718,8 @@
       for(field in rifields) {
           (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) }));
+            let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < new Date()) ? " hilite" : "";
+            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) + bgcolor }));
           })(field);
       }
       return trri;

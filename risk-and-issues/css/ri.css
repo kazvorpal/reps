@@ -161,3 +161,6 @@ body {
   top:65px;
   z-index: 100000;
 }
+.hilite {
+  background-color: #fcc;
+}
