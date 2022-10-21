@@ -90,6 +90,16 @@ const jq = `
       }
     })
   }
+  console.log(subp);
+  for (item in sublist) {
+    // console.log(item)
+    sublist[item].forEach(e => {
+      if (!subp.includes(e.Subprogram_Nm)) {
+        subp.push(e.Subprogram_Nm);
+      }
+    })
+  }
+  console.log(subp);
 
   const makeselect = (o, key) => {
     // Make a dropdown
