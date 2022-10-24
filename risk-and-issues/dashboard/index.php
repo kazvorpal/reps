@@ -320,9 +320,9 @@
             return  (program.Global_Flg) ? "Y" : "N";
           },
         category: () => {
-          let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-          return (projects != undefined && projects.length>0) ? "Project Association" : "Global";
-          // return  (program.Global_Flg) ? "Global" : "Project Association";
+          // let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+          // return (projects != undefined && projects.length>0) ? "Program" : "Global";
+          return  (program.Global_Flg) ? "Global" : "Program";
         },
         EPSSubprogram_Nm: () => {
             return getlocationbykey(program.EPSProject_Key)
@@ -450,7 +450,8 @@
           for (field of Object.keys(rifields)) {
               (function(test) {
                 const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < new Date()) ? " hilite" : "";
+                // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
+                let bgcolor = (test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date())) ? " hilite" : "";
                 tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
               })(field);
               if (rifields[field].name == "ID") {
