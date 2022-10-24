@@ -318,6 +318,11 @@
         },
         global: () => {
             return  (program.Global_Flg) ? "Y" : "N";
+          },
+        category: () => {
+          let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+          return (projects != undefined && projects.length>0) ? "Project Association" : "Global";
+          // return  (program.Global_Flg) ? "Global" : "Project Association";
         },
         EPSSubprogram_Nm: () => {
             return getlocationbykey(program.EPSProject_Key)
@@ -408,10 +413,6 @@
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
             return ret;
-        },
-        category: () => {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            return (projects != undefined && projects.length>0) ? "Project Association" : "Global";
         }
         };
         const program = getprogrambykey(id, programname);

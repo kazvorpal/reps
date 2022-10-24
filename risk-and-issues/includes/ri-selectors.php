@@ -90,7 +90,7 @@ const jq = `
       }
     })
   }
-  console.log(subp);
+  // console.log(subp);
   for (item in sublist) {
     // console.log(item)
     sublist[item].forEach(e => {
@@ -99,7 +99,7 @@ const jq = `
       }
     })
   }
-  console.log(subp);
+  // console.log(subp);
 
   const makeselect = (o, key) => {
     // Make a dropdown

@@ -87,7 +87,7 @@ const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
 const isempty = (field) => (document.getElementById(field).value == '');
 const isincluded = (filter, field) => {
-  console.log(filter)
+  // console.log(filter)
   return ($(filter).val().includes(field));
 }
 
@@ -128,8 +128,7 @@ const filterfunction = (o) => {
       ((ispp(mode) 
           || isempty("facility") 
           || (isincluded('#facility', o.Facility_Cd) || isincluded('#facility', o.EPSFacility_Cd)))) &&
-      (mode == "portfolio" 
-          || (isempty("dateranger") 
+      ((isempty("dateranger") 
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))
   );
 }
