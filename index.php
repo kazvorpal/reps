@@ -190,6 +190,8 @@ $(function(){
             // window.console && console.log(m) || alert(m); 
         },
         items: {
+			"home": {name: "R&I Home Page", icon: "globe", url: "/risk-and-issues/"},
+			"sep0": "---------",
             "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global"},
 			"dpr": {name: "Create Project R/I via DPR", icon: "edit", url: "/esp-status-details-index.php"},
             "sep1": "---------",
