@@ -295,8 +295,11 @@ const betweendate = (dates, tween) => {
   let s = splitdate(dates);
   let m = new Date(tween)
   let first = new Date(s[0]);
-  let middle = new Date(m.setDate(m.getDate()+1));
+  let middle = new Date(m.setDate(m.getDate()));
   let last = new Date(s[1]);
+  if ((middle >= first && middle <= last)) {
+    console.log (first + ":" + middle + ":" + last);
+  }
   r = ((middle >= first && middle <= last));
   return r;
 }  
