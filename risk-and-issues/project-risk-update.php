@@ -265,7 +265,6 @@ function toggle(source) {
   <input name="add_proj_select" type="hidden" value="<?php echo $add_proj_select; ?>">
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="project_nm" type="hidden" id="project_nm" value="<?php echo $project_nm?>">
-  <input name="assCRID" type="hidden" id="assCRID" value="">
   <input name="Individual" type="hidden" id="Individual" value="">
 
   <?php if(!empty($add_proj_select)) { ?>

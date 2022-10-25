@@ -38,6 +38,12 @@ const makeelement = (o) => {
   if (typeof o.j != "undefined") {
     t.onclick = o.j;
   }
+  if (typeof o.href != "undefined") {
+    t.href = o.href;
+  }
+  if (typeof o.style != "undefined") {
+    t.style = o.style;
+  }
   return t;
 }
 
@@ -81,7 +87,7 @@ const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
 const isempty = (field) => (document.getElementById(field).value == '');
 const isincluded = (filter, field) => {
-  console.log(filter)
+  // console.log(filter)
   return ($(filter).val().includes(field));
 }
 
@@ -90,7 +96,7 @@ const filterfunction = (o) => {
       (isempty("fiscal_year") 
           || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
       (isempty("risk_issue") || isincluded('#risk_issue', o.RIType_Cd)) &&
-      ((["project", "portfolio"].includes(mode)) 
+      ((["project"].includes(mode)) 
           || isempty("category") 
           || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
       (isempty("impact_level")
@@ -122,8 +128,7 @@ const filterfunction = (o) => {
       ((ispp(mode) 
           || isempty("facility") 
           || (isincluded('#facility', o.Facility_Cd) || isincluded('#facility', o.EPSFacility_Cd)))) &&
-      (mode == "portfolio" 
-          || (isempty("dateranger") 
+      ((isempty("dateranger") 
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))
   );
 }
@@ -290,8 +295,11 @@ const betweendate = (dates, tween) => {
   let s = splitdate(dates);
   let m = new Date(tween)
   let first = new Date(s[0]);
-  let middle = new Date(m.setDate(m.getDate()+1));
+  let middle = new Date(m.setDate(m.getDate()));
   let last = new Date(s[1]);
+  if ((middle >= first && middle <= last)) {
+    console.log (first + ":" + middle + ":" + last);
+  }
   r = ((middle >= first && middle <= last));
   return r;
 }  

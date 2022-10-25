@@ -318,6 +318,11 @@
         },
         global: () => {
             return  (program.Global_Flg) ? "Y" : "N";
+          },
+        category: () => {
+          // let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+          // return (projects != undefined && projects.length>0) ? "Program" : "Global";
+          return  (program.Global_Flg) ? "Global" : "Program";
         },
         EPSSubprogram_Nm: () => {
             return getlocationbykey(program.EPSProject_Key)
@@ -408,10 +413,6 @@
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
             return ret;
-        },
-        category: () => {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            return (projects != undefined && projects.length>0) ? "Project Association" : "Global";
         }
         };
         const program = getprogrambykey(id, programname);
@@ -449,7 +450,9 @@
           for (field of Object.keys(rifields)) {
               (function(test) {
                 const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter), w: w}));
+                // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
+                let bgcolor = (test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date())) ? " hilite" : "";
+                tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
               })(field);
               if (rifields[field].name == "ID") {
                 tridobj.appendChild(header);
@@ -533,10 +536,10 @@
 
     const makeheader = (name, type) => {
       
-      // Make the header. Duh.
+      // Make the header for Projects
       
         const safename = makesafe(name);
-        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4"});
+        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4<?= $headerposition ?>"});
         if (mode == "program") {
             let cells = ["Risk/Issue"];
             rowcolor = 1;
@@ -717,7 +720,8 @@
       for(field in rifields) {
           (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) }));
+            let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < new Date()) ? " hilite" : "";
+            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) + bgcolor }));
           })(field);
       }
       return trri;
@@ -725,7 +729,9 @@
 
 
     var modebutton = (target) => {
-        return makeelement({"i": target + "mode", "t": (target == "portfolio") ? "RAID Log" : capitalize(target), "e": "div", "c": "btn btn-primary ml-3", "j": function() {
+        let url = "<a href='" +"/risk-and-issues/dashboard/?mode=" + target + "' style='color:#fff' onclick='return false';>";
+        let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
+        return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-3","j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})
@@ -736,7 +742,8 @@
             m.removeChild(m.lastChild);
         }
         modes.forEach(element => {
-            let e = (element != mode) ? modebutton(element) :"";
+          let e = (element != mode) ? modebutton(element) :"";
+          console.log(e);
             (e != "") ? m.appendChild(e):"";
             m.appendChild(document.createTextNode(" "));
         });

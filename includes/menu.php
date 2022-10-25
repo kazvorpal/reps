@@ -1,4 +1,16 @@
-<nav class="navbar navbar-default" style="width:100%"> <!-- Brand and toggle get grouped for better mobile display -->
+<?php 
+  ini_set("display_errors", "On");
+  ini_set("error_log", "C:\\tmp\\log\\error.log");
+  // phpinfo();
+  if(isset($_GET["tester"]) && $_GET['tester'] == "menu") {
+    $menuposition = "position:fixed;z-index:100000";
+    $headerposition = " fixedheader";
+    $spacer = "<div style='height:64px;'>&nbsp&</div>";
+  } else {
+    $menuposition = $headerposition = $spacer = "";
+  }
+?>
+<nav class="navbar navbar-default" style="width:100%;<?= $menuposition ?>"> <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header" style="padding-top:5px" >
     <a class="navbar-brandx" href="<?php echo $menu_root?>">
       <img src="<?php echo $menu_root?>/images/rEPS-logo-2021-sm.png" width="90" alt=""/>
@@ -82,3 +94,7 @@
 </div>
   <!-- /.navbar-collapse -->  <!-- /.container-fluid --> 
 </nav>
+<script>
+  setTimeout(()=>{window.scrollTo(0,0);}, 1000);
+</script>
+<?= $spacer ?>
