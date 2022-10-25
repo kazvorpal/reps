@@ -177,30 +177,30 @@ var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggl
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
 })
-$(function(){
-    $.contextMenu({
-        selector: '.rimenu', 
-        trigger: 'hover',
-        delay: 500,
-        autoHide: true,
-        callback: function(key, options) {
-			console.log(options)
-            // var m = "clicked: " + key;
-			document.location.href = options.items[key].url;
-            // window.console && console.log(m) || alert(m); 
-        },
-        items: {
-			"home": {name: "R&I Home Page", icon: "globe", url: "/risk-and-issues/"},
-			"sep0": "---------",
-            "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global"},
-			"dpr": {name: "Create Project R/I via DPR", icon: "edit", url: "/esp-status-details-index.php"},
-            "sep1": "---------",
-            "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?mode=portfolio"},
-            "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?mode=program"},
-            "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?mode=project"}
-        }
-    });
-}); 
+// $(function(){
+//     $.contextMenu({
+//         selector: '.rimenu', 
+//         trigger: 'hover',
+//         delay: 500,
+//         autoHide: true,
+//         callback: function(key, options) {
+// 			console.log(options)
+//             // var m = "clicked: " + key;
+// 			document.location.href = options.items[key].url;
+//             // window.console && console.log(m) || alert(m); 
+//         },
+//         items: {
+// 			"home": {name: "R&I Home Page", icon: "globe", url: "/risk-and-issues/"},
+// 			"sep0": "---------",
+//             "create": {name: "Create Global Risk/Issue", icon: "edit", url: "/risk-and-issues/global"},
+// 			"dpr": {name: "Create Project R/I via DPR", icon: "edit", url: "/esp-status-details-index.php"},
+//             "sep1": "---------",
+//             "portfolio": {name: "RAID Log", url: "/risk-and-issues/dashboard/?mode=portfolio"},
+//             "program": {name: "Program Dashboard", url: "/risk-and-issues/dashboard/?mode=program"},
+//             "project": {name: "Project Dashboard", url: "/risk-and-issues/dashboard/?mode=project"}
+//         }
+//     });
+// }); 
 </script>
 
 </body>
