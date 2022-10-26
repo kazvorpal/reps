@@ -261,10 +261,22 @@ if($global == 1) { include ("../includes/menu.php"); }
 
 //EXECUTE IF RI IS SUCCESSFULLY CREATED
     if($SPCode == 0) { 
+        $globalportbutton = '<div align="center"><a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a></div>';
+        $globalprogbutton = '<div align="center"><a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a></div>';
+        $listbutton = '<div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
+
         echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPMaxRI_Id . '</div><br>';
 
         if(!empty($backhome) && $global != 1) {
-        echo '<div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
+        echo $listbutton;
+        } 
+
+        if($global==1 && $riLevel == "Portfolio"){
+            echo $globalportbutton;
+        }
+
+        if($global==1 && $riLevel == "Program"){
+            echo $globalprogbutton;
         }
         
         //EMAIL PM AND RI CREATOR
