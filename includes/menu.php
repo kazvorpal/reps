@@ -57,6 +57,8 @@
 
       <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Risks and Issues<span class="caret"></span><span class="sr-only">(current)</span></a>
         <ul class="dropdown-menu" role="menu">
+          <li><a href="<?php echo $menu_root?>/risk-and-issues/">Risk and Issues Home</a></li>
+          <li role="separator" class="divider"></li>
           <li><a href="<?php echo $menu_root?>/risk-and-issues/global/">Create Global Risk or Issue</a></li>
           <li><a href="<?php echo $menu_root?>/esp-status-details-index.php">Create Project R/I via DPR</a></li>
           <li role="separator" class="divider"></li>
