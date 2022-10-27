@@ -182,7 +182,7 @@ const initexcel = () => {
     document.workbook.created = new Date();
     const Mode = (mode == "portfolio") ? "Raid Log" : capitalize(mode);
     document.worksheet = document.workbook.addWorksheet(Mode + ' Report',  {properties:{tabColor:{argb:'3355bb'}, headerFooter: Mode + " Report Spreadsheet", firstFooter: "RePS"}});
-
+    document.changelog = document.workbook.addWorksheet("Change Log Request", {properties:{tabColor:{argb:'3355bb'}, headerFooter: "Change Log Request", firstFooter: "RePS"}}); 
 
     let cols = [];
     for (field in excelfields) {
