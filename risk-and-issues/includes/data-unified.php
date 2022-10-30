@@ -110,6 +110,7 @@
   }
   
 
+
   //    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')";
   // print '<!--' . $sqlstr . "<br/> -->";
@@ -277,6 +278,55 @@
       }
     }
 
+    $sqlap = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
+    where [Source] = 'ACTNPlan'
+    Order By RiskandIssue_Key DESC";
+    // print '<!--' . $sqlstr . "<br/> -->";
+    ini_set('mssql.charset', 'UTF-8');
+    $apquery = sqlsrv_query($data_conn, $sqlap);
+    // print($data_conn);
+    if($apquery === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($error as $errors) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
+        }
+      }
+    }  else {
+      $aprows = array();
+      $count = 1;
+      while($aprow = sqlsrv_fetch_array($apquery, SQLSRV_FETCH_ASSOC)) {
+        $aprows[$aprow["RiskAndIssue_Key"]] = array_map("fixutf8", $aprow);
+      }
+    }
+  
+    $sqllog = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
+    where [Source] = 'PRJILog'
+    Order By RiskandIssue_Key DESC";
+    // print '<!--' . $sqlstr . "<br/> -->";
+    ini_set('mssql.charset', 'UTF-8');
+    $logquery = sqlsrv_query($data_conn, $sqllog);
+    // print($data_conn);
+    if($logquery === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($error as $errors) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
+        }
+      }
+    }  else {
+      $logrows = array();
+      $count = 1;
+      while($logrow = sqlsrv_fetch_array($logquery, SQLSRV_FETCH_ASSOC)) {
+        $logrows[$logrow["RiskAndIssue_Key"]] = array_map("fixutf8", $logrow);
+      }
+    }
+  
+
+    $logout = json_encode($logrows);
+    $apout = json_encode($aprows);
     $subout = json_encode($sublist);
     $p4pout = json_encode($p4plist);
     $mangerout = json_encode($mangerlist);

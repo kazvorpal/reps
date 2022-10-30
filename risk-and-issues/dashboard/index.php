@@ -44,7 +44,8 @@
     const p4plist = <?= $p4pout ?>;
     const sublist = <?= $subout ?>;
     const portfolioprograms = <?= $portfolioprogramsout ?>;
-    
+    const aplist = <?= $apout ?>;
+    const loglist = <?= $logout ?>;
 
     const ffpp = (target) => {
       return portfolioprograms.filter(o => {
@@ -413,8 +414,20 @@
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
             return ret;
+        }, 
+        age: () => {
+          let r = (aplist[program.RiskAndIssue_Key]) ? new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date) : "";
+          console.log(r)
+          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1)  + " days" ;
+          console.log(d)
+            return  d;
+        },
+        actionplandate: () => {
+          let r = (aplist[program.RiskAndIssue_Key]) ? formatDate(new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date)) : "";
+          console.log(r)
+          return(r);
         }
-        };
+      };
         const program = getprogrambykey(id, programname);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
@@ -706,7 +719,19 @@
             if (ri.MLMProgramRI_Key != null) {
               p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgram_Key]
             }
-          }
+          }, 
+        age: () => {
+          let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
+          console.log(r)
+          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1)  + " days" ;
+          console.log(d)
+            return  d;
+        },
+        actionplandate: () => {
+          let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
+          console.log(r)
+          return(r);
+        }
       };
       const rowValues = [];
       for (field in excelfields) {
