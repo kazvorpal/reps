@@ -553,7 +553,7 @@
       
         const safename = makesafe(name);
         const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4<?= $headerposition ?>"});
-        if (mode == "program") {
+        // if (mode == "program") {
             let cells = ["Risk/Issue"];
             rowcolor = 1;
             for (field of Object.keys(rifields)) {
@@ -563,13 +563,13 @@
                     trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
                 }
             }
-        } else {
-            let cells = [];
-            Object.entries(rifields).forEach(([key, value]) => {
-                trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
-                cells.push(value);
-            })
-        }
+        // } else {
+        //     let cells = [];
+        //     Object.entries(rifields).forEach(([key, value]) => {
+        //         trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
+        //         cells.push(value);
+        //     })
+        // }
         excelrows();
         return trri;
     }
@@ -722,13 +722,36 @@
           }, 
         age: () => {
           let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
-          console.log(r)
+          // console.log(r)
           const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1)  + " days" ;
-          console.log(d)
+          // console.log(d)
             return  d;
         },
         actionplandate: () => {
           let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
+          // console.log(r)
+          return(r);
+        },
+        changelogdate: () => {
+          console.log(loglist[ri.RiskAndIssue_Key])
+          let r = (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
+          console.log(r)
+          return(r);
+        },
+        // requestor: () => {
+        //   let r = (loglist[ri.RiskAndIssue_Key]) ? "loglist[ri.RiskAndIssue_Key]" : "";
+        //   return(r);
+        // },
+        requestedaction: () => {
+          let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
+          return(r);
+        },
+        // reason: () => {
+        //   let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].Reason_Txt : "";
+        //   return(r);
+        // },
+        programmanager: () => {
+          let r = (loglist[ri.RiskAndIssue_Key]) ? "loglist[ri.RiskAndIssue_Key]" : "";
           console.log(r)
           return(r);
         }
@@ -741,6 +764,14 @@
         })(field);
       }
       let newrow = document.worksheet.addRow(rowValues);
+      const logValues = [];
+      for (field in changelog) {
+        (function(test) {
+            const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+            logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+        })(field);
+      }
+      let newlog = document.changelog.addRow(logValues);
       processcells();
       for(field in rifields) {
           (function(test) {
