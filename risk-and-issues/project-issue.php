@@ -1,12 +1,13 @@
-<?php include ("../includes/functions.php");?>
-<?php include ("../db_conf.php");?>
-<?php include ("../data/emo_data.php");?>
-<?php include ("../sql/project_by_id.php");?>
-<?php include ("../sql/ri_filter_vars.php");?>
-<?php include ("../sql/ri_filters.php");?>
-<?php include ("../sql/ri_filtered_data.php");?>
-<?php include ("../sql/RI_Internal_External.php");?>
 <?php 
+include ("../includes/functions.php");
+include ("../db_conf.php");
+include ("../data/emo_data.php");
+include ("../sql/project_by_id.php");
+include ("../sql/ri_filter_vars.php");
+include ("../sql/ri_filters.php");
+include ("../sql/ri_filtered_data.php");
+include ("../sql/RI_Internal_External.php");
+    
   $action = $_GET['action']; //new
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
@@ -555,10 +556,38 @@ Enter the details of your Project Issue
           </tr> -->
         <tr>
           <td colspan="3" align="left">
-            </td>
+          </td>
         </tr>
         <tr>
           <td colspan="3" align="left"></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+          <h4 style="color: #00aaf5">CHANGE LOG REQUEST</H4>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box" align="left">
+              <table>
+                <tr>
+                  <td><label for="changeLogAction">Requested Action</label>
+                    <select name="changeLogAction" id="changeLogAction" class="form-control">
+                      <option value=""></option> 
+                      <?php while($row_changeLogAction = sqlsrv_fetch_array( $stmt_changeLogAction , SQLSRV_FETCH_ASSOC)) { ?>
+                        <option value="<?php echo $row_changeLogAction['RequestAction_Key'] . ":" . $row_changeLogAction['RequestAction_Nm'];?>"><?php echo $row_changeLogAction['RequestAction_Nm'];?></option>
+                      <?php } ?>
+                    </select>
+                  </td>
+                  <td width="20px"></td>
+                  <td>
+                    <label for="changeLogReason">Reason</label>
+                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100">
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
         </tr>
 <!--
         <tr>

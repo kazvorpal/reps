@@ -344,6 +344,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
         echo $row_risk_issue_regions_up['MLMRegion_Cd'] . ',';
         }
         ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+
     <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
       %0D%0AID: <?php echo $ri_id;?>
@@ -364,6 +365,11 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
       %0D%0ADate Closed: <?php echo $dateClosed;?>
       %0D%0ALink: <?php echo $link;?>" 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+      
+    <span style="font-size: 24px;"> | </span> 
+
+    <a href="includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=<?php echo $prog_name;?>&prg_nm=<?php echo $prog_name;?>&progRIKey=<?php echo $progRIkey;?>&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="btn btn-primary">+/- Assoc. Projects</span></a>
+
     </div>
     <?php } ?>
     <?php } ?>

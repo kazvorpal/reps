@@ -64,7 +64,7 @@ $_SESSION["homebase"] = $_SERVER["REQUEST_URI"];
     <meta charset="utf-8">
     <title>Project Risk or Issue</title>
     <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
-    <link href='https://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>
+    <link href='httpsx://fonts.googleapis.com/css?family=Mulish' rel='stylesheet' type='text/css'>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
@@ -198,7 +198,7 @@ ProjectID: <?php echo $projID?>
         </td>
       <?php } ?>
       <td align="center">
-        <a title="View Detials | Update | Close" href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>&status=1&popup=false"><span class="glyphicon glyphicon-zoom-in" ></span></a>
+        <a title="View Detials | Update | Close" href="risk-and-issues/details.php?au=<?php echo $access?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key'];?>&fscl_year=<?php echo $fscl_year;?>&proj_name=<?php echo $proj_name;?>&status=1&popup=false&uid=<?php echo $uid; ?>"><span class="glyphicon glyphicon-zoom-in" ></span></a>
       </td>
     </tr>
     <?php } ?>

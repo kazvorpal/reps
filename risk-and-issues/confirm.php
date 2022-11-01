@@ -95,6 +95,9 @@ include ("../sql/update-time.php");
     <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>">
     <input name="groupID" type="hidden" id="groupID" value="<?php echo $groupID ?>">
     <input name="assCRID" type="hidden" id="assCRID" value="<?php echo $assCRID?>"> 
+    <input name="changeLogActionVal" type="hidden" id="changeLogActionVal" value="<?php echo $changeLogActionVal?>"> 
+    <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason?>"> 
+    <input name="PRJILog_Flg" type="hidden" id="PRJILog_Flg" value="<?php echo $PRJILog_Flg ?>">
 <!-- new for global portfolio/program-->
     <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $portfolioType?>"> 
     <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
@@ -148,7 +151,8 @@ include ("../sql/update-time.php");
       <td>Program</td>
       <td><?php echo $program ; ?></td>
     </tr>
-<?php } else { ?>
+<?php } ?>
+<?php if($programs != "") { ?>
   <tr>
       <td>Program</td>
       <td><?php echo $programs ; ?></td>
@@ -251,20 +255,27 @@ include ("../sql/update-time.php");
 <?php if(!isset($_POST['global'])) { ?>
     <tr>
       <td>Associated Projects</td>
-      <td><?php echo $assocProject_dsply; ?>
-    </td>
+      <td><?php echo $assocProject_dsply; ?></td>
     </tr>
     <?php } ?>
     <tr>
       <td>Action Plan</td>
-      <td><?php echo $actionPlan; ?>
-    </td>
+      <td><?php echo $actionPlan; ?></td>
     </tr>
+<?php if(!empty($_POST['changeLogAction'])) { ?>
+    <tr>
+      <td>Change Log Action</td>
+      <td><?php echo $changeLogAction; ?></td>
+    </tr>
+    <tr>
+      <td>Change Log Reason</td>
+      <td><?php echo $changeLogReason; ?></td>
+    </tr>
+<?php } ?>
 <?php if($RILevel == "Program") { ?>
     <tr>
       <td>Notify Portfolio Team</td>
-      <td><?php echo $raidLog; ?>
-    </td>
+      <td><?php echo $raidLog; ?></td>
     </tr>
 <?php } ?>
 <?php if($RIType == "Risk") { ?>

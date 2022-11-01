@@ -104,6 +104,16 @@ $project_nm ="";
     $assCRID = $_POST['assCRID'];
     $department = 1; //Temporary 8.17.22
 
+    //CHANGE LOG REQUEST INFO
+    $PRJILog_Flg = $_POST['PRJILog_Flg'];
+    $changeLogActionVal = NULL;
+
+    if(!empty($_POST['changeLogActionVal'])) {
+        $changeLogActionVal = $_POST['changeLogActionVal'];
+    }
+    
+    $changeLogReason = $_POST['changeLogReason'];
+
     //print_r($_POST);
     //exit();
 
@@ -187,6 +197,9 @@ if($global == 1) { include ("../includes/menu.php"); }
         array($assCRID, SQLSRV_PARAM_IN),
         array($department, SQLSRV_PARAM_IN),
         array($portfolioType, SQLSRV_PARAM_IN),
+        array($PRJILog_Flg, SQLSRV_PARAM_IN),
+        array($changeLogActionVal, SQLSRV_PARAM_IN),
+        array($changeLogReason, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
@@ -194,7 +207,7 @@ if($global == 1) { include ("../includes/menu.php"); }
         );
 
     //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
     //echo json_encode($params);

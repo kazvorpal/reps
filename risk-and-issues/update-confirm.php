@@ -148,6 +148,8 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
     <input name="global" type="hidden" id="global" value="<?php echo $global?>"> 
     <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
     <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $portfolioType_Key?>"> 
+    <input name="changeLogActionVal" type="hidden" id="changeLogActionVal" value="<?php echo $changeLogActionVal?>"> 
+    <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason?>">
 
 <?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
@@ -314,6 +316,16 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
       <td><?php echo $actionPlan; ?>
     </td>
     </tr>
+<?php if(!empty($_POST['changeLogAction'])) { ?>
+    <tr>
+      <td>Change Log Action</td>
+      <td><?php echo $changeLogAction; ?></td>
+    </tr>
+    <tr>
+      <td>Change Log Reason</td>
+      <td><?php echo $changeLogReason; ?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?>
