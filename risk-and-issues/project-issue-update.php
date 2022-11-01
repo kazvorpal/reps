@@ -39,7 +39,6 @@ $row_ri_createDT = sqlsrv_fetch_array($stmt_ri_createDT, SQLSRV_FETCH_ASSOC);
 // echo $row_ri_createDT['Driver_Nm]; 			
 // echo $sql_ri_createDT;
 
-
 //DEFINE
 $changeLogKey = 4;
 if(isset($_POST['add_proj_select'])) {
@@ -77,6 +76,9 @@ $add_proj_select = NULL;
 $createDT = date_format($row_ri_createDT['Created_Ts'],'Y-m-d'); // server on UTC time zone; need to get user time zone then set date - echo date_default_timezone_get();
 $assCRID = $row_risk_issue['AssociatedCR_Key'];
 $POC_Nm = $row_risk_issue['POC_Nm'];
+$changeLogActionVal = $row_risk_issue['RequestAction_Key'];
+$changeLogReason = $row_risk_issue['Reason_Txt'];
+$changeLogName = $row_risk_issue['RequestAction_Nm'];
 
 if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
   $forecastMin = date_format($date, "Y-m-d");
@@ -664,6 +666,34 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left"></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+          <h4 style="color: #00aaf5">CHANGE LOG REQUEST</H4>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box" align="left">
+              <table>
+                <tr>
+                  <td><label for="changeLogAction">Requested Action</label>
+                    <select name="changeLogAction" id="changeLogAction" class="form-control">
+                      <option value=""></option> 
+                      <?php while($row_changeLogAction = sqlsrv_fetch_array( $stmt_changeLogAction , SQLSRV_FETCH_ASSOC)) { ?>
+                        <option value="<?php echo $row_changeLogAction['RequestAction_Key'] . ":" . $row_changeLogAction['RequestAction_Nm'];?>" <?php if($changeLogActionVal == $row_changeLogAction['RequestAction_Key']) { echo "selected" ;} ?>><?php echo $row_changeLogAction['RequestAction_Nm'];?></option>
+                      <?php } ?>
+                    </select>
+                  </td>
+                  <td width="20px"></td>
+                  <td>
+                    <label for="changeLogReason">Reason</label>
+                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100" value="<?php echo $changeLogReason; ?>">
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
         </tr>
         <tr>
               <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>

@@ -1,4 +1,3 @@
-
 <?php 
 // LIMIT DATE TODAY FOR DATE CLOSED USED ON UPDATE PAGES
 $closeDateMax = date("Y-m-d"); //universal
@@ -54,4 +53,10 @@ $sql_strategy = "SELECT *  FROM [RI_MGT].[Response_Strategy]";
 $stmt_strategy  = sqlsrv_query( $data_conn, $sql_strategy  ); 
 //$row_strategy = sqlsrv_fetch_array( $stmt_strategy , SQLSRV_FETCH_ASSOC);
 //$row_strategy['columnname']
+
+//CHANGE LOG REQUEST ACTION
+$sql_changeLogAction = "select * from RI_MGT.fn_GetListOfAllRequestAction(1)";
+$stmt_changeLogAction  = sqlsrv_query( $data_conn, $sql_changeLogAction ); 
+//$row_changeLogAction = sqlsrv_fetch_array( $stmt_changeLogAction , SQLSRV_FETCH_ASSOC);
+//$row_changeLogAction['field_name']
 ?>

@@ -70,6 +70,20 @@ if(!empty($_POST['subprogram'])){
 $subprogram = implode(",",$_POST['subprogram']);
 }
 
+//CHANGE LOG VALUES
+if(!empty( $_POST['changeLogAction'])){
+  $changeLogAct = explode(":", $_POST['changeLogAction']);
+  $changeLogActionVal = $changeLogAct[0];
+  $changeLogAction = $changeLogAct[1];
+  $changeLogReason = $_POST['changeLogReason'];
+  $PRJILog_Flg = 1;
+} else {
+  $changeLogActionVal = "";
+  $changeLogReason = "";
+  $PRJILog_Flg = 0;
+}
+
+//GLOBAL SUBPROGRAMS
 if($global == 1 && $riLevel != "Portfolio") {
   
   $sql_subprg = "DECLARE @SUBP_IDs VARCHAR(100)

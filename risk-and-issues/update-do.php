@@ -128,13 +128,18 @@ $unframe = $_SESSION['unframe'];
     if($global == 1) {
         $programKeys = $_POST['program'];
     }
+
+    //CHANGE LOG REQUEST INFO
+    $changeLogActionVal = NULL;
+    if(!empty($_POST['changeLogActionVal'])) {
+        $changeLogActionVal = $_POST['changeLogActionVal'];
+    }
+    $changeLogReason = $_POST['changeLogReason'];
     
     $riKeys = $_POST['RiskAndIssue_Key']; //Multiple keys seperated by comma
     $firstRIkeyx = explode(",",$_POST['RiskAndIssue_Key']); //create array for keys
     $firstRIkey = array_values($firstRIkeyx)[0]; //call first position of arrra
     //echo $firstRIkey; exit();
-
-   
 
     $subprogram = $_POST['subprogram']; // array keys
     $portfolioType_Key = $_POST['portfolioType_Key'];
@@ -225,6 +230,8 @@ $unframe = $_SESSION['unframe'];
         array($subprogram, SQLSRV_PARAM_IN),
         array($global, SQLSRV_PARAM_IN), 
         array($portfolioType_Key, SQLSRV_PARAM_IN), 
+        array($changeLogActionVal, SQLSRV_PARAM_IN),
+        array($changeLogReason, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
@@ -237,7 +244,7 @@ $unframe = $_SESSION['unframe'];
             //exit();
 
         //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
       //EXECUTE PROCEDDURE
     $stmt3 = sqlsrv_query( $data_conn, $tsql_callSP, $params);

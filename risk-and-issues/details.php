@@ -106,6 +106,9 @@ $department = $row_risk_issue['POC_Department'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
 $riskRealized_Raw = $row_risk_issue['RiskRealized_Flg'];
 $crid = $row_risk_issue['AssociatedCR_Key'];
+$changeLogActionVal = $row_risk_issue['RequestAction_Nm'];
+$changeLogReason = $row_risk_issue['Reason_Txt'];
+$uid = $_GET['uid'];
 
 if($riskRealized_Raw == 1){
   $riskRealized = "Yes";
@@ -248,7 +251,8 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects (<?php echo $assPrjCnt; ?>)</td>
+      <td>Associated Projects (<?php echo $assPrjCnt; ?>)   
+        </td>
       <td>
         <?php echo $assocProject; 
         ?>
@@ -266,6 +270,16 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 
     </td>
     </tr>
+<?php if(!empty($changeLogActionVal)) { ?>
+    <tr>
+      <td>Change Log Action</td>
+      <td><?php echo $changeLogActionVal; ?></td>
+    </tr>
+    <tr>
+      <td>Change Log Reason</td>
+      <td><?php echo $changeLogReason; ?></td>
+    </tr>
+<?php } ?>
 <?php if($RILevel == "Program") { ?>
     <tr>
       <td>Notify Porfolio Team</td>
@@ -325,6 +339,11 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?php echo $link;?>"
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+
+            <span style="font-size: 24px;"> | </span> 
+
+          <a href="includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Add Project Association"><span class="btn btn-primary">+</span></a>
+          <a href="includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Remove Project Association"><span class="btn btn-primary">-</span></a>
         <?php } ?>
       <?php } ?>
     </div>
