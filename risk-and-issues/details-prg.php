@@ -40,12 +40,13 @@ $stmt_risk_issue_regions_up = sqlsrv_query( $data_conn, $sql_risk_issue_regions_
 
 //GET DISTINCT REGIONS
 $sql_risk_issue_regions = "DECLARE @temp VARCHAR(MAX) 
-                          SELECT @temp = COALESCE(@temp+', ' ,'') + MLMRegion_Cd 
+                          SELECT @temp = COALESCE(@temp+'<br> ' ,'') + MLMRegion_Cd 
                           FROM RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key 
                           SELECT @temp AS MLMRegion_Cd ";
 $stmt_risk_issue_regions  = sqlsrv_query( $data_conn, $sql_risk_issue_regions);
 $row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_regions , SQLSRV_FETCH_ASSOC);
-//echo $row_risk_issue_regions['MLMRegion_Cd']; 			
+//echo $row_risk_issue_regions['MLMRegion_Cd'];
+//echo $sql_risk_issue_regions;			
 
 //GET ASSOCIATED PROJECTS
 //FIRST GET THE PROGRAM RI KEY

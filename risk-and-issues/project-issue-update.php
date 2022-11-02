@@ -276,7 +276,7 @@ function toggle(source) {
   <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>
   <div class="alert alert-success">
   <div align="left">
-    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue.  You can not edit the details.
+    <span class="glyphicon glyphicon-warning-sign"></span> You are about to add the following project(s) to this Risk/Issue. 
   </div>
   </br>
       <table width="100%" border="0" cellpadding="10" cellspacing="10">
@@ -294,7 +294,13 @@ function toggle(source) {
       </table>
   </div>
   <hr>
+  <div class="alert alert-danger">
+  <div align="left">
+    <span class="glyphicon glyphicon-warning-sign"></span> You <b>CAN NOT</b> edit the details.
+  </div>
+  </div>
   <?php } ?>
+
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
@@ -605,7 +611,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box">  
+            <div class="box <?php echo $disble_it;?>">  
               <table width="100%" border="0" cellpadding="5" cellspacing="5">
                 <tbody>
                     <tr>
@@ -639,7 +645,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3">
-            <div class="box">
+            <div class="box <?php echo $disble_it;?>">
               <input type="text" name="assCRID" class="form-control" value="<?php echo $assCRID; ?>">
             </div>
           </td>
@@ -674,7 +680,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box" align="left">
+            <div class="box <?php echo $disble_it;?>" align="left">
               <table>
                 <tr>
                   <td><label for="changeLogAction">Requested Action</label>

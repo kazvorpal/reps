@@ -39,6 +39,10 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 //$Projassoc = $row_risk_issue_assoc_proj['proj_nm']; //NEED TO SHOW ALL DRIVER LOOP
 //echo $sql_ri_assoc_prj;
 
+//FIXES DUPLICATE REGIONS
+$myregions = implode(',', array_unique(explode(',', $region)));
+//echo $myregions;
+
 ?>
 <!doctype html>
 <html>
@@ -227,7 +231,11 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 <?php if(!empty($region_conx)){ ?>
     <tr>
       <td>Region</td>
-      <td><?php if($global==1){echo $region_glb;} else { echo str_replace(",", "<br>", $region); }?></td>
+      <td>
+        <?php 
+        if($global==1){echo $region_glb;} else { echo str_replace(",", "<br>", $myregions); }
+        ?>
+      </td>
     </tr>
 <?php } ?>
     <tr>
