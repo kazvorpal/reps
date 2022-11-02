@@ -230,7 +230,7 @@ include ("../sql/update-time.php");
         ?>
         </td>
     </tr>
-<?php if($global != 1) { ?>
+<?php if($global != 0 || $RILevel != 'Program') { ?>
     <tr>
       <td>Tranfer to Program Manager</td>
       <td>
@@ -242,7 +242,7 @@ include ("../sql/update-time.php");
               echo "No";
             }
         ?>
-    </td>
+      </td>
     </tr>
 <?php } ?>
 <?php if(isset($_POST['opportunity'])) { ?>
