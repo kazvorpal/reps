@@ -40,7 +40,8 @@ $stmt_ri_assoc_prj = sqlsrv_query( $data_conn, $sql_ri_assoc_prj );
 //echo $sql_ri_assoc_prj;
 
 //FIXES DUPLICATE REGIONS
-$myregions = implode(',', array_unique(explode(',', $region)));
+$myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) : "";
+// $myregions = implode(',', array_unique(explode(',', $region)));
 //echo $myregions;
 
 ?>

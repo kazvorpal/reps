@@ -425,7 +425,10 @@
           let r = (aplist[program.RiskAndIssue_Key]) ? formatDate(new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date)) : "";
           console.log(r)
           return(r);
-        }
+        }//, 
+        // MLMProgram_Nm: () => {
+
+        // }
       };
         const program = getprogrambykey(id, programname);
         const safename = makesafe(program.MLMProgram_Nm);
