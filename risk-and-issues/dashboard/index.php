@@ -417,10 +417,9 @@
         }, 
         age: () => {
           let r = (aplist[program.RiskAndIssue_Key]) ? new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date) : "";
-          console.log(r)
-          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1)  + " days" ;
-          console.log(d)
-            return  d;
+          let d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1) ;
+          let s = (d == 1) ? " day" : (d == "") ? "" : " days";
+          return  `${d}${s}`;
         },
         actionplandate: () => {
           let r = (aplist[program.RiskAndIssue_Key]) ? formatDate(new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date)) : "";
@@ -553,7 +552,8 @@
       
         const safename = makesafe(name);
         const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4<?= $headerposition ?>"});
-        // if (mode == "program") {
+        if (ispp(mode)) {
+          console.log("pp")
             let cells = ["Risk/Issue"];
             rowcolor = 1;
             for (field of Object.keys(rifields)) {
@@ -563,13 +563,14 @@
                     trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
                 }
             }
-        // } else {
-        //     let cells = [];
-        //     Object.entries(rifields).forEach(([key, value]) => {
-        //         trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
-        //         cells.push(value);
-        //     })
-        // }
+        } else {
+          console.log("p")
+            let cells = [];
+            Object.entries(rifields).forEach(([key, value]) => {
+                trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
+                cells.push(value);
+            })
+        }
         excelrows();
         return trri;
     }
@@ -631,7 +632,11 @@
             return  (ri.RaidLog_Flg) ? "Y" : "N";
           },
           RIOpen_Hours: () => {
-            return Math.floor(ri.RIOpen_Hours/24) + " days";
+            let d = Math.floor(ri.RIOpen_Hours/24);
+            let s = (d == 1) ? " day" : (d === "") ? "" : " days";
+            return  `${d}${s}`;
+            // let s = (d == 1) ? "s" : "";
+            // return  `${d} day${s}`;
           },
           market: () => {
             const m = getlocationbykey(ri.EPSProject_Key);
@@ -682,7 +687,10 @@
           },
           duration: () => {
             const d = Math.floor((new Date(ri.Last_Update_Ts.date) - new Date(ri.Created_Ts.date))/(1000 * 60 * 60 * 24));
-            return  d + " days";
+            let s = (d == 1) ? " day" : (d == "") ? "" : " days";
+            return  `${d}${s}`;
+            // let s = (d == 1) ? "s" : "";
+            // return  `${d} day${s}`;
           },
           RI_Nm: () => {
               const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
@@ -722,14 +730,12 @@
           }, 
         age: () => {
           let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
-          // console.log(r)
-          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1)  + " days" ;
-          // console.log(d)
-            return  d;
+          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1);
+          let s = (d == 1) ? " day" : (d == "") ? "" : " days";
+          return  `${d}${s}`;
         },
         actionplandate: () => {
           let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
-          // console.log(r)
           return(r);
         },
         changelogdate: () => {
