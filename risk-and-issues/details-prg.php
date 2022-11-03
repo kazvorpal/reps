@@ -367,9 +367,13 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
       %0D%0ALink: <?php echo $link;?>" 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
       
-    <span style="font-size: 24px;"> | </span> 
+    <span style="font-size: 24px;"> | </span>
 
-    <a href="includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=<?php echo $prog_name;?>&prg_nm=<?php echo $prog_name;?>&progRIKey=<?php echo $progRIkey;?>&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>"><span class="btn btn-primary">+/- Assoc. Projects</span></a>
+    <?php
+    $assocProjLink = urlencode("includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=" . $prog_name . "&prg_nm=" . $prog_name . "&progRIKey=" . $progRIkey . "&fiscal_year=" . $fscl_year . "&name=" . $row_risk_issue['RI_Nm'] . "&proj_name=" . $proj_name . "&ri_type=" . $row_risk_issue['RIType_Cd'] . "&rikey=" . $row_risk_issue['RiskAndIssue_Key'] . "&status=1&uid=" . $uid) 
+    ?>
+
+    <a href="<?php echo $assocProjLink ?>"><span class="btn btn-primary">+/- Assoc. Projects</span></a>
 
     </div>
     <?php } ?>
