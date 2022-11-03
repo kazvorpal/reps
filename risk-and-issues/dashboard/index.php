@@ -785,7 +785,7 @@
       for(field in rifields) {
           (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < new Date()) ? " hilite" : "";
+            let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < (new Date()+1)) ? " hilite" : "";
             trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) + bgcolor }));
           })(field);
       }

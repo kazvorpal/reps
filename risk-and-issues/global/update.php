@@ -405,7 +405,7 @@ function toggle(source) {
           <h3 class="panel-title">REGION*</h3>
         </div>
         <div class="panel-body">
-          <table width="100%">
+          <table width="100%" class="checkbox_group required" required>
           <tr>
             <td><label for="California"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>> California </label> </td>
             <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
