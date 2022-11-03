@@ -987,7 +987,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   // Event creators
 
   $("#subprogram").change(() => {
-    console.log("sub")
+    console.log("sub");
+    console.log($("#subprogram").val());
     localStorage.setItem("subprogram", $("#subprogram").val());
   })
 
@@ -1083,24 +1084,28 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.getElementById("program").style.display = "block";
     document.getElementById("subprogram").style.display = "block";
   }, 1000);
-
-  if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
-    document.backbutton = true;
-    document.subprogram = localStorage.getItem("subprogram");
-    document.program = localStorage.getItem("program");
-    // document.getElementById("program").value = document.program;
-    console.log(document.program)
-    setTimeout(function(){
-      $('#program').val(document.program).multiselect("destroy").multiselect();
-      subevent();
-      // setTimeout(function() {
-        $('#subprogram').val(document.subprogram.split(",")).multiselect("destroy").multiselect();
-      // }, 100);
-    }, 100);
-    setTimeout(conditionals, 1000);
-  } else 
-    document.backbutton = false;
-
+  
+  const restoredata = () => {
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+      document.backbutton = true;
+      document.subprogram = localStorage.getItem("subprogram");
+      document.program = localStorage.getItem("program");
+      // document.getElementById("program").value = document.program;
+      console.log(document.program)
+      console.log("restoring sub");
+      console.log(document.subprogram)
+      setTimeout(conditionals, 2000);
+      setTimeout(function(){
+        $('#program').val(document.program).multiselect("destroy").multiselect();
+        subevent();
+        // setTimeout(function() {
+          $('#subprogram').val(document.subprogram.split(",")).multiselect("destroy").multiselect();
+          // }, 100);
+        }, 3000);
+      } else 
+      document.backbutton = false;
+    }
+    setTimeout(restoredata), 4000;
   const prescreen = () => {
     document.querySelectorAll("input[type=text], textarea").forEach(o => { 
       o.value = o.value.trim()
