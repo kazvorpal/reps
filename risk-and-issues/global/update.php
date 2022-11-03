@@ -27,7 +27,7 @@ if(empty($row_glb_prog)){
   exit();
 }
 
-//DELARE
+//DELARE  
 $RiskAndIssueLog_Key = $row_glb_prog['RiskAndIssueLog_Key'];
 
 $RILevel_Cd = $row_glb_prog['RILevel_Cd']; 
