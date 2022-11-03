@@ -370,7 +370,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
     <span style="font-size: 24px;"> | </span>
 
     <?php
-    $assocProjLink = urlencode("includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=" . $prog_name . "&prg_nm=" . $prog_name . "&progRIKey=" . $progRIkey . "&fiscal_year=" . $fscl_year . "&name=" . $row_risk_issue['RI_Nm'] . "&proj_name=" . $proj_name . "&ri_type=" . $row_risk_issue['RIType_Cd'] . "&rikey=" . $row_risk_issue['RiskAndIssue_Key'] . "&status=1&uid=" . $uid) 
+    $assocProjLink = "includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=" . $prog_name . "&prg_nm=" . $prog_name . "&progRIKey=" . $progRIkey . "&fiscal_year=" . $fscl_year . "&name=" . $row_risk_issue['RI_Nm'] . "&proj_name=" . $proj_name . "&ri_type=" . $row_risk_issue['RIType_Cd'] . "&rikey=" . $row_risk_issue['RiskAndIssue_Key'] . "&status=1&uid=" . $uid;
     ?>
 
     <a href="<?php echo $assocProjLink ?>"><span class="btn btn-primary">+/- Assoc. Projects</span></a>
