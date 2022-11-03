@@ -446,9 +446,9 @@
                           </td>
                           <td align="center" bgcolor="<?php //echo $prog_clr ?>">
                           	    <?php if($row_por['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
-                                  <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe">0<?php //echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
+                                  <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
                                 <?php } else { ?>
-                                  <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe">0<?php //echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
+                                  <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
                                 <?php } ?>
                           </td>
                                                            
