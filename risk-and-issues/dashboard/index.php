@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Project R&I Dashboard</title>
+    <title>Risk & Issues Dashboard</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <?php 
         $mode = (stripos($_SERVER['REQUEST_URI'], "program")) ? "program" : "project";
@@ -299,193 +299,220 @@
         // Make all the data inside a risk or issue, Program and Portfolio
 
         const fieldswitch = {
-        //    Specific fields that need extra calculation
-        //    Add any field to rifields that you want to be a column,
-        //    in the format {fieldname: "Human Name"}
-        //    If it exists in rifields, it will be populated automatically here.
-        //    If, instead, you need to do some calculation to produce it,
-        //    add its fieldname to this "switch" object, fieldswitch,
-        //    with an anonymous function to handle the changes.
-        RiskAndIssue_Key: () => {
-            return `<span style='font-weight:900'>${text}</span>`;
-        },
-        mangerlist: () => {
-            const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
-            let mangers = [];
-            for (man of manger) {
-            mangers.push(man.User_Nm);
-            }  
-            return mangers.join().replace(",", ", ");
-        },
-        global: () => {
-            return  (program.Global_Flg) ? "Y" : "N";
+          //    Specific fields that need extra calculation
+          //    Add any field to rifields that you want to be a column,
+          //    in the format {fieldname: "Human Name"}
+          //    If it exists in rifields, it will be populated automatically here.
+          //    If, instead, you need to do some calculation to produce it,
+          //    add its fieldname to this "switch" object, fieldswitch,
+          //    with an anonymous function to handle the changes.
+          RiskAndIssue_Key: () => {
+              return `<span style='font-weight:900'>${text}</span>`;
           },
-        category: () => {
-          // let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-          // return (projects != undefined && projects.length>0) ? "Program" : "Global";
-          return  (program.Global_Flg) ? "Global" : "Program";
-        },
-        EPSSubprogram_Nm: () => {
-            return getlocationbykey(program.EPSProject_Key)
-        },
-        ForecastedResolution_Dt: () => {
-            return (program.ForecastedResolution_Dt == null) ? "Unknown" : makestringdate(program.ForecastedResolution_Dt);
-        },
-        RIActive_Flg: () => {
-            return (program.RIActive_Flg) ? "Open" : "Closed";
-        },
-        Created_Ts: () => {
-            return makestringdate(program.Created_Ts);
-        },
-        monthcreated: () => {
-            return new Date(program.Created_Ts.date).toLocaleString('default', { month: 'long' });
-        },
-        monthclosed: () => {
-            return (program.RIClosed_Dt != null) ? new Date(program.RIClosed_Dt.date).toLocaleString('default', { month: 'long' }) : "";
-        },
-        quartercreated: () => {
-            const m = new Date(program.Created_Ts.date).getMonth();
-            return  (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
-        },
-        quarterclosed: () => {
-            const m = (program.RIClosed_Dt != null) ? new Date(program.RIClosed_Dt.date).getMonth():"";
-            return  (program.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
-        },
-        duration: () => {
-            const enddate = (program.RIActive_Flg == 1 || program.Created_Ts.date < program.RIClosed_Dt) ? program.Last_Update_Ts.date : program.RIClosed_Dt;
-            const d = Math.floor((new Date(enddate) - new Date(program.Created_Ts.date))/(1000 * 60 * 60 * 24));
-            return  d + " days";
-        },
-        Last_Update_Ts: () => {
-            return  makestringdate(program.Last_Update_Ts);
-        },
-        RIClosed_Dt: () => {
-            return  (program.RIClosed_Dt != null) ? formatDate(new Date(program.RIClosed_Dt.date)) : "";
-        },
-        AssociatedCR_Key: () => {
-            return  (program.AssociatedCR_Key) ? "Y" : "N";
-        },
-        MLMRegion_Cd: () => {
-            let list = ""
-            let counter = 0;
-            for(r of ridata) {
-                if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
-                counter++;
-                list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : r.MLMRegion_Cd;
+          mangerlist: () => {
+              const manger = mangerlist[program.Fiscal_Year + "-" + program.MLMProgram_Key];
+              let mangers = [];
+              for (man of manger) {
+              mangers.push(man.User_Nm);
+              }  
+              return mangers.join().replace(",", ", ");
+          },
+          global: () => {
+              return  (program.Global_Flg) ? "Y" : "N";
+            },
+          category: () => {
+            // let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            // return (projects != undefined && projects.length>0) ? "Program" : "Global";
+            return  (program.Global_Flg) ? "Global" : "Program";
+          },
+          EPSSubprogram_Nm: () => {
+              return getlocationbykey(program.EPSProject_Key)
+          },
+          ForecastedResolution_Dt: () => {
+              return (program.ForecastedResolution_Dt == null) ? "Unknown" : makestringdate(program.ForecastedResolution_Dt);
+          },
+          RIActive_Flg: () => {
+              return (program.RIActive_Flg) ? "Open" : "Closed";
+          },
+          Created_Ts: () => {
+              return makestringdate(program.Created_Ts);
+          },
+          monthcreated: () => {
+              return new Date(program.Created_Ts.date).toLocaleString('default', { month: 'long' });
+          },
+          monthclosed: () => {
+              return (program.RIClosed_Dt != null) ? new Date(program.RIClosed_Dt.date).toLocaleString('default', { month: 'long' }) : "";
+          },
+          quartercreated: () => {
+              const m = new Date(program.Created_Ts.date).getMonth();
+              return  (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+          },
+          quarterclosed: () => {
+              const m = (program.RIClosed_Dt != null) ? new Date(program.RIClosed_Dt.date).getMonth():"";
+              return  (program.RIClosed_Dt == null) ? "" : (m < 3) ? "Q1" : (m < 6) ? "Q2" : (m < 9) ? "Q3" : "Q4";
+          },
+          duration: () => {
+              const enddate = (program.RIActive_Flg == 1 || program.Created_Ts.date < program.RIClosed_Dt) ? program.Last_Update_Ts.date : program.RIClosed_Dt;
+              const d = Math.floor((new Date(enddate) - new Date(program.Created_Ts.date))/(1000 * 60 * 60 * 24));
+              return  d + " days";
+          },
+          Last_Update_Ts: () => {
+              return  makestringdate(program.Last_Update_Ts);
+          },
+          RIClosed_Dt: () => {
+              return  (program.RIClosed_Dt != null) ? formatDate(new Date(program.RIClosed_Dt.date)) : "";
+          },
+          AssociatedCR_Key: () => {
+              return  (program.AssociatedCR_Key) ? "Y" : "N";
+          },
+          MLMRegion_Cd: () => {
+              let list = ""
+              let counter = 0;
+              for(r of ridata) {
+                  if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
+                  counter++;
+                  list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : r.MLMRegion_Cd;
+                  }
+              }
+              return (list.slice(0, -2));
+          },
+          regioncount: () => {
+              let counter = 0;
+              for(r of ridata) {
+                  if (typeof r != "undefined" && r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
+                  counter++;
+                  }
+              }
+              return counter;
+          },
+          RaidLog_Flg: () => {
+              return  (program.RaidLog_Flg) ? "Y" : "N";
+          },
+          RiskRealized_Flg: () => {
+              return  (program.RiskRealized_Flg) ? "Y" : "N";
+          },
+          RIOpen_Hours: () => {
+              return Math.floor(program.RIOpen_Hours/24) + " days";
+          },
+          driver: () => {
+              return (driverlist[program.RiskAndIssueLog_Key]) 
+              ? (driverlist[program.RiskAndIssueLog_Key]) 
+              ? driverlist[program.RiskAndIssueLog_Key].Driver_Nm : "" : "";
+          },
+          projectcount: () => {
+              let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+              return (projects != undefined && projects.length>0) ? projects.length : "";
+          }, 
+          subprogram: () => {
+              let list = "";
+              let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+              if (prog != undefined) {
+                for(r of prog) {
+                  // console.log((program.Global_Flg)?true:false)
+                    list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
+                } 
+              }
+              let ret = (list != "") ? list.slice(0, -2) : ""
+              return ret;
+          }, 
+          MLMProgram_Nm: () => {
+            if (program.Global_Flg == 1) {
+              let programs = "";
+              ridata.forEach((o) => {
+                let comma = (programs != "") ? ", " : ""
+                if (o.RiskAndIssue_Key == program.RiskAndIssue_Key 
+                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
+                  programs = programs + comma + o.MLMProgram_Nm;
                 }
+              })
+              return (programs);
+            } else {
+              return program.MLMProgram_Nm;
             }
-            return (list.slice(0, -2));
-        },
-        regioncount: () => {
-            let counter = 0;
-            for(r of ridata) {
-                if (typeof r != "undefined" && r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
-                counter++;
-                }
-            }
-            return counter;
-        },
-        RaidLog_Flg: () => {
-            return  (program.RaidLog_Flg) ? "Y" : "N";
-        },
-        RiskRealized_Flg: () => {
-            return  (program.RiskRealized_Flg) ? "Y" : "N";
-        },
-        RIOpen_Hours: () => {
-            return Math.floor(program.RIOpen_Hours/24) + " days";
-        },
-        driver: () => {
-            return (driverlist[program.RiskAndIssueLog_Key]) 
-            ? (driverlist[program.RiskAndIssueLog_Key]) 
-            ? driverlist[program.RiskAndIssueLog_Key].Driver_Nm : "" : "";
-        },
-        projectcount: () => {
-            let projects = p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            return (projects != undefined && projects.length>0) ? projects.length : "";
-        }, 
-        subprogram: () => {
-            let list = "";
-            let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-            if (prog != undefined) {
-              for(r of prog) {
-                // console.log((program.Global_Flg)?true:false)
-                  list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
-              } 
-            }
-            let ret = (list != "") ? list.slice(0, -2) : ""
-            return ret;
-        }, 
-        age: () => {
-          let r = (aplist[program.RiskAndIssue_Key]) ? new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date) : "";
-          let d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1) ;
-          let s = (d == 1) ? " day" : (d == "") ? "" : " days";
-          return  `${d}${s}`;
-        },
-        actionplandate: () => {
-          let r = (aplist[program.RiskAndIssue_Key]) ? formatDate(new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date)) : "";
-          console.log(r)
-          return(r);
-        }//, 
-        // MLMProgram_Nm: () => {
+          },
+          programcount: () => {
+              let programs = "";
+              let pc = 0;
+              ridata.forEach((o) => {
+                let comma = (programs != "") ? ", " : ""
+                if (o.RiskAndIssue_Key == program.RiskAndIssue_Key 
+                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
+                  programs = programs + comma + o.MLMProgram_Nm;
+                  pc++;
+                } 
+              })
+              return (pc);
+          },
+          age: () => {
+            let r = (aplist[program.RiskAndIssue_Key]) ? new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date) : "";
+            let d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1) ;
+            let s = (d == 1) ? " day" : (d == "") ? "" : " days";
+            return  `${d}${s}`;
+          },
+          actionplandate: () => {
+            let r = (aplist[program.RiskAndIssue_Key]) ? formatDate(new Date(aplist[program.RiskAndIssue_Key].LastUpdate.date)) : "";
+            return(r);
+          }//, 
+          // MLMProgram_Nm: () => {
 
-        // }
-      };
+          // }
+        };
         const program = getprogrambykey(id, programname);
         const safename = makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
         let url = text = "";
         // if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
-          const trid = "tr" + type + saferi + Math.random();
-          let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
-          document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
-          const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
-            ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
-            ? "▶" : "" : "";
-            // console.log("arrow")
-            // console.log(arrow)
-          const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
-          url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=${program["RiskAndIssue_Key"]}`;
-          text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
-          const c = (arrow == "") ? "plainbox" : "namebox";
-          const w = (mode == "portfolio") ? "" : "";
-          const header = makeelement({
-            e: "th", 
-            i: "th" + type + saferi, 
-            t: "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-            c:"p-4 " + c,
-          });
-          const tridobj = document.getElementById(trid);
-          if (arrow != "") {
-              if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
-                tridobj.onclick = (e) => {
-                  toggler(document.getElementById("projects" + saferi), e.target.children[0]);
-                };
-              }
-          }
-          for (field of Object.keys(rifields)) {
-              (function(test) {
-                const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
-                let bgcolor = (test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date())) ? " hilite" : "";
-                tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
-              })(field);
-              if (rifields[field].name == "ID") {
-                tridobj.appendChild(header);
-              }
-          }
-          var rowValues = [];
-          for (field in excelfields) {
-              (function(test) {
-                  let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
-                  t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
-                  rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
-              })(field);
-          }
-          let newrow = document.worksheet.addRow(rowValues);
-          processcells();
-          if(arrow != "") {
-            makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
-          }
+        const trid = "tr" + type + saferi + Math.random();
+        let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
+        document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
+        const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
+          ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
+          ? "▶" : "" : "";
+          // console.log("arrow")
+          // console.log(arrow)
+        const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
+        url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=${program["RiskAndIssue_Key"]}`;
+        text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
+        const c = (arrow == "" || mode == "portfolio") ? "plainbox" : "namebox";
+        const w = (mode == "portfolio") ? "" : "";
+        const header = makeelement({
+          e: "th", 
+          i: "th" + type + saferi, 
+          t: "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
+          c:"p-4 " + c,
+        });
+        const tridobj = document.getElementById(trid);
+        if (arrow != "") {
+            if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
+              tridobj.onclick = (e) => {
+                toggler(document.getElementById("projects" + saferi), e.target.children[0]);
+              };
+            }
+        }
+        for (field of Object.keys(rifields)) {
+            (function(test) {
+              const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+              // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
+              let bgcolor = (test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date())) ? " hilite" : "";
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
+            })(field);
+            if (rifields[field].name == "ID") {
+              tridobj.appendChild(header);
+            }
+        }
+        var rowValues = [];
+        for (field in excelfields) {
+            (function(test) {
+                let t = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+                t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
+                rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
+            })(field);
+        }
+        let newrow = document.worksheet.addRow(rowValues);
+        processcells();
+        if(arrow != "") {
+          makeprojects(p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key], program.MLMProgram_Nm, "table" + safename, saferi);
+        }
         // }
     }    
 
@@ -556,7 +583,6 @@
         const safename = makesafe(name);
         const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4<?= $headerposition ?>"});
         if (ispp(mode)) {
-          console.log("pp")
             let cells = ["Risk/Issue"];
             rowcolor = 1;
             for (field of Object.keys(rifields)) {
@@ -567,7 +593,6 @@
                 }
             }
         } else {
-          console.log("p")
             let cells = [];
             Object.entries(rifields).forEach(([key, value]) => {
                 trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
@@ -742,9 +767,7 @@
           return(r);
         },
         changelogdate: () => {
-          console.log(loglist[ri.RiskAndIssue_Key])
           let r = (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
-          console.log(r)
           return(r);
         },
         // requestor: () => {
@@ -762,7 +785,6 @@
         // },
         programmanager: () => {
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
-          console.log(r)
           return(r);
         }
       };
@@ -776,7 +798,6 @@
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
       if (ri.RIType_Cd == "Issue") {
-        console.log(ri.RIType_Cd);
         for (field in changelog) {
           (function(test) {
               const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
@@ -812,7 +833,6 @@
         }
         modes.forEach(element => {
           let e = (element != mode) ? modebutton(element) :"";
-          console.log(e);
             (e != "") ? m.appendChild(e):"";
             m.appendChild(document.createTextNode(" "));
         });

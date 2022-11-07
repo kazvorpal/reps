@@ -142,10 +142,7 @@ const jq = `
       }
       td.appendChild(select);
       document.getElementById("row").appendChild(td);
-    } else {
-      console.log("nothing");
-      // console.log(o)
-    }
+    } 
   }
 
   var programnames;

@@ -635,7 +635,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   </div>
   <!--ROW 8 - RISK REALIZED | ASSOC CR | NOTIFY PORT TEAM-->
   <div class="row row-eq-height">
-    <div class="col-md-4" align="left">
+    <div class="col-md-4" align="left" id="realizeddiv">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">RISK REALIZED*</h3>
@@ -895,8 +895,15 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         locations = "MULTI ";
       }
     }
-    let p = (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) ? "PORTFOLIO " : "";
-    Namex.value = p + program.value + ' ' + locations + Descriptor.value + ' POR' + fiscalYer.value.slice(2)
+    let p = n = "";
+    if (document.querySelector('input[name="RILevel"][value=Portfolio]').checked == true) {
+      p = "PORTFOLIO ";
+      n = ($("#program").val().length == 1) ? $("#program").val()[0] :"";
+    } else {
+      p = "";
+      n = $("#program").val();
+    }
+    Namex.value = p + n + ' ' + locations + Descriptor.value + ' POR' + fiscalYer.value.slice(2)
     return(locations)
   }
 
@@ -1044,6 +1051,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram", "raidLog"], e: "Portfolio"})
   }
 
+document.getElementsByName("RIType").forEach((o) => {
+  o.addEventListener("click", (e) => {
+    document.getElementById("realizeddiv").style.display = (e.target.value == "Issue") ? "none" : "block";
+  })
+})
 
   $(document).ready(function() {
     document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
