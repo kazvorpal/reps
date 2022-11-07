@@ -444,7 +444,7 @@
                                   <a href="ri2.php?prj_name=<?php echo htmlspecialchars($row_por['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?>&uid=<?php echo $uid_x; ?>&winuser=<?php echo $row_por['PROJ_OWNR_NM']; ?>&fscl_year=<?php echo $row_por['FISCL_PLAN_YR']; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prj_RiskAndIssue_Cnt']); ?></a>
                                 <?php } ?>
                           </td>
-                          <td align="center" bgcolor="<?php //echo $prog_clr ?>">
+                          <td align="center" bgcolor="<?php echo $prog_clr ?>">
                           	    <?php if($row_por['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
                                   <a href="ri2-prg.php?<?php echo "proj_nm=" . $row_por['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_por['FISCL_PLAN_YR'] . "&count=" . $row_por['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="ocdframe"><?php echo htmlspecialchars($row_por['Prg_RiskAndIssue_Cnt']); ?></a>
                                 <?php } else { ?>
