@@ -2,13 +2,13 @@
   ini_set("display_errors", "On");
   ini_set("error_log", "C:\\tmp\\log\\error.log");
   // phpinfo();
-  if(isset($_GET["tester"]) && $_GET['tester'] == "menu") {
+  // if(isset($_GET["tester"]) && $_GET['tester'] == "menu") {
     $menuposition = "position:fixed;z-index:100000";
     $headerposition = " fixedheader";
     $spacer = "<div style='height:64px;'>&nbsp&</div>";
-  } else {
-    $menuposition = $headerposition = $spacer = "";
-  }
+  // } else {
+  //   $menuposition = $headerposition = $spacer = "";
+  // }
 ?>
 <nav class="navbar navbar-default" style="width:100%;<?= $menuposition ?>"> <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header" style="padding-top:5px" >
