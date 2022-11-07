@@ -444,10 +444,10 @@
             // console.log("arrow")
             // console.log(arrow)
           const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
-          url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=0fir`;
+          url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=${program["RiskAndIssue_Key"]}`;
           text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
           const c = (arrow == "") ? "plainbox" : "namebox";
-          const w = (mode == "portfolio") ? 7 : "";
+          const w = (mode == "portfolio") ? "" : "";
           const header = makeelement({
             e: "th", 
             i: "th" + type + saferi, 
@@ -696,7 +696,7 @@
             // return  `${d} day${s}`;
           },
           RI_Nm: () => {
-              const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}`;
+              const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["RiskAndIssue_Key"]}`;
               return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
           EPSProject_Nm: () => {
@@ -733,7 +733,7 @@
           }, 
         age: () => {
           let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
-          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))+1);
+          const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24)));
           let s = (d == 1) ? " day" : (d == "") ? "" : " days";
           return  `${d}${s}`;
         },
@@ -752,15 +752,16 @@
         //   return(r);
         // },
         requestedaction: () => {
+          // let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
           let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
-          return(r);
+          return(ri.RequestedAction_Nm);;
         },
         // reason: () => {
         //   let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].Reason_Txt : "";
         //   return(r);
         // },
         programmanager: () => {
-          let r = (loglist[ri.RiskAndIssue_Key]) ? "loglist[ri.RiskAndIssue_Key]" : "";
+          let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
           console.log(r)
           return(r);
         }
@@ -774,13 +775,16 @@
       }
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
-      for (field in changelog) {
-        (function(test) {
-            const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
-        })(field);
+      if (ri.RIType_Cd == "Issue") {
+        console.log(ri.RIType_Cd);
+        for (field in changelog) {
+          (function(test) {
+              const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+          })(field);
+        }
+        let newlog = document.changelog.addRow(logValues);
       }
-      let newlog = document.changelog.addRow(logValues);
       processcells();
       for(field in rifields) {
           (function(test) {

@@ -278,6 +278,25 @@
       }
     }
 
+    $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(0)";
+    // print '<!--' . $sqlstr . "<br/> -->";
+    $driverquery = sqlsrv_query($data_conn, $sqlstr);
+    if($driverquery === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($error as $errors) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
+        }
+      }
+    } else {
+      $count = 1;
+      while($driverrow = sqlsrv_fetch_array($driverquery, SQLSRV_FETCH_ASSOC)) {
+        $driverrows[$driverrow["RiskAndIssueLog_Key"]] = array_map("fixutf8", $driverrow);
+        // $driverrows[] = array_map("fixutf8", $driverrow);
+      }
+    }
+
     $sqlap = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'ACTNPlan'
     Order By RiskandIssue_Key DESC";
