@@ -418,13 +418,16 @@
           MLMProgram_Nm: () => {
             if (program.Global_Flg == 1) {
               let programs = "";
-              ridata.forEach((o) => {
-                let comma = (programs != "") ? ", " : ""
-                if (o.RiskAndIssue_Key == program.RiskAndIssue_Key 
-                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
-                  programs = programs + comma + o.MLMProgram_Nm;
+              portfolioprograms.forEach(o => {
+                let comma = (programs != "") ? ", " : "";
+                if (o.RiskAndIssue_Key == program.RiskAndIssue_Key) {
+                  console.log(o.RiskAndIssue_Key)
+                  programs = programs + comma + o.Program_Nm;
                 }
               })
+              if (programs == "" ) {
+                programs = program.MLMProgram_Nm;
+              }
               return (programs);
             } else {
               return program.MLMProgram_Nm;
@@ -433,14 +436,17 @@
           programcount: () => {
               let programs = "";
               let pc = 0;
-              ridata.forEach((o) => {
+              portfolioprograms.forEach((o) => {
                 let comma = (programs != "") ? ", " : ""
                 if (o.RiskAndIssue_Key == program.RiskAndIssue_Key 
                   && programs.indexOf(o.MLMProgram_Nm) == -1) {
-                  programs = programs + comma + o.MLMProgram_Nm;
+                  programs = programs + comma + o.Program_Nm;
                   pc++;
                 } 
               })
+              if (pc == 0) {
+                pc = 1;
+              }
               return (pc);
           },
           age: () => {
@@ -812,7 +818,7 @@
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
             // let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < (new Date()+1)) ? " hilite" : "";
             let bgcolor = (test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date())) ? " hilite" : "";
-            console.log(bgcolor)
+            // console.log(bgcolor)
             trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) + bgcolor }));
           })(field);
       }
