@@ -94,11 +94,19 @@ const jq = `
   for (item in sublist) {
     // console.log(item)
     sublist[item].forEach(e => {
-      if (!subp.includes(e.Subprogram_Nm)) {
-        subp.push(e.Subprogram_Nm);
+      if (!subp.includes(e.SubProgram_Nm)) {
+        // console.log(e.SubProgram_Nm);
+        subp.push(e.SubProgram_Nm);
       }
     })
   }
+
+  projectfull.forEach(o => {
+    if(!subp.includes(o.EPSSubprogram_Nm)) {
+      subp.push(o.EPSSubprogram_Nm);
+    }
+  })
+  subp = subp.sort();
   // console.log(subp);
 
   const makeselect = (o, key) => {
