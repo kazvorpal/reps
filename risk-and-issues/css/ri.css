@@ -159,7 +159,7 @@ body {
 .fixedheader {
   position:sticky;
   top:65px;
-  z-index: 100000;
+  z-index: 1;
 }
 .hilite {
   background-color: #fcc;
