@@ -477,7 +477,7 @@
           // console.log("arrow")
           // console.log(arrow)
         const file = (program.Global_Flg) ? "global/details.php" : "details-prg.php";
-        url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false&uid=${program["RiskAndIssue_Key"]}`;
+        url = `/risk-and-issues/${file}?au=false&status=${program["RIActive_Flg"]}&popup=true&rikey=${program["RiskAndIssue_Key"]}&fscl_year=${program["Fiscal_Year"]}&program=${program.MLMProgram_Nm}&proj_name=null&unframe=false`;
         text = `<a href='${url}' class='miframe cboxElement'>${program["RiskAndIssue_Key"]}</a>`;
         const c = (arrow == "" || mode == "portfolio") ? "plainbox" : "namebox";
         const w = (mode == "portfolio") ? "" : "";
@@ -878,18 +878,6 @@
       init(mode);
       setInterval(colorboxschtuff, 2000);
    
-    //   $("#collapseBandwidthManagement").on("hide.bs.collapse", () => {
-    //       document.getElementById("collapseBandwidthManagement").style.overflow= "initial";
-    //   })
-
-
-    // $(".collapse").on("hide.bs.collapse", () => {
-    //     document.getElementById("collapseBandwidthManagement").style.overflow= "initial";
-    // });
-    // $(".collapse").on("show.bs.collapse", () => {
-    //     document.getElementById("collapseBandwidthManagement").style.overflow= "initial";
-    // });
-
   </script>
   </body>
 </html>
