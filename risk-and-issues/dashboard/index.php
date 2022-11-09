@@ -780,11 +780,11 @@
         //   let r = (loglist[ri.RiskAndIssue_Key]) ? "loglist[ri.RiskAndIssue_Key]" : "";
         //   return(r);
         // },
-        requestedaction: () => {
-          // let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
-          let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
-          return(ri.RequestedAction_Nm);;
-        },
+        // requestedaction: () => {
+        //   // let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
+        //   let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].RequestAction_Nm : "";
+        //   return(ri.RequestedAction_Nm);;
+        // },
         // reason: () => {
         //   let r = (loglist[ri.RiskAndIssue_Key]) ? loglist[ri.RiskAndIssue_Key].Reason_Txt : "";
         //   return(r);
@@ -803,7 +803,7 @@
       }
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
-      if (ri.RIType_Cd == "Issue" && (ri.RequestedAction_Nm != null || ri.Reason_Txt != "")) {
+      if (mode == "project" && ri.RIType_Cd == "Issue" && (ri.RequestedAction_Nm != null || ri.Reason_Txt != "")) {
         for (field in changelog) {
           (function(test) {
               const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
