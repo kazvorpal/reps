@@ -3,6 +3,7 @@ include ("../includes/functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/MS_Users_prg.php");
+//print_r($_REQUEST);
 
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_GET['rikey'];
@@ -14,11 +15,6 @@ $proj_name = $_GET['proj_name'];
 }
 
 $prog_name = $_GET['program'];
-
-$uid = "";
-if(isset($_GET['uid'])) {
-$uid = $_GET['uid'];
-}
 
 $status = $_GET['status']; //0=closed , 1=open
 $popup = $_GET['popup'];
@@ -54,8 +50,6 @@ $row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_regions , SQLSRV_
 $sql_progRIkey = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_progRIkey  = sqlsrv_query( $data_conn, $sql_progRIkey  );
 $row_progRIkey  = sqlsrv_fetch_array($stmt_progRIkey , SQLSRV_FETCH_ASSOC);
-//echo $sql_progRIkey;
-//exit();
 $progRIkey = $row_progRIkey ['MLMProgramRI_Key']; 
 $programKey = $row_progRIkey ['MLMProgram_Key'];
 $riLog_Key =  $row_progRIkey ['RiskAndIssueLog_Key'];
@@ -94,6 +88,23 @@ $sql_assoc_proj_cnt = "SELECT COUNT(*) AS AsscPrjCnt FROM RI_Mgt.fn_GetListOfAss
 $stmt_assoc_proj_cnt = sqlsrv_query( $data_conn, $sql_assoc_proj_cnt );
 $row_assoc_proj_cnt = sqlsrv_fetch_array($stmt_assoc_proj_cnt, SQLSRV_FETCH_ASSOC);
 $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
+
+
+//GET UID FOR ASSOCIATED PROJECTS - 11.9.2023
+$sql_uid = "Select EPSProject_Nm, PROJ_ID
+                  FROM RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status) 
+                  left join [EPS].[ProjectStage] on PROJ_NM = EPSProject_Nm";
+$stmt_uid = sqlsrv_query( $data_conn, $sql_uid );
+$row_uid = sqlsrv_fetch_array($stmt_uid  , SQLSRV_FETCH_ASSOC);
+$uid_frm_prj = $row_uid ['PROJ_ID']; 
+//echo $uid_frm_prj;
+
+$uid = $uid_frm_prj;
+if(isset($_GET['uid'])) {
+$uid = $_GET['uid'];
+}
+
+//echo $uid;
 
 //USER AUTHORIZATION - NOT USED-DELETE
 $authProg = $row_risk_issue['MLMProgram_Nm'];
