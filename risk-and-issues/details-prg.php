@@ -97,14 +97,14 @@ $sql_uid = "Select EPSProject_Nm, PROJ_ID
 $stmt_uid = sqlsrv_query( $data_conn, $sql_uid );
 $row_uid = sqlsrv_fetch_array($stmt_uid  , SQLSRV_FETCH_ASSOC);
 $uid_frm_prj = $row_uid ['PROJ_ID']; 
-echo $uid_frm_prj;
+//echo $uid_frm_prj;
 
 $uid = $uid_frm_prj;
 if(isset($_GET['uid'])) {
 $uid = $_GET['uid'];
 }
 
-echo $uid;
+//echo $uid;
 
 //USER AUTHORIZATION - NOT USED-DELETE
 $authProg = $row_risk_issue['MLMProgram_Nm'];
