@@ -353,21 +353,21 @@ if($global == 1 && $formType == "Update") {
     $global_region = $_POST['Region'];
     $global_subprg = $_POST['subprogram'];
   } else {
-    $global_region = substr(implode(',', $_POST['Region']), 0, -1);
+    //$global_region = substr(implode(',', $_POST['Region']), 0, -1); //DECOMISSIONED 11.08.2023
+    $global_region = implode(',', $_POST['Region']);
     $global_subprg = implode(',', $_POST['subprogram']);
   }
 
   $global_prg = implode(',', $_POST['program']);
   $global_drv = implode(',', $_POST['Drivers']);
-  //echo $global_region;
-  //exit();
   
   //REGIONS FOR GLOBAL
   if($riLevel == "Program") {
-    $sql_regions = "DECLARE @REG_IDs VARCHAR(100)
-      SELECT @REG_IDs = COALESCE(@REG_IDs+'</BR>','')+ CAST(Region_Cd AS VARCHAR(100))
+    $sql_regions = "DECLARE @REG_IDs VARCHAR(1000)
+      SELECT @REG_IDs = COALESCE(@REG_IDs+'</BR>','')+ CAST(Region_Cd AS VARCHAR(1000))
       FROM [CR_MGT].[Region] WHERE Region_key IN($global_region)
       SELECT @REG_IDs AS Region_Cd";
+
     $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
     $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
     $region_glb = $row_regions['Region_Cd'];
