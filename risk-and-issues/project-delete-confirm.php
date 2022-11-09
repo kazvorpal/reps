@@ -88,8 +88,8 @@ if(!empty($_POST['proj_select'])) {
 
 //ASSOCIATED RISK AND ISSUES
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "DECLARE @PROJS VARCHAR(100)
-    SELECT @PROJS = COALESCE(@PROJS+',','')+ CAST(Proj_Nm AS VARCHAR(100))
+$sql_risk_issue_assoc_proj = "DECLARE @PROJS VARCHAR(MAX)
+    SELECT @PROJS = COALESCE(@PROJS+',','')+ CAST(Proj_Nm AS VARCHAR(MAX))
     FROM [RI_MGT].[fn_GetListOfAssociatedProjectsForProjectRINm]('$name',1) 
     WHERE RiskAndIssue_Key IN ($del_proj_select)
     SELECT @PROJS AS Proj_Nm";
