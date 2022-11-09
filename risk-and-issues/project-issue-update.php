@@ -92,7 +92,6 @@ if (isset($_POST['groupID'])) {
 }
 
 $disble_it = "";
-
 if (isset($_POST['add_proj_select'])){
   $add_proj_select = implode(",", $_POST['add_proj_select']);
   $disble_it = " disable";
@@ -114,6 +113,23 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 			
 // echo "<br>" . $sql_risk_issue_assoc_proj;
 
+//COMPARE CHANGE LOG FLAGS
+$sql_clflag = "DECLARE @CLFLG VARCHAR(100)
+    SELECT @CLFLG = COALESCE(@CLFLG+',','')+ CAST(PRJILog_Flg AS VARCHAR(100))
+    from  [RI_MGT].[fn_GetListOfAllRiskAndIssue] (1) 
+    WHERE RiskAndIssue_Key IN ($assocProject)
+    SELECT @CLFLG AS PRJILog_Flg";
+$stmt_clflag = sqlsrv_query( $data_conn, $sql_clflag );
+$row_clflag = sqlsrv_fetch_array($stmt_clflag, SQLSRV_FETCH_ASSOC);
+
+  //check if array is consistant
+  $clflag_array = explode(",", $row_clflag['PRJILog_Flg']);
+  if(array_sum($clflag_array) == count($clflag_array)) {
+    $match = 1;
+  } else {
+    $match = 0;
+  }
+  $clflag_count = count($clflag_array);
 ?>
 <!doctype html>
 <html lang="en">
@@ -229,6 +245,17 @@ function toggle(source) {
   <h2>PROJECT ISSUE UPDATE</h2>
   Edit the details of your Project Issue
 </div>
+
+<?php
+if($match == 0 && $clflag_count > 1) { 
+  echo "<div class='alert alert-danger'>
+        You can't update Change Log Information becuase you have a mismatch in Change Log Request.<br>
+        Please go back and make sure your selections are consistant.<br><br>
+        <button onclick='history.back()' type='button' class='btn btn-primary'><span class='glyphicon glyphicon-step-backward'></span> Back </button>
+        </div>";
+  exit();
+} 
+?>
 <div class="finePrint">
 <?php  
   //echo "Project UID: " . $row_projID['PROJ_ID'] . "<br>"; 
@@ -680,7 +707,7 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
-            <div class="box <?php echo $disble_it;?>" align="left">
+            <div class="box <?php echo $disble_it?>" align="left">
               <table>
                 <tr>
                   <td><label for="changeLogAction">Requested Action</label>

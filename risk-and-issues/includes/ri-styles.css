@@ -37,3 +37,7 @@
     display: -ms-flexbox;
     display:         flex;
   }
+  .field-msg {
+    font-size: 12px;  
+    color: red;
+}

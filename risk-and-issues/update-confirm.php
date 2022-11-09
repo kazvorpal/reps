@@ -4,7 +4,8 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/risk-issues-lookup.php"); 
 include ("../sql/update-time.php");
- 
+
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 session_start();
 
 $unframe = 0;
@@ -306,7 +307,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>
 <?php } ?>
 <?php if($global == "0") { ?>
-<?php if($_POST['formaction'] == "update") { ?>
+<?php if($_POST['formaction'] == "update" && $_POST['assocProjects'] != "") { ?>
     <tr>
       <td>Associated Projects</td>
       <td><?php echo str_replace(",", "<br>", $_POST['assocProjects']); ?>

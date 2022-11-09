@@ -86,8 +86,8 @@ if(!empty( $_POST['changeLogAction'])){
 //GLOBAL SUBPROGRAMS
 if($global == 1 && $riLevel != "Portfolio") {
   
-  $sql_subprg = "DECLARE @SUBP_IDs VARCHAR(100)
-      SELECT @SUBP_IDs = COALESCE(@SUBP_IDs+'</BR>','')+ CAST(SubProgram_Nm AS VARCHAR(100))
+  $sql_subprg = "DECLARE @SUBP_IDs VARCHAR(1000)
+      SELECT @SUBP_IDs = COALESCE(@SUBP_IDs+'<br>','')+ CAST(SubProgram_Nm AS VARCHAR(1000))
       FROM mlm.fn_getlistofsubprogramforprogram(-1) WHERE SubProgram_Key IN ($subprogram) AND Program_Nm = '$program' AND LRPYear = $lrpYear
       SELECT @SUBP_IDs AS SubProgram_Nm";
     $stmt_subprg = sqlsrv_query( $data_conn, $sql_subprg );
@@ -353,13 +353,15 @@ if($global == 1 && $formType == "Update") {
     $global_region = $_POST['Region'];
     $global_subprg = $_POST['subprogram'];
   } else {
-    $global_region = implode(',', $_POST['Region']);
+    $global_region = substr(implode(',', $_POST['Region']), 0, -1);
     $global_subprg = implode(',', $_POST['subprogram']);
   }
 
   $global_prg = implode(',', $_POST['program']);
   $global_drv = implode(',', $_POST['Drivers']);
-
+  //echo $global_region;
+  //exit();
+  
   //REGIONS FOR GLOBAL
   if($riLevel == "Program") {
     $sql_regions = "DECLARE @REG_IDs VARCHAR(100)
@@ -369,10 +371,12 @@ if($global == 1 && $formType == "Update") {
     $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
     $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
     $region_glb = $row_regions['Region_Cd'];
+    //echo $sql_regions;
+    //exit();
 
   //SUBPROGRAMS FOR GLOBAL
-    $sql_subprg = "DECLARE @SUBP_IDs VARCHAR(100)
-      SELECT @SUBP_IDs = COALESCE(@SUBP_IDs+'</BR>','')+ CAST(SubProgram_Nm AS VARCHAR(100))
+    $sql_subprg = "DECLARE @SUBP_IDs VARCHAR(1000)
+      SELECT @SUBP_IDs = COALESCE(@SUBP_IDs+'</BR>','')+ CAST(SubProgram_Nm AS VARCHAR(1000))
       FROM mlm.fn_getlistofsubprogramforprogram(-1) WHERE SubProgram_Key IN ($global_subprg) AND Program_Key = $global_prg
       SELECT @SUBP_IDs AS SubProgram_Nm";
     $stmt_subprg = sqlsrv_query( $data_conn, $sql_subprg );
