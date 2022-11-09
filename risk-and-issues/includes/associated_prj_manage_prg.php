@@ -70,7 +70,6 @@ $row_risk_issue_regions  = sqlsrv_fetch_array($stmt_risk_issue_regions , SQLSRV_
 //echo $row_risk_issue_regions['Risk_Issue_Name']; 			
 //echo $sql_risk_issue_regions . "<BR><BR>";
 $regions = $row_risk_issue_regions['eps_regions'];
-
 ?>
 <!doctype html>
 <html>

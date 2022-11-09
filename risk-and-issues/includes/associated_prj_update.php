@@ -81,6 +81,8 @@ $opportunity = $row_risk_issue['Opportunity_Txt'];
 $assocProject = "";
 $actionPlan = $row_risk_issue['ActionPlanStatus_Cd'];
 $dateClosed = "";
+$changeLogReason = $row_risk_issue['Reason_Txt'];
+$changeLogName = $row_risk_issue['RequestAction_Nm'];
 
 if($_GET['ri_type'] == "Risk"){
   $gotoPage = "../project-risk-update.php";
