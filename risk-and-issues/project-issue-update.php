@@ -250,7 +250,7 @@ function toggle(source) {
 if($match == 0 && $clflag_count > 1) { 
   echo "<div class='alert alert-danger'>
         You can't update Change Log Information becuase you have a mismatch in Change Log Request.<br>
-        Please go back and make sure your selections are consistant.<br><br>
+        Please go back and make sure your selections are consistent.<br><br>
         <button onclick='history.back()' type='button' class='btn btn-primary'><span class='glyphicon glyphicon-step-backward'></span> Back </button>
         </div>";
   exit();

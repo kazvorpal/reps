@@ -64,6 +64,10 @@ $riskRealized =  $row_risk_issue['RiskRealized_Flg'];
 $department = $row_risk_issue['POC_Department'];
 $del_proj_select = $_POST['del_proj_select'];
 $POC_Nm = $row_risk_issue['POC_Nm'];
+$changeLogReason = $row_risk_issue['Reason_Txt'];
+$changeLogName = $row_risk_issue['RequestAction_Nm'];
+$changeLogActionKey = $row_risk_issue['RequestAction_Key'];
+
 
 $groupID = "";
 if (isset($_POST['groupID'])) {
@@ -243,6 +247,8 @@ function toggle(source) {
   <input name="delete" type="hidden" id="delete" value="1">
   <input name="Individual" type="hidden" id="Individual" value="">
   <input name="dispAssocProj" type="hidden" id="dispAssocProj" value="<?php echo str_replace(",", "<br>",$row_risk_issue_assoc_proj['Proj_Nm']) ?>">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="<?php echo $changeLogActionKey. ":" . $changeLogName ?>"> 
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason ?>">
 
   <div class="alert alert-danger">
   <div align="left">
