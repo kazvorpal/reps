@@ -803,7 +803,7 @@
       }
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
-      if (ri.RIType_Cd == "Issue") {
+      if (ri.RIType_Cd == "Issue" && (ri.RequestedAction_Nm != null || ri.Reason_Txt != "")) {
         for (field in changelog) {
           (function(test) {
               const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
