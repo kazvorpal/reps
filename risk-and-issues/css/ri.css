@@ -59,7 +59,7 @@
   .navbar-nav {float: none!important; margin-top: 7.5px;}
   .navbar-nav>li {float: none;}
   .navbar-nav>li>a { padding-top: 10px;padding-bottom: 10px;}
-  .collapse.in{display:block !important;}
+  /* .collapse.in{display:block !important;} */
   .navbar-nav .open .dropdown-menu { position: static; float: none; width: auto; margin-top: 0; background-color: transparent; border: 0; -webkit-box-shadow: none; box-shadow: none;}
 
 }
@@ -163,4 +163,7 @@ body {
 }
 .hilite {
   background-color: #fcc;
+}
+.collapse {
+  overflow: initial;
 }

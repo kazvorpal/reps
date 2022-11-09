@@ -421,7 +421,7 @@
               portfolioprograms.forEach(o => {
                 let comma = (programs != "") ? ", " : "";
                 if (o.RiskAndIssue_Key == program.RiskAndIssue_Key) {
-                  console.log(o.RiskAndIssue_Key)
+                  // console.log(o.RiskAndIssue_Key)
                   programs = programs + comma + o.Program_Nm;
                 }
               })
@@ -847,6 +847,11 @@
       document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
         
     }
+    const fixcollapse = () => {
+      document.querySelectorAll(".collapse").forEach(o => {
+        o.style.overflow = "initial";
+      })
+    }
 
     const init = (target) => {
         mode = target;
@@ -867,11 +872,24 @@
         makeheadline();
         setTimeout(colorboxschtuff, 2000);
         makemodebuttons(mode);
+        setTimeout(fixcollapse, 1000);
       }
       
       init(mode);
       setInterval(colorboxschtuff, 2000);
    
+    //   $("#collapseBandwidthManagement").on("hide.bs.collapse", () => {
+    //       document.getElementById("collapseBandwidthManagement").style.overflow= "initial";
+    //   })
+
+
+    // $(".collapse").on("hide.bs.collapse", () => {
+    //     document.getElementById("collapseBandwidthManagement").style.overflow= "initial";
+    // });
+    // $(".collapse").on("show.bs.collapse", () => {
+    //     document.getElementById("collapseBandwidthManagement").style.overflow= "initial";
+    // });
+
   </script>
   </body>
 </html>

@@ -416,7 +416,7 @@ function toggle(source) {
             <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southeast </label> </td>
             <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southwest </label></td>
             <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Virginia </label></td>
-            <td><label for="All"><input type="checkbox" name="Region[]" value="" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
+            <td><label for="All"><input type="checkbox" name="regionall" id="regionall" value="" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
           </tr>
         </table>
         </div>
@@ -858,6 +858,7 @@ const nameevent = () => {
 document.getElementsByName("Region[]").forEach((e) => {
   e.addEventListener("click", nameevent);
 });
+document.getElementById("regionall").addEventListener("click", nameevent);
 
 nameevent();
 
