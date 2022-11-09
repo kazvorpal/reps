@@ -336,6 +336,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
     <?php } ?>
 <?php if($lock == "no")  {?>  
 <?php if($status == 1){ ?>
+  <?php $eregions = str_replace("<br>", ",", $regionx)?>
     <a href="<?php echo $formType ?>?formName=<?php echo $formName?>&action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
         while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
         echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
@@ -352,7 +353,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
       %0D%0ARisk/Issue Name: <?php echo $name;?>
       %0D%0AType: <?php echo $RILevel . " " . $RIType;?>
       %0D%0AProgram: <?php echo $prog_name;?>
-      %0D%0ARegion(s): <?php echo $regionx;?>
+      %0D%0ARegion(s): <?php echo $eregions;?>
       %0D%0ADescriptor: <?php echo $descriptor;?>
       %0D%0ADescription: <?php echo $description;?>
       %0D%0ADriver: <?php echo $Driversx;?>

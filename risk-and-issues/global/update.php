@@ -80,7 +80,7 @@ if($RILevel_Cd == "Program") {
   $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
   //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
   // $row_prog['Program_Nm'];
-  //echo "<br>" . $sql_prog . "HERE";
+  //echo "<br>" . $sql_prog ;
 
   //PROGRAM FROM RIKEY (ARRAY)(0 Non Global or 1 Global )
   $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
@@ -292,7 +292,7 @@ function toggle(source) {
   <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $RIPortfolio_Key; ?>">
   
   <?php if($RILevel_Cd == "Portfolio") {?>
-    <!-- <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key; ?>"> -->
+    <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key; ?>">
     <input name="subprogram" type="hidden" id="subprogramx" value="<?php echo $SubProgramkeys; ?>">
   <?php } ?>
   
@@ -595,7 +595,7 @@ function toggle(source) {
                     class="form-control" 
                     id="date" 
                     value="2022-01-01"
-                    onChange="//forCastedX()"  
+                    onChange="forCastedX()"  
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -604,7 +604,7 @@ function toggle(source) {
                 <input type="checkbox" 
                     name="Unknown" 
                     id="Unknown" 
-                    onChange="//unKnownX()"
+                    onChange="unKnownX()"
                     <?php if(empty($ForecastedResolution_Dt)){ echo "checked";} ?>
                 >
                 <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -752,7 +752,7 @@ function toggle(source) {
 </div>
 <!--end container -->
   <!--<button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button> -->
-  <button type="submit" class="btn btn-primary">Review? <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
@@ -846,21 +846,6 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
-const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
-const nameevent = () => {
-  let locations = document.querySelectorAll('input[name="Region[]"]:checked').length;
-  document.getElementsByName("Region[]").forEach((e) => {
-      e.required = (!locations > 0);
-      console.log(e.required)
-      e.setCustomValidity((e.required) ? "You must select a region" : "");
-  });
-}
-document.getElementsByName("Region[]").forEach((e) => {
-  e.addEventListener("click", nameevent);
-});
-
-nameevent();
-
 </script>
 
 <script src="/risk-and-issues/includes/ri-functions.js"></script>

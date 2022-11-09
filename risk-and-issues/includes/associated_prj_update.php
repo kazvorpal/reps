@@ -52,7 +52,7 @@ $stmt_ri_driver_lst = sqlsrv_query( $data_conn, $sql_ri_driver_lst );
 
 //GET ASSOCIATED PROJECTS
 //$ri_name = $row_risk_issue['RI_Nm'];
-$sql_risk_issue_assoc_proj = "select distinct RiskAndIssue_Key,PROJECT_key, proj_nm, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',$status) where RI_Nm != '$name' ";
+$sql_risk_issue_assoc_proj = "select distinct PRJILog_Flg, RiskAndIssue_Key,PROJECT_key, proj_nm, Issue_Descriptor, RIDescription_Txt, RILevel_Cd, RIType_Cd, RI_Nm,ActionPlanStatus_Cd from RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$name',$status) where RI_Nm != '$name' ";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 // $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue_assoc_proj['RI_Nm]; 		
@@ -87,6 +87,10 @@ if($_GET['ri_type'] == "Risk"){
 } else {
   $gotoPage = "../project-issue-update.php";
 }
+
+$priLog = $row_risk_issue['PRJILog_Flg'];
+if($priLog == 1) { $priLogdisplay = "Yes";} else {$priLogdisplay = "No";}
+
 ?>
 <!doctype html>
 <html>
@@ -228,19 +232,31 @@ function toggle(source) {
     <th>Risk/Issues Name</th>
     <th>Project Name</th>
     <th>Action Plan</th>
+    <?php if($ri_level == "prj" && $ri_type == "Issue") { ?>
+      <th>Change Log</th>
+      <?php } ?>
   </tr>
   <tr>
     <td><input type="checkbox" name="dummy" id="dummy" value="" disabled checked></td> <!-- DUMMY CHECKBOX -->
     <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RI_Nm']; ?> [ORIGINATING R/I]</td>
     <td bgcolor="#d9edf7"><?php echo $row_risk_issue['proj_nm']; ?></td>
     <td bgcolor="#d9edf7"><?php echo $row_risk_issue['RIDescription_Txt']; ?></td>
+    <?php if($ri_level == "prj" && $ri_type == "Issue") { ?>
+      <td align="center" bgcolor="#d9edf7"><?php echo $priLogdisplay; ?></td>
+    <?php } ?>
   </tr>
-  <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { ?>
+  <?php while ($row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC)) { 
+    $priLogAssocProj = $row_risk_issue_assoc_proj['PRJILog_Flg'];
+    if($priLogAssocProj == 1) { $priLogAssocProj_display = "Yes";} else {$priLogAssocProj_display = "No";}
+  ?>
   <tr>
     <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_risk_issue_assoc_proj['RiskAndIssue_Key'];?>" checked></td>
     <td><?php echo $row_risk_issue_assoc_proj['RI_Nm'];?></td>
     <td><?php echo $row_risk_issue_assoc_proj['proj_nm'];?></td>
     <td><?php echo $row_risk_issue_assoc_proj['RIDescription_Txt'];?></td>
+    <?php if($ri_level == "prj" && $ri_type == "Issue") { ?>
+      <td align="center"><?php echo $priLogAssocProj_display;?></td>
+    <?php } ?>
   </tr>
   <?php } ?>
 </table>
