@@ -291,6 +291,7 @@ const excelrows = () => {
       };
   }
 }
+
 document.cbrun = false;
 const colorboxschtuff = () => {
   $(".miframe").colorbox({

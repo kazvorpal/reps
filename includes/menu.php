@@ -5,7 +5,7 @@
   // if(isset($_GET["tester"]) && $_GET['tester'] == "menu") {
     $menuposition = "position:fixed;z-index:100000";
     $headerposition = " fixedheader";
-    $spacer = "<div style='height:64px;'>&nbsp&</div>";
+    $spacer = "<div id='spacey' style='height:64px;'>&nbsp&</div>";
   // } else {
   //   $menuposition = $headerposition = $spacer = "";
   // }
@@ -97,6 +97,37 @@
   <!-- /.navbar-collapse -->  <!-- /.container-fluid --> 
 </nav>
 <script>
+  const findnamedclass = (target) => {
+    // This finds a class in a named style sheet, and returns it
+    // target should be an object with properties:
+    // target.sheetname = title you gave the style sheet in the <link rel> tag
+    // target.selector = the queryselector you want to find, probably a class name
+
+    for (o in document.styleSheets) {
+        if(document.styleSheets[o].title == target.sheetname) {
+            for (x in document.styleSheets[o].cssRules) {
+                if (document.styleSheets[o].cssRules[x].selectorText == target.selector) {
+                    return(document.styleSheets[o].cssRules[x]);
+                }
+            };
+            console.log("selector not found");
+            return false;
+        }
+    }
+    console.log("sheetname not found");
+    return false;
+  }
+
+  var menustats;
   setTimeout(()=>{window.scrollTo(0,0);}, 1000);
+  const menuhandler = () => {
+    menustats = window.getComputedStyle(document.getElementById("myDefaultNavbar1"));
+    mh = (menustats.height == "auto") ? "53px" : menustats.height;
+    // console.log(mh);
+    document.querySelector("#spacey").style.height = mh;
+    fh = findnamedclass({sheetname: "ri", selector: ".fixedheader"});
+    fh.style.top = mh;
+  }
+  setInterval(menuhandler, 1000);
 </script>
 <?= $spacer ?>

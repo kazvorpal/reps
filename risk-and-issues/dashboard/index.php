@@ -131,7 +131,7 @@
       
     </script>
 
-<link rel="stylesheet" href="../css/ri.css">
+<link rel="stylesheet" title="ri" href="../css/ri.css">
 <style type="text/css">
   </style>
   </head>
