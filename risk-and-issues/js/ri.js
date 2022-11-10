@@ -214,15 +214,19 @@ const processcells = () => {
       })
     }
   })
-  document.changelog.eachRow(function(row, rowNumber) {
-    if (row._number != 1) {
-      row.eachCell(function(cell, colNumber) {
-        // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
-        cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
-      })
-    }
-  })
+  if (mode == "project") {
+    document.changelog.eachRow(function(row, rowNumber) {
+      if (row._number != 1) {
+        row.eachCell(function(cell, colNumber) {
+          // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
+          cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
+        })
+      }
+    });
+  }
 }
+
+
 const excelrows = () => {
   document.worksheet.getRow(1).eachCell( function(cell, colNumber){
     if(cell.value){
@@ -248,42 +252,44 @@ const excelrows = () => {
       right: { style: borderstyle }
     };
   });
-  document.changelog.getRow(1).eachCell( function(cell, colNumber){
-        if(cell.value){
-          document.changelog.getRow(1).height = 42;
-          document.changelog.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: false, color: {argb: 'ff000000'}};
-          document.changelog.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
-          document.changelog.getRow(1).getCell(colNumber).fill = {
-                          type: 'pattern',
-                          pattern:'solid',
-                          bgColor: {argb: "FF3377AA"},
-                          fgColor: {argb: "FFddeeFF"},
-                          width: "256",
-                          height: "256"
-                        };
-        }
+  if (mode == "project") {
+    document.changelog.getRow(1).eachCell( function(cell, colNumber){
+          if(cell.value){
+            document.changelog.getRow(1).height = 42;
+            document.changelog.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: false, color: {argb: 'ff000000'}};
+            document.changelog.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
+            document.changelog.getRow(1).getCell(colNumber).fill = {
+                            type: 'pattern',
+                            pattern:'solid',
+                            bgColor: {argb: "FF3377AA"},
+                            fgColor: {argb: "FFddeeFF"},
+                            width: "256",
+                            height: "256"
+                          };
+          }
+        });
+        document.changelog.columns.forEach(column => {
+          column.border = {
+            top: { style: borderstyle },
+            left: { style: borderstyle },
+            bottom: { style: borderstyle },
+            right: { style: borderstyle }
+          };
       });
-      document.changelog.columns.forEach(column => {
-        column.border = {
-          top: { style: borderstyle },
-          left: { style: borderstyle },
-          bottom: { style: borderstyle },
-          right: { style: borderstyle }
-        };
-    });
-    document.changelog.insertRow(1, "TEST");
-    document.changelog.mergeCells('A1:M1');
-    document.changelog.getCell('A1').value = "Requestor Section";
-    document.changelog.getCell('A1').font = { name: 'helvetica', family: 4, size: 18, underline: 'none', bold: false, color: {argb: 'ff000000'}};;
-    document.changelog.getCell('A1').alignment = {horizontal: 'center', vertical: 'middle'};
-    document.changelog.getCell('A1').fill = {
-      type: 'pattern',
-      pattern:'solid',
-      bgColor: {argb: "FF3377AA"},
-      fgColor: {argb: "FF22dd66"},
-      width: "256",
-      height: "256"
-    };
+      document.changelog.insertRow(1, "TEST");
+      document.changelog.mergeCells('A1:M1');
+      document.changelog.getCell('A1').value = "Requestor Section";
+      document.changelog.getCell('A1').font = { name: 'helvetica', family: 4, size: 18, underline: 'none', bold: false, color: {argb: 'ff000000'}};;
+      document.changelog.getCell('A1').alignment = {horizontal: 'center', vertical: 'middle'};
+      document.changelog.getCell('A1').fill = {
+        type: 'pattern',
+        pattern:'solid',
+        bgColor: {argb: "FF3377AA"},
+        fgColor: {argb: "FF22dd66"},
+        width: "256",
+        height: "256"
+      };
+  }
 }
 document.cbrun = false;
 const colorboxschtuff = () => {
