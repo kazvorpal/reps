@@ -21,6 +21,13 @@
     ?>
     <script>
 
+    const sortby = (list, property) => {
+      rv = list.sort((a, b) => {
+        return ((a[property] > b[property]) ? 1 : ((a[property] < b[property]) ? -1 : 0));
+      });
+      return rv;
+    }
+
     const capitalize = (target) => {
         return target.charAt(0).toUpperCase() + target.slice(1);
     }
@@ -30,14 +37,22 @@
     document.title = capitalize(mode) + " R&I Dashboard";
     const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
       
-    const projectopen = <?= $projectout ?>;  
-    const projectclosed = <?= $closedout ?>;  
-    const projectfull = projectopen.concat(projectclosed);  
-    const programopen =<?= $programout ?>;
-    const programclosed =<?= $closedprogramout ?>;
-    const programfull = programopen.concat(programclosed);  
-    const portfolioopen =<?= $portfolioout ?>;
-    const portfolioclosed =<?= $closedportfolioout ?>;
+    let projectopen = <?= $projectout ?>;  
+    projectopen = sortby(projectopen, "RiskAndIssue_Key");
+    let projectclosed = <?= $closedout ?>;  
+    projectclosed = sortby(projectclosed, "RiskAndIssue_Key");
+    let projectfull = projectopen.concat(projectclosed);  
+    projectfull = sortby(projectfull, "RiskAndIssue_Key");
+    let programopen =<?= $programout ?>;
+    programopen = sortby(programopen, "RiskAndIssue_Key");
+    let programclosed =<?= $closedprogramout ?>;
+    programclosed = sortby(programclosed, "RiskAndIssue_Key");
+    let programfull = programopen.concat(programclosed);  
+    programfull = sortby(programfull, "RiskAndIssue_Key");
+    let portfolioopen =<?= $portfolioout ?>;
+    portfolioopen = sortby(portfolioopen, "RiskAndIssue_Key");
+    let portfolioclosed =<?= $closedportfolioout ?>;
+    portfolioclosed = sortby(portfolioclosed, "RiskAndIssue_Key");
     const mangerlist = <?= $mangerout ?>;
     const driverlist = <?= $driverout ?>;
     const locationlist = <?= $locationout ?>;
@@ -75,7 +90,8 @@
       return target;
     }
     
-    const portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(portfolioclosed));
+    let portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(portfolioclosed));
+    portfoliofull = sortby(portfoliofull, "RiskAndIssue_Key");
     // const portfolioclosed = portfoliofull = portfolioopen;
 
     const cleandata = (list) => {
