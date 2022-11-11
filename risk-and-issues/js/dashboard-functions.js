@@ -182,8 +182,16 @@ const excelrows = () => {
       };
   }
 }
+mode = (window.location.href.indexOf("program")>=0) ? "program" : 
+(window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
+alt = (mode == "project") ? "program" : "project";
+document.title = capitalize(mode) + " R&I Dashboard";
 
 const uniques = () => (mode == "program") 
   ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
   : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
   : getwholeuniques(d1, "RiskAndIssue_Key");
+
+
+
+  const modes = ["project", "program", "portfolio"];
