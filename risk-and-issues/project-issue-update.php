@@ -859,16 +859,16 @@ jQuery(function ($) {
 
 <script>
 function validateGrp() {
-  let things = document.querySelectorAll('.required_group')
+  let things = document.querySelectorAll('.required_group');
   let checked = 0;
   for (let thing of things) {
-    thing.checked && checked++
+    thing.checked && checked++;
   }
   if (checked) {
     things[things.length - 1].setCustomValidity("");
     document.getElementById('checkGroup').submit();
   } else {
-    things[things.length - 1].setCustomValidity("type="radio" name="Drivers");
+    things[things.length - 1].setCustomValidity("type='radio' name='Drivers'");
     things[things.length - 1].reportValidity();
   }
 }
