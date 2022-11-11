@@ -19,24 +19,15 @@
         include ("../includes/data-unified.php");
         include ("../includes/cdns.php");
     ?>
+    <script src="../js/universal-functions.js"></script>
+    <script src="../js/dashboard-functions.js"></script>
     <script>
 
-    const sortby = (list, property) => {
-      rv = list.sort((a, b) => {
-        return ((a[property] > b[property]) ? 1 : ((a[property] < b[property]) ? -1 : 0));
-      });
-      return rv;
-    }
-
-    const capitalize = (target) => {
-        return target.charAt(0).toUpperCase() + target.slice(1);
-    }
     mode = (window.location.href.indexOf("program")>=0) ? "program" : 
         (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
     alt = (mode == "project") ? "program" : "project";
     document.title = capitalize(mode) + " R&I Dashboard";
-    const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
-      
+
     let projectopen = <?= $projectout ?>;  
     projectopen = sortby(projectopen, "RiskAndIssue_Key");
     let projectclosed = <?= $closedout ?>;  
@@ -62,34 +53,6 @@
     const aplist = <?= $apout ?>;
     const loglist = <?= $logout ?>;
 
-    const ffpp = (target) => {
-      return portfolioprograms.filter(o => {
-            return o.RiskAndIssue_Key == target;
-          })
-    }
-    
-    const syncportfolio = (target) => {
-      for (key in target) {
-        if(!target[key].MLMProgram_Nm) {
-          let ps = "";
-          for (lokey in portfolioprograms) {
-            if (portfolioprograms[lokey].RiskAndIssue_Key == target[key].RiskAndIssue_Key) {
-              ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
-            }
-            target[key].MLMProgram_Nm = ps;
-          }
-          let pp = ffpp(target[key].RiskAndIssue_Key);
-          if (typeof pp[0] != 'undefined') {
-            target[key].MLMProgram_Nm = pp[0].Program_Nm;
-            target[key].MLMProgram_Key = pp[0].Program_Key;
-          } else if(!target[key].MLMProgram_Nm) {
-            delete target[key];
-          }
-        }
-      }
-      return target;
-    }
-    
     let portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(portfolioclosed));
     portfoliofull = sortby(portfoliofull, "RiskAndIssue_Key");
     // const portfolioclosed = portfoliofull = portfolioopen;
@@ -102,7 +65,6 @@
       })
       return(list);
     }
-
 
       var ridata, d1, d1, rifiltered;
       const setdata = () => {
@@ -135,12 +97,6 @@
           showPage();
           colorboxschtuff();
       });
-      const MM_setTextOfTextfield = (objId,x,newText) => { //v9.0
-        with (document){ if (getElementById){
-          var obj = getElementById(objId);} if (obj) obj.value = newText;
-        }
-      }
-      
       $(function () {
         $('[data-toggle="tooltip"]').tooltip()
       })
@@ -174,7 +130,28 @@
       const hiddenfields = ["AssociatedCR_Key", "MLMRegion_Key", "MLMProgramRI_Key", "TransferredPM_Flg", "Opportunity_Txt", "RiskProbability_Key", "POC_Nm", "POC_Department"];
       const modes = ["project", "program", "portfolio"];
       var projectfields, projectfieldnames, rifields, excelfields, centerfields;
-  </script>
+
+      const setlists = () => {
+  projectfields = (mode == "program") ? ["EPSProject_Nm", "Subprogram_nm", "EPSProject_Owner", "MLMRegion_Cd", "Market_Cd", "EPS_Location_Cd"]
+      : ["EPSProject_Nm", "EPS_Location_Cd", "EPSProject_Owner", "SubMLMProgram_Nm"];
+  projectfieldnames = (mode == "program") ? [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}]
+      : ["Project Name", "Facility", "Owner", "Subprogram"];
+
+  rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 4}, "MLMProgram_Nm": {name: "Program", width: 9}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 5}, "ImpactLevel_Nm": {name: "Impact Level", width: 5}, "RIDescription_Txt": {name: "Description", width: 17}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 17}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 6}, "ResponseStrategy_Cd": {name: "Response Strategy", width: 3}, "RIOpen_Hours": {name: "Open Duration", width: 5}, "RIActive_Flg": {name: "Status", width: 5}} 
+    : (mode == "portfolio") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 3}, "MLMProgram_Nm": {name: "Program", width: 9}, programcount: {name: "Program Count", width: 2}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 6}, "ImpactLevel_Nm": {name: "Impact", width: 6}, "RIDescription_Txt": {name: "Description", width: 18}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 18}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 5}, "ResponseStrategy_Nm": {name: "Response Strategy", width: 4}, "RIOpen_Hours": {name: "Open Duration", width: 6}, "RIActive_Flg": {name: "Status", width: 4}}
+    : {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "RIDescription_Txt": "Description", actionplandate: "Action Plan Date", age: "Age", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
+
+  excelfields = (mode == "program") ? {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "LastUpdateBy_Nm": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Assoc Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", age: "Age", actionplandate: "Action Plan Date", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"} 
+    : (mode == "portfolio") ? {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", programcount: "Program Count", "subprogram": "Subprogram", "LastUpdateBy_Nm": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "category": "Category", "projectcount": "Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", age: "Age", actionplandate: "Action Plan Date", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"}
+    : {"Fiscal_Year": "Fiscal Year", "RiskAndIssue_Key": "ID", "RI_Nm": "Name", "RIType_Cd": "Type", "RIIncrement_Num": "Group ID", groupcount: "Proj Group Count", grouptype: "Group Type", "EPSProject_Nm": "Project Name", "EPSRegion_Abb": "Region", "RIActive_Flg": "Status", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Sub-Program", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "LastUpdateBy_Nm": "Owner", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "TransferredPM_Flg": "Transferred to PDM", "AssociatedCR_Key": "CR", "AssociatedCR_Key": "CR", "RiskRealized_Flg": "Risk Realized", age: "Age", actionplandate: "Action Plan Date", "ActionPlanStatus_Cd": "Action Plan", "RIOpen_Hours": "Duration", "Created_Ts": "Creation Date", "quartercreated": "Quarter Created", "monthcreated": "Month Created", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "ForecastedResolution_Dt": "Resolution Date", "RIClosed_Dt": "Date Closed", "quarterclosed": "Quarter Closed", "monthclosed": "Month Closed"};
+  centerfield = ["Fiscal_Year", "ID", "regioncount", "projectcount", "RIIncrement_Num"];
+  
+  changelog = {"changelogdate": "Change Log Requested Date", "RiskAndIssue_Key": "Risk ID", "RI_Nm": "Risk Name", "EPSProject_Nm": "Project Name", "EPSProgram_Nm": "Program", "EPSRegion_Abb": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", LastUpdateBy_Nm: "Requestor", RequestAction_Nm: "Requested Action", Reason_Txt: "Reason", programmanager: "Program Manager"};
+  
+}
+
+
+</script>
   <?php include ("../../includes/menu.php");?>
   <section>
     <div class="row" align="center">
@@ -264,15 +241,6 @@
         let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ` <span title="Project Count">Portfolio: ${portfoliocount}</span>`
         document.getElementById("banner" + safename).innerHTML += p + ' )';
     }  
-
-    function listri(target, type) {
-    
-        // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-        pre = rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target); // list of all data with the right program name and risk or issue
-        post = pre.filter(filterfunction); // run it through the filters
-        uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
-        return uni;
-    }
 
     const makebanner = (safename) => {
 
@@ -583,20 +551,6 @@
         }
         return trri;
     }  
-
-    const toggler = (target, o) => {
-        // Toggles visibility of projects when a given program is clicked
-        if (target != null) {
-        if (target.className.indexOf("show") != -1) {
-            target.className = target.className.replace("show", "");
-            // o.children[0].innerHTML = "►";
-        } else { 
-            target.className += "show";
-            // o.children[0].innerHTML = "▼";
-        }
-        }
-    }
-  
 
     const makeheader = (name, type) => {
       
