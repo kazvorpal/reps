@@ -554,7 +554,7 @@ function toggle(source) {
         <tr>
           <td colspan="3" align="right" valign="middle">
             <button type="button" class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
-            <button type="submit" class="btn btn-primary" onmouseover="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+            <button type="submit" name="submit" class="btn btn-primary" onmouseover="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">Review <span class="glyphicon glyphicon-step-forward"></span></button>
           </td>
         </tr>
       </tbody>
@@ -693,11 +693,13 @@ document.getElementById('date').value = today;
 </script>
 
 <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  if(document.getElementById("indy")) {
+    document.getElementById("indy").addEventListener("change", function(){
+      const v = this.value.split(" : ");
+      this.value = v[0];
+      document.getElementById("InternalExternal").value = v[1];
+    });
+  }
 </script>
 <script>
 $('.subscriber :checkbox').change(function () {
@@ -709,6 +711,7 @@ $('.subscriber :checkbox').change(function () {
 </script>  
 <script type="text/javascript">
 jQuery(document).ready(function($) {
+  if (document.getElementById("multiselect")) {
     $('#multiselect').multiselect();
     preselect = {};
     document.getElementById("multiselect").addEventListener('click', function(event) {
@@ -734,6 +737,7 @@ jQuery(document).ready(function($) {
             to.innerHTML = postselect;
         }
     });
+  }
 });
 </script>
 <script language="javascript">

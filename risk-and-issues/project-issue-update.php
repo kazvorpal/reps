@@ -682,7 +682,7 @@ if($match == 0) {
         <tr>
           <td colspan="3">
             <div class="box <?php echo $disble_it;?>">
-              <input type="text" name="assCRID" class="form-control" value="<?php echo $assCRID; ?>">
+              <input type="text" name="assCRID" id="assCRID" class="form-control" value="<?php echo $assCRID; ?>">
             </div>
           </td>
         </tr>
@@ -767,7 +767,7 @@ if($match == 0) {
     </table>
     <div align="right">
     <button type="button" class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
-    <button type="submit" class="btn btn-primary" onclick="return validateForm()">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
+    <button type="submit" name="submit" class="btn btn-primary" onclick="return validateForm()">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
     </div>
   </form>
 </div>
@@ -775,63 +775,79 @@ if($match == 0) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
+  if (document.getElementById("myDIV")) {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+      x.style.display = "none";
+    } else {
+      x.style.display = "none";
+    }
   }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
+  if (document.getElementById("myDIV2")) {
+    var y = document.getElementById("myDIV2");
+    if (y.style.display === "none") {
+      y.style.display = "block";
+    } else {
+      y.style.display = "block";
+    }
   }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
+  if (document.getElementById("myIssue")) {
+    var z = document.getElementById("myIssue");
+    if (z.style.display === "none") {
+      z.style.display = "none";
+    } else {
+      z.style.display = "none";
+    }
   }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
+  if (document.getElementById("myRisk")) {
+    var w = document.getElementById("myRisk");
+    if (w.style.display === "none") {
+      w.style.display = "block";
+    } else {
+      w.style.display = "block";
+    }
   }
 
 }
 
 function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
+  if (document.getElementById("myDIV")) {
+    var x = document.getElementById("myDIV");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "block";
+    }
   }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
+  if (document.getElementById("myDIV2")) {
+    var y = document.getElementById("myDIV2");
+    if (y.style.display === "none") {
+      y.style.display = "none";
+    } else {
+      y.style.display = "none";
+    }
   }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
+  if (document.getElementById("myIssue")) {
+    var z = document.getElementById("myIssue");
+    if (z.style.display === "none") {
+      z.style.display = "block";
+    } else {
+      z.style.display = "block";
+    }
   }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
+  if (document.getElementById("myRisk")) {
+    var w = document.getElementById("myRisk");
+    if (w.style.display === "none") {
+      w.style.display = "none";
+    } else {
+      w.style.display = "none";
+    }
   }
 
 }

@@ -126,7 +126,9 @@
     // console.log(mh);
     document.querySelector("#spacey").style.height = mh;
     fh = findnamedclass({sheetname: "ri", selector: ".fixedheader"});
-    fh.style.top = mh;
+    if (fh) {
+      fh.style.top = mh;
+    }
   }
   setInterval(menuhandler, 1000);
 </script>
