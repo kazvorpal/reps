@@ -239,6 +239,8 @@ function toggle(source) {
   <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
   <input name="Individual" type="hidden" id="Individual" value="">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>

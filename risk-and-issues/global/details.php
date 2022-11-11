@@ -45,8 +45,8 @@ $row_glb_drv   = sqlsrv_fetch_array( $stmt_glb_drv , SQLSRV_FETCH_ASSOC);
 //echo $sql_glb_drv;
 
 //PROGRAM FROM RIKEY
-$sql_rikey_prg = "DECLARE @PROG_NMs VARCHAR(100)
-    SELECT @PROG_NMs = COALESCE(@PROG_NMs+'<br>','')+ CAST(Program_Nm AS VARCHAR(100))
+$sql_rikey_prg = "DECLARE @PROG_NMs VARCHAR(1000)
+    SELECT @PROG_NMs = COALESCE(@PROG_NMs+'<br>','')+ CAST(Program_Nm AS VARCHAR(1000))
     FROM [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] ($ri_id)
     SELECT @PROG_NMs AS Program_Nm";
 $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
@@ -54,16 +54,26 @@ $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
 //echo $sql_glb_drv;
 
 //SUBPROGRAM FROM RIKEY
-$sql_rikey_subprg = "DECLARE @SPROG_NMs VARCHAR(100)
-    SELECT @SPROG_NMs = COALESCE(@SPROG_NMs+'<br>','')+ CAST(SubProgram_Nm AS VARCHAR(100))
+$sql_rikey_subprg = "DECLARE @SPROG_NMs VARCHAR(1000)
+    SELECT @SPROG_NMs = COALESCE(@SPROG_NMs+'<br>','')+ CAST(SubProgram_Nm AS VARCHAR(1000))
     FROM RI_Mgt.fn_GetListSubProgramsforRIKey($ri_id,$status)
     SELECT @SPROG_NMs AS SubProgram_Nm";
 $stmt_rikey_subprg = sqlsrv_query( $data_conn, $sql_rikey_subprg); 
 $row_rikey_subprg = sqlsrv_fetch_array( $stmt_rikey_subprg , SQLSRV_FETCH_ASSOC);
 $subprograms = $row_rikey_subprg['SubProgram_Nm'];
 
+//REGIONS FOR GLOBAL PROGRAM R/I
+$sql_regions = "DECLARE @EPS_IDs VARCHAR(1000)
+    SELECT @EPS_IDs = COALESCE(@EPS_IDs+'<br>','')+ CAST(MLMRegion_Cd AS VARCHAR(1000))
+    FROM RI_MGT.fn_GetListOfAllRiskAndIssue(1) where RiskAndIssue_Key = $ri_id
+    SELECT @EPS_IDs AS MLMRegion_Cd";
+$stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
+$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
+echo $sql_regions;
+//echo $row_regions['MLMRegion_Cd'];
 
 //DECLARE
+$global = $row_glb_prog['Global_Flg'];
 $ri_id = $row_glb_prog['RiskAndIssue_Key'];
 $name = trim($row_glb_prog['RI_Nm']);
 $RILevel = $row_glb_prog['RILevel_Cd'];
@@ -88,7 +98,7 @@ if($RILevel == "Program") {
 $project_nm = $row_glb_prog['EPSProject_Nm'];
 $descriptor  = $row_glb_prog['ScopeDescriptor_Txt'];
 $description = $row_glb_prog['RIDescription_Txt'];
-$regionx = "";
+$regionx = $row_regions['MLMRegion_Cd'];;
 $Driversx = $row_glb_drv['Driver_Nm'];
 $impactArea2 = $row_glb_prog['ImpactArea_Nm'];
 $impactLevel2 = $row_glb_prog['ImpactLevel_Nm'];
@@ -229,10 +239,12 @@ if($unframe == "0") { //NO COLORBOX
       <td>Description</td>
       <td><?php echo $description; ?></td>
     </tr>
-    <!--<tr>
+<?php if($RILevel == "Program" && $global == 1){ ?>
+    <tr>
       <td>Region</td>
-      <td><?php //echo $regionx; ?></td>
-    </tr> -->
+      <td><?php echo $regionx; ?></td>
+    </tr>
+<?php } ?>
     <tr>
       <td>Drivers</td>
       <td>
@@ -341,6 +353,7 @@ if($unframe == "0") { //NO COLORBOX
 
         <?php if($portUser == 1){?>  
             <?php// if($status == 1){ ?>
+            <?php $eregions = str_replace("<br>", ",", $regionx)?>
             <a href="../global/update.php?&id=<?php echo $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
@@ -348,7 +361,7 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AName: <?php echo $name;?>
             %0D%0AType: <?php echo $RILevel . " " . $RIType?>
             %0D%0AProgram: <?php echo $programs;?>
-            %0D%0ARegion(s): <?php echo $regionx;?>
+            %0D%0ARegion(s): <?php echo $eregions;?>
             %0D%0ADescriptor: <?php echo $descriptor ?>
             %0D%0ADescription: <?php echo $description?>
             %0D%0ADriver: <?php echo $Driversx?>

@@ -266,6 +266,8 @@ function toggle(source) {
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="project_nm" type="hidden" id="project_nm" value="<?php echo $project_nm?>">
   <input name="Individual" type="hidden" id="Individual" value="">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
 
   <?php if(!empty($add_proj_select)) { ?>
   <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>

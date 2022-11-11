@@ -326,7 +326,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
       <td><?php echo $actionPlan; ?>
     </td>
     </tr>
-<?php if(!empty($_POST['changeLogAction'])) { ?>
+<?php if($PRJILog_Flg == 1) { ?>
     <tr>
       <td>Change Log Action</td>
       <td><?php echo $changeLogAction; ?></td>

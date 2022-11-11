@@ -83,8 +83,8 @@ if($RILevel_Cd == "Program") {
   //echo "<br>" . $sql_prog ;
 
   //PROGRAM FROM RIKEY (ARRAY)(0 Non Global or 1 Global )
-  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
-  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
+  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(1000)
+  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(1000))
   FROM [RI_MGT].[fn_GetListOfProgramsForRI_Key] ($ri_id, 1) 
   SELECT @PROG_IDs AS Program_Key";
   $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
@@ -102,8 +102,8 @@ if($RILevel_Cd == "Program") {
   //echo "<br>" . $sql_prog . "NO";
 
   //PROGRAM FROM PORTFOLIO RIKEY (ARRAY)(0 Non Global or 1 Global )
-  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(100)
-  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(100))
+  $sql_rikey_prg = "DECLARE @PROG_IDs VARCHAR(1000)
+  SELECT @PROG_IDs = COALESCE(@PROG_IDs+',','')+ CAST(Program_Key AS VARCHAR(1000))
   FROM [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] ($ri_id) 
   SELECT @PROG_IDs AS Program_Key";
   $stmt_rikey_prg = sqlsrv_query( $data_conn, $sql_rikey_prg); 
@@ -120,8 +120,8 @@ $stmt_subprog = sqlsrv_query( $data_conn, $sql_subprog );
 //echo "<br>" . $sql_subprog;
 
 //SUBPROGRAM FROM RIKEY
-$sql_rikey_subprog = "DECLARE @SUB_IDs VARCHAR(100)
-    SELECT @SUB_IDs = COALESCE(@SUB_IDs+',','')+ CAST(SubProgram_Key AS VARCHAR(100))
+$sql_rikey_subprog = "DECLARE @SUB_IDs VARCHAR(1000)
+    SELECT @SUB_IDs = COALESCE(@SUB_IDs+',','')+ CAST(SubProgram_Key AS VARCHAR(1000))
     FROM [RI_MGT].[fn_GetListSubProgramsforRIKey] ($ri_id,1)
     SELECT @SUB_IDs AS SubProgram_Key";
 $stmt_rikey_subprog = sqlsrv_query( $data_conn, $sql_rikey_subprog ); 
@@ -138,8 +138,8 @@ $row_driver = sqlsrv_fetch_array( $stmt_driver , SQLSRV_FETCH_ASSOC);
 $Driver_Key = $row_driver['Driver_Key'];
 
 //REGIONS
-$sql_regions = "DECLARE @EPS_IDs VARCHAR(100)
-    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(MLMRegion_Key AS VARCHAR(100))
+$sql_regions = "DECLARE @EPS_IDs VARCHAR(1000)
+    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(MLMRegion_Key AS VARCHAR(1000))
     FROM RI_MGT.fn_GetListOfAllRiskAndIssue(1) where RiskAndIssue_Key = $ri_id
     SELECT @EPS_IDs AS MLMRegion_Key";
 $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
@@ -290,6 +290,8 @@ function toggle(source) {
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $Fiscal_Year; ?>">
   <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $RIPortfolio_Key; ?>">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
   
   <?php if($RILevel_Cd == "Portfolio") {?>
     <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key; ?>">
@@ -416,7 +418,7 @@ function toggle(source) {
             <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southeast </label> </td>
             <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southwest </label></td>
             <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Virginia </label></td>
-            <td><label for="All"><input type="checkbox" name="regionall" id="regionall" value="" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
+            <td><label for="All"><input type="checkbox" name="Region[]" value="" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
           </tr>
         </table>
         </div>
@@ -846,22 +848,6 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
-const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
-const nameevent = () => {
-  let locations = document.querySelectorAll('input[name="Region[]"]:checked').length;
-  document.getElementsByName("Region[]").forEach((e) => {
-      e.required = (!locations > 0);
-      console.log(e.required)
-      e.setCustomValidity((e.required) ? "You must select a region" : "");
-  });
-}
-document.getElementsByName("Region[]").forEach((e) => {
-  e.addEventListener("click", nameevent);
-});
-document.getElementById("regionall").addEventListener("click", nameevent);
-
-nameevent();
-
 </script>
 
 <script src="/risk-and-issues/includes/ri-functions.js"></script>
