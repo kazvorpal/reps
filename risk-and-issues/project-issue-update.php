@@ -114,22 +114,31 @@ $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_pr
 // echo "<br>" . $sql_risk_issue_assoc_proj;
 
 //COMPARE CHANGE LOG FLAGS
-$sql_clflag = "DECLARE @CLFLG VARCHAR(100)
-    SELECT @CLFLG = COALESCE(@CLFLG+',','')+ CAST(PRJILog_Flg AS VARCHAR(100))
-    from  [RI_MGT].[fn_GetListOfAllRiskAndIssue] (1) 
-    WHERE RiskAndIssue_Key IN ($assocProject)
-    SELECT @CLFLG AS PRJILog_Flg";
+$sql_clflag = "SELECT count(distinct PRJILog_Flg) AS  PRJILog_Flg
+              from [RI_MGT].[fn_GetListOfAllRiskAndIssue] (1) 
+              WHERE RiskAndIssue_Key IN ($assocProject) ";
 $stmt_clflag = sqlsrv_query( $data_conn, $sql_clflag );
 $row_clflag = sqlsrv_fetch_array($stmt_clflag, SQLSRV_FETCH_ASSOC);
 
   //check if array is consistant
-  $clflag_array = explode(",", $row_clflag['PRJILog_Flg']);
-  if(array_sum($clflag_array) == count($clflag_array)) {
-    $match = 1;
+  $clflag_array = $row_clflag['PRJILog_Flg'];
+  if($clflag_array == 1) { //this is incorrect cannot us array_sum //if greater than one then fail
+    $match = 1;  //pass
   } else {
-    $match = 0;
+    $match = 0; //fail
   }
-  $clflag_count = count($clflag_array);
+
+//echo $sql_clflag . "<br>";
+//echo $match;
+//  $clflag_count = count($clflag_array);
+
+  //echo "does it match:" .$match . "<br>";
+  //echo "the count:" . $clflag_count . "<br>";
+  //echo "flag for each: " . $row_clflag['PRJILog_Flg'] . "<br>";
+  //print_r( $clflag_array) . "<br>";
+
+  //echo $sql_clflag;
+  
 ?>
 <!doctype html>
 <html lang="en">
@@ -247,9 +256,9 @@ function toggle(source) {
 </div>
 
 <?php
-if($match == 0 && $clflag_count > 1) { 
+if($match == 0) { 
   echo "<div class='alert alert-danger'>
-        You can't update Change Log Information becuase you have a mismatch in Change Log Request.<br>
+        You can't update Change Log Information because you have a mismatch in Change Log Request.<br>
         Please go back and make sure your selections are consistent.<br><br>
         <button onclick='history.back()' type='button' class='btn btn-primary'><span class='glyphicon glyphicon-step-backward'></span> Back </button>
         </div>";

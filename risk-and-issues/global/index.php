@@ -238,6 +238,8 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
   <input name="global" type="hidden" id="global" value="1">
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
   
 
   <div class="container">

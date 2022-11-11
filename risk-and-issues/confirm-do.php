@@ -105,14 +105,17 @@ $project_nm ="";
     $department = 1; //Temporary 8.17.22
 
     //CHANGE LOG REQUEST INFO
-    $PRJILog_Flg = $_POST['PRJILog_Flg'];
-    $changeLogActionVal = NULL;
+    $PRJILog_Flg = $_POST['PRJILog_Flg']; //
 
+    $changeLogActionVal = NULL;  //THE KEY
     if(!empty($_POST['changeLogActionVal'])) {
         $changeLogActionVal = $_POST['changeLogActionVal'];
     }
-    
+
+    $changeLogReason = "";
+    if(!empty($_POST['changeLogReason'])) {    
     $changeLogReason = $_POST['changeLogReason'];
+    }
 
     //print_r($_POST);
     //exit();

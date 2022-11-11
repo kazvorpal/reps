@@ -265,7 +265,7 @@ include ("../sql/update-time.php");
 <?php if(!empty($_POST['changeLogAction'])) { ?>
     <tr>
       <td>Change Log Action</td>
-      <td><?php echo $changeLogAction; ?></td>
+      <td><?php if(!empty($changeLogAction)) {echo $changeLogAction;} ?></td>
     </tr>
     <tr>
       <td>Change Log Reason</td>

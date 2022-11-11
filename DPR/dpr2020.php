@@ -1,7 +1,7 @@
 <table width="100%" border="0" cellpadding="5" cellspacing="0" class="table-striped table-bordered table-hover">
   <thead>
-    <tr align="center" valign="middle" style="color:#FFFFFF; background-color:#00aaf5; font-size:10px; padding:2px">
-      <th class="sticky" ><strong>PROGRAM</strong></th>
+    <tr align="center" valign="middle" style="color:#FFFFFF; background-color:#337AB7; font-size:10px; padding:2px">
+      <th class="sticky"><strong>PROGRAM</strong></th>
       <th class="sticky">SUBPROGRAM</th>
       <th class="sticky"><strong>PROJECT NAME</strong></th>
       <th class="sticky"><strong>OWNER</strong></th>

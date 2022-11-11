@@ -433,6 +433,8 @@ if($formaction == "update") {
   <!--<input type="hidden" name="riskRealized" value="1" id="riskRealized" value="0">-->
   <!--<input name="CreatedFrom" type="hidden" id="Created From" value="<?php //echo $assCRID;?>"-->
   <input name="Individual" type="hidden" id="Individual" value="">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
 
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">

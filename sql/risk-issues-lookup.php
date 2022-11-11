@@ -71,17 +71,19 @@ $subprogram = implode(",",$_POST['subprogram']);
 }
 
 //CHANGE LOG VALUES
-if(!empty( $_POST['changeLogAction'])){
-  $changeLogAct = explode(":", $_POST['changeLogAction']);
+$changeLogAct = explode(":", $_POST['changeLogAction']);
+
+if($_POST['changeLogAction'] != "" && $_POST['changeLogReason'] != ""){
   $changeLogActionVal = $changeLogAct[0];
   $changeLogAction = $changeLogAct[1];
   $changeLogReason = $_POST['changeLogReason'];
   $PRJILog_Flg = 1;
 } else {
-  $changeLogActionVal = "";
-  $changeLogReason = "";
-  $PRJILog_Flg = 0;
+  $changeLogActionVal = $changeLogAct[0]; //key
+  $changeLogReason = $_POST['changeLogReason']; // reason
+  $PRJILog_Flg = 0; //flag
 }
+//echo $PRJILog_Flg . "<br>";
 
 //GLOBAL SUBPROGRAMS
 if($global == 1 && $riLevel != "Portfolio") {

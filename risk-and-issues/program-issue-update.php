@@ -375,6 +375,8 @@ if($formaction == "update") {
   <input name="CreatedFrom" type="hidden" class="form-control" id="Created From" value="">
   <input name="formaction" type="hidden" id="formaction" value="<?php echo $formaction ?>">
   <input name="Individual" type="hidden" id="Individual" value="">
+  <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
+  <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
 
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">
