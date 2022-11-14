@@ -360,6 +360,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 
 <?php 
 $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
+$act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
 ?>
 
 <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
@@ -378,7 +379,7 @@ $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : 
       %0D%0ANotify Portfolio Team: <?php echo $raidLog;?>
       %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ;?>
       %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject);?>
-      %0D%0AAction Plan: <?php echo $actionPlan;?>
+      %0D%0AAction Plan: <?php echo $act;?>
       %0D%0ADate Closed: <?php echo $dateClosed;?>
       %0D%0ALink: <?php echo $link;?>" 
       class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
