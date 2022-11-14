@@ -321,6 +321,12 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
         <?php if($access=="true"){?>  
           <?php if($status == 1){ ?>
             <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo urlencode($name)?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+
+            <?php 
+$desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
+$act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
+?>
+
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
             %0D%0AID: <?php echo $ri_id;?>
@@ -328,14 +334,14 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
             %0D%0AType: <?php echo $RILevel . " " . $RIType?>
             %0D%0AProject: <?php echo $project_nm?>
             %0D%0ADescriptor: <?php echo $descriptor ?>
-            %0D%0ADescription: <?php echo $description?>
+            %0D%0ADescription: <?php echo $desc?>
             %0D%0ADriver: <?php echo $Driversx?>
             %0D%0AImpact Area: <?php echo $impactArea2?>
             %0D%0AImpact Level: <?php echo $impactLevel2?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject)?>
-            %0D%0AAction Plan: <?php echo $actionPlan?>
+            %0D%0AAction Plan: <?php echo $act?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?php echo $link;?>"
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>

@@ -257,9 +257,8 @@
         $mangerlist[$row["Fiscal_Year"]."-".$row["MLMProgram_Key"]] = $mangerrows;
       }
     }
-
+    
     $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(1)";
-    // print '<!--' . $sqlstr . "<br/> -->";
     $driverquery = sqlsrv_query($data_conn, $sqlstr);
     if($driverquery === false) {
       if(($error = sqlsrv_errors()) != null) {
@@ -277,7 +276,7 @@
         // $driverrows[] = array_map("fixutf8", $driverrow);
       }
     }
-
+      // Get Drivers
     $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(0)";
     // print '<!--' . $sqlstr . "<br/> -->";
     $driverquery = sqlsrv_query($data_conn, $sqlstr);
@@ -293,10 +292,10 @@
       $count = 1;
       while($driverrow = sqlsrv_fetch_array($driverquery, SQLSRV_FETCH_ASSOC)) {
         $driverrows[$driverrow["RiskAndIssueLog_Key"]] = array_map("fixutf8", $driverrow);
-        // $driverrows[] = array_map("fixutf8", $driverrow);
       }
     }
 
+    // Action Plan Data
     $sqlap = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'ACTNPlan'
     Order By RiskandIssue_Key DESC";
@@ -319,7 +318,7 @@
         $aprows[$aprow["RiskAndIssue_Key"]] = array_map("fixutf8", $aprow);
       }
     }
-  
+      // Change Log Data
     $sqllog = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'PRJILog'
     Order By RiskandIssue_Key DESC";
@@ -460,7 +459,7 @@ let projectopen = <?= $projectout ?>;
     : {"Fiscal_Year": "Fiscal Year", "RiskAndIssue_Key": "ID", "RI_Nm": "Name", "RIType_Cd": "Type", "RIIncrement_Num": "Group ID", groupcount: "Proj Group Count", grouptype: "Group Type", "EPSProject_Nm": "Project Name", "EPSRegion_Abb": "Region", "RIActive_Flg": "Status", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Sub-Program", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "LastUpdateBy_Nm": "Owner", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", "TransferredPM_Flg": "Transferred to PDM", "AssociatedCR_Key": "CR", "AssociatedCR_Key": "CR", "RiskRealized_Flg": "Risk Realized", age: "Age", actionplandate: "Action Plan Date", "ActionPlanStatus_Cd": "Action Plan", "RIOpen_Hours": "Duration", "Created_Ts": "Creation Date", "quartercreated": "Quarter Created", "monthcreated": "Month Created", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "ForecastedResolution_Dt": "Resolution Date", "RIClosed_Dt": "Date Closed", "quarterclosed": "Quarter Closed", "monthclosed": "Month Closed"};
   centerfield = ["Fiscal_Year", "ID", "regioncount", "projectcount", "RIIncrement_Num"];
   
-  changelog = {"changelogdate": "Change Log Requested Date", "RiskAndIssue_Key": "Risk ID", "RI_Nm": "Risk Name", "EPSProject_Nm": "Project Name", "EPSProgram_Nm": "Program", "EPSRegion_Abb": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", LastUpdateBy_Nm: "Requestor", RequestAction_Nm: "Requested Action", Reason_Txt: "Reason", programmanager: "Program Manager"};
+  changelog = {"changelogdate": "Change Log Requested Date", "RiskAndIssue_Key": "Risk ID", "RI_Nm": "Risk Name", "EPSProject_Nm": "Project Name", "EPSProgram_Nm": "Program", "EPSRegion_Abb": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", LastUpdateBy_Nm: "Requestor", RequestAction_Nm: "Requested Action", Reason_Txt: "Reason", EPSProgramManager: "Program Manager"};
   
 }
 

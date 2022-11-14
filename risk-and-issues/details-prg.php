@@ -358,7 +358,11 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
         }
         ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
 
-    <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
+<?php 
+$desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
+?>
+
+<a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
       %0D%0AID: <?php echo $ri_id;?>
       %0D%0ARisk/Issue Name: <?php echo $name;?>
@@ -366,7 +370,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
       %0D%0AProgram: <?php echo $prog_name;?>
       %0D%0ARegion(s): <?php echo $eregions;?>
       %0D%0ADescriptor: <?php echo $descriptor;?>
-      %0D%0ADescription: <?php echo $description;?>
+      %0D%0ADescription: <?php echo $desc;?>
       %0D%0ADriver: <?php echo $Driversx;?>
       %0D%0AImpact Area: <?php echo $impactArea2;?>
       %0D%0AImpact Level: <?php echo $impactLevel2;?>
