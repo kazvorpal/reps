@@ -69,7 +69,7 @@ $sql_regions = "DECLARE @EPS_IDs VARCHAR(1000)
     SELECT @EPS_IDs AS MLMRegion_Cd";
 $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
 $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
-echo $sql_regions;
+//echo $sql_regions;
 //echo $row_regions['MLMRegion_Cd'];
 
 //DECLARE
