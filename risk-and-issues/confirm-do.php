@@ -407,7 +407,7 @@ if($global == 1) { include ("../includes/menu.php"); }
 
     } else {
         echo '<br><br><br><h2 align="center">Risk and Issue Error</h2><div align="center">' . $SPCode . ' = ' . $SPMessage . '<br>BatchID = ' . $SPBatch_Id . '</div><br><div align="center">
-        <a href="javascript:history.back()"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Edit </a>
+        <a href="javascript:history.go(-2)"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Edit </a>
         </div>' ;
     }
 
