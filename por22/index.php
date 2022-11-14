@@ -29,7 +29,7 @@ function MM_goToURL() { //v3.0
       <div align="center"><h2>Plan of Record 2022</h2></div>
       <div align="center">
 <?php // PORDate(); ?>
-POR Version 10/31/2022 (Includes approved CR's as of 10/28/2022) 
+POR Version 11/14/2022 (Includes approved CR's as of 11/11/2022) 
 </div>
 
       <!-- Master Container -->
