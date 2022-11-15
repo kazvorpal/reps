@@ -291,7 +291,8 @@
             if (prog != undefined) {
               for(r of prog) {
                 // console.log((program.Global_Flg)?true:false)
-                list += r.SubProgram_Nm;
+                let comma = (list.length > 0) ? ", " : "";
+                list += comma + r.SubProgram_Nm ;
               } 
             } else {
               // console.log("sublist[" + program.RiskAndIssue_Key+ "]");
