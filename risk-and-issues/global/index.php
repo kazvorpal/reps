@@ -956,12 +956,15 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   }
 
   const disableevent = (o) => {
-    if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false;
+    
+    // o is the object, with properties:
+    // o.t = type (the id or name of the element to be clicked on)
+    // o.v = the (v)alue that will cause something to be disabled
+    // o.d = a, [array] of ids that will be disabled
+    // o.e = the mode where the disabled thing is allowed
+
+    if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false; // if you can't find the element to be clicked
     const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
-    if (o.v == "Issue") {
-      console.log("Yes")
-      document.getElementById("riskprobability").style.display = (disable) ? "none" : "block";
-    }
     o.d.forEach(field => {
       console.log(field)
       console.log(document.getElementsByName(field).length)
@@ -977,6 +980,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         })
       }
     })
+    if (o.v == "Issue") {
+      console.log("Yes")
+      document.getElementById("riskprobability").style.display = (disable) ? "none" : "block";
+      document.getElementById("RiskRelized_1").checked = (!disable);
+    }
     if (o.t == "RILevel" && o.v == "Program") {
       setTimeout(() => document.getElementById("raid_0").click());
     }

@@ -684,16 +684,16 @@
       for(field in rifields) {
           (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            if (test == "actionplandate") {
-              // console.log(Date.parse(texter));
-              then = new Date(texter);
-              now = new Date();
-              console.log(Math.abs((then.getTime()-now.getTime()))/(24*60*60*1000));
+            if (test == "age") {
+              console.log(texter.replace(/\D/g, ''));
             }
             // let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < (new Date()+1)) ? " hilite" : "";
             let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
-                            || (["actionplandate"] == test && (Date.parse(texter)+86400000+2592000000) < Date.parse(new Date()))) ? " hilite" : 
-                            (["actionplandate"] == test && (Date.parse(texter)+86400000+1296000000) < Date.parse(new Date())) ? " blulite" : "";
+                            || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
+                            ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
+            // let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
+            //                 || (["actionplandate"] == test && (Date.parse(texter)+86400000+2592000000) < Date.parse(new Date()))) ? " hilite" : 
+            //                 (["actionplandate"] == test && (Date.parse(texter)+86400000+1296000000) < Date.parse(new Date())) ? " blulite" : "";
             // console.log(bgcolor)
             trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) + bgcolor }));
           })(field);
