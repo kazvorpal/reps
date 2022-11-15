@@ -66,7 +66,7 @@
 		<td>
 			<img src="images/UP_04.jpg" width="127" height="90" alt=""></td>
 		<td>
-			<a href="por22">
+			<a href="por23">
 			<img src="images/UP_05.jpg" width="60" height="90" alt=""
 				onmouseover="this.src='images/DOWN_05.jpg'" 
 				onmouseout="this.src='images/UP_05.jpg'" 

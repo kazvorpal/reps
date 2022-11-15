@@ -1,6 +1,6 @@
 <?php 
-  ini_set("display_errors", "On");
-  ini_set("error_log", "C:\\tmp\\log\\error.log");
+  //ini_set("display_errors", "On");
+  //ini_set("error_log", "C:\\tmp\\log\\error.log");
   // phpinfo();
   // if(isset($_GET["tester"]) && $_GET['tester'] == "menu") {
     $menuposition = "position:fixed;z-index:100000";
@@ -29,9 +29,8 @@
       <li><a href="<?php echo $menu_root?>/esp-status-details-index.php">Detailed Phase Report<span class="sr-only">(current)</span></a></li>
       <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">POR<span class="caret"></span><span class="sr-only">(current)</span></a>
       		<ul class="dropdown-menu" role="menu">
-              <li><a href="<?php echo $menu_root?>/por20">2020</a></li>
-              <li><a href="<?php echo $menu_root?>/por21">2021</a></li>
               <li><a href="<?php echo $menu_root?>/por22">2022</a></li>
+              <li><a href="<?php echo $menu_root?>/por23">2023</a></li>
               
 <!--              <li><a href="#">Something else here</a></li>
               <li class="divider"></li>
