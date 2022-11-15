@@ -164,6 +164,9 @@ body {
 .hilite {
   background-color: #fcc;
 }
+.blulite {
+  background-color: #cff;
+}
 .collapse {
   overflow: initial;
 }
