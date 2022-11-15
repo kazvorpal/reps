@@ -49,7 +49,7 @@ POR Version 11/14/2022 (Includes approved CR's as of 11/11/2022)
             <div class="downloadReset" align = "center" >
                <button class="buttons" onclick="onResetFilterClick()">Clear Selection</button>
                <!--<button class="buttons" onclick="fnExcelReport()"> Download Excel </button>-->
-               <button class="buttons" onClick="MM_goToURL('parent','https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Strat%20Plat%20POR/Forms/AllItems.aspx?csf=1&web=1&e=bjwhTA&cid=49946fbb%2Da778%2D46da%2D96fe%2D2845389029d6&FolderCTID=0x01200028DF62F3FE18AB4891ED32786E841668&viewid=20101ba1%2D097b%2D4809%2Db6a4%2D8e0a95502ded&id=%2Fteams%2Fengmgmtoffice%2FStrat%20Plat%20POR%2FPOR22');return document.MM_returnValue"> Link to Download Excel File </button>
+               <button class="buttons" onClick="MM_goToURL('parent','https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Strat%20Plat%20POR/Forms/AllItems.aspx?id=%2Fteams%2Fengmgmtoffice%2FStrat%20Plat%20POR%2FPOR23&viewid=20101ba1%2D097b%2D4809%2Db6a4%2D8e0a95502ded');return document.MM_returnValue"> Link to Download Excel File </button>
             </div>
                   
          <!-- Adding Legends and Line Breaks in the beginning and End -->
