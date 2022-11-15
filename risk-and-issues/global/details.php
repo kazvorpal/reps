@@ -351,9 +351,12 @@ if($unframe == "0") { //NO COLORBOX
         <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
       <?php } ?>
 
-        <?php if($portUser == 1){?>  
-            <?php// if($status == 1){ ?>
-            <?php $eregions = str_replace("<br>", ",", $regionx)?>
+        <?php if($portUser == 1){
+            $eregions = str_replace("<br>", ",", $regionx);
+            $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
+            $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
+
+            ?>
             <a href="../global/update.php?&id=<?php echo $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
@@ -363,14 +366,14 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AProgram: <?php echo $programs;?>
             %0D%0ARegion(s): <?php echo $eregions;?>
             %0D%0ADescriptor: <?php echo $descriptor ?>
-            %0D%0ADescription: <?php echo $description?>
+            %0D%0ADescription: <?php echo $desc?>
             %0D%0ADriver: <?php echo $Driversx?>
             %0D%0AImpact Area: <?php echo $impactArea2?>
             %0D%0AImpact Level: <?php echo $impactLevel2?>
             %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0ATransfer to Program Manager: <?php echo $opportunityIndicator;?>
-            %0D%0AAction Plan: <?php echo $actionPlan?>
+            %0D%0AAction Plan: <?php echo $act?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?php echo $mailLink;?>
             " 
