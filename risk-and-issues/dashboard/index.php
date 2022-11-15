@@ -285,16 +285,19 @@
               return (projects != undefined && projects.length>0) ? projects.length : "";
           }, 
           subprogram: () => {
-              let list = "";
-              let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
-              if (prog != undefined) {
-                for(r of prog) {
-                  // console.log((program.Global_Flg)?true:false)
-                    list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
-                } 
-              }
-              let ret = (list != "") ? list.slice(0, -2) : ""
-              return ret;
+            let list = "";
+            let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            if (prog != undefined) {
+              for(r of prog) {
+                // console.log((program.Global_Flg)?true:false)
+                list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
+              } 
+            } else {
+              console.log("sublist[" + program.RiskAndIssue_Key+ "]");
+              console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"]");
+            }
+            let ret = (list != "") ? list.slice(0, -2) : ""
+            return ret;
           }, 
           MLMProgram_Nm: () => {
             if (program.Global_Flg == 1) {
@@ -380,7 +383,9 @@
             (function(test) {
               const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
               // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
-              let bgcolor = (test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date())) ? " hilite" : "";
+              let bgcolor = ((test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date()))
+                              || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
+                            ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
               tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
@@ -671,7 +676,7 @@
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
       if (mode == "project" && ri.RIType_Cd == "Issue" && ((typeof ri.RequestedAction_Nm != "undefined" && ri.RequestedAction_Nm != null) || (ri.Reason_Txt != null && ri.Reason_Txt != ""))) {
-        console.log(ri.Reason_Txt);
+        // console.log(ri.Reason_Txt);
         for (field in changelog) {
           (function(test) {
               const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
@@ -685,7 +690,7 @@
           (function(test) {
             const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
             if (test == "age") {
-              console.log(texter.replace(/\D/g, ''));
+              // console.log(texter.replace(/\D/g, ''));
             }
             // let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < (new Date()+1)) ? " hilite" : "";
             let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))

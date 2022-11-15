@@ -78,7 +78,7 @@
     }
     $sublist = array();
     foreach ($programrows as $row)  {
-      if($row["MLMProgramRI_Key"] != '') {
+      // if($row["MLMProgramRI_Key"] != '') {
         // echo "IN";
         // Get PROJECTS //
         $sqlstr = "select * from  RI_Mgt.fn_GetListSubProgramsforRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["RIActive_Flg"] .")";
@@ -105,7 +105,7 @@
           }
         }
         $sublist[$row["RiskAndIssue_Key"]] = $subrows;
-      }
+      // }
     }
   }
   
