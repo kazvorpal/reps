@@ -250,11 +250,13 @@
               let list = ""
               let counter = 0;
               for(r of ridata) {
-                  if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
+                if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
                   counter++;
-                  list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : r.MLMRegion_Cd;
-                  }
+                  console.log(regions[r.MLMRegion_Cd] +":"+ r.MLMRegion_Cd)
+                  list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : (regions[r.MLMRegion_Cd] != null) ? r.MLMRegion_Cd : "";
+                }
               }
+              console.log(list);
               return (list.slice(0, -2));
           },
           regioncount: () => {
