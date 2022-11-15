@@ -670,7 +670,8 @@
       }
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
-      if (mode == "project" && ri.RIType_Cd == "Issue" && (ri.RequestedAction_Nm != null || ri.Reason_Txt != "")) {
+      if (mode == "project" && ri.RIType_Cd == "Issue" && ((typeof ri.RequestedAction_Nm != "undefined" && ri.RequestedAction_Nm != null) || (ri.Reason_Txt != null && ri.Reason_Txt != ""))) {
+        console.log(ri.Reason_Txt);
         for (field in changelog) {
           (function(test) {
               const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
