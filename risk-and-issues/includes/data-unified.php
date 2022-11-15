@@ -49,9 +49,9 @@
     foreach ($programrows as $row)  {
       if($row["MLMProgramRI_Key"] != '') {
         // echo "IN";
-        // Get PROJECTS //
+        // Get PROJECTS for programs //
         $sqlstr = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["MLMProgramRI_Key"] .", -1)";
-         //echo $sqlstr . "<br/>";
+        //  echo $sqlstr . "<br/>";
         ini_set('mssql.charset', 'UTF-8');
         $p4pquery = sqlsrv_query($data_conn, $sqlstr);
         if($p4pquery === false) {
@@ -80,7 +80,7 @@
     foreach ($programrows as $row)  {
       // if($row["MLMProgramRI_Key"] != '') {
         // echo "IN";
-        // Get PROJECTS //
+        // Get subprogram for global programs] //
         $sqlstr = "select * from  RI_Mgt.fn_GetListSubProgramsforRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["RIActive_Flg"] .")";
         //  echo $sqlstr . "<br/>";
         ini_set('mssql.charset', 'UTF-8');
@@ -111,7 +111,6 @@
   
 
 
-  //    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'portfolio'";
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')";
   // print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
@@ -132,7 +131,6 @@
       $portfoliorows[] = array_map("fixutf8", $portfoliorow);
     }
 
-    //     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'portfolio'";
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio')";
     ini_set('mssql.charset', 'UTF-8');
     $closedportfolio = sqlsrv_query($data_conn, $sqlstr);
@@ -150,6 +148,36 @@
       while($row = sqlsrv_fetch_array($closedportfolio, SQLSRV_FETCH_ASSOC)) {
         $closedportfoliorows[] = array_map("fixutf8", $row);
       }
+    }
+    foreach ($portfoliorows as $row)  {
+      // if($row["MLMProgramRI_Key"] != '') {
+        // echo "IN";
+        // Get subprogram for global programs] //
+        $sqlstr = "select * from  RI_Mgt.fn_GetListSubProgramsforRIKey(". $row["RiskAndIssue_Key"] ." ,". $row["RIActive_Flg"] .")";
+        //  echo $sqlstr . "<br/>";
+        ini_set('mssql.charset', 'UTF-8');
+        $subquery = sqlsrv_query($data_conn, $sqlstr);
+        $subrows = array();
+        if($subquery === false) {
+          if(($error = sqlsrv_errors()) != null) {
+            print_r($error);
+            foreach($error as $errors) {
+              echo "SQLSTATE: ".$errors[ 'SQLSTATE']."<br />";
+              echo "code: ".$errors[ 'code']."<br />";
+              echo "message: ".$errors[ 'message']."<br />";
+            }
+          }
+        } else {
+          // echo "OUT";
+          $count = 1;
+          $checker = 0;
+          while($subrow = sqlsrv_fetch_array($subquery, SQLSRV_FETCH_ASSOC)) {
+            $subrows[] = array_map("fixutf8", $subrow);
+            $checker = 1;
+          }
+        }
+        $sublist[$row["RiskAndIssue_Key"]] = $subrows;
+      // }
     }
     $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
     ini_set('mssql.charset', 'UTF-8');

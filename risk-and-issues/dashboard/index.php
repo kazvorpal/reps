@@ -286,15 +286,17 @@
           }, 
           subprogram: () => {
             let list = "";
-            let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            // let prog = (program.Global_Flg) ? sublist[program.RiskAndIssue_Key] : p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key];
+            let prog = sublist[program.RiskAndIssue_Key];
             if (prog != undefined) {
               for(r of prog) {
                 // console.log((program.Global_Flg)?true:false)
-                list += (program.Global_Flg) ? r.SubProgram_Nm + ", " : r.Subprogram_nm + ", ";
+                let comma = (list.length > 0) ? ", " : "";
+                list += comma + r.SubProgram_Nm ;
               } 
             } else {
-              console.log("sublist[" + program.RiskAndIssue_Key+ "]");
-              console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"]");
+              // console.log("sublist[" + program.RiskAndIssue_Key+ "]");
+              // console.log("p4plist[" + program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key+"]");
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
             return ret;
