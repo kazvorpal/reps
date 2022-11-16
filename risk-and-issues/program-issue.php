@@ -241,6 +241,7 @@ function toggle(source) {
   <input name="Individual" type="hidden" id="Individual" value="">
   <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
   <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
+  <input name="raidLog" type="hidden"id="raidLog" value="Yes" >
   
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -637,7 +638,7 @@ function toggle(source) {
             </div>
           </td>
         </tr>
-        <tr>
+       <!-- <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
         <tr>
@@ -661,7 +662,7 @@ function toggle(source) {
               </div>
 			    </td>
         </tr>
-        <!--
+        
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>

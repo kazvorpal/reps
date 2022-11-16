@@ -272,12 +272,12 @@ include ("../sql/update-time.php");
       <td><?php echo $changeLogReason; ?></td>
     </tr>
 <?php } ?>
-<?php if($RILevel == "Program") { ?>
-    <tr>
+<?php //if($RILevel == "Program") { ?>
+    <!--<tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?></td>
-    </tr>
-<?php } ?>
+    </tr>-->
+<?php //} ?>
 <?php if($RIType == "Risk") { ?>
     <tr>
       <td>Risk Realized</td>

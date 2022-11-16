@@ -108,10 +108,10 @@ $unframe = $_SESSION['unframe'];
     }
 
     $raidLogx = $_POST['raidLog'];
-    if($raidLogx == "No"){
+    if($raidLogx == "No" || $raidLogx == "0"){
         $raidLog = 0;
     } 
-    if($raidLogx == "Yes"){
+    if($raidLogx == "Yes" || $raidLogx == "1"){
         $raidLog = 1;
     } 
 

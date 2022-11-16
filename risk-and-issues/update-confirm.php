@@ -333,14 +333,14 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>
     <tr>
       <td>Change Log Reason</td>
-      <td><?php echo $changeLogReason; ?></td>
+      <td><?php echo $changeLogReason; ?></td>S
     </tr>
 <?php } ?>
-    <tr>
+    <!--<tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?>
     </td>
-    </tr>
+    </tr>-->
 <?php if($RIType == "Risk") { ?>
     <tr>
       <td>Risk Realized</td>

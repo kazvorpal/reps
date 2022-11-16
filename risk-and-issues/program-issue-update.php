@@ -377,6 +377,7 @@ if($formaction == "update") {
   <input name="Individual" type="hidden" id="Individual" value="">
   <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
   <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
+  <input name="raidLog" type="hidden"id="raidLog" value="<?php echo $raidLog ?>">
 
   <?php if($assc_prj_update == "yes"){ ?>
   <div class="alert alert-danger">
@@ -799,6 +800,7 @@ if($formaction == "update") {
             </div>
           </td>
       </tr>
+      <!--
       <tr>
         <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
 			  </tr>
@@ -810,16 +812,16 @@ if($formaction == "update") {
                   </tr>
                   <tr>
                   <td><label>
-                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php if($raidLog == 1) {echo "checked";}?>>
+                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php //if($raidLog == 1) {echo "checked";}?>>
                     Yes</label></td>
                   <td><label>
-                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php if($raidLog == 0) {echo "checked";}?>>
+                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php //if($raidLog == 0) {echo "checked";}?>>
                     No</label></td>
                   </tr>
                 </table>
               </div>
 			    </td>
-        </tr>
+        </tr>-->
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>

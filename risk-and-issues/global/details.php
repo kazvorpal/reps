@@ -352,7 +352,11 @@ if($unframe == "0") { //NO COLORBOX
       <?php } ?>
 
         <?php if($portUser == 1){
-            $eregions = str_replace("<br>", ",", $regionx);
+
+            $eregions = "N/A";
+              if($regionx = "") {
+              $eregions = str_replace("<br>", ",", $regionx);
+              }
             $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
             $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
 
