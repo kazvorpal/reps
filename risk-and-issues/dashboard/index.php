@@ -250,19 +250,23 @@
               let list = ""
               let counter = 0;
               for(r of ridata) {
-                if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
-                  counter++;
-                  console.log(regions[r.MLMRegion_Cd] +":"+ r.MLMRegion_Cd)
-                  list += (regions[r.MLMRegion_Cd] != undefined) ? regions[r.MLMRegion_Cd] + ", " : (regions[r.MLMRegion_Cd] != null) ? r.MLMRegion_Cd : "";
+                if (r) {
+                  console.log(r)
+                  if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
+                    counter++;
+                    // console.log(regions[r.MLMRegion_Cd] +":"+ r.MLMRegion_Cd)
+                    list += (!isempty(regions[r.MLMRegion_Cd])) ? regions[r.MLMRegion_Cd] + ", " : (!isempty(regions[r.MLMRegion_Cd])) ? r.MLMRegion_Cd : "";
+                  }
                 }
+                return (list.slice(0, -2));
               }
-              console.log(list);
-              return (list.slice(0, -2));
+              // console.log(list);
+              return "";
           },
           regioncount: () => {
               let counter = 0;
               for(r of ridata) {
-                  if (typeof r != "undefined" && r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
+                  if (!isempty(r) && r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
                   counter++;
                   }
               }
@@ -292,7 +296,6 @@
             let prog = sublist[program.RiskAndIssue_Key];
             if (prog != undefined) {
               for(r of prog) {
-                // console.log((program.Global_Flg)?true:false)
                 let comma = (list.length > 0) ? ", " : "";
                 list += comma + r.SubProgram_Nm ;
               } 
@@ -306,10 +309,10 @@
           MLMProgram_Nm: () => {
             if (program.Global_Flg == 1) {
               let programs = "";
-              portfolioprograms.forEach(o => {
+              let portprog = (program.RIActive_Flg) ? portfolioprograms : portfolioprogramsclosed;
+              portprog.forEach(o => {
                 let comma = (programs != "") ? ", " : "";
                 if (o.RiskAndIssue_Key == program.RiskAndIssue_Key) {
-                  // console.log(o.RiskAndIssue_Key)
                   programs = programs + comma + o.Program_Nm;
                 }
               })
@@ -388,9 +391,10 @@
               const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
               // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
               let bgcolor = ((test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date()))
-                              || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
-                            ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + textalign(texter) + bgcolor, w: w}));
+                              || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite"
+                               : ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
+              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + wrapping + textalign(texter) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
               tridobj.appendChild(header);
@@ -416,7 +420,7 @@
     const makeprojects = (projects, programname, tableid, saferi) => {
 
         // Make the rows of projects inside the program
-        // console.log(projects)
+
         document.getElementById(tableid).appendChild(makeelement({e: "tr", i: "projects" + saferi, c: "panel-collapse collapse"}));
         document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", t: "&nbsp;"}));
         document.getElementById("projects" + saferi).appendChild(makeelement({e: "td", i: "td" + saferi, s: 6}));
@@ -468,7 +472,8 @@
             let cells = ["Risk/Issue"];
             rowcolor = 1;
             for (field of Object.keys(rifields)) {
-                trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
+                trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles"}));
+                // trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
                 cells.push(rifields[field].name);
                 if (rifields[field].name == "ID") {
                     trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
@@ -673,13 +678,14 @@
       const rowValues = [];
       for (field in excelfields) {
         (function(test) {
-            const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+            let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+            t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
             rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
         })(field);
       }
       let newrow = document.worksheet.addRow(rowValues);
       const logValues = [];
-      if (mode == "project" && ri.RIType_Cd == "Issue" && ((typeof ri.RequestedAction_Nm != "undefined" && ri.RequestedAction_Nm != null) || (ri.Reason_Txt != null && ri.Reason_Txt != ""))) {
+      if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
         // console.log(ri.Reason_Txt);
         for (field in changelog) {
           (function(test) {
@@ -704,7 +710,8 @@
             //                 || (["actionplandate"] == test && (Date.parse(texter)+86400000+2592000000) < Date.parse(new Date()))) ? " hilite" : 
             //                 (["actionplandate"] == test && (Date.parse(texter)+86400000+1296000000) < Date.parse(new Date())) ? " blulite" : "";
             // console.log(bgcolor)
-            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + textalign(texter) + bgcolor }));
+             let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
+            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + wrapping + textalign(texter) + bgcolor }));
           })(field);
       }
       return trri;

@@ -207,6 +207,13 @@ $RegionArr = explode(",", $MLMRegion_Key);
         //     return validateForm()
         //   })
         // });
+        // setTimeout(function() {
+        // $("#program").val(false).attr("multiple", true).multiselect();
+        // $('#program').removeAttr('style')
+        // document.getElementById("program").style.height = "1px";
+        // document.getElementById("program").style.width = "1px";
+        // document.getElementById("program").style.position= "absolute";
+        // }, 1000);
   </script> 
 
 <script language="JavaScript">
@@ -270,7 +277,7 @@ function toggle(source) {
 </div>
 
 <div style="padding: 20px;">
-  <form action="../update-confirm.php" onsubmit="return validateForm()" method="post" id="programRisk">
+  <form action="../update-confirm.php" onsubmit="return validateForm();" method="post" id="programRisk">
 
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $ri_id ?>">
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="4">
@@ -754,7 +761,7 @@ function toggle(source) {
 </div>
 <!--end container -->
   <!--<button class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button> -->
-  <button type="submit" class="btn btn-primary">Review <span class="glyphicon glyphicon-step-forward"></span></button>
+  <button type="submit" class="btn btn-primary" id="review">Review <span class="glyphicon glyphicon-step-forward"></span></button>
   </form>
 </div>
 </main>
@@ -848,6 +855,14 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+
+setInterval(function() {
+    // nameevent();
+    // document.getElementById("program").style.display = "block";
+    // document.querySelector("#program").required = true;
+    // document.getElementById("subprogram").style.display = "block";
+  }, 100);
+
 </script>
 
 <script src="/risk-and-issues/includes/ri-functions.js"></script>

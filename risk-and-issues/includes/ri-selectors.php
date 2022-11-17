@@ -71,42 +71,42 @@ const jq = `
 
 const filterfunction = (o) => {
   return (
-      (isempty("fiscal_year") 
+      (fieldempty("fiscal_year") 
           || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
-      (isempty("risk_issue") || isincluded('#risk_issue', o.RIType_Cd)) &&
+      (fieldempty("risk_issue") || isincluded('#risk_issue', o.RIType_Cd)) &&
       ((["project"].includes(mode)) 
-          || isempty("category") 
+          || fieldempty("category") 
           || ($('#category').val().includes((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") ? '1' : '0'))) &&
-      (isempty("impact_level")
+      (fieldempty("impact_level")
           || ($('#impact_level').val() + " Impact").includes(o.ImpactLevel_Nm)) &&
       (["program", "project"].includes(mode)
-          || isempty("level")
+          || fieldempty("level")
           || ($('#level').val().includes(o.RILevel_Cd))) &&
-      ((isempty("owner") 
+      ((fieldempty("owner") 
           || isincluded('#owner', o.LastUpdateBy_Nm))) &&
-      ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (isempty("pStatus") && o.RIActive_Flg == '1') 
+      ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (fieldempty("pStatus") && o.RIActive_Flg == '1') 
           || ($("#pStatus").val() != null && isincluded("#pStatus", o.RIActive_Flg.toString()))) &&
       (document.getElementById("program") == null 
-          || isempty("program") 
+          || fieldempty("program") 
           || isincluded('#program', o.MLMProgram_Nm) || isincluded('#program', o.EPSProgram_Nm)) && 
       ((["portfolio"].includes(mode)) 
           || document.getElementById("subprogram") == null 
-          || isempty("subprogram") 
+          || fieldempty("subprogram") 
           || ((typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key] != "undefined" && typeof p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0] != "undefined") && isincluded('#subprogram', p4plist[o.RiskAndIssue_Key + "-" + o.MLMProgramRI_Key][0].Subprogram_nm)) 
           || isincluded('#subprogram', o.EPSSubprogram_Nm)) &&
       (mode == "project" || mode == "portfolio" 
-          || isempty("region") 
+          || fieldempty("region") 
           || $('#region').val().includes(o.MLMRegion_Cd)) &&
       (ispp(mode) 
-          || (isempty("region") 
+          || (fieldempty("region") 
           || isincluded('#region', o.EPSRegion_Cd))) &&
       ((ispp(mode) 
-          || isempty("market") 
+          || fieldempty("market") 
           || (isincluded('#market', o.Market_Cd) || isincluded('#market', o.EPSMarket_Cd)))) &&
       ((ispp(mode) 
-          || isempty("facility") 
+          || fieldempty("facility") 
           || (isincluded('#facility', o.Facility_Cd) || isincluded('#facility', o.EPSFacility_Cd)))) &&
-      ((isempty("dateranger") 
+      ((fieldempty("dateranger") 
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))
   );
 }

@@ -170,3 +170,8 @@ body {
 .collapse {
   overflow: initial;
 }
+.overflow-everything {
+  overflow-wrap: anywhere;
+  min-width: 128px;
+  max-width: 64px;
+}

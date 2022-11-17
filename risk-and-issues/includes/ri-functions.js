@@ -39,10 +39,15 @@ Any Fields Still Empty are in RED, Above`;
     return false;
     }
   } else {
-    console.log("pass")
-    console.log(document.getElementById("ActionPlan").value)
-    return true;
+    if (document.querySelector("#program").value == "") {
+      alert("please select a program");
+      document.querySelector("#program").parentElement.style.backgroundColor = "#fee";
+      window.scrollTo(0, 0);
+      return false;
+    } else 
+      return true
   }
 }
 
-// yes it was.  warning for back button  on all forms
+const checkprogram = () => {
+}

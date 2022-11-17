@@ -4,7 +4,7 @@
 const mapper = "RiskAndIssue_Key";
 const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
-const isempty = (field) => (document.getElementById(field).value == '');
+const fieldempty = (field) => (document.getElementById(field).value == '');
 const isincluded = (filter, field) => {
   // console.log(filter)
   return ($(filter).val().includes(field));

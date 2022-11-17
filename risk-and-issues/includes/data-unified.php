@@ -7,6 +7,20 @@
   $mode = (stripos($_SERVER['REQUEST_URI'], "program")) ? "program" : "project";
 
 
+  $sqlportfolioprogramsclosed = <<<PPC
+  WITH CTE_LastInactiveRILogs AS (
+    select  max(riskandissuelog_key) as RILogs
+    from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)
+    where Active_Flg = 0
+    group by RiskAndIssue_Key
+)
+SELECT a.*
+FROM [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1) a
+INNER JOIN CTE_LastInactiveRILogs b on b.RILogs = a.RiskAndIssueLog_Key
+PPC;
+
+
+
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
   // print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
@@ -179,7 +193,7 @@
         $sublist[$row["RiskAndIssue_Key"]] = $subrows;
       // }
     }
-    $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
+    $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1) where active_flg = 1";
     ini_set('mssql.charset', 'UTF-8');
     $portfolioprograms = sqlsrv_query($data_conn, $portfolioprogramsstr);
     if($portfolioprograms === false) {
@@ -195,6 +209,24 @@
       $count = 1;
       while($row = sqlsrv_fetch_array($portfolioprograms, SQLSRV_FETCH_ASSOC)) {
         $portfolioprogramsrows[] = array_map("fixutf8", $row);
+      }
+    }
+     // portfolio programs, closed
+    ini_set('mssql.charset', 'UTF-8');
+    $portfolioprogramsclosed = sqlsrv_query($data_conn, $sqlportfolioprogramsclosed);
+    if($portfolioprogramsclosed === false) {
+      if(($error = sqlsrv_errors()) != null) {
+        foreach($errors as $error) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
+        }
+      }
+    } else {
+      $portfolioprogramsclosedrows = array();
+      $count = 1;
+      while($row = sqlsrv_fetch_array($portfolioprogramsclosed, SQLSRV_FETCH_ASSOC)) {
+        $portfolioprogramsclosedrows[] = array_map("fixutf8", $row);
       }
     }
   }
@@ -379,6 +411,7 @@
     $driverout = json_encode($driverrows);
     $locationout = json_encode($locationrows);
     $portfolioprogramsout = json_encode($portfolioprogramsrows);
+    $portfolioprogramsclosedout = json_encode($portfolioprogramsclosedrows);
     $projectout = json_encode($rows);
     $closedout = json_encode($closedrows);
     $programout = json_encode($programrows);
@@ -414,6 +447,7 @@ let projectopen = <?= $projectout ?>;
     const p4plist = <?= $p4pout ?>;
     const sublist = <?= $subout ?>;
     const portfolioprograms = <?= $portfolioprogramsout ?>;
+    const portfolioprogramsclosed = <?= $portfolioprogramsclosedout ?>;
     const aplist = <?= $apout ?>;
     const loglist = <?= $logout ?>;
 
@@ -479,7 +513,7 @@ let projectopen = <?= $projectout ?>;
       : ["Project Name", "Facility", "Owner", "Subprogram"];
 
   rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 4}, "MLMProgram_Nm": {name: "Program", width: 9}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 5}, "ImpactLevel_Nm": {name: "Impact Level", width: 5}, "RIDescription_Txt": {name: "Description", width: 17}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 17}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 6}, "ResponseStrategy_Cd": {name: "Response Strategy", width: 3}, "RIOpen_Hours": {name: "Open Duration", width: 5}, "RIActive_Flg": {name: "Status", width: 5}} 
-    : (mode == "portfolio") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 3}, "MLMProgram_Nm": {name: "Program", width: 9}, programcount: {name: "Program Count", width: 2}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 6}, "ImpactLevel_Nm": {name: "Impact", width: 6}, "RIDescription_Txt": {name: "Description", width: 18}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 18}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 5}, "ResponseStrategy_Nm": {name: "Response Strategy", width: 4}, "RIOpen_Hours": {name: "Open Duration", width: 6}, "RIActive_Flg": {name: "Status", width: 4}}
+    : (mode == "portfolio") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 3}, "MLMProgram_Nm": {name: "Program", width: 9}, programcount: {name: "Program Count", width: 2}, "subprogram": {name: "Sub-program", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 6}, "ImpactLevel_Nm": {name: "Impact", width: 6}, "RIDescription_Txt": {name: "Description", width: 18}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 18}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 5}, "ResponseStrategy_Nm": {name: "Response Strategy", width: 4}, "RIOpen_Hours": {name: "Open Duration", width: 6}, "RIActive_Flg": {name: "Status", width: 4}}
     : {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "RIDescription_Txt": "Description", actionplandate: "Action Plan Date", age: "Age", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
 
   excelfields = (mode == "program") ? {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "LastUpdateBy_Nm": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Assoc Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", age: "Age", actionplandate: "Action Plan Date", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"} 

@@ -5,6 +5,10 @@ const sortby = (list, property) => {
     return rv;
   }
 
+  const isempty = (target) => {
+    return ([undefined, null, "null", ""].includes(target));
+  }
+
   const capitalize = (target) => {
       return target.charAt(0).toUpperCase() + target.slice(1);
   }
