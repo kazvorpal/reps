@@ -290,10 +290,10 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
     </tr>
-    <tr>
+    <!--<tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?></td>
-    </tr>
+    </tr>-->
     <tr>
       <td>Forecasted Resolution Date</td>
       <td>
