@@ -116,7 +116,7 @@ include ("../sql/RI_Internal_External.php");
 
   //GET EPS PROJECT KEYS FROM PROJECT NAMES
   $sql_epsProjKey = "DECLARE @EPS_IDs VARCHAR(100)
-                    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(100))
+                    SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(MAX))
                     FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) WHERE EPSProject_Nm in ($regionIN)
                     SELECT @EPS_IDs AS eps_proj_key";
   $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );

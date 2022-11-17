@@ -76,14 +76,15 @@
   //echo $sql_regions;
 
   //GET EPS PROJECT KEYS FROM PROJECT NAMES
-  $sql_epsProjKey = "DECLARE @EPS_IDs VARCHAR(100)
-      SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(100))
+  $sql_epsProjKey = "DECLARE @EPS_IDs VARCHAR(1000)
+      SELECT @EPS_IDs = COALESCE(@EPS_IDs+',','')+ CAST(EPSProject_key AS VARCHAR(1000))
       FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) WHERE EPSProject_Nm in ($regionIN)
       SELECT @EPS_IDs AS eps_proj_key";
   $stmt_epsProjKey = sqlsrv_query( $data_conn, $sql_epsProjKey );
   $row_epsProjKey = sqlsrv_fetch_array( $stmt_epsProjKey, SQLSRV_FETCH_ASSOC);
 //echo "<b>EPS PROJECT KEYS FROM PROJECT NAMES</b> " . $sql_epsProjKey . "<br><br>";
   $eps_proj_keys = $row_epsProjKey['eps_proj_key'];
+
 //echo "Project Keys: " . $eps_proj_keys;
 
   //REGIONS FROM ASSOC PROJECT KEYS FOR DISPLAY CHECKBOX
@@ -98,8 +99,8 @@
     $IReplace = "'" . $inRegion . "'";
     //$IReplace = str_replace(",", "','", $inRegion);
 
-    $sql_region_update = "DECLARE @REG_Nms VARCHAR(100) 
-    SELECT @REG_Nms = COALESCE(@REG_Nms+',','')+ CAST(Region_Cd AS VARCHAR(100)) 
+    $sql_region_update = "DECLARE @REG_Nms VARCHAR(1000) 
+    SELECT @REG_Nms = COALESCE(@REG_Nms+',','')+ CAST(Region_Cd AS VARCHAR(1000)) 
     FROM [EPS].[ProjectStage] INNER JOIN [CR_MGT].[Region] on Region_Cd = Region 
     WHERE PROJ_NM IN ($IReplace ) 
     SELECT @REG_Nms AS Region_Cd";
@@ -111,8 +112,8 @@
   //echo "<B>Regions from ASSOC PROJECTS: </B>" . $sql_region_update . "<br><br>";
 
   //GET REGIONS KEYS FOR HIDDEN FIELD
-  $regionkeySQL = " DECLARE @REG_IDs VARCHAR(100) 
-      SELECT @REG_IDs = COALESCE(@REG_IDs+',','')+ CAST(Region_key AS VARCHAR(100)) 
+  $regionkeySQL = " DECLARE @REG_IDs VARCHAR(1000) 
+      SELECT @REG_IDs = COALESCE(@REG_IDs+',','')+ CAST(Region_key AS VARCHAR(1000)) 
       FROM [EPS].[ProjectStage]
       INNER JOIN [CR_MGT].[Region] on Region_Cd = Region
       WHERE PROJ_NM IN ($projFromURL) 
@@ -138,6 +139,8 @@
   $row_regions_f = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC);
   //$row_regions_f['Region_key'];
   //echo $sql_regions_f;
+
+  //explode(",",)
   //exit(); 
   //echo "<br>Its here" . $row_regions_f['Region_key'];
 
@@ -224,8 +227,8 @@
   $driverList = rtrim($_GET['drivertime'], ",");
   $driverArr = explode(",", $driverList);
   $actionPlan_b = $row_risk_issue['ActionPlanStatus_Cd'];
-  $regionList = rtrim($_GET['regions'], ","); //echo $regionList;
-  $regionArr = explode(",", $regionList);
+  $regionList = rtrim($_GET['regions'], ","); //echo "Regions from URL: " . $regionList . " and array <br>";
+  $regionArr = explode(",", $regionList); //print_r($regionArr); echo "<br><br>";
 
   $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
   $raid = $row_risk_issue['RaidLog_Flg'];
@@ -235,17 +238,21 @@
   $formName = $_GET['formName'];
   $POC_Nm = $row_risk_issue['POC_Nm'];
 
+  //REGIONS FROM DATABASE
   $regionkeyUp = $row_region_update['Region_Cd']; //echo "<b></br></br>Regions to update: </b>" .  $regionkeyUp . "</br>";
-  $regionkeyUpArray = explode(",", $regionkeyUp); //echo "" . print_r($regionkeyUpArray);
+  $regionkeyUpArray = array_unique(explode(",", $regionkeyUp)); 
+  //echo "" . print_r($regionkeyUpArray);
 
+  //REGIONS FROM QUERYSTRING
   $regions = $_GET['regions'];
   if($assc_prj_update == "yes"){
     $regions = $regionkeyUp;
   }
-
+  //echo "Selected assoc proj: " . $assc_prj_update . "<br>"; //YES/NO HAS NEW PROJECT ASSOCIATIONS COMING FROM PREVIOUSE PAGE
 
   $createDT = date_format($row_risk_issue['Created_Ts'],'Y-m-d');
-  $regionKeys = $row_regions_f['Region_key']; 
+  $regionKeys = rtrim(implode(",",array_unique(explode(",", $row_regions_f['Region_key']))), ","); 
+  //echo "Region Keys from database: " . $regionKeys; // ALL REGION KEYS
 
   if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
     $forecastMin = date_format($date, "Y-m-d");
