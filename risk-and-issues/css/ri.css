@@ -172,6 +172,6 @@ body {
 }
 .overflow-everything {
   overflow-wrap: anywhere;
-  min-width: 128px;
-  max-width: 64px;
+  /*min-width: 64px;
+  max-width:128px; */
 }

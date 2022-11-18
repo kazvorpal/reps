@@ -54,7 +54,7 @@ const sortby = (list, property) => {
   
 // Sanitize a string
 const makesafe = (target) => {
-  return  (target in ["null", null]) ? "datamissing" : target.replace(/\s/g,'');
+  return  (target in ["null", null]) ? "datamissing" : target.replace(/[.\s]/g,'');
 }
 
 const padTo2Digits = (num) => num.toString().padStart(2, '0');
