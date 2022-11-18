@@ -8,7 +8,6 @@ include ("../../sql/ri_filter_vars.php");
 include ("../../sql/ri_filters.php");
 include ("../../sql/ri_prj_assoc_manage.php");
 
-
 //DECLARE
 $uid = $_GET['uid'];
 $ri_type = strtolower($_GET['ri_type']);

@@ -277,21 +277,25 @@ if($global == 1) { include ("../includes/menu.php"); }
 
 //EXECUTE IF RI IS SUCCESSFULLY CREATED
     if($SPCode == 0) { 
-        $globalportbutton = '<div align="center"><a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a></div>';
-        $globalprogbutton = '<div align="center"><a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a></div>';
-        $globalprogportbutton = '<div align="center"><a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a>  <a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a></div>';
-        $listbutton = '<div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
-
+        $globalportbutton = '<a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a>';
+        $globalprogbutton = '<a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a>';
+        $globalprogportbutton = '<a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a>  <a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a>';
+        $listbutton = '<a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a>';
+//echo $riLevel . " - " . $global;
         echo '<br><br><br><h2 align="center">Risk and Issue Created</h2><div align="center">Your Risk/Issue has been created.<br>ID: ' . $SPMaxRI_Id . '</div><br>';
+        echo '<div align="center">';
+            if(!empty($backhome) && $global != 1) {
+                echo $listbutton . " ";
+            } 
 
-        if(!empty($backhome) && $global != 1) {
-        echo $listbutton;
-        } 
-
-        if($global==1){
-            echo $globalprogportbutton;
-        }
-
+            if($global==1 && $riLevel == "Portfolio"){
+                echo $globalportbutton . " ";
+            }
+            
+            if($riLevel == "Program"){
+                echo $globalprogbutton . " ";
+            }
+        echo '</div>';
         //if($global==1 && $riLevel == "Program"){
             //echo $globalprogbutton;
         //}

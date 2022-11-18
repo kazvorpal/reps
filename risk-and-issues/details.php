@@ -15,7 +15,7 @@ $popup = $_GET['popup'];
 $sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key";
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-//echo $sql_risk_issue;
+//echo $sql_risk_issue; exit();
 $ri_name = $row_risk_issue['RI_Nm'];
 $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 
@@ -116,7 +116,8 @@ if($riskRealized_Raw == 1){
   $riskRealized = "No";
 }
 
-$link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=true");
+//LINK FOR DETAILS BUTTON
+$link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=true&uid=" . $uid);
 //echo $link; 
 ?>
 <!doctype html>

@@ -271,7 +271,7 @@ function toggle(source) {
         <table width="100%" border="0" cellpadding="5" cellspacing="5" class="table table-bordered table-hover">
                   <tbody>
                     <tr>
-                        <th bgcolor="#EFEFEF"><input type="checkbox" name="checkbox" id="checkbox" onClick="toggle(this)"></th>
+                        <th bgcolor="#EFEFEF"><input type="checkbox" name="checkbox" id="checkbox" value="0" onClick="toggle(this)"></th>
                         <th bgcolor="#EFEFEF">Project Name</th>
                         <th bgcolor="#EFEFEF">Program</th>
                         <th bgcolor="#EFEFEF">Region</th>

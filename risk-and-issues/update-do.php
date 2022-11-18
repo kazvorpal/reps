@@ -313,22 +313,26 @@ $unframe = $_SESSION['unframe'];
     ';
 // echo $SPCode;
     if($SPCode == 0) {
-        $globalportbutton = '<div align="center"><a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a></div>';
-        $globalprogbutton = '<div align="center"><a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a></div>';
-        $globalprogportbutton = '<br><div align="center"><a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a>  <a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a></div>';
-        $listbutton = '<div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
+        $globalportbutton = '<a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a>';
+        $globalprogbutton = '<a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a>';
+        $globalprogportbutton = '<a href="dashboard/?program=&mode=program" class="btn btn-primary" target="_parent">Program Dashboard</a>  <a href="dashboard/?portfolio=&mode=portfolio" class="btn btn-primary" target="_parent">RAID Log</a>';
+        $listbutton = '<a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a>';
 
-        echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>Risk and Issue ID: ' . $riKeys . '</div>';
-
-        if($backhome != "" && $global != 1) {
-            echo '<br><br><div align="center"><a href=" ' . $backhome . '" class="btn btn-primary">Back to List</a></div>';
-            session_destroy();
-        }
-    
-        if($global==1){
-            echo $globalprogportbutton;
-        }
-    
+        echo '<br><br><br><h2 align="center">Risk and Issue ' . $changeLogName . '</h2><div align="center">Your Risk/Issue has been ' . $changeLogName. '<br>Risk and Issue ID: ' . $riKeys . '<br><br></div>';
+        echo '<div align="center">';
+            if($backhome != "" && $global != 1) {
+                echo $listbutton . " ";
+                session_destroy();
+            }
+        
+            if($global==1 && $riLevel == "Portfolio"){
+                echo $globalportbutton . " ";
+            }
+            
+            if($riLevel == "Program"){
+                echo $globalprogbutton . " ";
+            }
+        echo '</div>';
         //if($global==1 && $riLevel == "Program"){
             //echo $globalprogbutton;
         //}
