@@ -108,10 +108,10 @@ $uid = $_GET['uid'];
 
 //USER AUTHORIZATION - NOT USED-DELETE
 $authProg = $row_risk_issue['MLMProgram_Nm'];
-$sql_authorize = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('gcarolin', 2022) WHERE Program_Nm = '$authProg'";
+$sql_authorize = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$windowsUser', $fscl_year) WHERE Program_Nm = '$authProg'";
 $stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
 $row_authorize = sqlsrv_fetch_array($stmt_authorize, SQLSRV_FETCH_ASSOC);
-
+//echo $sql_authorize;
 //echo $row_authorize['Program_Nm'];
 
 //old authorizarion
