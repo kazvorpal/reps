@@ -369,10 +369,13 @@ if($global == 1 && $formType == "Update") {
       SELECT @REG_IDs = COALESCE(@REG_IDs+'</BR>','')+ CAST(Region_Cd AS VARCHAR(1000))
       FROM [CR_MGT].[Region] WHERE Region_key IN($global_region)
       SELECT @REG_IDs AS Region_Cd";
+    //echo $sql_regions . "<br>" . $global_region;
+    //exit();
 
     $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
     $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
     $region_glb = $row_regions['Region_Cd'];
+    
     //echo $sql_regions;
     //exit();
 
