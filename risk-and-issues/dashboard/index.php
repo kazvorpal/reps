@@ -104,10 +104,12 @@
           var mt = document.getElementById("maintable");
           mt.appendChild(makeheader("projects"));
       }
+      portfolio = {MLMProgram_Nm: "Portfolios"};
+      makerow(portfolio, 1, 1)
       for (loop of rilist) {
         // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
         if(loop != null) {
-            (ispp(mode)) ? makerow(loop, listri(loop, "Risk").length, listri(loop, "Issue").length) : mt.appendChild(createrow(loop));
+            (ispp(mode)) ? makerow(loop, listri(loop.MLMProgram_Nm, "Risk").length, listri(loop.MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(loop));
         }
         resultcounter((ispp(mode)) ? result : rilist);
       }
@@ -119,7 +121,8 @@
         if (typeof target == null) {
           return false;
         }
-        if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null") return false;
+        console.log(target.MLMProgram_Nm + ":" + risks+":"+issues)
+        if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null" || (risks == 0 && issues == 0)) return false;
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
         const banner = makebanner(safename);
@@ -135,7 +138,8 @@
         projectcount = portfoliocount = 0;
         makeri(target, "Risk");
         makeri(target, "Issue");
-        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ` <span title="Project Count">Portfolio: ${portfoliocount}</span>`
+        // let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ` <span title="Project Count">Portfolio: ${portfoliocount}</span>`
+        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ``;
         document.getElementById("banner" + safename).innerHTML += p + ' )';
     }  
 
@@ -154,25 +158,26 @@
     }  
 
     const makeri = (ri, type) => {
-        // Create a Risk or Issue section
-        programname = ri.MLMProgram_Nm;
-        if (programname == "null" || programname == null) return false;
-        safename = makesafe(programname);
-            let list = listri(programname, type);
-            document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
-            if (list.length != 0) {
-                document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
-                for (ri of list) {
-                  result++;
-                  window.ricount.push(true);
-                  rowcolor++;
-                  makedata(ri, type, programname);
-                  program = getprogrambykey(ri, programname);
-                  portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
-                  projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
-                }
-            }
-        // }
+      // Create a Risk or Issue section
+      programname = ri.MLMProgram_Nm;
+      if (programname == "null" || programname == null) return false;
+      safename = makesafe(programname);
+      let list = listri(programname, type);
+      // console.log("list");
+      // console.log(list);
+      document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
+      if (list.length != 0) {
+          document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
+          for (ri of list) {
+            result++;
+            window.ricount.push(true);
+            rowcolor++;
+            makedata(ri, type, programname);
+            program = getprogrambykeyonly(ri);
+            portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
+            projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
+          }
+      }
     }
 
     const makedata = (id, type, programname) => {            
@@ -251,7 +256,7 @@
               let counter = 0;
               for(r of ridata) {
                 if (r) {
-                  console.log(r)
+                  // console.log(r)
                   if (r.RI_Nm == program.RI_Nm && r.MLMProgram_Nm == program.MLMProgram_Nm) {
                     counter++;
                     // console.log(regions[r.MLMRegion_Cd] +":"+ r.MLMRegion_Cd)
@@ -354,13 +359,17 @@
 
           // }
         };
-        const program = getprogrambykey(id, programname);
-        const safename = makesafe(program.MLMProgram_Nm);
+        const program = getprogrambykeyonly(id, programname);
+        // const program = getprogrambykey(id, programname);
+        console.log(id);
+        const safename = (program.RILevel_Cd == "Portfolio") ? "Portfolios" : makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
         let url = text = "";
         // if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
         const trid = "tr" + type + saferi + Math.random();
         let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
+        console.log("table" + safename)
+        console.log(document.getElementById("table" + safename))
         document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
         const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
           ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
@@ -755,7 +764,9 @@
         setTimeout(function(){
           makefilters();
           dofilters();
+          console.log("1114")
           rifiltered = filtration(ridata);
+          console.log(rifiltered);
           let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
           setTimeout(function() {
             populate(riseed);

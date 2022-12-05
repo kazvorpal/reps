@@ -11,7 +11,7 @@ $fscl_year = $_GET['fscl_year'];
 
 $proj_name = "";
 if(!empty($_GET['proj_name'])){
-$proj_name = $_GET['proj_name'];
+  $proj_name = $_GET['proj_name'];
 }
 
 $prog_name = $_GET['program'];
@@ -94,7 +94,6 @@ $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
 $sql_uid = "Select EPSProject_Nm, PROJ_ID
                   FROM RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status) 
                   left join [EPS].[ProjectStage] on PROJ_NM = EPSProject_Nm";
-// echo $sql_uid;
 $stmt_uid = sqlsrv_query( $data_conn, $sql_uid );
 $row_uid = sqlsrv_fetch_array($stmt_uid  , SQLSRV_FETCH_ASSOC);
 $uid_frm_prj = $row_uid ['PROJ_ID']; 
@@ -102,7 +101,7 @@ $uid_frm_prj = $row_uid ['PROJ_ID'];
 
 $uid = $uid_frm_prj;
 if(isset($_GET['uid'])) {
-$uid = $_GET['uid'];
+  $uid = $_GET['uid'];
 }
 
 //echo $uid;
@@ -204,6 +203,12 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+
+<script>
+
+    ri = <?= json_encode($row_risk_issue) ?>
+
+</script>
 
 <body style="font-family:Mulish, serif;" onload="copyDiv()">
 	<div align="center"><h3>PROGRAM <?php echo strtoupper($RIType) ?> DETAILS</h3></div>

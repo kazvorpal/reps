@@ -39,8 +39,14 @@ const resultcounter = (results) => {
   function listri(target, type) {
     
     // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-    pre = rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target); // list of all data with the right program name and risk or issue
+    pre = (target == "Portfolios") 
+      ? rifiltered.filter(o => o.RIType_Cd == type && o.RILevel_Cd == "Portfolio")
+      : rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target && o.RILevel_Cd != "Portfolio"); // list of all data with the right program name and risk or issue
+    // console.log("pre");
+    // console.log(pre);
     post = pre.filter(filterfunction); // run it through the filters
+    // console.log("post");
+    // console.log(post);
     uni = post.map(item => item.RiskAndIssue_Key).filter((value, index, self) => self.indexOf(value) === index);
     return uni;
 }
@@ -59,9 +65,10 @@ const toggler = (target, o) => {
 }
 
   // Takes a program key and name and returns the row object
-  const getprogrambyname = (target) =>  mlm = rifiltered.find(o => o.MLMProgram_Nm == target);
-  const getprogrambykey = (target, name) =>  mlm = rifiltered.find(o => o && o.RiskAndIssue_Key == target && o.MLMProgram_Nm == name);
-  const getlocationbykey = (key) =>  mlm = locationlist.find(o => o.EPSProject_key == key);
+  const getprogrambyname = (target) =>  rifiltered.find(o => o.MLMProgram_Nm == target);
+  const getprogrambykey = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target && (o.MLMProgram_Nm == name || (name == "Portfolios" && o.MLMProgram_Nm == "Portfolio")));
+  const getprogrambykeyonly = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target);
+  const getlocationbykey = (key) =>  locationlist.find(o => o.EPSProject_key == key);
   
   const textalign = (field) => (field == null || parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
 
