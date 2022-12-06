@@ -120,9 +120,17 @@ $project_nm ="";
     //print_r($_POST);
     //exit();
 
-//GET POC EMAIL 
-
 //LOOK UP KEY VALUES 
+// GET UID FROM PROJECT NAME
+$assocProjects_sql = explode(",", $assocProject);
+$asscProjIN = $assocProjects_sql[0];
+
+$sql_in = "SELECT* FROM [EPS].[ProjectStage] WHERE PROJ_NM IN ('$asscProjIN')";
+$stmt_in  = sqlsrv_query( $data_conn, $sql_in  ); 
+$row_in  = sqlsrv_fetch_array( $stmt_in , SQLSRV_FETCH_ASSOC);
+$uid = $row_in['PROJ_ID'];
+//echo $uid;
+
 // IMPACT AREA
 $sql_imp_area = "SELECT* FROM RI_MGT.Impact_Area WHERE ImpactArea_Key = $impactArea";
 $stmt_imp_area  = sqlsrv_query( $data_conn, $sql_imp_area  ); 
@@ -351,7 +359,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=1&rikey=" . $SPMaxRI_Id;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=true&program=" . urlencode($assocProgram) ;
+                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($asscProjIN) . "&status=1&popup=true&program=" . urlencode($assocProgram) . "&uid=" . $uid ;
             }
             
             // SEND EMAIL USING MAIL FUNCION 
@@ -397,7 +405,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=1&rikey=" . $SPMaxRI_Id;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=1&popup=true&program=" . urlencode($assocProgram) ;
+                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($sql) . "&status=1&popup=true&program=" . urlencode($assocProgram) . "&uid=" . $uid;
             }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){

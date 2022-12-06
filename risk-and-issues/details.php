@@ -8,7 +8,7 @@ include ("../sql/project_by_name.php");
 //FIND PROJECT RISK AND ISSUES 1.26.2022
 $RiskAndIssue_Key = $_GET['rikey'];
 $fscl_year = $_GET['fscl_year'];
-$proj_name = $_GET['proj_name'];
+$proj_name = $_GET['proj_name']; 
 $status = $_GET['status']; //0=closed , 1=open
 $popup = $_GET['popup'];
   
@@ -54,7 +54,7 @@ $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
                 $sql_authorize = "SELECT [CCI_Alias], [PROJ_OWNR_NM], [PROJ_NM], [PROJ_ID],[RI_MGT].[RiskandIssues_Users].[Username]
                 from [RI_MGT].[RiskandIssues_Users]
                 left join [EPS].[ProjectStage] on [PROJ_OWNR_NM] = [CCI_Alias]
-                Where [RI_MGT].[RiskandIssues_Users].[Username] = '$windowsUser'and [PROJ_NM] = '$proj_name'";
+                Where [RI_MGT].[RiskandIssues_Users].[Username] = '$windowsUser' and [PROJ_NM] = '$proj_name'";
 
 								$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
                 $row_authorize = sqlsrv_fetch_array( $stmt_authorize, SQLSRV_FETCH_ASSOC);
@@ -71,7 +71,6 @@ $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
                   $access = "false";}
                 //PRINT USER SQL TO SCREEN FOR DEBUG
                 //echo $sql_authorize;
-                //echo $access;
 
 //DECLARE
 $ri_id = $row_risk_issue['RiskAndIssue_Key'];
@@ -118,7 +117,7 @@ if($riskRealized_Raw == 1){
 
 //LINK FOR DETAILS BUTTON
 $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $ri_id ."&fscl_year=" . $fscl_year . "&proj_name=" . $project_nm . "&status=1&popup=true&uid=" . $uid);
-//echo $link; 
+
 ?>
 <!doctype html>
 <html>

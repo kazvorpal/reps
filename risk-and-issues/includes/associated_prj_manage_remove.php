@@ -13,7 +13,7 @@ include ("../../sql/ri_prj_assoc_manage.php");
 $uid = $_GET['uid'];
 $ri_type = strtolower($_GET['ri_type']);
 $action = $_GET['action'];
-$fiscal_year =  $_GET['fscl_year'];
+$fiscal_year =  $_GET['fiscal_year'];
 $ri_level = strtolower($_GET['ri_level']);
 $ri_proj_name = $row_projID['PROJ_NM'];
 $name =$_GET['name'];
