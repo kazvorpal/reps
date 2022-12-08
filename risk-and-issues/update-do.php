@@ -373,7 +373,7 @@ $unframe = $_SESSION['unframe'];
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=" . $riOpenFlg . "&rikey=" . $riKeys;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/" . $detailPage . ".php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true";
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/" . $detailPage . ".php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true&uid=";
             }
                            
             // SEND EMAIL USING MAIL FUNCION 
@@ -419,7 +419,7 @@ $unframe = $_SESSION['unframe'];
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=" . $riOpenFlg . "&rikey=" . $riKeys;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true";
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true&uid=";
             }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){
