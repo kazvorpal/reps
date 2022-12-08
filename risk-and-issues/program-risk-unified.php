@@ -291,6 +291,7 @@
   <link rel="stylesheet" href="steps/style.css" type='text/css'> 
   <link rel="stylesheet" href="../colorbox-master/example1/colorbox.css" />
   <link rel="stylesheet" href="includes/ri-styles.css" />
+  <link rel="stylesheet" href="css/ri.css" />
   
 <script>
 $(document).ready(function(){
@@ -973,6 +974,8 @@ if($formaction == "update") {
     </div>
   </form>
 </div>
+<div id="ricontainer" class="ricontainer">
+                    </div>
 </main>
 
 <script>
@@ -1139,4 +1142,28 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 
 <script src="includes/ri-functions.js"></script>
 </body>
+<script>
+ritiles = {
+    fiscalyear: {name: "fiscalYer", text: "LRP Year*", field: ""}, 
+    rilevel: {name: "RILevel", text: "RISK/ISSUE Risk/Issue Level *", field: ""}, 
+    portfoliotype: {name: "portfolioType", text: "Portfolio Type*", field: ""}
+};
+
+for (o in  ritiles) {
+    console.log(o)
+    let ritile = makeelement({e: "div", i: ritiles[o].name, c: "ritile"});
+    ritile.appendChild(makeelement({e: "div", t: ritiles[o].text, c: "tilehead"}))
+    ritile.appendChild(makeelement({e: "div", i: o, t: o, c: "tilebody"}));
+    console.log(ritile);
+    document.querySelector("#ricontainer").appendChild(ritile);
+}
+
+// ritiles.forEach(o => {
+//     console.log(o)
+//     let ritile = makeelement({e: "div", i: "riinfo" + o, c: "ritile", t: Math.random()});
+//     console.log(ritile);
+//     document.querySelector("#ricontainer").appendChild(ritile);
+// })
+</script>
+
 </html>

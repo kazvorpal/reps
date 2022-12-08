@@ -104,8 +104,7 @@
           var mt = document.getElementById("maintable");
           mt.appendChild(makeheader("projects"));
       }
-      portfolio = {MLMProgram_Nm: "Portfolios"};
-      makerow(portfolio, 1, 1)
+      (mode == "portfolio") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
       for (loop of rilist) {
         // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
         if(loop != null) {
@@ -163,8 +162,6 @@
       if (programname == "null" || programname == null) return false;
       safename = makesafe(programname);
       let list = listri(programname, type);
-      // console.log("list");
-      // console.log(list);
       document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
       if (list.length != 0) {
           document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));

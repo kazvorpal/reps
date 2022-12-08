@@ -227,7 +227,7 @@ POR Version 12/05/2022 (Includes approved CR's as of 12/02/2022)
                   </thead>
                   
                   <!-- Output from JSON  -->
-                  <tbody id="gridTableContainer" style="font-size:7px"></tbody>
+                  <tbody id="gridTableContainer" style="font-size:10px"></tbody>
 
                </table>
             </div>
