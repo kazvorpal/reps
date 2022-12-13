@@ -110,7 +110,14 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
   
   <script>
-  $(document).ready(function(){
+   let prop = {
+      includeSelectAllOption: true, 
+      enableCaseInsensitiveFiltering: true, 
+      selectAllNumber: true, 
+      numberDisplayed: 1, 
+      includeResetOption: true
+    }
+   $(document).ready(function(){
           //Examples of how to assign the Colorbox event to elements
           $(".group1").colorbox({rel:'group1'});
           $(".group2").colorbox({rel:'group2', transition:"fade"});
@@ -939,9 +946,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         s.appendChild(makeelement({e: "option", t: o, v: k}));
       });
     }
-    $('#subprogram').multiselect("destroy").multiselect({
-        includeSelectAllOption: true,
-    });
+    $('#subprogram').multiselect("destroy").multiselect(prop);
     setTimeout(function() {
       if (!document.backbutton)
         document.getElementById("programcache").value = document.getElementById("program").value;
@@ -971,7 +976,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       console.log(document.getElementsByName(field).length)
       if(document.getElementsByName(field).length == 0) {
         $(`#${field}`).val("").multiselect(disable ? "disable" : "enable");
-        $('#subprogram').multiselect("destroy").multiselect();
+        $('#subprogram').multiselect("destroy").multiselect(prop);
       } else {
         document.getElementsByName(field).forEach(t2 => {
           console.log(disable);
@@ -994,11 +999,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const programlevel = () => {
     if (document.querySelector(`input[name="RILevel"]:checked`) && document.querySelector(`input[name="RILevel"]:checked`).value == "Portfolio") {
       console.log("portfolio");
-      $("#program").val(false).attr("required", true).attr("multiple", true).multiselect("destroy").multiselect().attr("display", "block");;
+      $("#program").val(false).attr("required", true).attr("multiple", true).multiselect("destroy").multiselect(prop).attr("display", "block");;
     } else {
       if (!document.backbutton) {
         console.log("ping")
-        $("#program").val(false).attr("required", true).attr("multiple", false).val(false).multiselect("destroy").multiselect().attr("display", "block");;
+        $("#program").val(false).attr("required", true).attr("multiple", false).val(false).multiselect("destroy").multiselect(prop).attr("display", "block");;
       }
     }
   }
@@ -1079,8 +1084,8 @@ document.getElementsByName("RIType").forEach((o) => {
     setsubprogramevent();
     setregionevent();
     setlevelevent();
-    $("#program").val(false).attr("multiple", true).multiselect();
-    $("#subprogram").val(false).attr("multiple", true).multiselect();
+    $("#program").val(false).attr("multiple", true).multiselect(prop);
+    $("#subprogram").val(false).attr("multiple", true).multiselect(prop);
     $('#program').removeAttr('style')
     document.getElementById("program").style.height = "1px";
     document.getElementById("program").style.width = "1px";
@@ -1120,10 +1125,10 @@ document.getElementsByName("RIType").forEach((o) => {
       console.log(document.subprogram)
       setTimeout(conditionals, 2000);
       setTimeout(function(){
-        $('#program').val(document.program).multiselect("destroy").multiselect();
+        $('#program').val(document.program).multiselect("destroy").multiselect(prop);
         subevent();
         // setTimeout(function() {
-          $('#subprogram').val(document.subprogram.split(",")).multiselect("destroy").multiselect();
+          $('#subprogram').val(document.subprogram.split(",")).multiselect("destroy").multiselect(prop);
           // }, 100);
         }, 3000);
       } else 

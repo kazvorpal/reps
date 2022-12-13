@@ -53,7 +53,7 @@
   <section>
     <div class="row" align="center">
       <div style="width:98%">
-        <div class="col-xs-12 text-center">
+        <div class="col-lg-12 text-center">
         <h1 id="title">R&I Dashboard</h1>
         <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
 
@@ -382,7 +382,7 @@
           e: "th", 
           i: "th" + type + saferi, 
           t: "<div style='overflow:hidden'>" + program.RI_Nm + "</div>", 
-          c:"p-4 " + c,
+          c:"p-1 " + c,
         });
         const tridobj = document.getElementById(trid);
         if (arrow != "") {
@@ -400,7 +400,7 @@
                               || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite"
                                : ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
               let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-4 datacell" + wrapping + textalign(texter) + bgcolor, w: w}));
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + textalign(texter) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
               tridobj.appendChild(header);
@@ -447,7 +447,7 @@
                   : (field == "Market_Cd" && locale != undefined) ? locale.Market_Cd 
                   : (field == "EPS_Location_Cd" && locale != undefined)  ? locale.Facility_Cd 
                   : project[field];
-                  tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell"}));
+                  tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell align-middle"}));
               }
               document.getElementById("table" + saferi).appendChild(tr);
               p.push(project.EPSProject_Key);
@@ -463,7 +463,7 @@
         // Make the header row for a project 
         const trri = document.createElement("tr");
         for (field of Object.keys(projectfieldnames)) {
-            trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-4 subtitles", w: projectfieldnames[field].width}));
+            trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-1 subtitles", w: projectfieldnames[field].width}));
         }
         return trri;
     }  
@@ -473,22 +473,22 @@
       // Make the header for Projects
       
         const safename = makesafe(name);
-        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-4<?= $headerposition ?>"});
+        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-1<?= $headerposition ?>"});
         if (ispp(mode)) {
             let cells = ["Risk/Issue"];
             rowcolor = 1;
             for (field of Object.keys(rifields)) {
-                trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles"}));
+                trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-1 titles align-middle"}));
                 // trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
                 cells.push(rifields[field].name);
                 if (rifields[field].name == "ID") {
-                    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-4 text-center titles", "w": "12"}));
+                    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-1 text-center titles align-middle", "w": "12"}));
                 }
             }
         } else {
             let cells = [];
             Object.entries(rifields).forEach(([key, value]) => {
-                trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-4 titles"}));
+                trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-1 titles align-middle"}));
                 cells.push(value);
             })
         }
@@ -500,7 +500,7 @@
       // Create a row in the Project table
       const name = ri.RI_Nm;
       const safename = makesafe(ri["RI_Nm"]);
-      const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-4 datarow"});
+      const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-1 datarow"});
       const fieldswitch = {
           //    Specific fields that need extra calculation
           mangerlist: () => {
@@ -717,7 +717,7 @@
             //                 (["actionplandate"] == test && (Date.parse(texter)+86400000+1296000000) < Date.parse(new Date())) ? " blulite" : "";
             // console.log(bgcolor)
              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
-            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-4 datacell" + wrapping + textalign(texter) + bgcolor }));
+            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
           })(field);
       }
       return trri;
@@ -725,7 +725,7 @@
     var modebutton = (target) => {
         let url = "<a href='" +"/risk-and-issues/dashboard/?mode=" + target + "' style='color:#fff' onclick='return false';>";
         let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
-        return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-3","j": function() {
+        return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-1","j": function() {
             console.log("changing mode to " + target);
             init(target);
         }})

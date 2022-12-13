@@ -1143,18 +1143,26 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 <script src="includes/ri-functions.js"></script>
 </body>
 <script>
-ritiles = {
-    fiscalyear: {name: "fiscalYer", text: "LRP Year*", field: ""}, 
-    rilevel: {name: "RILevel", text: "RISK/ISSUE Risk/Issue Level *", field: ""}, 
-    portfoliotype: {name: "portfolioType", text: "Portfolio Type*", field: ""}
+const years = [{name: "2022", value: 2022}, {name: "2023", value: 2023}]
+const levels = [{name: "RILevel", text: "Portfolio", value: "Portfolio"}, {name: "RILevel", text: "Program", value: "Program"}]
+const ritiles = {
+    fiscalyear: {name: "fiscalYer", text: "LRP Year*", field: {e: "select", l: years, n: "fiscalYer", i: "fiscalYer"}}, 
+    rilevel: {name: "RILevel", text: "RISK/ISSUE Risk/Issue Level *", field: {e: "radio", l: levels, n: "RILevel", i: "RILevel"}}, 
+    portfoliotype: {name: "portfolioType", text: "Portfolio Type*", field: "kjlkjhlkj"}
 };
-
 for (o in  ritiles) {
-    console.log(o)
+    // console.log(o)
     let ritile = makeelement({e: "div", i: ritiles[o].name, c: "ritile"});
-    ritile.appendChild(makeelement({e: "div", t: ritiles[o].text, c: "tilehead"}))
-    ritile.appendChild(makeelement({e: "div", i: o, t: o, c: "tilebody"}));
-    console.log(ritile);
+    ritile.append(makeelement({e: "div", t: ritiles[o].text, c: "tilehead"}))
+    let ribody = makeelement({e: "div", i: o, c: "tilebody"});
+    // console.log(ritiles[o].field);
+    if (ritiles[o].field != "") {
+        ribody.append(makeelement(ritiles[o].field));
+    } else 
+        ribody.createTextNode(ritiles[o].field)
+    ritile.append(ribody);
+    
+    // console.log(ritile);
     document.querySelector("#ricontainer").appendChild(ritile);
 }
 

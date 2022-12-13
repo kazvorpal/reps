@@ -254,21 +254,32 @@ $(function(){
   makefilters();
 
   const dofilters = () => {
-    let prop = {includeSelectAllOption: true}
+    let shortprops = {
+      includeSelectAllOption: true, 
+      numberDisplayed: 2, 
+    }
+    let longprops = structuredClone(shortprops);
+    longprops["includeSelectAllOption"] = true;
+    longprops["enableCaseInsensitiveFiltering"] = true;
+    longprops["selectAllNumber"] = true;
+    longprops["numberDisplayed"] = 2;
+    longprops["includeResetOption"] = true;
+
     $('#fiscal_year').val(new Date().getFullYear()).multiselect({
       includeSelectAllOption: true,
     });
-    $("#level").multiselect(prop);
-    $("#pStatus").val(1).multiselect("destroy").multiselect();
-		$('#category').multiselect(prop);
-		$('#owner').multiselect(prop);
-		$('#program').multiselect(prop);
-		$('#subprogram').multiselect(prop);
-		$('#region').multiselect(prop);
-		$('#market').multiselect(prop);
-    $('#facility').multiselect(prop);
-		$('#risk_issue').multiselect(prop);
-		$('#impact_level').multiselect(prop);
+    console.log(shortprops)
+    $("#level").multiselect(longprops);
+    $("#pStatus").val(1).multiselect("destroy").multiselect(shortprops);
+		$('#category').multiselect(shortprops);
+		$('#owner').multiselect(longprops);
+		$('#program').multiselect(longprops);
+		$('#subprogram').multiselect(longprops);
+		$('#region').multiselect(longprops);
+		$('#market').multiselect(longprops);
+    $('#facility').multiselect(longprops);
+		$('#risk_issue').multiselect(shortprops);
+		$('#impact_level').multiselect(shortprops);
     document.getElementById("Go").onclick = function() {
       // filter form button
       // let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : ridata;
