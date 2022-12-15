@@ -172,8 +172,8 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
     for(var i=0, n=checkboxes.length;i<n;i++) {
       checkboxes[i].checked = source.checked;
     }
-    document.getElementById("Region").checked = false;
-    document.getElementById("Region").click();
+    // document.getElementById("Region").checked = false;
+    // document.getElementById("Region").click();
   }
   var user  = <?= json_encode($row_port_user, JSON_PRETTY_PRINT) ?>
   ;
@@ -371,7 +371,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
             <td><label for="Southeast"><input type="checkbox" name="Region[]" value="Southeast" required> Southeast </label> </td>
             <td><label for="Southwest"><input type="checkbox" name="Region[]" value="Southwest" required> Southwest </label></td>
             <td><label for="Virginia"><input type="checkbox" name="Region[]" value="Virginia" required> Virginia </label></td>
-            <td><label for="All"><input type="checkbox" name="Region[]" value="All" onClick="toggle(this)"> All </label></td>
+            <td><label for="All"><input type="checkbox" name="allbutton" value="All" onClick="toggle(this)"> All </label></td>
           </tr>
         </table>
         </div>
@@ -885,7 +885,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
   const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
   const nameevent = () => {
     let locations = "";
-    if (document.querySelector('input[name="Region[]"][value=All]').checked == true) {
+    if (document.querySelector('input[name="allbutton"][value=All]').checked == true) {
       locations = "ALL ";
       document.getElementsByName("Region[]").forEach((o) => {
         o.required = false;
@@ -1109,7 +1109,7 @@ document.getElementsByName("RIType").forEach((o) => {
   });
 
   setInterval(function() {
-    nameevent();
+    // nameevent();
     document.getElementById("program").style.display = "block";
     document.getElementById("subprogram").style.display = "block";
   }, 100);
