@@ -1109,10 +1109,10 @@ document.getElementsByName("RIType").forEach((o) => {
   });
 
   setInterval(function() {
-    // nameevent();
+    nameevent();
     document.getElementById("program").style.display = "block";
     document.getElementById("subprogram").style.display = "block";
-  }, 100);
+  }, 1000);
   
   const restoredata = () => {
     if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
