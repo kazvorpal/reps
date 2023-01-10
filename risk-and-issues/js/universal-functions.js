@@ -16,6 +16,7 @@ const sortby = (list, property) => {
   const makeelement = (o) => {
 
     // o is an (o)bject with these optional properties:
+    // o.a is title text, sorta like (a)lt text
     // o.c is the (c)lasses, separated by spaces like usual
     // o.d is (d)efault, or selected, or checked
     // o.e is the (e)lement, like "td" or "tr"
@@ -28,19 +29,27 @@ const sortby = (list, property) => {
     // o.t is the innerHTML (t)ext or such
     // o.v is any necessary (v)alue, like input.value
     // o.w is the (w)idth
+    // o.y is t(y)pe
     
     let t;
     if (["radio", "checkbox"].includes(o.e)) {
       console.log("radio");
       ts = [];
+      let d = document.createElement("div");
       o.l.forEach(l => {
-        x = document.createElement(o.e);
+        let x = document.createElement("input");
         x.value = l.value;
         x.name = l.name;
         x.text = l.text;
-        ts.push(x);
+        x.type = o.e;
+        let label = document.createElement("label");
+        label.textContent = " " + l.text + " ";
+        // ts.push(x);
+        d.appendChild(x);
+        d.appendChild(label);
       });
-      t = ts;
+      t = d;
+      console.log(d)
     } else {
       // console.log(["radio", "checkbox"].includes[o.e])
       t = document.createElement(o.e);
@@ -49,6 +58,8 @@ const sortby = (list, property) => {
       t.className = (typeof o.c == "undefined") ? "" : o.c;
       t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
       t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
+      t.title = (typeof o.a == "undefined") ? "" : o.a;
+      t.type = (typeof o.a == "undefined") ? "" : o.y;
       if (typeof o.w != "undefined" && o.w != "") {
         t.width =  o.w + "%";
       }

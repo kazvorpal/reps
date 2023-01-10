@@ -211,3 +211,10 @@ body {
   border-bottom: #ddd solid 1px;
   border-radius: 0px 0px 5px 5px;
 }
+
+.active {
+  cursor: pointer;
+}
+.active:hover {
+  text-decoration: underline;
+}

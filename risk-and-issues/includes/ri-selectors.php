@@ -107,8 +107,35 @@ const filterfunction = (o) => {
           || fieldempty("facility") 
           || (isincluded('#facility', o.Facility_Cd) || isincluded('#facility', o.EPSFacility_Cd)))) &&
       ((fieldempty("dateranger") 
-          || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))
+          || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))  && 
+      (fieldempty("allsearch")
+          || idsearch(o))
   );
+}
+
+const ridatasearch = () => {
+  ridata.forEach(o => {
+    for (key in o) {
+        if(typeof o[key] == "string" && o[key].toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) {
+            console.log(o[key]);
+        }
+    }
+  })
+}
+
+const propsearch = o => {
+    for (key in o) {
+        if(typeof o[key] == "string" && o[key].toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) {
+          return true;
+        }
+    }
+}
+
+const idsearch = o => {
+  // console.log()
+  if(o["RiskAndIssue_Key"].toString().indexOf(document.getElementById("allsearch").value) != -1) {
+    return true;
+  }
 }
 
 const filtration = (data) => {
@@ -174,6 +201,8 @@ $(function(){
 
     if (key == "daterange") {
       document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
+    } else if(key == "searchall") {
+      document.getElementById("row").appendChild(makeelement({e: "div", t: "Search&nbsp;IDs<br/><input type='text' id='allsearch' />", c: ""}));
     } else if((typeof o.p == "undefined" || o.p.includes(mode))) {
       o.f = (typeof key != "undefined") ? key : o.f;
       o.l = (typeof o.l == "undefined") ? ridata : o.l;
@@ -229,7 +258,8 @@ $(function(){
       Subprogram_Nm: {i: "subprogram", n: "subprogram", t: "Subprogram<br/>", p: ["program", "project"], l: subp},
       Region_Cd: {i: "region", n: "region", t: "Region<br/>", p: ["project"], l: locationlist},
       Market_Cd: {i: "market", n: "market", t: "Market<br/>", p: ["project"], l: locationlist},
-      Facility_Cd: {i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", p: ["project"], l: locationlist}
+      Facility_Cd: {i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", p: ["project"], l: locationlist},
+      searchall: {}
     }
     // This loop makes all of the filters
     Object.entries(selectors).forEach(([key, value]) => {
@@ -268,7 +298,8 @@ $(function(){
     $('#fiscal_year').val(new Date().getFullYear()).multiselect({
       includeSelectAllOption: true,
     });
-    console.log(shortprops)
+    testlist = [1, 2, 3, 4, 5, 12, 11, 13, 23, 24, 22];
+    // console.log(shortprops)
     $("#level").multiselect(longprops);
     $("#pStatus").val(1).multiselect("destroy").multiselect(shortprops);
 		$('#category').multiselect(shortprops);
@@ -280,6 +311,15 @@ $(function(){
     $('#facility').multiselect(longprops);
 		$('#risk_issue').multiselect(shortprops);
 		$('#impact_level').multiselect(shortprops);
+    // $('#allsearch').autoComplete({
+    //   minLength: 1,
+    //   search: function(string,)
+    // })
+    
+    // $('#allsearch').change(function () {
+    //   alert($('#allsearch').val());
+    // })
+
     document.getElementById("Go").onclick = function() {
       // filter form button
       // let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : ridata;
