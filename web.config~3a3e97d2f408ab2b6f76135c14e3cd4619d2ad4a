@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <defaultDocument>
+            <files>
+				<remove value="index.php" />
+                <add value="index.php" />
+            </files>
+        </defaultDocument>
+        <rewrite>
+            <rules>
+                <rule name="Change Requset Generator" stopProcessing="true">
+                    <match url="ccrb" />
+                    <action type="Redirect" url="https://catl0dwas11208.corp.cox.com:8443/cr" />
+                </rule>
+                <rule name="Master List Management" stopProcessing="true">
+                    <match url="mlm" />
+                    <action type="Redirect" url="https://catl0dwas11208.corp.cox.com:8443/mlm" />
+                </rule>
+		<rule name="Budget Tracker" stopProcessing="true">
+                    <match url="bt" />
+                    <action type="Redirect" url="https://catl0dwas11208.corp.cox.com:8443/bt" />
+                </rule>
+		<rule name="POInt" stopProcessing="true">
+                    <match url="point" />
+                    <action type="Redirect" url="https://catl0dwas11208.corp.cox.com:8443/point" />
+                </rule>
+            </rules>
+        </rewrite>
+    </system.webServer>
+</configuration>
