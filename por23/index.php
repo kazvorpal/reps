@@ -2,6 +2,7 @@
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/update-time.php");?>
+<?php include ("../sql/pordates.php");?>
 <!doctype html>
 <html>
    <head>
@@ -30,7 +31,7 @@ function MM_goToURL() { //v3.0
       <div align="center"><h2>Plan of Record 2023</h2></div>
       <div align="center">
 <?php // PORDate(); ?>
-POR Version 12/05/2022 (Includes approved CR's as of 12/02/2022) 
+POR Version <?php echo $por_pub_date;?> (Includes approved CR's as of <?php echo $por_cr_date;?>) 
 </div>
 
       <!-- Master Container -->
@@ -227,7 +228,7 @@ POR Version 12/05/2022 (Includes approved CR's as of 12/02/2022)
                   </thead>
                   
                   <!-- Output from JSON  -->
-                  <tbody id="gridTableContainer" style="font-size:10px"></tbody>
+                  <tbody id="gridTableContainer" style="font-size:7px"></tbody>
 
                </table>
             </div>

@@ -2,6 +2,7 @@
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/update-time.php");?>
+<?php include ("../sql/pordates.php");?>
 <!doctype html>
 <html>
    <head>
@@ -29,7 +30,7 @@ function MM_goToURL() { //v3.0
       <div align="center"><h2>Plan of Record 2022</h2></div>
       <div align="center">
 <?php // PORDate(); ?>
-POR Version 11/14/2022 (Includes approved CR's as of 11/11/2022) 
+POR Version <?php echo $por_pub_date;?> (Includes approved CR's as of <?php echo $por_cr_date;?>) 
 </div>
 
       <!-- Master Container -->
