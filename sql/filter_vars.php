@@ -8,7 +8,7 @@ if (isset($_POST['fiscal_year'])) {
 	$fiscal_year = $list_fy;
 }
 
-$fiscal_year_default = '2022';
+$fiscal_year_default = '2023';
 if (isset($_POST['fiscal_year'])) { 
 	$fiscal_year_default_x = $_POST['fiscal_year'];
 
