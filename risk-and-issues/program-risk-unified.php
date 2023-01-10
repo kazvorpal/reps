@@ -278,7 +278,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Carolino, Gil">
-    <title>RePS Reporting - Cox Communications</title>
+    <title>Unified RePS Reporting - Cox Communications</title>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
@@ -474,7 +474,7 @@ if($formaction == "update") {
   <hr>
 <?php } ?>
 
-    <table width="100%" border="0" cellpadding="10" cellspacing="10">
+    <!--table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
           <th width="50%" align="left">
@@ -502,7 +502,7 @@ if($formaction == "update") {
                 <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" value="<?php echo $name ?>">
                 <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_risk_issue['MLMProgram_Nm'];?>">
                 <input name="NameA1" type="hidden" id="NameA1" value="<?php //echo $row_projID['SCOP_DESC'];?>">
-                <input name="NameB" type="hidden" id="NameB" value="<?php echo $regionCD; ?>"> <!-- Region -->
+                <input name="NameB" type="hidden" id="NameB" value="<?php echo $regionCD; ?>">
                 <input name="NameC" type="hidden" id="NameC" value="<?php //echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
               </tr>
               <tr>
@@ -728,35 +728,6 @@ if($formaction == "update") {
 		</div> 
         </td>
         </tr>
-        <!--
-        <tr>
-          <td colspan="2" align="left"></td>
-        </tr>
-        <tr>
-          <td align="left"><h4 style="color: #00aaf5">CURRENT TASK POC</h4></td>
-          <td align="left">
-		  </td>
-        </tr>
-        <tr>
-          <td colspan="2" align="left">
-          <div class="box">
-            <label for="Individual">Individual POC *<br></label>
-                <select type="text" list="Individual" name="Individual" class="form-control" id="indy" required>
-                  
-                    <?php while($row_internal  = sqlsrv_fetch_array( $stmt_internal , SQLSRV_FETCH_ASSOC)) { ?>
-                      <option value=""></option>
-                      <option value="<?php echo $row_internal['POC_Nm'] ;?>" <?php if($POC_Nm == $row_internal['POC_Nm']) { echo "selected";} ?>><?php echo $row_internal['POC_Nm'] . " : " . $row_internal['POC_Department'] ;?></option>
-                    <?php } ?>
-                </select>  
-              <hr>
-                <div align="center">
-                  <span class="glyphicon glyphicon-edit"></span> <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">Request POC Addition</a>
-                </div>
-          </div>
-              </div>
-          </td>
-          </tr> 
-        -->
         <tr>
           <td colspan="2" align="left"></hr></td>
         </tr>
@@ -925,29 +896,6 @@ if($formaction == "update") {
             </div>
           </td>
         </tr>
-        <!--
-        <tr>
-        <td colspan="3" align="left"><h4 style="color: #00aaf5">RAID LOG</h4></td>
-			  </tr>
-        <tr>
-          <td colspan="3" align="left">
-            <div class="box">
-              <table width="50%" border="0">
-                  <td colspan="2"><strong>Notify Portfolio Team</strong></td>
-                  </tr>
-                  <tr>
-                  <td><label>
-                    <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php //if($raidLog == 1) {echo "checked";}?>>
-                    Yes</label></td>
-                  <td><label>
-                    <input type="radio" name="raidLog" value="No" id="raid_1" <?php //if($raidLog == 0) {echo "checked";}?>>
-                    No</label></td>
-                  </tr>
-                </table>
-              </div>
-			    </td>
-        </tr>
-        -->
         <tr>
           <td colspan="3" align="left"><h4 style="color: #00aaf5">DATE CLOSED</h4></td>
         </tr>
@@ -966,7 +914,7 @@ if($formaction == "update") {
     </table><div align="right">
     <button type="button" class="btn btn-primary" onclick="myConfirmation()"><span class="glyphicon glyphicon-step-backward"></span> Back </button>
     <button type="submit" class="btn btn-primary" onclick="return validateForm()">Review <span class="glyphicon glyphicon-step-forward"></span></button>  
-    </div>
+    </div-->
     </fieldset>
   </form>
     <div align="left" style="margin-top:-33px;">  
@@ -1072,26 +1020,26 @@ jQuery(function ($) {
 </script>
 
 <script>
-function validateGrp() {
-  let things = document.querySelectorAll('.required_group_reg')
-  let checked = 0;
-  for (let thing of things) {
-    thing.checked && checked++
-  }
-  if (checked) {
-    things[things.length - 1].setCustomValidity("");
-    document.getElementById('checkGroup').submit();
-  } else {
-    // things[things.length - 1].setCustomValidity("type="radio" name="Drivers");
-    things[things.length - 1].setCustomValidity("This is where a validation message goes");
-    things[things.length - 1].reportValidity();
-  }
-}
+// function validateGrp() {
+//   let things = document.querySelectorAll('.required_group_reg')
+//   let checked = 0;
+//   for (let thing of things) {
+//     thing.checked && checked++
+//   }
+//   if (checked) {
+//     things[things.length - 1].setCustomValidity("");
+//     document.getElementById('checkGroup').submit();
+//   } else {
+//     // things[things.length - 1].setCustomValidity("type="radio" name="Drivers");
+//     things[things.length - 1].setCustomValidity("This is where a validation message goes");
+//     things[things.length - 1].reportValidity();
+//   }
+// }
 
-document.querySelector('[type=submit]').addEventListener('click', () => {
-  console.log("clicker")
-  // validateGrp()
-});
+// document.querySelector('[type=submit]').addEventListener('click', () => {
+//   console.log("clicker")
+//   // validateGrp()
+// });
 </script>
 <script>
 var date = new Date();
@@ -1105,12 +1053,12 @@ if (day < 10) day = "0" + day;
 
 var today = <?php if(is_null($date)) {echo ""; } else { echo json_encode(date_format($date,'Y-m-d'), JSON_HEX_TAG); } ?>
 
-document.getElementById('date').value = today;
+// document.getElementById('date').value = today;//restore
 </script>
 
 <script>
-var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_encode(date_format($RIClosed_Dt,'Y-m-d'), JSON_HEX_TAG); } ?>
-document.getElementById('DateClosed').value = closeday;
+// var closeday = <?php if(is_null($RIClosed_Dt)) {echo ""; } else { echo json_encode(date_format($RIClosed_Dt,'Y-m-d'), JSON_HEX_TAG); } ?>
+// document.getElementById('DateClosed').value = closeday;
 </script>
 <script>
   // They commented out the indy field
@@ -1130,25 +1078,29 @@ $('.subscriber :checkbox').change(function () {
 </script> 
 
 <script language="javascript">
-document.getElementById("dateUnknown").addEventListener("change", function(){
-document.getElementById("Unknown").checked = false;
-})
+// document.getElementById("dateUnknown").addEventListener("change", function(){
+// document.getElementById("Unknown").checked = false;
+// })
 </script>
 
 <script>
-document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
-document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+// document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
+// document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 </script>
 
 <script src="includes/ri-functions.js"></script>
 </body>
 <script>
 const years = [{name: "2022", value: 2022}, {name: "2023", value: 2023}]
-const levels = [{name: "RILevel", text: "Portfolio", value: "Portfolio"}, {name: "RILevel", text: "Program", value: "Program"}]
+const levels = [{name: "RILevel", text: "Portfolio", value: "Portfolio"}, {name: "RILevel", text: "Program", value: "Program"}];
+const ptypes = [{name: "portfolioType", text: "NT 2.0", value: "1"}, {name: "portfolioType", text: "BAU", value: "2"}];
+const ritypes = [{name: "RIType", text: "Risk 2.0", value: "Risk"}, {name: "RIType", text: "Issue", value: "Issue"}];
+// const ritypes = [{name: "RIType", text: "Risk 2.0", value: "Risk"}, {name: "RIType", text: "Issue", value: "Issue"}];
 const ritiles = {
+    name: {name: "name", text: "Name*", field: {e: "input", y: "text", n: "Namex", i: "Namex", c: "form-control"}}, 
     fiscalyear: {name: "fiscalYer", text: "LRP Year*", field: {e: "select", l: years, n: "fiscalYer", i: "fiscalYer"}}, 
     rilevel: {name: "RILevel", text: "RISK/ISSUE Risk/Issue Level *", field: {e: "radio", l: levels, n: "RILevel", i: "RILevel"}}, 
-    portfoliotype: {name: "portfolioType", text: "Portfolio Type*", field: "kjlkjhlkj"}
+    portfoliotype: {name: "portfolioType", text: "Portfolio Type*", field: {e: "radio", l: ptypes, }}
 };
 for (o in  ritiles) {
     // console.log(o)
@@ -1156,12 +1108,14 @@ for (o in  ritiles) {
     ritile.append(makeelement({e: "div", t: ritiles[o].text, c: "tilehead"}))
     let ribody = makeelement({e: "div", i: o, c: "tilebody"});
     // console.log(ritiles[o].field);
-    if (ritiles[o].field != "") {
+    if (typeof ritiles[o].field == "object") {
+        // console.log(typeof ritiles[o].field)
         ribody.append(makeelement(ritiles[o].field));
-    } else 
-        ribody.createTextNode(ritiles[o].field)
+        // console.log(ribody)
+    } //else if (ritiles[o].field != "")
+    //     ribody.createTextNode(ritiles[o].field)
     ritile.append(ribody);
-    
+    console.log(ritile)
     // console.log(ritile);
     document.querySelector("#ricontainer").appendChild(ritile);
 }

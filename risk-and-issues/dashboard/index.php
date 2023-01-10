@@ -105,12 +105,18 @@
           mt.appendChild(makeheader("projects"));
       }
       (mode == "portfolio") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
+      rowcounter = 0;
       for (loop of rilist) {
+        rowcounter++;
         // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
         if(loop != null) {
             (ispp(mode)) ? makerow(loop, listri(loop.MLMProgram_Nm, "Risk").length, listri(loop.MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(loop));
         }
         resultcounter((ispp(mode)) ? result : rilist);
+        if (rowcounter > 19 && mode == "project") {
+          console.log("paginating")
+          break
+        } 
       }
     }
 
@@ -120,7 +126,7 @@
         if (typeof target == null) {
           return false;
         }
-        console.log(target.MLMProgram_Nm + ":" + risks+":"+issues)
+        // console.log(target.MLMProgram_Nm + ":" + risks+":"+issues)
         if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null" || (risks == 0 && issues == 0)) return false;
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
@@ -358,15 +364,15 @@
         };
         const program = getprogrambykeyonly(id, programname);
         // const program = getprogrambykey(id, programname);
-        console.log(id);
+        // console.log(id);
         const safename = (program.RILevel_Cd == "Portfolio") ? "Portfolios" : makesafe(program.MLMProgram_Nm);
         const saferi = makesafe(program.RI_Nm);
         let url = text = "";
         // if (document.getElementById('impact_level').value == "" || ($('#impact_level').val()).includes(program.ImpactLevel_Nm)) {
         const trid = "tr" + type + saferi + Math.random();
         let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
-        console.log("table" + safename)
-        console.log(document.getElementById("table" + safename))
+        // console.log("table" + safename)
+        // console.log(document.getElementById("table" + safename))
         document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
         const arrow = (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) 
           ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) 
@@ -394,7 +400,9 @@
         }
         for (field of Object.keys(rifields)) {
             (function(test) {
-              const texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+              let texter = (typeof fieldswitch[test] != "function") ? program[test] : fieldswitch[test]();
+/*              if (typeof texter == "string" && !fieldempty("allsearch")) 
+                texter = (texter.toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) ? "<span style='background-color: yellow'>" + texter + "</span" : texter; */
               // if (test == "ForecastedResolution_Dt") {console.log((Date.parse(texter)+86400000) +"<"+ Date.parse(new Date()))}
               let bgcolor = ((test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date()))
                               || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite"
@@ -477,19 +485,62 @@
         if (ispp(mode)) {
             let cells = ["Risk/Issue"];
             rowcolor = 1;
-            for (field of Object.keys(rifields)) {
-                trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-1 titles align-middle"}));
-                // trri.appendChild(makeelement({"e": "th", "t": rifields[field].name, "c": "p-4 titles", "w": rifields[field].width}));
-                cells.push(rifields[field].name);
-                if (rifields[field].name == "ID") {
-                    trri.appendChild(makeelement({"e": "th", "t": type+"s", "c": "p-1 text-center titles align-middle", "w": "12"}));
+            Object.entries(rifields).forEach(([key, value]) => {
+              let direction = b1 = b2 = "";
+              if (sort == key) {
+                direction = (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
+                b1 = "<u>";
+                b2 = "</u>";
+              }
+              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
+                // console.log(this)
+                if (this.innerHTML.indexOf("↓") != -1) {
+                  reverse = true;
+                  // console.log("reversing")
+                } else {
+                  reverse = false;
                 }
-            }
+                sort = key;
+                init(mode);
+              }}));
+              // trri.appendChild(makeelement({"e": "th", "t": rifields[key].name, "c": "p-4 titles", "w": rifields[key].width}));
+              cells.push(rifields[key].name);
+              if (rifields[key].name == "ID") {
+                  trri.appendChild(makeelement({"e": "th", "t": b1 + type + b2 + direction, "c": "p-1 text-center titles align-middle active", "w": "12", a: "click here to sort by this field", "j": function() {
+                console.log(this)
+                if (this.innerHTML.indexOf("↓") != -1) {
+                  reverse = true;
+                  // console.log("reversing")
+                } else {
+                  reverse = false;
+                }
+                sort = "RiskAndIssue_Key";
+                init(mode);
+              }}));
+              }
+            })
         } else {
             let cells = [];
             Object.entries(rifields).forEach(([key, value]) => {
-                trri.appendChild(makeelement({"e": "td", "t": value, "c": "p-1 titles align-middle"}));
-                cells.push(value);
+              // console.log(key)
+              let direction = b1 = b2 = "";
+              if (sort == key) {
+                direction = (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
+                b1 = "<u>";
+                b2 = "</u>";
+              }
+              trri.appendChild(makeelement({"e": "td", "t": b1 + value + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
+                // console.log(this)
+                if (this.innerHTML.indexOf("↓") != -1) {
+                  reverse = true;
+                  // console.log("reversing")
+                } else {
+                  reverse = false;
+                }
+                sort = key;
+                init(mode);
+              }}));
+              cells.push(value);
             })
         }
         excelrows();
@@ -704,10 +755,9 @@
       processcells();
       for(field in rifields) {
           (function(test) {
-            const texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            if (test == "age") {
-              // console.log(texter.replace(/\D/g, ''));
-            }
+            let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+/**            if (typeof texter == "string" && !fieldempty("allsearch")) 
+                texter = (texter.toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) ? "<span style='background-color: yellow'>" + texter + "</span" : texter; */
             // let bgcolor = (test == "ForecastedResolution_Dt" && Date.parse(texter) < (new Date()+1)) ? " hilite" : "";
             let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
                             || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
@@ -750,6 +800,13 @@
         o.style.overflow = "initial";
       })
     }
+    const risort = (list, field) => {
+      let qs = list.sort((a, b) => {
+        return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
+      });
+      // console.log(reverse);
+      return (!reverse) ? qs : qs.reverse();
+    }
 
     const init = (target) => {
         mode = target;
@@ -761,9 +818,10 @@
         setTimeout(function(){
           makefilters();
           dofilters();
-          console.log("1114")
-          rifiltered = filtration(ridata);
-          console.log(rifiltered);
+          // console.log("1114")
+          rifiltered = risort(filtration(ridata), sort);
+          // document.getElementById("dir" + sort).innerHTML = "↓";
+          // console.log(rifiltered);
           let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
           setTimeout(function() {
             populate(riseed);
