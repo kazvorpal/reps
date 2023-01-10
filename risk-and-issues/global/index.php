@@ -22,7 +22,7 @@ $row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
 // print(json_encode($row_port_user, JSON_PRETTY_PRINT));
 // print("'</pre>, uid=$user_id");
 
-$thisyear = date('Y');
+$thisyear = date('Y');german for goo
 $sqluseraccess = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', $thisyear)";
 // echo $sqluseraccess;
 $sqluserresults = sqlsrv_query($data_conn, $sqluseraccess);
