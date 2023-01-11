@@ -1,7 +1,7 @@
 <?php 
 // DATABASE
 //$db_uni = $conn_COX_QA; // QA
-$db_uni = $conn_COXProd; // Production 
+$db_uni = $data_conn; // Production 
 //$db_uni = $conn; // DEV
 
 // Fiscal Year for Dropdowns - Set to all years to display all dropdown items when cleared button is clicked
