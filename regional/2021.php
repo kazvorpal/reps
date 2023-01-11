@@ -24,7 +24,7 @@
 					WHERE EPS.ProjectStage.Region = '$match_reg' AND FISCL_PLAN_YR = '$fsyear'
 					GROUP BY EPS.ProjectStage.PRGM
 					";
-					$stmt_prog_clsp = sqlsrv_query($conn_COXProd, $sql_prog_clsp);
+					$stmt_prog_clsp = sqlsrv_query($data_conn, $sql_prog_clsp);
 					//$row_prog_clsp = sqlsrv_fetch_array( $stmt_prog_clsp, SQLSRV_FETCH_ASSOC)
 					//echo $row_prog_clsp['PROJ_ID']
                     ?>
@@ -42,7 +42,7 @@
 							EPS.ProjectStage.PRGM = '$program_clps_mtch' AND
 							FISCL_PLAN_YR = '$fsyear'
 							ORDER BY EPS.ProjectStage.FISCL_PLAN_YR, EPS.ProjectStage.Sub_Prg, EPS.ProjectStage.Plan_Finish_Dt, EPS.ProjectStage.PROJ_NM";
-							$stmt_proj_clps = sqlsrv_query( $conn_COXProd, $sql_proj_clps );
+							$stmt_proj_clps = sqlsrv_query( $data_conn, $sql_proj_clps );
 							//echo $row_pcount['PROJ_ID']
 							?>  
                 	
