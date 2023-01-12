@@ -8,7 +8,7 @@ $bmysql = $_GET['sql'];
 $sql_por = "$bmysql"; 
 //echo $sql_por;
 //exit;
-$stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
+$stmt_por = sqlsrv_query( $data_conn, $sql_por );
 
 //mysql_select_db($database_data, $data);
 //$query_program_n = "$bmysql";
@@ -38,6 +38,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <td bgcolor="#ECECEC">PROGRAM</td>
       <td bgcolor="#ECECEC">SUBPROGRAM</td>
       <td bgcolor="#ECECEC">PROJECT NAME</td>
+      <td bgcolor="#ECECEC">DESCRIPTION</td>
       <td bgcolor="#ECECEC">OWNER</td>
       <td bgcolor="#ECECEC">FISCAL YR</td>
       <td bgcolor="#ECECEC">REGION</td>
@@ -62,6 +63,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <td><?php echo $row_program_n['PRGM'];?></td>
       <td><?php echo $row_program_n['Sub_Prg'];?></td>
       <td><?php echo $row_program_n['PROJ_NM'];?></td>
+      <td><?php echo $row_program_n['PROJ_DESC'];?></td>
       <td><?php echo $row_program_n['PROJ_OWNR_NM'];?></td>
       <td><?php echo $row_program_n['FISCL_PLAN_YR'];?></td>
       <td><?php echo $row_program_n['Region'];?></td>
