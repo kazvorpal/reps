@@ -198,7 +198,7 @@ const trimmer = (target, key) => {
 
 
 var params = new URLSearchParams(window.location.search);
-var mode = params.get("mode");
+var mode = (params.get("mode") == null) ? "project" : params.get("mode");
 var page = params.get("page");
 var page = (page > 1) ? page : 1;
 var pagesize = params.get("pagesize");
