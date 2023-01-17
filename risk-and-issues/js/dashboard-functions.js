@@ -189,8 +189,25 @@ const excelrows = () => {
       };
   }
 }
-mode = (window.location.href.indexOf("program")>=0) ? "program" : 
-(window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
+
+const trimmer = (target, key) => {
+  return (target.length > textlength) 
+  ? target.substr(0, textlength) + `<a href="#" class="more" id="more${key}" onclick="document.getElementById('desc${key}').style.display='block';this.style.display='none';return false">[more]</a><span style="display:none;" onclick="this.style.display='none';document.getElementById('more${key}').style.display='inline'" id="desc${key}">${target.substr(21)}<a href="#" onclick="return false">[less]</a></div>`
+  : target;
+}
+
+
+var params = new URLSearchParams(window.location.search);
+var mode = params.get("mode");
+var page = params.get("page");
+var page = (page > 1) ? page : 1;
+var pagesize = params.get("pagesize");
+var pagesize = (pagesize > 0) ? pagesize : 20;
+var textlength = params.get("textlength");
+var textlength = (textlength == null) ? 100 : textlength;
+console.log(textlength);
+// mode = (window.location.href.indexOf("program")>=0) ? "program" : 
+// (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
 alt = (mode == "project") ? "program" : "project";
 document.title = capitalize(mode) + " R&I Dashboard";
 var sort = "RiskAndIssue_Key";

@@ -105,19 +105,54 @@
           mt.appendChild(makeheader("projects"));
       }
       (mode == "portfolio") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
-      rowcounter = 0;
-      for (loop of rilist) {
-        rowcounter++;
+      // rowcounter = 0;
+      pagestart = (page*pagesize) - pagesize;
+      console.log(pagestart);
+      ps = (page*pagesize);
+      console.log(ps);
+      maxpages = 2;
+      pagestop = (rilist.length < pagesize) ? rilist.length : ps;
+      console.log(pagestop)
+      // for (loop of rilist) {
+      for (loop = pagestart; loop < pagestop; loop++ ) {
+        console.log(loop);
+        // rowcounter++;
         // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
-        if(loop != null) {
-            (ispp(mode)) ? makerow(loop, listri(loop.MLMProgram_Nm, "Risk").length, listri(loop.MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(loop));
+        if(loop != null && typeof rilist[loop] != "undefined") {
+            (ispp(mode)) ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
         }
         resultcounter((ispp(mode)) ? result : rilist);
-        if (rowcounter > 19 && mode == "project") {
-          console.log("paginating")
-          break
-        } 
+        // if (rowcounter > 19 && mode == "project") {
+        //   console.log("paginating")
+        //   break
+        // } 
       }
+      pages = rilist.length/pagesize;
+      console.log(main);
+      ttt = "";
+      paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
+      paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : ""
+      for (loop = 1; loop < pages+1; loop++) {
+        if (loop == 1 || ((loop + maxpages) >= page && (loop-maxpages) <= page) || loop == pages) {
+          console.log(loop + "in")
+          let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' class="pages" onclick='pager(${loop});return false';>`;
+          // console.log(loop)
+          // paginator.appendChild(makeelement({e: "a", t: url + loop + "</a>"}))
+          // paginator.innerHTML += (loop < pages && loop != maxpages) ? " | " : "";
+          paginator.innerHTML += url + loop + "</a>";
+        } else {
+          let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' onclick='pager(${loop});return false';>`;
+          paginator.innerHTML += url + ".</a>";
+        }
+      }
+      paginator.innerHTML += (page < pages) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)+1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)+1});return false';> > </a>` : "";
+      // ttt = "from " + pagestart + " to " + pagestop;
+      console.log(paginator)
+      main.appendChild(paginator);
+    }
+    const pager = (target) => {
+      page = target;
+      init(mode);
     }
 
     const makerow = (target, risks, issues) => {
@@ -549,6 +584,8 @@
 
     const createrow = (ri) => {
       // Create a row in the Project table
+      if (typeof ri == "undefined") 
+        return false ;
       const name = ri.RI_Nm;
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-1 datarow"});
@@ -571,6 +608,10 @@
               gc += (ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0;
             })
             return gc;
+          },
+          RiskAndIssue_Key: () => {
+            let status = (ri.RIActive_Flg == 1) ? " <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>" : " <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>"
+            return (ri.RiskAndIssue_Key.toString()) + (status);
           },
           grouptype: () => {
             let gc = 0;
@@ -714,6 +755,16 @@
           let r = (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
           return(r);
         },
+        RIDescription_Txt: () => {
+          let desc = ri.RIDescription_Txt;
+          let key = ri.RiskAndIssue_Key;
+          return trimmer(desc, key);
+        },
+        ActionPlanStatus_Cd: () => {
+          let plan = ri.ActionPlanStatus_Cd;
+          let key = ri.RiskAndIssue_Key;
+          return trimmer(plan, key);
+        },
         // requestor: () => {
         //   let r = (loglist[ri.RiskAndIssue_Key]) ? "loglist[ri.RiskAndIssue_Key]" : "";
         //   return(r);
@@ -773,7 +824,7 @@
       return trri;
     }  
     var modebutton = (target) => {
-        let url = "<a href='" +"/risk-and-issues/dashboard/?mode=" + target + "' style='color:#fff' onclick='return false';>";
+        let url = `<a href='/risk-and-issues/dashboard/?mode=${target}&page=${page}' style='color:#fff' onclick='return false';>`;
         let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
         return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-1","j": function() {
             console.log("changing mode to " + target);
@@ -812,6 +863,9 @@
         mode = target;
         let url = new URL(window.location);
         url.searchParams.set("mode", mode);
+        url.searchParams.set("page", page);
+        url.searchParams.set("pagesize", pagesize);
+        // url.searchParams.set("page", mode);
         window.history.pushState({}, '', url);
         setdata();
         setlists();

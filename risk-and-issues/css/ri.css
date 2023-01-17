@@ -218,3 +218,21 @@ body {
 .active:hover {
   text-decoration: underline;
 }
+
+.pagination {
+  /* display: block; */
+  /* width: 100%; */
+  text-align: center;
+  padding: 4px;
+  box-shadow: 1px 1px 4px #ddd;
+}
+
+.pages {
+  display: inline-block;
+  padding: 0 6px;
+}
+.selectedpage {
+  background-color: #08f;
+  color: #fff;
+  border-radius: 3px;
+}
