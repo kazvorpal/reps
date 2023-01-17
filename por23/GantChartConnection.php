@@ -73,5 +73,4 @@ while( $row_test = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
 }
 // sqlsrv_free_stmt( $stmt);
 print(json_encode(utf8ize($json_array)));
-
 ?>
