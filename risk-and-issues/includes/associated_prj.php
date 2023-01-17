@@ -246,7 +246,7 @@ function toggle(source) {
                     </tr>
                     <?php while($row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC)) { ?>
                         <tr>
-                            <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_por['PROJ_NM'];?>"></td> <!-- CHECK BOX FOR PROJECT SELECT -->
+                            <td><input type="checkbox" name="proj_select[]" id="proj_select" value="<?php echo $row_por['PROJ_ID'];?>"></td> <!-- CHECK BOX FOR PROJECT SELECT -->
                             <td><?php echo $row_por['PROJ_NM'] ?></td>
                             <td><?php echo $row_por['PRGM'] ?></td>
                             <td><?php echo $row_por['Region'] ?></td>

@@ -7,23 +7,35 @@
   $action = $_GET['action'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
+  $uid = $_GET['uid'];
+  //echo $uid;
 
   if(!empty($_POST['proj_select'])) { 
     $ass_project_regions = implode("','", $_POST['proj_select']); 
     $ass_project_regionsx = $ass_project_regions; 
 
-    $regionIN = "'" . $ass_project_regions . "','" . $ass_project . "'"; 
+    $regionIN = "'" . $ass_project_regions . "','" . $uid . "'"; 
       } else { 
-    $regionIN = "'" . $ass_project . "'"; 
+    $regionIN = "'" . $uid . "'"; 
       }
 
     $region_rplc_a = str_replace("'"," ",$regionIN);
     $region_display = str_replace(",","<br>",$region_rplc_a);
 
+  //PROJECT NAMES
+  $sql_projects = " DECLARE @SUBP_PROJ VARCHAR(1000)
+                    SELECT @SUBP_PROJ = COALESCE(@SUBP_PROJ+'<br>','')+ CAST(PROJ_NM AS VARCHAR(1000))
+                    FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                    WHERE proj_id in ($regionIN)
+                    SELECT @SUBP_PROJ AS PROJ_NM";
+  $stmt_projects = sqlsrv_query( $data_conn, $sql_projects );
+  $row_projects = sqlsrv_fetch_array( $stmt_projects, SQLSRV_FETCH_ASSOC);
+  $prj_nm_diplay = $row_projects['PROJ_NM'];
+
   //GET REGIONS
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                  where proj_id in ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
@@ -31,33 +43,34 @@
   
   //GET REGIONS FOR HIDDEN FIELD
   $sql_regions_f = "SELECT DISTINCT Region_key, Region
-  FROM [EPS].[ProjectStage]
-  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                    FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                    where proj_id in ($regionIN)";
   $stmt_regions_f = sqlsrv_query( $data_conn, $sql_regions_f );
   //$row_region_fs = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC);
   //$row_regions_f['Region'];
 
   //GET ALL REGIONS FOR REGIONS SELECTION
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                  where proj_id in ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
 
   //SINGLE REGION FOR NAME CONCATINATION
   $sql_region = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                where proj_id in ($regionIN)";
   $stmt_region = sqlsrv_query( $data_conn, $sql_region );
   $row_region = sqlsrv_fetch_array( $stmt_region, SQLSRV_FETCH_ASSOC);
   //echo $row_region['Region'];
- 
+  //echo $sql_region;
+
 
   //MULTI-REGION CONCATINATION - ROW COUNT
   $sql_regions_con = "SELECT Count(DISTINCT Region_key) as numRows
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                      FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                      where proj_id in ($regionIN)";
   $stmt_regions_con  = sqlsrv_query( $data_conn, $sql_regions_con );
   $row_regions_con = sqlsrv_fetch_array( $stmt_regions_con, SQLSRV_FETCH_ASSOC );
  //echo $sql_regions_con;
@@ -67,13 +80,14 @@
   //exit();
 
   //GET SUBPROGRAMS
-  $sql_subprg_f = "SELECT DISTINCT Sub_Prg FROM [EPS].[ProjectStage] WHERE PROJ_NM IN ($regionIN)";
+  $sql_subprg_f = "SELECT DISTINCT Sub_Prg FROM [EPS].[ProjectStage] WHERE PROJ_ID IN ($regionIN)";
   $stmt_subprg_f = sqlsrv_query( $data_conn, $sql_subprg_f );
   //$row_subprg_f = sqlsrv_fetch_array( $stmt_subprg_f, SQLSRV_FETCH_ASSOC );
   //$row_subprg_f['Sub_Prg'];
+  echo $sql_subprg_f;
 
 
-  if($numRows == 7){
+  if($numRows == 9){
       $regionCD = "All";
   } else if($numRows == 1) {
       $regionCode =  $row_region['Region'];
@@ -91,8 +105,12 @@
             $regionCD = 'SW';
         } else if($regionCode=='Virginia'){
             $regionCD = 'VA';
+        } else if($regionCode=='East'){
+            $regionCD = 'EA';
+        } else if($regionCode=='West'){
+            $regionCD = 'WS';
         } 
-  } else if($numRows >= 2 && $numRows <= 6){
+  } else if($numRows >= 2 && $numRows <= 8){
       $regionCD= "Multi";
   }
   
@@ -233,14 +251,14 @@ function toggle(source) {
   <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $row_projID['FISCL_PLAN_YR'] ?>">
   <input name="RIType" type="hidden" id="RIType" value="Risk">
   <input name="RILevel" type="hidden" id="RILevel" value="Program">
-  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $row_projID['PROJ_NM'] ?>">
+  <!--<input name="assocProjects" type="hidden" id="assocProjects" value="<?php //echo $row_projID['PROJ_NM'] ?>">-->
   <!--<input name="Descriptor" type="hidden" id="Descriptor" value="">-->
   <input name="CreatedFrom" type="hidden" id="Created From" value="">
   <input name="TransfertoProgramManager" type="hidden" id="Created From" value="">
   <input name="program" type="hidden" id="program" value='<?php echo $row_projID['PRGM']; ?>'> <!-- EPS PROGRAM -->
   <input name="RIName" type="hidden" id="RIName" value="">
   <input type="hidden" name="Region" id="Region" value="<?php while($row_regions_f = sqlsrv_fetch_array( $stmt_regions_f, SQLSRV_FETCH_ASSOC)) { echo $row_regions_f['Region'] . "," ; } ?>">
-  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
+  <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo str_replace('<br>', ',',$prj_nm_diplay) ?>">
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="CreatedFrom" type="hidden" class="form-control" id="CreatedFrom" value="">
   <!--<input name="riskRealized" type="hidden" class="form-control" id="riskRealized" value="0">-->
@@ -610,7 +628,7 @@ function toggle(source) {
         <tr>
           <td colspan="2" align="left">
             <div class="box">
-              <?php echo $region_display ?>
+              <?php echo $prj_nm_diplay; //$region_display ?>
             </div>
           </td>
         </tr>
