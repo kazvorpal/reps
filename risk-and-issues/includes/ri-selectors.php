@@ -202,7 +202,7 @@ $(function(){
     if (key == "daterange") {
       document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
     } else if(key == "searchall") {
-      document.getElementById("row").appendChild(makeelement({e: "div", t: "Search&nbsp;IDs<br/><input type='text' id='allsearch' />", c: ""}));
+      document.getElementById("row").appendChild(makeelement({e: "div", t: `IDs&nbsp;Search<br/><input type='text' id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
     } else if((typeof o.p == "undefined" || o.p.includes(mode))) {
       o.f = (typeof key != "undefined") ? key : o.f;
       o.l = (typeof o.l == "undefined") ? ridata : o.l;
@@ -320,11 +320,22 @@ $(function(){
     //   alert($('#allsearch').val());
     // })
 
-    document.getElementById("Go").onclick = function() {
+    document.getElementById("Go").onclick = function () {processfilters();
+      return false;
+    }
+  }
+
+  const processfilters = () => {
       // filter form button
       // let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : ridata;
       // populate(filtration(ridata));
       // colorboxschtuff();
+      let url = new URL(window.location);
+        url.searchParams.set("mode", mode);
+        url.searchParams.set("page", page);
+        url.searchParams.set("pagesize", pagesize);
+        // url.searchParams.set("page", mode);
+        window.history.pushState({}, '', url);
       rifiltered = filtration(ridata);
       let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
       setTimeout(function() {
@@ -334,7 +345,6 @@ $(function(){
         }, 2000);
       });
       return false;
-    }  
   }
 
   const resetform = () => {

@@ -236,3 +236,6 @@ body {
   color: #fff;
   border-radius: 3px;
 }
+.searchfield {
+  placeholder: normal;
+}

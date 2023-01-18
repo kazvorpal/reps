@@ -131,9 +131,19 @@
       console.log(main);
       ttt = "";
       paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
-      paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : ""
+      paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : "";
+      if (page > pages) {
+        page = 1;
+        let url = new URL(window.location);
+        url.searchParams.set("mode", mode);
+        url.searchParams.set("page", page);
+        url.searchParams.set("pagesize", pagesize);
+        // url.searchParams.set("page", mode);
+        window.history.pushState({}, '', url);
+        init(mode);
+      }
       for (loop = 1; loop < pages+1; loop++) {
-        if (loop == 1 || ((loop + maxpages) >= page && (loop-maxpages) <= page) || loop == pages) {
+        if (loop == 1 || ((loop + maxpages) >= page && (loop-maxpages) <= page) || loop == (parseInt(pages))) {
           console.log(loop + "in")
           let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' class="pages" onclick='pager(${loop});return false';>`;
           // console.log(loop)
@@ -141,8 +151,9 @@
           // paginator.innerHTML += (loop < pages && loop != maxpages) ? " | " : "";
           paginator.innerHTML += url + loop + "</a>";
         } else {
-          let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' onclick='pager(${loop});return false';>`;
-          paginator.innerHTML += url + ".</a>";
+          // let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' onclick='pager(${loop});return false';>`;
+          paginator.innerHTML += "…";
+          loop = (loop > page) ? parseInt(pages)-1 : page - maxpages - 1;
         }
       }
       paginator.innerHTML += (page < pages) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)+1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)+1});return false';> > </a>` : "";
@@ -152,7 +163,8 @@
     }
     const pager = (target) => {
       page = target;
-      init(mode);
+      // init(mode);
+      processfilters();
     }
 
     const makerow = (target, risks, issues) => {
