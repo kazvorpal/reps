@@ -134,6 +134,16 @@ const propsearch = o => {
 const idsearch = o => {
   // console.log()
   if(o["RiskAndIssue_Key"].toString().indexOf(document.getElementById("allsearch").value) != -1) {
+    var delay = 100;
+    setTimeout(() => {
+      let bannerlist = document.querySelectorAll("[id^=banner]");
+      let reversebanners = $.makeArray(bannerlist);
+      reversebanners.reverse().forEach(o => {
+        delay += 200;
+        console.log(delay);
+        setTimeout(function() {o.click()}, delay)
+      });
+    }, 100);
     return true;
   }
 }
@@ -202,7 +212,7 @@ $(function(){
     if (key == "daterange") {
       document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
     } else if(key == "searchall") {
-      document.getElementById("row").appendChild(makeelement({e: "div", t: `IDs&nbsp;Search<br/><input type='text' id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
+      document.getElementById("row").appendChild(makeelement({e: "div", t: `ID&nbsp;Search<br/><input type='text' id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
     } else if((typeof o.p == "undefined" || o.p.includes(mode))) {
       o.f = (typeof key != "undefined") ? key : o.f;
       o.l = (typeof o.l == "undefined") ? ridata : o.l;
@@ -265,8 +275,8 @@ $(function(){
     Object.entries(selectors).forEach(([key, value]) => {
       makeselect(value, key);
     })
-    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary">', c: "filtercol"}));
-    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/><a href="." onclick="resetform();return false" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/>&nbsp;<input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary spacer">', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/>&nbsp;<a href="." onclick="resetform();return false" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
     
     $('.daterange').daterangepicker({
       autoUpdateInput: false,
