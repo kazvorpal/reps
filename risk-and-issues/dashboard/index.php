@@ -127,42 +127,44 @@
         //   break
         // } 
       }
-      pages = Math.ceil(rilist.length/pagesize);
-      console.log(rilist.length + "/" + pagesize);
-      console.log(pages)
-      console.log(main);
-      ttt = "";
-      paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
-      paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : "";
-      if (page > pages) {
-        console.log("pages" + pages)
-        page = 1;
-        let url = new URL(window.location);
-        url.searchParams.set("mode", mode);
-        url.searchParams.set("page", page);
-        url.searchParams.set("pagesize", pagesize);
-        // url.searchParams.set("page", mode);
-        window.history.pushState({}, '', url);
-        init(mode);
-      }
-      for (loop = 1; loop < pages+1; loop++) {
-        if (loop == 1 || ((loop + maxpages) >= page && (loop-maxpages) <= page) || loop == (parseInt(pages))) {
-          console.log(loop + "in")
-          let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' class="pages" onclick='pager(${loop});return false';>`;
-          // console.log(loop)
-          // paginator.appendChild(makeelement({e: "a", t: url + loop + "</a>"}))
-          // paginator.innerHTML += (loop < pages && loop != maxpages) ? " | " : "";
-          paginator.innerHTML += url + loop + "</a>";
-        } else {
-          // let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' onclick='pager(${loop});return false';>`;
-          paginator.innerHTML += "…";
-          loop = (loop > page) ? parseInt(pages)-1 : page - maxpages - 1;
+      if (mode == "project") {
+        pages = Math.ceil(rilist.length/pagesize);
+        console.log(rilist.length + "/" + pagesize);
+        console.log(pages)
+        console.log(main);
+        ttt = "";
+        paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
+        paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : "";
+        if (page > pages) {
+          console.log("pages" + pages)
+          page = 1;
+          let url = new URL(window.location);
+          url.searchParams.set("mode", mode);
+          url.searchParams.set("page", page);
+          url.searchParams.set("pagesize", pagesize);
+          // url.searchParams.set("page", mode);
+          window.history.pushState({}, '', url);
+          init(mode);
         }
+        for (loop = 1; loop < pages+1; loop++) {
+          if (loop == 1 || ((loop + maxpages) >= page && (loop-maxpages) <= page) || loop == (parseInt(pages))) {
+            console.log(loop + "in")
+            let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' class="pages" onclick='pager(${loop});return false';>`;
+            // console.log(loop)
+            // paginator.appendChild(makeelement({e: "a", t: url + loop + "</a>"}))
+            // paginator.innerHTML += (loop < pages && loop != maxpages) ? " | " : "";
+            paginator.innerHTML += url + loop + "</a>";
+          } else {
+            // let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' onclick='pager(${loop});return false';>`;
+            paginator.innerHTML += "…";
+            loop = (loop > page) ? parseInt(pages)-1 : page - maxpages - 1;
+          }
+        }
+        paginator.innerHTML += (page < pages) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)+1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)+1});return false';> > </a>` : "";
+        // ttt = "from " + pagestart + " to " + pagestop;
+        console.log(paginator)
+        main.appendChild(paginator);
       }
-      paginator.innerHTML += (page < pages) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)+1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)+1});return false';> > </a>` : "";
-      // ttt = "from " + pagestart + " to " + pagestop;
-      console.log(paginator)
-      main.appendChild(paginator);
     }
     const pager = (target) => {
       page = target;
