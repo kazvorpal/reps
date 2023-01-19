@@ -127,12 +127,15 @@
         //   break
         // } 
       }
-      pages = rilist.length/pagesize;
+      pages = Math.ceil(rilist.length/pagesize);
+      console.log(rilist.length + "/" + pagesize);
+      console.log(pages)
       console.log(main);
       ttt = "";
       paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
       paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : "";
       if (page > pages) {
+        console.log("pages" + pages)
         page = 1;
         let url = new URL(window.location);
         url.searchParams.set("mode", mode);
