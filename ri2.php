@@ -193,8 +193,8 @@ ProjectID: <?php echo $projID?>
       </td>
       <?php if($authorized != ''){  ?> 
         <td align="center">
-          <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-plus"></span></a> | 
-          <a title="Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-minus"></span></a>      
+          <a title="Add Associated Project" href="risk-and-issues/includes/associated_prj_manage.php?ri_level=prj&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-plus"></span></a> | 
+          <a title="Remove Associated Project" href="risk-and-issues/includes/associated_prj_manage_remove.php?ri_level=prj&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>"><span class="glyphicon glyphicon-minus"></span></a>      
         </td>
       <?php } ?>
       <td align="center">
