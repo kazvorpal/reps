@@ -201,6 +201,7 @@ $(function(){
   subp = subp.sort();
   // console.log(subp);
 
+  var newregions = ["West", "East", "Central", "Corporate"];
   const makeselect = (o, key) => {
     // Make a dropdown
     // Takes a properties object, o
@@ -234,18 +235,65 @@ $(function(){
         for (option in o.l) 
           if(o.l[option] != ""&& o.l[option] != null)
             select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
+      } else if (o.i == "region") {
+        const list = getuniques(o.l, o.f);
+        setTimeout(function() {
+          regiondropdown();
+        }, 1000);
+        select.addEventListener("change", () => {
+          console.log("change")
+        })
+        setTimeout(() => {
+          console.log("select")
+          console.log(select)
+        }, 1000);
       } else {
         const list = getuniques(o.l, o.f);
         // console.log(list)
         // console.log(o.i)
         for (option in list) 
-          if(list[option] != ""&& list[option] != null)
-            select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+        if(list[option] != ""&& list[option] != null)
+        select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
       }
       td.appendChild(select);
       document.getElementById("row").appendChild(td);
     } 
   }
+  
+  const regiondropdown = () => {
+    const list = getuniques(locationlist, "Region_Cd");
+    let select = document.getElementById("region");
+    select.options.length = 0;
+    // console.log(list)
+    for (option in list) { 
+      if(isincluded("#fiscal_year", "2024") && newregions.includes(list[option])){
+        // console.log("list[option]" + list[option])
+        select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+      } else if ($("#fiscal_year").val().includes("2023") && !newregions.includes(list[option])){
+        // console.log("list[option]" + list[option])
+        select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+      } else {
+        // console.log($("#fiscal_year").val().includes("2023") +":"+ !newregions.includes(list[option]))
+        // console.log(list[option])
+      }
+      // document.getElementById("regions").appendChild(select)
+    }
+    console.log("regiondropdown")
+    $("#region").multiselect("destroy").multiselect(longprops);
+    // dofilters();
+  };
+  var yearcache = "";
+  // const checkyear = setInterval(() => {
+  //   if (JSON.stringify(yearcache) != JSON.stringify($("#fiscal_year").val())) {
+  //     regiondropdown();
+  //     console.log((yearcache != $("#fiscal_year").val()));
+  //     console.log(yearcache);9Twitter
+  //     console.log($("#fiscal_year").val());
+  //     yearcache = $("#fiscal_year").val();
+  //   } else {
+  //     console.log(".");
+  //   }
+  // }, 1000);
 
   var programnames;
   const makefilters = () => {
@@ -293,20 +341,31 @@ $(function(){
   }
   makefilters();
 
+  var longprops;
   const dofilters = () => {
     let shortprops = {
       includeSelectAllOption: true, 
       numberDisplayed: 2, 
     }
-    let longprops = structuredClone(shortprops);
+    longprops = structuredClone(shortprops);
     longprops["includeSelectAllOption"] = true;
     longprops["enableCaseInsensitiveFiltering"] = true;
     longprops["selectAllNumber"] = true;
     longprops["numberDisplayed"] = 2;
     longprops["includeResetOption"] = true;
-
+    let yearprops = structuredClone(longprops);
+    // yearprops["onChange"] = () => {
+    //   console.log("change");
+    //   regiondropdown();
+    // }
     $('#fiscal_year').val(new Date().getFullYear()).multiselect({
       includeSelectAllOption: true,
+      onChange: (option, checked, select) => {
+        console.log("change");
+        regiondropdown();
+        return true;
+      },
+      async: false
     });
     testlist = [1, 2, 3, 4, 5, 12, 11, 13, 23, 24, 22];
     // console.log(shortprops)
@@ -330,6 +389,10 @@ $(function(){
     //   alert($('#allsearch').val());
     // })
 
+    // document.getElementById("fiscal_year").addEventListener("change", () => {
+    //   console.log("event");
+    //   regiondropdown();
+    // })
     document.getElementById("Go").onclick = function () {processfilters();
       return false;
     }

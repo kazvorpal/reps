@@ -22,7 +22,7 @@ $row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
 // print(json_encode($row_port_user, JSON_PRETTY_PRINT));
 // print("'</pre>, uid=$user_id");
 
-$thisyear = date('Y');german for goo
+$thisyear = date('Y');
 $sqluseraccess = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', $thisyear)";
 // echo $sqluseraccess;
 $sqluserresults = sqlsrv_query($data_conn, $sqluseraccess);
@@ -261,6 +261,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
           <select name="fiscalYer" id="fiscalYer" class="form-control">
             <option value="2022" <?php if(date('Y') == "2022") { echo " selected ";} ?>>2022</option>
             <option value="2023" <?php if(date('Y') == "2023") { echo " selected ";} ?>>2023</option>
+            <option value="2024" <?php if(date('Y') == "2024") { echo " selected ";} ?>>2024</option>
           </select>
         </div>
       </div>
@@ -360,17 +361,26 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
           <h3 class="panel-title">REGION*</h3>
         </div>
         <div class="panel-body">
-          <table width="100%" class="checkbox_group required" required>
+          <table width="100%" class="checkbox_group required" id="regionsold" required>
+            <tr>
+              <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California" required oninvalid="this.setCustomValidity('Please choose at least one region')"> California </label> </td>
+              <td><label for="Central"><input type="checkbox" name="Region[]" value="Central" required> Central </label></td>
+              <td><label for="Corporate"><input type="checkbox" name="Region[]" value="Corporate" required> Corporate </label></td>
+              <td><label for="Northeast"><input type="checkbox" name="Region[]" value="Northeast" required> Northeast </label></td>
+            </tr>
+            <tr>
+              <td><label for="Southeast"><input type="checkbox" name="Region[]" value="Southeast" required> Southeast </label> </td>
+              <td><label for="Southwest"><input type="checkbox" name="Region[]" value="Southwest" required> Southwest </label></td>
+              <td><label for="Virginia"><input type="checkbox" name="Region[]" value="Virginia" required> Virginia </label></td>
+              <td><label for="All"><input type="checkbox" name="allbutton" value="All" onClick="toggle(this)"> All </label></td>
+            </tr>
+          </table>
+          <table width="100%" class="checkbox_group required" id="regionsnew" style="display:none" required>
           <tr>
-            <td><label for="California"><input type="checkbox" id="Region" name="Region[]" value="California" required oninvalid="this.setCustomValidity('Please choose at least one region')"> California </label> </td>
             <td><label for="Central"><input type="checkbox" name="Region[]" value="Central" required> Central </label></td>
             <td><label for="Corporate"><input type="checkbox" name="Region[]" value="Corporate" required> Corporate </label></td>
-            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="Northeast" required> Northeast </label></td>
-          </tr>
-          <tr>
-            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="Southeast" required> Southeast </label> </td>
-            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="Southwest" required> Southwest </label></td>
-            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="Virginia" required> Virginia </label></td>
+            <td><label for="East"><input type="checkbox" name="Region[]" value="East" required> East </label> </td>
+            <td><label for="West"><input type="checkbox" name="Region[]" value="West" required> West </label></td>
             <td><label for="All"><input type="checkbox" name="allbutton" value="All" onClick="toggle(this)"> All </label></td>
           </tr>
         </table>
@@ -882,7 +892,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   // Event functions to be used later
 
-  const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", "Northwest": "NW", "Corporate": "COR"}
+  const regions = {"California": "CA", "Southwest": "SW", "Central": "CE", East: "EA", "Northeast": "NE", "Virginia": "VA", "Southeast": "SE", West: "WS", "Northwest": "NW", "Corporate": "COR"}
   const nameevent = () => {
     let locations = "";
     if (document.querySelector('input[name="allbutton"][value=All]').checked == true) {
@@ -900,6 +910,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         o.required = required;
         o.setCustomValidity((required) ? "You must select a region" : "");
       });
+      console.log(locations)
       if (locations.length > 4) {
         locations = "MULTI ";
       }
@@ -1143,6 +1154,13 @@ document.getElementsByName("RIType").forEach((o) => {
   document.getElementById("review").addEventListener("mouseover", () => {
     prescreen();
   })
+  document.getElementById("fiscalYer").addEventListener("change", (e) => {
+    let yer = e.target.value;
+    console.log(e.target.value);
+    document.getElementById("regionsold").style.display = (yer == 2024) ? "none" : "";
+    document.getElementById("regionsnew").style.display = (yer != 2024) ? "none" : "";
+  })
+
 </script>
 
 <script src="../includes/ri-functions.js"></script>
