@@ -107,18 +107,18 @@
       (mode == "portfolio") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
       // rowcounter = 0;
       pagestart = (page*pagesize) - pagesize;
-      console.log(pagestart);
+      // console.log(pagestart);
       ps = (page*pagesize);
-      console.log(ps);
+      // console.log(ps);
       maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
       console.log(pagestop)
       // for (loop of rilist) {
-      for (loop = pagestart; loop < pagestop; loop++ ) {
-        console.log(loop);
-        // rowcounter++;
-        // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
-        if(loop != null && typeof rilist[loop] != "undefined") {
+        for (loop = pagestart; loop < pagestop; loop++ ) {
+          // console.log(loop);
+          // rowcounter++;
+          // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
+          if(loop != null && typeof rilist[loop] != "undefined") {
             (ispp(mode)) ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
         }
         resultcounter((ispp(mode)) ? result : rilist);
@@ -128,8 +128,9 @@
         // } 
       }
       pages = Math.ceil(rilist.length/pagesize);
-      if (page > pages) {
+      if (pages > 0 && page > pages) {
         console.log("pages" + pages)
+        console.log("page" + page)
         page = 1;
         let url = new URL(window.location);
         url.searchParams.set("mode", mode);
@@ -137,18 +138,19 @@
         url.searchParams.set("pagesize", pagesize);
         // url.searchParams.set("page", mode);
         window.history.pushState({}, '', url);
+        console.log(9);
         init(mode);
       }
       if (mode == "project") {
-        console.log(rilist.length + "/" + pagesize);
-        console.log(pages)
-        console.log(main);
+        // console.log(rilist.length + "/" + pagesize);
+        // console.log(pages)
+        // console.log(main);
         ttt = "";
         paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
         paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : "";
         for (loop = 1; loop < pages+1; loop++) {
           if (loop == 1 || ((loop + maxpages) >= page && (loop-maxpages) <= page) || loop == (parseInt(pages))) {
-            console.log(loop + "in")
+            // console.log(loop + "in")
             let url = (page == loop) ? "<a class='selectedpage pages'>" : `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${loop}&pagesize=${pagesize}' class="pages" onclick='pager(${loop});return false';>`;
             // console.log(loop)
             // paginator.appendChild(makeelement({e: "a", t: url + loop + "</a>"}))
@@ -162,7 +164,7 @@
         }
         paginator.innerHTML += (page < pages) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)+1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)+1});return false';> > </a>` : "";
         // ttt = "from " + pagestart + " to " + pagestop;
-        console.log(paginator)
+        // console.log(paginator)
         main.appendChild(paginator);
       }
     }

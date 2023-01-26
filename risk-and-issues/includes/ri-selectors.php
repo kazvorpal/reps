@@ -113,15 +113,15 @@ const filterfunction = (o) => {
   );
 }
 
-const ridatasearch = () => {
-  ridata.forEach(o => {
-    for (key in o) {
-        if(typeof o[key] == "string" && o[key].toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) {
-            console.log(o[key]);
-        }
-    }
-  })
-}
+// const ridatasearch = () => {
+//   ridata.forEach(o => {
+//     for (key in o) {
+//         if(typeof o[key] == "string" && o[key].toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) {
+//             console.log(o[key]);
+//         }
+//     }
+//   })
+// }
 
 const propsearch = o => {
     for (key in o) {
@@ -140,7 +140,7 @@ const idsearch = o => {
       let reversebanners = $.makeArray(bannerlist);
       reversebanners.reverse().forEach(o => {
         delay += 200;
-        console.log(delay);
+        // console.log(delay);
         setTimeout(function() {o.click()}, delay)
       });
     }, 100);
@@ -155,9 +155,6 @@ const filtration = (data) => {
     : getwholeuniques(filtered, "RiskAndIssue_Key");
   return results;
 }  
-
-
-
 
 $(function(){
     $('[data-toggle="popover"]').popover({ 
@@ -241,11 +238,11 @@ $(function(){
           regiondropdown();
         }, 1000);
         select.addEventListener("change", () => {
-          console.log("change")
+          // console.log("change")
         })
         setTimeout(() => {
-          console.log("select")
-          console.log(select)
+          // console.log("select")
+          // console.log(select)
         }, 1000);
       } else {
         const list = getuniques(o.l, o.f);
@@ -278,7 +275,7 @@ $(function(){
       }
       // document.getElementById("regions").appendChild(select)
     }
-    console.log("regiondropdown")
+    // console.log("regiondropdown")
     $("#region").multiselect("destroy").multiselect(longprops);
     // dofilters();
   };
@@ -361,7 +358,7 @@ $(function(){
     $('#fiscal_year').val(new Date().getFullYear()).multiselect({
       includeSelectAllOption: true,
       onChange: (option, checked, select) => {
-        console.log("change");
+        // console.log("change");
         regiondropdown();
         return true;
       },
