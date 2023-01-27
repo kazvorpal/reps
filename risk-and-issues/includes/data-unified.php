@@ -453,7 +453,6 @@ let projectopen = <?= $projectout ?>;
 
     let portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(portfolioclosed));
     portfoliofull = sortby(portfoliofull, "RiskAndIssue_Key");
-    // const portfolioclosed = portfoliofull = portfolioopen;
 
     const cleandata = (list) => {
       Object.keys(list).forEach(key => {
@@ -471,7 +470,6 @@ let projectopen = <?= $projectout ?>;
             const localportfolios = portfoliofull.filter(o => {
                 return o.RaidLog_Flg == 0;
               })
-              // ridata = programfull.concat(localportfolios);
               ridata = programfull;
               d1 = programopen;
               d2 = programclosed;
