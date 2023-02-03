@@ -30,7 +30,4 @@ $stmt_por_cnt = sqlsrv_query( $data_conn, $sql_por_cnt );
 
 $row_da_count = sqlsrv_fetch_array( $stmt_por_cnt, SQLSRV_FETCH_ASSOC);
 //$row_da_count['daCount']
-
-
-
 ?>
