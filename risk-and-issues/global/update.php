@@ -95,7 +95,7 @@ if($RILevel_Cd == "Program") {
 } else { 
 
   //PROGRAM FOR PORTFOLIO RI (MULTIPUL PROGRAMS)
-  $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
+  $sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', $Fiscal_Year)";
   $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
   //$row_prog = sqlsrv_fetch_array( $stmt_prog , SQLSRV_FETCH_ASSOC);
   // $row_prog['Program_Nm'];
@@ -370,7 +370,7 @@ function toggle(source) {
     <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">PROGRAM*</h3>
+          <h3 class="panel-title">PROGRAM*</h3> 
         </div>
         <div class="panel-body">
           <select name="program[]" id="program" class="form-control" multiple="multiple" readonly>
