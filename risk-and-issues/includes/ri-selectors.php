@@ -135,18 +135,27 @@ const idsearch = o => {
   // console.log()
   if(o["RiskAndIssue_Key"].toString().indexOf(document.getElementById("allsearch").value) != -1) {
     var delay = 100;
-    setTimeout(() => {
-      let bannerlist = document.querySelectorAll("[id^=banner]");
-      let reversebanners = $.makeArray(bannerlist);
-      reversebanners.reverse().forEach(o => {
-        delay += 200;
-        // console.log(delay);
-        setTimeout(function() {o.click()}, delay)
-      });
-    }, 100);
+    openall(false);
     return true;
   }
 }
+
+openval = false;
+const openall = (status) => {
+  var delay = 100;
+  setTimeout(() => {
+    let bannerlist = document.querySelectorAll("[id^=banner]");
+    let reversebanners = (!status) ? $.makeArray(bannerlist).reverse() : $.makeArray(bannerlist);
+    reversebanners.forEach(o => {
+      delay += 200;
+      // console.log(delay);
+      setTimeout(function() {o.click()}, delay)
+    });
+  }, 100);
+  document.getElementById("allbutton").innerHTML = (status) ? "Expand All" : "Collapse All";
+  openval = (!status);
+}
+
 
 const filtration = (data) => {
   let filtered = data.filter(filterfunction);

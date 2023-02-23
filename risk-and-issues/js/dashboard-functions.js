@@ -201,6 +201,7 @@ var params = new URLSearchParams(window.location.search);
 var mode = (params.get("mode") == null) ? "project" : params.get("mode");
 var page = params.get("page");
 var page = (page > 1) ? page : 1;
+var format = params.get("format");
 var pagesize = params.get("pagesize");
 var pagesize = (pagesize > 0) ? pagesize : 20;
 var textlength = params.get("textlength");

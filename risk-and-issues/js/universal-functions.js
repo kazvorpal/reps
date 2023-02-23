@@ -76,10 +76,9 @@ const sortby = (list, property) => {
         t.style = o.style;
       }
       if (o.e == "select") {
-        // console.log(o)
         list = o.l;
         for (option in list) 
-          if(list[option].name != ""&& list[option].name != null)
+          if(list[option] != null && list[option].name != ""&& list[option].name != null)
             t.appendChild(makeelement({e: "option", v: list[option].value, t: list[option].name}));
       }
     }

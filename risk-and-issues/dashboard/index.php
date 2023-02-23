@@ -88,8 +88,9 @@
       result = 0;
       window.ricount = [];
       const main = document.getElementById("main");
+      seeall = ` <button value="" class="btn btn-default" onclick="openall(openval)" id="allbutton">Expand All</a>`;
       initexcel();
-      if (ispp(mode)) {
+      if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
             p = ", Portfolio";
             n = "RAID Log";
@@ -97,23 +98,22 @@
             p = ", Projects";
             n = capitalize(mode);
         }
-        main.innerHTML = `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})</div>`;
+        main.innerHTML = `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})${seeall}</div>`;
       } else {
           main.innerHTML = '';
           main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
           var mt = document.getElementById("maintable");
           mt.appendChild(makeheader("projects"));
       }
-      (mode == "portfolio") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
+      (mode == "portfolio"&&format != "grid") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
       pagestart = (page*pagesize) - pagesize;
       ps = (page*pagesize);
       maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
-      console.log(pagestop)
-        for (loop = pagestart; loop < pagestop; loop++ ) {
+      for (loop = pagestart; loop < pagestop; loop++ ) {
           // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
-          if(loop != null && typeof rilist[loop] != "undefined") {
-            (ispp(mode)) ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
+        if(loop != null && typeof rilist[loop] != "undefined") {
+          (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
         }
         resultcounter((ispp(mode)) ? result : rilist);
       }
@@ -155,6 +155,8 @@
         if (typeof target == null) {
           return false;
         }
+        // console.log("makerow: ");
+        // console.log(target);
         if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null" || (risks == 0 && issues == 0)) return false;
         const safename = makesafe(target.MLMProgram_Nm);
         const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
@@ -173,10 +175,10 @@
         makeri(target, "Issue");
         let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ``;
         document.getElementById("banner" + safename).innerHTML += p + ' )';
-    }  
-
-    const makebanner = (safename) => {
-
+      }  
+      
+      const makebanner = (safename) => {
+        
         // Program Start
         const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
         const banner = document.createElement("div");
@@ -186,7 +188,7 @@
         Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
         banner.ariaExpanded = true;
         return banner;
-    }  
+      }  
 
     const makeri = (ri, type) => {
       // Create a Risk or Issue section
@@ -195,17 +197,23 @@
       safename = makesafe(programname);
       let list = listri(programname, type);
       document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
+      console.log("makeri: ");
+      console.log(list.length);
       if (list.length != 0) {
-          document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
-          for (ri of list) {
-            result++;
-            window.ricount.push(true);
-            rowcolor++;
-            makedata(ri, type, programname);
-            program = getprogrambykeyonly(ri);
+        document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
+        for (rikey of list) {
+          result++;
+          window.ricount.push(true);
+          rowcolor++;
+          makedata(rikey, type, programname);
+          program = getprogrambykeyonly(rikey);
             portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
             projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
           }
+          // console.log((ri.MLMProgram_Nm == "Portfolios") ? "result:" + result : ri)
+      } else {
+        if (ri.MLMProgram_Nm == "Portfolios") 
+          document.getElementById("itemPortfolios").style.display = "none";
       }
     }
 
@@ -225,16 +233,26 @@
               return `<span style='font-weight:900'>${text}</span>`;
           },
           mangerlist: () => {
-              const manger = mangerlist[ri.Fiscal_Year + "-" + ri.MLMProgram_Key];
-              let mangers = [];
+            if (ri["MLMProgram_Key"] || mode("project")) {
+              const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
+              let mangers = [ri["Fiscal_Year"]];
               for (man of manger) {
-                mangers.push(man.User_Nm);
+                  mangers.push(man.User_Nm);
               }  
               return mangers.join().replace(",", ", ");
+            } else
+              return "";
           },
           global: () => {
               return  (ri.Global_Flg) ? "Y" : "N";
             },
+          groupcount: () => {
+            let gc = 0;
+            ridata.forEach(o => {
+              gc += (ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0;
+            })
+            return gc;
+          },
           category: () => {
             return  (ri.Global_Flg) ? "Global" : "Program";
           },
@@ -371,6 +389,16 @@
             let s = (d == 1) ? " day" : (d == "") ? "" : " days";
             return  `${d}${s}`;
           },
+          RIDescription_Txt: () => {
+          let desc = ri.RIDescription_Txt;
+          let key = ri.RiskAndIssue_Key;
+          return trimmer(desc, key);
+        },
+        ActionPlanStatus_Cd: () => {
+          let plan = ri.ActionPlanStatus_Cd;
+          let key = ri.RiskAndIssue_Key;
+          return trimmer(plan, key);
+        },
           actionplandate: () => {
             let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
             return(r);

@@ -146,6 +146,7 @@ PPC;
     }
 
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio')";
+    // echo $sqlstr;
     ini_set('mssql.charset', 'UTF-8');
     $closedportfolio = sqlsrv_query($data_conn, $sqlstr);
     if($closedportfolio === false) {
@@ -193,7 +194,7 @@ PPC;
         $sublist[$row["RiskAndIssue_Key"]] = $subrows;
       // }
     }
-    $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1) where active_flg = 1";
+    $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
     ini_set('mssql.charset', 'UTF-8');
     $portfolioprograms = sqlsrv_query($data_conn, $portfolioprogramsstr);
     if($portfolioprograms === false) {
@@ -417,7 +418,8 @@ PPC;
     $programout = json_encode($programrows);
     $closedprogramout = json_encode($closedprogramrows);
     $portfolioout = json_encode($portfoliorows);
-    $closedportfolioout = json_encode($closedportfoliorows);
+    $closedportfolioout = json_encode($closedportfoliorows, JSON_PRETTY_PRINT);
+    // echo $closedportfolioout;
   
   
   }
@@ -439,8 +441,21 @@ let projectopen = <?= $projectout ?>;
     programfull = sortby(programfull, "RiskAndIssue_Key");
     let portfolioopen =<?= $portfolioout ?>;
     portfolioopen = sortby(portfolioopen, "RiskAndIssue_Key");
-    let portfolioclosed =<?= $closedportfolioout ?>;
-    portfolioclosed = sortby(portfolioclosed, "RiskAndIssue_Key");
+</script>
+<!-- this is portfolio closed -->
+<script>
+
+let portfolioclosed = <?= $closedportfolioout ?>;
+    // Closing line
+    // portfolioclosed = sortby(portfolioclosed, "RiskAndIssue_Key");
+    var placeholder = [];
+    portfolioclosed.forEach(o => { 
+      placeholder.push(o)
+    });
+    // portfolioclosed = placeholder;
+    console.log("portfolioclosed");
+    console.log(portfolioclosed);
+    console.log(placeholder);
     const mangerlist = <?= $mangerout ?>;
     const driverlist = <?= $driverout ?>;
     const locationlist = <?= $locationout ?>;
@@ -451,7 +466,7 @@ let projectopen = <?= $projectout ?>;
     const aplist = <?= $apout ?>;
     const loglist = <?= $logout ?>;
 
-    let portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(portfolioclosed));
+    let portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(placeholder));
     portfoliofull = sortby(portfoliofull, "RiskAndIssue_Key");
 
     const cleandata = (list) => {
@@ -479,7 +494,7 @@ let projectopen = <?= $projectout ?>;
               })
               ridata = cleandata(portfoliofull).concat(globalprograms)
               d1 = portfolioopen;
-              d1 = portfolioclosed;
+              d2 = portfolioclosed;
           } else {
               ridata = projectfull;
               d1 = projectopen;
