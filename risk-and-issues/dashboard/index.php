@@ -84,6 +84,15 @@
     const populate = (rilist) => {
       console.log("rilist");
       console.log(rilist);
+      rilist = rilist.sort(function(a, b) {
+        if(a.MLMProgram_Nm < b.MLMProgram_Nm)
+          return -1;
+        else if (a.MLMProgram_Nm > b.MLMProgram_Nm)
+          return 1;
+        else 
+          return 0;
+
+      })
       resultcounter(rilist);
       result = 0;
       window.ricount = [];
@@ -110,6 +119,7 @@
       ps = (page*pagesize);
       maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
+      console.log(list)
       for (loop = pagestart; loop < pagestop; loop++ ) {
           // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
         if(loop != null && typeof rilist[loop] != "undefined") {
@@ -197,8 +207,8 @@
       safename = makesafe(programname);
       let list = listri(programname, type);
       document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
-      console.log("makeri: ");
-      console.log(list.length);
+      // console.log("makeri: ");
+      // console.log(list.length);
       if (list.length != 0) {
         document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
         for (rikey of list) {
