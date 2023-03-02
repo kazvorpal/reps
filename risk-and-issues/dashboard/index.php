@@ -77,6 +77,7 @@
     const populate = (rilist) => {
       console.log("rilist");
       console.log(rilist);
+      portfoliocount = 0;
       rilist = rilist.sort(function(a, b) {
         if(a.MLMProgram_Nm < b.MLMProgram_Nm)
           return -1;
@@ -103,11 +104,12 @@
         }
         main.innerHTML += `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})${seeall}</div>`;
       } else {
-          main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
-          var mt = document.getElementById("maintable");
-          mt.appendChild(makeheader("projects"));
+        main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
+        var mt = document.getElementById("maintable");
+        mt.appendChild(makeheader("projects"));
       }
       (mode == "portfolio"&&format != "grid") ? makerow({MLMProgram_Nm: "Portfolio"}, 1, 1) : "";
+      document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
       pagestart = (page*pagesize) - pagesize;
       ps = (page*pagesize);
       maxpages = 2;
@@ -172,7 +174,7 @@
       item.appendChild(collapse).appendChild(body).appendChild(table);
       document.getElementById("main").appendChild(item);
       document.getElementById("banner" + safename).innerHTML += " (";
-      projectcount = portfoliocount = 0;
+      projectcount = 0;
       makeri(target, "Risk");
       makeri(target, "Issue");
       let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ``;
@@ -199,7 +201,7 @@
       safename = makesafe(programname);
       let list = listri(programname, type);
       document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
-      // console.log("makeri: ");
+      // console.log(ri.MLMProgram_Nm + "makeri: ");
       // console.log(list);
       if (list.length != 0) {
         document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
@@ -214,10 +216,6 @@
           }
           // console.log((ri.MLMProgram_Nm == "Portfolios") ? "result:" + result : ri)
       } else {
-        if (ri.MLMProgram_Nm == "Portfolio") {
-          console.log(ri);
-          document.getElementById("itemPortfolio").style.display = "none";
-        }
       }
     }
 
@@ -409,7 +407,7 @@
           }
         };
         const ri = getprogrambykeyonly(id, programname);
-        const safename = (ri.RILevel_Cd == "Portfolio") ? "Portfolios" : makesafe(ri.MLMProgram_Nm);
+        const safename = (ri.RILevel_Cd == "Portfolio") ? "Portfolio" : makesafe(ri.MLMProgram_Nm);
         const saferi = makesafe(ri.RI_Nm);
         let url = text = "";
         const trid = "tr" + type + saferi + Math.random();

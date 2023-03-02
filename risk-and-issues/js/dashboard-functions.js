@@ -40,10 +40,10 @@ const resultcounter = (results) => {
   
   function listri(target, type) {
     // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-    pre = (target == "Portfolios") 
+    pre = (target == "Portfolio") 
       ? rifiltered.filter(o => o.RIType_Cd == type && o.RILevel_Cd == "Portfolio")
       : rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target && o.RILevel_Cd != "Portfolio"); // list of all data with the right program name and risk or issue
-    // console.log("pre");
+    // console.log(target);
     // console.log(pre);
     post = pre.filter(filterfunction); // run it through the filters
     // console.log("post");
@@ -67,7 +67,7 @@ const toggler = (target, o) => {
 
   // Takes a program key and name and returns the row object
   const getprogrambyname = (target) =>  rifiltered.find(o => o.MLMProgram_Nm == target);
-  const getprogrambykey = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target && (o.MLMProgram_Nm == name || (name == "Portfolios" && o.MLMProgram_Nm == "Portfolio")));
+  const getprogrambykey = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target && (o.MLMProgram_Nm == name || (name == "Portfolio" && o.MLMProgram_Nm == "Portfolio")));
   const getprogrambykeyonly = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target);
   const getlocationbykey = (key) =>  locationlist.find(o => o.EPSProject_key == key);
   
