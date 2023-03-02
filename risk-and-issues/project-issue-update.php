@@ -5,7 +5,7 @@ include ("../includes/big_bro_functions.php");
 include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/RI_Internal_External.php");
-
+//echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
   //$action = $_GET['action']; //new
   //$temp_id = $_GET['tempid'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
@@ -23,7 +23,7 @@ $sql_risk_issue = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProjec
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 // echo $row_risk_issue['Risk_Issue_Name']; 
-// echo $sql_risk_issue . "<br>";		
+//echo $sql_risk_issue . "<br>";		
 
 //GET DRIVERS
 $sql_risk_issue_driver = "select * from [RI_MGT].[fn_GetListOfRiskAndIssuesForEPSProject]  ($fscl_year,'$proj_name') where RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -39,6 +39,26 @@ $row_ri_createDT = sqlsrv_fetch_array($stmt_ri_createDT, SQLSRV_FETCH_ASSOC);
 // echo $row_ri_createDT['Driver_Nm]; 			
 // echo $sql_ri_createDT;
 
+//GET REGIONS ///send region keys
+//BUILD PROJECT ID STRING
+  //project names
+  $daProj = "'" . $proj_name . "'" ;
+  if(isset ($_POST['add_proj_select'])){
+    $daProj = "'" . $proj_name . "','" . implode("','", $_POST['add_proj_select']) . "'";
+  }
+  //echo $daProj ."<br>here";
+  
+$sql_regions = " DECLARE @ASSC_PROJ VARCHAR(8000)
+SELECT @ASSC_PROJ = COALESCE(@ASSC_PROJ+',','')+ CAST(Region AS VARCHAR(8000))
+FROM [RI_MGT].[fn_GetListOfRegionForEPSProject]() 
+WHERE PROJ_NM IN($daProj)
+SELECT @ASSC_PROJ AS Region";
+//echo $sql_regions;
+$stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
+$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
+$regions = $row_regions['Region'];
+//echo $regions;
+
 //DEFINE
 $changeLogKey = 4;
 if(isset($_POST['add_proj_select'])) {
@@ -52,7 +72,7 @@ $programs = "";
 $project_nm = $row_risk_issue['proj_nm'];
 $descriptor  = $row_risk_issue['ScopeDescriptor_Txt'];
 $description = $row_risk_issue['RIDescription_Txt'];
-$regionx = "";
+$regionx = $regions;
 $Driversx = $row_risk_issue['Driver_Nm'];
 $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
@@ -79,6 +99,9 @@ $POC_Nm = $row_risk_issue['POC_Nm'];
 $changeLogActionVal = $row_risk_issue['RequestAction_Key'];
 $changeLogReason = $row_risk_issue['Reason_Txt'];
 $changeLogName = $row_risk_issue['RequestAction_Nm'];
+
+$Estimated_Act= $row_risk_issue['PRJI_Estimated_Act_Ts'];
+$Estimated_Mig= $row_risk_issue['PRJI_Estimated_Mig_Ts'];
 
 if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
   $forecastMin = date_format($date, "Y-m-d");
@@ -297,7 +320,7 @@ if($match == 0) {
   <input name="RiskAndIssue_Key" type="hidden" id="RiskAndIssue_Key" value="<?php echo $assocProject; ?>">
   <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $RiskProbability ?>">
   <input name="CreatedFrom" type="hidden" id="CreatedFrom" value="">
-  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php $assocProject; ?>">
+  <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="<?php echo $assocProject; ?>">
   <input name="regionKeys" type="hidden" id="regionKeys" value="">
   <input name="programKeys" type="hidden" id="programKeys" value="">
   <input name="status" type="hidden" id="status" value="<?php echo $status;?>">
@@ -307,6 +330,7 @@ if($match == 0) {
   <input name="add_proj_select" type="hidden" value="<?php echo $add_proj_select; ?>">
   <input name="formaction" type="hidden" id="formaction" value="update">
   <input name="Individual" type="hidden" id="Individual" value="">
+  <input name="Region" type="hidden" id="Region" value="<?php echo $regionx ?>">
 
   <?php if(!empty($add_proj_select)) { ?>
   <div align="left"><h4 style="color: #00aaf5">ADDING PROJECT ASSOCIATION(S)</h4></div>
@@ -734,6 +758,27 @@ if($match == 0) {
                   </td>
                 </tr>
               </table>
+              <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
+              <table>
+                <div id="hidden_div">
+                  <tr>
+                    <td width="213px">
+                      <label for="EstActiveDate">Est. Activation Date*</label>
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php echo date_format($Estimated_Act, "Y-m-d") ?>">
+                    </td>
+                    <td width="20px"></td>
+                    <td>
+                      <label for="EstMigrateDate">Est. Migration Date*</label>
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php echo date_format($Estimated_Mig, "Y-m-d") ?>">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </div>
+              </table>  
             </div>
           </td>
         </tr>
