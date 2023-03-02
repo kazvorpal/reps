@@ -21,14 +21,7 @@
         include ("../includes/cdns.php");
         include ("../includes/data-unified.php");
     ?>
-    <script>
-
-
-    </script>
-
 <link rel="stylesheet" title="ri" href="../css/ri.css">
-<style type="text/css">
-  </style>
   </head>
   <body>
     <!--LOADER-->
@@ -99,6 +92,7 @@
       const main = document.getElementById("main");
       seeall = ` <button value="" class="btn btn-default" onclick="openall(openval)" id="allbutton">Expand All</a>`;
       initexcel();
+      main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default" onclick="togglegrid()" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
       if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
             p = ", Portfolio";
@@ -107,14 +101,13 @@
             p = ", Projects";
             n = capitalize(mode);
         }
-        main.innerHTML = `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})${seeall}</div>`;
+        main.innerHTML += `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})${seeall}</div>`;
       } else {
-          main.innerHTML = '';
           main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
           var mt = document.getElementById("maintable");
           mt.appendChild(makeheader("projects"));
       }
-      (mode == "portfolio"&&format != "grid") ? makerow({MLMProgram_Nm: "Portfolios"}, 1, 1) : "";
+      (mode == "portfolio"&&format != "grid") ? makerow({MLMProgram_Nm: "Portfolio"}, 1, 1) : "";
       pagestart = (page*pagesize) - pagesize;
       ps = (page*pagesize);
       maxpages = 2;
@@ -125,8 +118,8 @@
         if(loop != null && typeof rilist[loop] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
         }
-        resultcounter((ispp(mode)) ? result : rilist);
       }
+      resultcounter((ispp(mode) && format != "gridfile") ? result : rilist);
       pages = Math.ceil(rilist.length/pagesize);
       if (pages > 0 && page > pages) {
         page = 1;
@@ -160,45 +153,44 @@
     }
 
     const makerow = (target, risks, issues) => {
-
-        // Runs once per Program
-        if (typeof target == null) {
-          return false;
-        }
-        // console.log("makerow: ");
-        // console.log(target);
-        if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null" || (risks == 0 && issues == 0)) return false;
-        const safename = makesafe(target.MLMProgram_Nm);
-        const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
-        const banner = makebanner(safename);
-        const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
-        const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
-        const table = makeelement({e: "table", i: "table" + safename, c: "table"});
-        
-        banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: target.MLMProgram_Nm}));
-        item.appendChild(banner);
-        item.appendChild(collapse).appendChild(body).appendChild(table);
-        document.getElementById("main").appendChild(item);
-        document.getElementById("banner" + safename).innerHTML += " (";
-        projectcount = portfoliocount = 0;
-        makeri(target, "Risk");
-        makeri(target, "Issue");
-        let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ``;
-        document.getElementById("banner" + safename).innerHTML += p + ' )';
-      }  
+      // Runs once per Program
+      if (typeof target == null) {
+        return false;
+      }
+      // console.log("makerow: ");
+      // console.log(target);
+      if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null" || (risks == 0 && issues == 0)) return false;
+      const safename = makesafe(target.MLMProgram_Nm);
+      const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
+      const banner = makebanner(safename);
+      const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
+      const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
+      const table = makeelement({e: "table", i: "table" + safename, c: "table"});
       
-      const makebanner = (safename) => {
-        
-        // Program Start
-        const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
-        const banner = document.createElement("div");
-        banner.id = "banner" + safename;
-        banner.className = "accordion-banner";
-        rowcolor = 1;
-        Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
-        banner.ariaExpanded = true;
-        return banner;
-      }  
+      banner.appendChild(makeelement({e: "span", i: "program" + safename, c: "a-proj", t: target.MLMProgram_Nm}));
+      item.appendChild(banner);
+      item.appendChild(collapse).appendChild(body).appendChild(table);
+      document.getElementById("main").appendChild(item);
+      document.getElementById("banner" + safename).innerHTML += " (";
+      projectcount = portfoliocount = 0;
+      makeri(target, "Risk");
+      makeri(target, "Issue");
+      let p = (mode == "program") ? ` <span title="Project Count">P: ${projectcount}</span>` : ``;
+      document.getElementById("banner" + safename).innerHTML += p + ' )';
+    }
+      
+    const makebanner = (safename) => {
+      
+      // Program Start
+      const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
+      const banner = document.createElement("div");
+      banner.id = "banner" + safename;
+      banner.className = "accordion-banner";
+      rowcolor = 1;
+      Object.entries(bannerfields).forEach(([key, value]) => banner.setAttribute(key, value));
+      banner.ariaExpanded = true;
+      return banner;
+    }  
 
     const makeri = (ri, type) => {
       // Create a Risk or Issue section
@@ -208,7 +200,7 @@
       let list = listri(programname, type);
       document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
       // console.log("makeri: ");
-      // console.log(list.length);
+      // console.log(list);
       if (list.length != 0) {
         document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
         for (rikey of list) {
@@ -222,8 +214,10 @@
           }
           // console.log((ri.MLMProgram_Nm == "Portfolios") ? "result:" + result : ri)
       } else {
-        if (ri.MLMProgram_Nm == "Portfolios") 
-          document.getElementById("itemPortfolios").style.display = "none";
+        if (ri.MLMProgram_Nm == "Portfolio") {
+          console.log(ri);
+          document.getElementById("itemPortfolio").style.display = "none";
+        }
       }
     }
 
@@ -518,13 +512,16 @@
 
     const makeheader = (name, type) => {
       
-      // Make the header for Projects
+      // Make the header for Grids
       
         const safename = makesafe(name);
         const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-1<?= $headerposition ?>"});
         if (ispp(mode)) {
+            let namefield = (format == "grid") ? "R/I Name" : type;
             let cells = ["Risk/Issue"];
             rowcolor = 1;
+            // console.log("rifields");
+            // console.log(rifields);
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
@@ -532,6 +529,9 @@
                 b1 = "<u>";
                 b2 = "</u>";
               }
+              // console.log(name)
+              // console.log(type)
+              const c = (format == "grid") ? "" : (type == "Risk") ? "  " : " issueheader ";
               trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
                 if (this.innerHTML.indexOf("↓") != -1) {
                   reverse = true;
@@ -543,20 +543,31 @@
               }}));
               cells.push(rifields[key].name);
               if (rifields[key].name == "ID") {
-                  trri.appendChild(makeelement({"e": "th", "t": b1 + type + b2 + direction, "c": "p-1 text-center titles align-middle active", "w": "12", a: "click here to sort by this field", "j": function() {
-                console.log(this)
-                if (this.innerHTML.indexOf("↓") != -1) {
-                  reverse = true;
-                } else {
-                  reverse = false;
-                }
-                sort = "RiskAndIssue_Key";
-                init(mode);
-              }}));
+                  trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2, "c": "p-1 text-center titles align-middle active" + c, "w": "12", a: "click here to sort by this field", "j": function() {
+                  console.log(this)
+                  if (this.innerHTML.indexOf("↓") != -1 && false) {
+                    reverse = true;
+                  } else {
+                    reverse = false;
+                  }
+                  sort = "RiskAndIssue_Key";
+                  init(mode);
+                }}));
+                  trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 , "c": "text-center titles align-middle active typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
+                  console.log(this)
+                  if (this.innerHTML.indexOf("↓") != -1 && false) {
+                    reverse = true;
+                  } else {
+                    reverse = false;
+                  }
+                  sort = "RiskAndIssue_Key";
+                  init(mode);
+                }}));
               }
             })
         } else {
             let cells = [];
+            console.log(rifields)
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
@@ -564,7 +575,8 @@
                 b1 = "<u>";
                 b2 = "</u>";
               }
-              trri.appendChild(makeelement({"e": "td", "t": b1 + value + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
+              let name = (typeof value == "object") ? value.name : value;
+              trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
                 if (this.innerHTML.indexOf("↓") != -1) {
                   reverse = true;
                 } else {
@@ -608,7 +620,7 @@
             return gc;
           },
           RiskAndIssue_Key: () => {
-            let status = (ri.RIActive_Flg == 1) ? " <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>" : " <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>"
+            let status = format == "grid" ? "" : (ri.RIActive_Flg == 1) ? " <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>" : " <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>"
             return (ri.RiskAndIssue_Key.toString()) + (status);
           },
           grouptype: () => {
@@ -719,7 +731,7 @@
                 counter++;
               }
             }
-            return (counter > 1) ? "Associated" : "Single";
+            return (ispp(mode) && format == "grid") ? (ri.Global_Flg) ? "Global" : "Program" :(counter > 1) ? "Associated" : "Single";
           },
           projectcount: () => {
             let counter = 0;
@@ -765,6 +777,20 @@
         }
       };
       const rowValues = [];
+      const saferi = makesafe(ri.RI_Nm);
+      let c = "plainbox";
+      const header = makeelement({
+          e: "th", 
+          i: "th" + "type" + saferi, 
+          t: "<div style='overflow:hidden'>" + ri.RI_Nm + "</div>", 
+          c:"p-1 " + c,
+      });
+      const type = makeelement({
+          e: "th", 
+          i: "th" + "type" + saferi, 
+          t: "<div style='overflow:hidden'>" + ri.RIType_Cd + "</div>", 
+          c:"p-1 " + c,
+      });
       for (field in excelfields) {
         (function(test) {
             let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
@@ -793,6 +819,10 @@
              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
             trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
           })(field);
+          if (rifields[field].name == "ID") {
+              trri.appendChild(header);
+              trri.appendChild(type);
+          }
       }
       return trri;
     }  
@@ -845,6 +875,21 @@
           dofilters();
           rifiltered = risort(filtration(ridata), sort);
           let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
+          console.log("riseed");
+          console.log(riseed);
+          if (ispp(mode)&&format == "grid") {
+            let extralist = [];
+            ["Risk", "Issue"].forEach(x => {
+              for (loop of riseed) {
+                templist = (listri(loop.MLMProgram_Nm, x));
+                templist.forEach(o => {
+                  extralist.push(getprogrambykeyonly(o));
+                });
+              }
+            });
+            riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
+            resultcounter(riseed.length)
+          }
           setTimeout(function() {
             populate(riseed);
           });

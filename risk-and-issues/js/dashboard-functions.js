@@ -1,5 +1,7 @@
 const resultcounter = (results) => {
     let r = (typeof results == "object") ? results.length : results;
+    console.log("r")
+    console.log(results)
     const s = (r == 1) ? "" : "s";
     document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`
   }
@@ -37,7 +39,6 @@ const resultcounter = (results) => {
   }
   
   function listri(target, type) {
-    
     // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
     pre = (target == "Portfolios") 
       ? rifiltered.filter(o => o.RIType_Cd == type && o.RILevel_Cd == "Portfolio")
@@ -196,7 +197,6 @@ const trimmer = (target, key) => {
   : target;
 }
 
-
 var params = new URLSearchParams(window.location.search);
 var mode = (params.get("mode") == null) ? "project" : params.get("mode");
 var page = params.get("page");
@@ -221,3 +221,11 @@ const uniques = () => (mode == "program")
 
 
   const modes = ["project", "program", "portfolio"];
+var togglegrid = () => {
+  format = (format == "grid") ? "accordion" : "grid";
+  let url = new URL(window.location);
+  url.searchParams.set("format", format);
+  window.history.pushState({}, '', url);
+  // populate(ridata);
+  init(mode);
+}

@@ -44,8 +44,8 @@ const jq = `
         <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
           <div class="form-group">
             <div id="filterpanel" class="container-fluid"><div class="row" id="row"></div></div>
-            <br>
- <table cellspacing="0" cellpadding="0">
+            <!-- <br> -->
+ <!-- <table cellspacing="0" cellpadding="0">
   <tbody>
     <tr>
     </tr>
@@ -61,8 +61,7 @@ const jq = `
       <td>&nbsp;</td>
     </tr>
   </tbody>
-</table>
-
+</table> -->
 </div>
 	</form>
 

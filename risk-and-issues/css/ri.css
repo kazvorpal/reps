@@ -239,3 +239,13 @@ body {
 .searchfield {
   placeholder: normal;
 }
+
+.riskheader {
+  background-color: #880;
+}
+.issueheader {
+  background-color: #800;
+}
+.typecolumn {
+  width: 0;
+}
