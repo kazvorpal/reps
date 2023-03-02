@@ -12,6 +12,48 @@ include ("../sql/RI_Internal_External.php");
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
+  $region = $row_prj_region['Region'];
+
+  //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+
+  //BUILD PROJECT ID STRING
+  //for display
+  $daProj = "'" . $projID . "'" ;
+
+  if(isset ($_POST['proj_select'])){
+  $daProj = "'" . $projID . "','" . implode("','", $_POST['proj_select']) . "'";
+  }
+  echo $daProj ."<br>";
+  
+
+  //GET PROJECT NAMES FROM PROJECT UID FOR DISPLAY
+  $sql_projects = " DECLARE @ASSC_PROJ VARCHAR(1000)
+  SELECT @ASSC_PROJ = COALESCE(@ASSC_PROJ+'<br>','')+ CAST(PROJ_NM AS VARCHAR(1000))
+  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject]() 
+  WHERE PROJ_ID IN($daProj)
+  SELECT @ASSC_PROJ AS PROJ_NM";
+  $stmt_projects = sqlsrv_query( $data_conn, $sql_projects );
+  $row_projects = sqlsrv_fetch_array( $stmt_projects, SQLSRV_FETCH_ASSOC);
+  $prj_nm_diplay = $row_projects['PROJ_NM'];
+
+  //echo $prj_nm_diplay;
+  //echo $projID;
+  //GET PROJECT NAMES FOR FIELD
+  //echo $prj_nm_diplay;
+  $allProjects = str_replace("<br>",",",$prj_nm_diplay);
+
+  //GET REGIONS
+  $sql_regions = " DECLARE @ASSC_PROJ VARCHAR(1000)
+  SELECT @ASSC_PROJ = COALESCE(@ASSC_PROJ+',','')+ CAST(Region AS VARCHAR(1000))
+  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject]() 
+  WHERE PROJ_ID IN($daProj)
+  SELECT @ASSC_PROJ AS PROJ_NM";
+  $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
+  $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
+  $regions_display = $row_regions['PROJ_NM'];
+echo $regions_display;
+
+$forcastDate =  date('m/d/Y');
 
 ?>
 <!doctype html>
@@ -159,7 +201,7 @@ Enter the details of your Project Issue
   <input name="assocProjectsKeys" type="hidden" id="assocProjectsKeys" value="">
   <input name="DateClosed" type="hidden" id="DateClosed" value="">
   <input name="raidLog" type="hidden" value="No" id="raidLog">
-
+  <input name="Region" type="hidden" id="Region" value="<?php echo $regions_display ?>">
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
         <tr>
@@ -497,10 +539,11 @@ Enter the details of your Project Issue
         <tr>
           <td colspan="3">
           <div class="box" align="left">
-          <input type="hidden" name="assocProjects" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
-          <?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "<br>" . $proj_selectx; } else { echo $ass_project; }?>
-        </div>
-		  </td>
+              <input type="hidden" name="assocProjects" id="assocProjects" value="<?php echo $allProjects //if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
+              <?php //if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "<br>" . $proj_selectx; } else { echo $ass_project; }?>
+              <?php echo $prj_nm_diplay ?>
+            </div>
+		      </td>
         </tr>
         <!-- 
         <tr>
@@ -572,7 +615,7 @@ Enter the details of your Project Issue
               <table>
                 <tr>
                   <td><label for="changeLogAction">Requested Action</label>
-                    <select name="changeLogAction" id="changeLogAction" class="form-control">
+                    <select name="changeLogAction" id="changeLogAction" class="form-control" onchange="showDiv('hidden_div', this)">
                       <option value=""></option> 
                       <?php while($row_changeLogAction = sqlsrv_fetch_array( $stmt_changeLogAction , SQLSRV_FETCH_ASSOC)) { ?>
                         <option value="<?php echo $row_changeLogAction['RequestAction_Key'] . ":" . $row_changeLogAction['RequestAction_Nm'];?>"><?php echo $row_changeLogAction['RequestAction_Nm'];?></option>
@@ -584,9 +627,30 @@ Enter the details of your Project Issue
                     <label for="changeLogReason">Reason</label>
                     <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100">
                   </td>
+                  <td width="20px"></td> 
                 </tr>
-              </table>
-            </div>
+                </table>
+                <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
+                <div id="hidden_div">
+                <table>
+                  <tr>
+                    <td width="213px">
+                      <label for="EstActiveDate">Est. Activation Date*</label>
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" required>
+                    </td>
+                    <td width="20px"></td>
+                    <td>
+                      <label for="EstMigrateDate">Est. Migration Date*</label>
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" required>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                   </tr>
+              </table>   
+              </div>        
           </td>
         </tr>
 <!--
@@ -623,6 +687,7 @@ Enter the details of your Project Issue
         </tr>
       </tbody>
     </table>
+    <div id="hidden_div">I can see this</div>
   </form>
 </div>
 </main>
@@ -779,6 +844,12 @@ document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDef
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 </script>
 
+<script>
+function showDiv(divId, element)
+{
+    document.getElementById(divId).style.display = element.value == "5:POR Schedule Update" ? 'block' : 'none';
+}
+</script>
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>
