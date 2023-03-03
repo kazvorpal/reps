@@ -744,7 +744,7 @@ if($match == 0) {
               <table>
                 <tr>
                   <td><label for="changeLogAction">Requested Action</label>
-                    <select name="changeLogAction" id="changeLogAction" class="form-control">
+                    <select name="changeLogAction" id="changeLogAction" class="form-control" onchange="showDiv('hidden_div', this)">
                       <option value=""></option> 
                       <?php while($row_changeLogAction = sqlsrv_fetch_array( $stmt_changeLogAction , SQLSRV_FETCH_ASSOC)) { ?>
                         <option value="<?php echo $row_changeLogAction['RequestAction_Key'] . ":" . $row_changeLogAction['RequestAction_Nm'];?>" <?php if($changeLogActionVal == $row_changeLogAction['RequestAction_Key']) { echo "selected" ;} ?>><?php echo $row_changeLogAction['RequestAction_Nm'];?></option>
@@ -754,13 +754,13 @@ if($match == 0) {
                   <td width="20px"></td>
                   <td>
                     <label for="changeLogReason">Reason</label>
-                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100" value="<?php echo $changeLogReason; ?>">
+                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100" value="<?php echo $changeLogReason; ?>" required>
                   </td>
                 </tr>
               </table>
               <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
-              <table>
-                <div id="hidden_div">
+              <div id="hidden_div">
+                <table>
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
@@ -777,8 +777,8 @@ if($match == 0) {
                     <td></td>
                     <td></td>
                   </tr>
-                </div>
-              </table>  
+                </table>  
+              </div>
             </div>
           </td>
         </tr>
@@ -981,6 +981,32 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+
+var  showDiv
+(showDiv = function(divId, element) {
+  console.log("showdiv");
+    if (element.value == "5:POR Schedule Update"){
+      document.getElementById(divId).style.display = 'block';
+      document.getElementById("EstMigrateDate").required = true;
+    } else {
+      document.getElementById(divId).style.display = 'none';
+      document.getElementById("EstMigrateDate").required = false;
+    }
+    document.logaction = element.value;
+    localStorage.setItem("logaction", element.value);
+})('hidden_div', document.getElementById("changeLogAction"))
+
+if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+  console.log("backbutton")
+  document.logaction = localStorage.getItem("logaction");
+  console.log(document.logaction)
+  document.getElementById("changeLogAction").value = document.logaction;
+  setTimeout(function() {
+    showDiv('hidden_div', document.getElementById("changeLogAction"))
+  }, 100)
+} else {
+  console.log("Noback")
+}
 </script>
 
 <script src="includes/ri-functions.js"></script>

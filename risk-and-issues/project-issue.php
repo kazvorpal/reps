@@ -625,7 +625,7 @@ Enter the details of your Project Issue
                   <td width="20px"></td>
                   <td>
                     <label for="changeLogReason">Reason</label>
-                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100">
+                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100" required>
                   </td>
                   <td width="20px"></td> 
                 </tr>
@@ -871,13 +871,16 @@ if (window.performance && window.performance.navigation.type === window.performa
   document.logaction = localStorage.getItem("logaction");
   console.log(document.logaction)
   document.getElementById("changeLogAction").value = document.logaction;
-  showDiv('hidden_div', document.getElementById("changeLogAction"))
+  setTimeout(function() {
+    showDiv('hidden_div', document.getElementById("changeLogAction"))
+  }, 100)
 } else {
   console.log("Noback")
 }
 
 </script>
 <script src="includes/ri-functions.js"></script>
+
 </body>
 </html>
 	  
