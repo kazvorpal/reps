@@ -68,6 +68,13 @@ $changeLogReason = $row_risk_issue['Reason_Txt'];
 $changeLogName = $row_risk_issue['RequestAction_Nm'];
 $changeLogActionKey = $row_risk_issue['RequestAction_Key'];
 
+$changeLogActionVal = $row_risk_issue['RequestAction_Key'];
+$changeLogReason = $row_risk_issue['Reason_Txt'];
+$changeLogName = $row_risk_issue['RequestAction_Nm'];
+
+$Estimated_Act= $row_risk_issue['PRJI_Estimated_Act_Ts'];
+$Estimated_Mig= $row_risk_issue['PRJI_Estimated_Mig_Ts'];
+
 
 $groupID = "";
 if (isset($_POST['groupID'])) {
@@ -578,12 +585,11 @@ function toggle(source) {
           </div>			</td>
         </tr>
         <tr>
-          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4>
+          <td colspan="3" align="left"><h4 style="color: #00aaf5">ACTION PLAN</h4><!-- ADD EST DATE FOR CR 3.1.2023-->
           
           <div class="box <?php echo $disble_it;?>">  
             <table width="100%" border="0" cellpadding="5" cellspacing="5">
               <tbody>
-                
                   <tr>
                     <td width="100%">
                           <textarea name="ActionPlan" cols="120" required="required" class="form-control" id="ActionPlan"><?php echo $actionPlan; ?></textarea>  
@@ -610,6 +616,58 @@ function toggle(source) {
         </tr>
         <tr>
           <td colspan="3" align="left">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left"></td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+          <h4 style="color: #00aaf5">CHANGE LOG REQUEST</H4>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="left">
+            <div class="box <?php echo $disble_it?>" align="left">
+              <table>
+                <tr>
+                  <td><label for="changeLogAction">Requested Action</label>
+                    <select name="changeLogAction" id="changeLogAction" class="form-control">
+                      <option value=""></option> 
+                      <?php while($row_changeLogAction = sqlsrv_fetch_array( $stmt_changeLogAction , SQLSRV_FETCH_ASSOC)) { ?>
+                        <option value="<?php echo $row_changeLogAction['RequestAction_Key'] . ":" . $row_changeLogAction['RequestAction_Nm'];?>" <?php if($changeLogActionVal == $row_changeLogAction['RequestAction_Key']) { echo "selected" ;} ?>><?php echo $row_changeLogAction['RequestAction_Nm'];?></option>
+                      <?php } ?>
+                    </select>
+                  </td>
+                  <td width="20px"></td>
+                  <td>
+                    <label for="changeLogReason">Reason</label>
+                    <input name="changeLogReason" type="text" class="form-control" id="changeLogReason" size="100" value="<?php echo $changeLogReason; ?>">
+                  </td>
+                </tr>
+              </table>
+              <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
+              <table>
+                <div id="hidden_div">
+                  <tr>
+                    <td width="213px">
+                      <label for="EstActiveDate">Est. Activation Date*</label>
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php echo date_format($Estimated_Act, "Y-m-d") ?>">
+                    </td>
+                    <td width="20px"></td>
+                    <td>
+                      <label for="EstMigrateDate">Est. Migration Date*</label>
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php echo date_format($Estimated_Mig, "Y-m-d") ?>">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </div>
+              </table>  
+            </div>
           </td>
         </tr>
 

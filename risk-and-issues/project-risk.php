@@ -9,8 +9,46 @@
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
-?>
-<?php 
+  $region = $row_prj_region['Region'];
+
+  //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
+
+  //BUILD PROJECT ID STRING
+  //for display
+  $daProj = "'" . $projID . "'" ;
+
+  if(isset ($_POST['proj_select'])){
+  $daProj = "'" . $projID . "','" . implode("','", $_POST['proj_select']) . "'";
+  }
+  //echo $daProj ."<br>";
+  
+  //GET PROJECT NAMES FROM PROJECT UID FOR DISPLAY
+  $sql_projects = " DECLARE @ASSC_PROJ VARCHAR(1000)
+  SELECT @ASSC_PROJ = COALESCE(@ASSC_PROJ+'<br>','')+ CAST(PROJ_NM AS VARCHAR(1000))
+  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject]() 
+  WHERE PROJ_ID IN($daProj)
+  SELECT @ASSC_PROJ AS PROJ_NM";
+  $stmt_projects = sqlsrv_query( $data_conn, $sql_projects );
+  $row_projects = sqlsrv_fetch_array( $stmt_projects, SQLSRV_FETCH_ASSOC);
+  $prj_nm_diplay = $row_projects['PROJ_NM'];
+  //echo $sql_projects;
+  //echo $prj_nm_diplay;
+  //echo $projID;
+  //GET PROJECT NAMES FOR FIELD
+  //echo $prj_nm_diplay;
+  $allProjects = str_replace("<br>",",",$prj_nm_diplay);
+
+  //GET REGIONS
+  $sql_regions = " DECLARE @ASSC_PROJ VARCHAR(1000)
+  SELECT @ASSC_PROJ = COALESCE(@ASSC_PROJ+',','')+ CAST(Region AS VARCHAR(1000))
+  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject]() 
+  WHERE PROJ_ID IN($daProj)
+  SELECT @ASSC_PROJ AS PROJ_NM";
+  $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
+  $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
+  $regions_display = $row_regions['PROJ_NM'];
+  //echo $regions_display;
+
 $forcastDate =  date('m/d/Y');
 ?>
 <!doctype html>
@@ -145,6 +183,7 @@ function toggle(source) {
     <input name="Individual" type="hidden" id="Individual" value="">
     <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
     <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
+    <input name="Region" type="hidden" id="Region" value="<?php echo $regions_display ?>">
 
     <table width="100%" border="0" cellpadding="10" cellspacing="10">
       <tbody>
@@ -513,8 +552,9 @@ function toggle(source) {
         <tr>
           <td colspan="3">
             <div class="box" align="left">
-              <input type="hidden" name="assocProjects" id="assocProjects" value="<?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
-              <?php if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "<br>" . $proj_selectx; } else { echo $ass_project; }?>
+              <input type="hidden" name="assocProjects" id="assocProjects" value="<?php echo $allProjects //if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "," . $proj_selectx; } else { echo $ass_project; }?>">
+              <?php //if(!empty($_POST['proj_select'])) { $proj_select = implode(',', $_POST['proj_select']); $proj_selectx = $proj_select; echo $ass_project . "<br>" . $proj_selectx; } else { echo $ass_project; }?>
+              <?php echo $prj_nm_diplay ?>
             </div>
 		      </td>
         </tr>

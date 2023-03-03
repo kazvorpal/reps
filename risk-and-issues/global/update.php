@@ -110,7 +110,9 @@ if($RILevel_Cd == "Program") {
   $row_rikey_prg = sqlsrv_fetch_array( $stmt_rikey_prg , SQLSRV_FETCH_ASSOC);
   $Programkeys = $row_rikey_prg['Program_Key'];
   $Program_Key = explode(",", $Programkeys); 
-}
+} 
+//FOR TESTING ONLY
+//echo $sql_rikey_prg  . " " . $Programkeys . " " . $Program_Key;
 
 //SUBPROGRAM 
 $sql_subprog = "select * from mlm.fn_getlistofsubprogramforprogram(-1) where Program_Nm = '$MLMProgram_Nm' and LRPYear = $Fiscal_Year";
@@ -299,6 +301,7 @@ function toggle(source) {
   <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $RIPortfolio_Key; ?>">
   <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
   <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
+  <input name="portfolioType" type="hidden" id="portfolioType" value="" >
   
   <?php if($RILevel_Cd == "Portfolio") {?>
     <input name="Region" type="hidden" id="Region" value="<?php echo $MLMRegion_Key; ?>">
@@ -308,7 +311,7 @@ function toggle(source) {
    <div class="container">
   <!--ROW 1 -->
   <div class="row row-eq-height">
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">LRP YEAR*</h3>
@@ -321,7 +324,7 @@ function toggle(source) {
         </div>
       </div>
     </div>  
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">RISK/ISSUE LEVEL*</h3>
@@ -332,18 +335,7 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">PORTFOLIO TYPE*</h3>
-        </div>
-        <div class="panel-body">
-        <label for="portfolioType"><input type="radio" name="portfolioType" value="nt 2.0" required <?php if($RIPortfolio_Key == 1) { echo 'checked';} ?> disabled> NT 2.0 </label> 
-        <label for="portfolioType1"><input type="radio" name="portfolioType" value="bau" required <?php if($RIPortfolio_Key == 2) { echo 'checked';} ?> disabled> BAU </label>
-        </div>
-    </div>
-    </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">RISK/ISSUE TYPE*</h3>

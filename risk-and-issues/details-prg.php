@@ -25,7 +25,6 @@ $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
 //echo $row_risk_issue['Risk_Issue_Name']; 	
 //echo $sql_risk_issue . "<br><br>";
-//exit();		
 
 //GET DISTINCT REGIONS FOR UPDATE
 $sql_risk_issue_regions_up = "select * from RI_Mgt.fn_GetListOfAllRiskAndIssue($status) where RIlevel_Cd = 'Program' and RiskAndIssue_Key = $RiskAndIssue_Key";
@@ -94,7 +93,6 @@ $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
 $sql_uid = "Select EPSProject_Nm, PROJ_ID
                   FROM RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progRIkey,$status) 
                   left join [EPS].[ProjectStage] on PROJ_NM = EPSProject_Nm";
-// echo $sql_uid;
 $stmt_uid = sqlsrv_query( $data_conn, $sql_uid );
 $row_uid = sqlsrv_fetch_array($stmt_uid  , SQLSRV_FETCH_ASSOC);
 $uid_frm_prj = $row_uid ['PROJ_ID']; 
@@ -108,8 +106,9 @@ $uid = $_GET['uid'];
 //echo $uid;
 
 //USER AUTHORIZATION - NOT USED-DELETE
+$windowsUserLower = strtolower($windowsUser);
 $authProg = $row_risk_issue['MLMProgram_Nm'];
-$sql_authorize = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$windowsUser', $fscl_year) WHERE Program_Nm = '$authProg'";
+$sql_authorize = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$windowsUserLower', $fscl_year) WHERE Program_Nm = '$authProg'";
 $stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
 $row_authorize = sqlsrv_fetch_array($stmt_authorize, SQLSRV_FETCH_ASSOC);
 //echo $sql_authorize;
@@ -139,6 +138,7 @@ if(is_null($row_winuser_prg)) {
 
 //DECLARE
 $ri_id = $row_risk_issue['RiskAndIssue_Key'];
+$ri_owner = $row_risk_issue['LastUpdateBy_Nm'];
 $name = $row_risk_issue['RI_Nm'];
 $RILevel = $row_risk_issue['RILevel_Cd'];
 $RIType = $row_risk_issue['RIType_Cd'];
@@ -222,7 +222,11 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
   <tr>
       <td width="20%">ID</td>
       <td><?php echo $ri_id; ?></td>
-    </tr>  
+  </tr>
+  <tr>
+      <td width="20%">Owner Name</td>
+      <td><?php echo $ri_owner; ?></td>
+  </tr>  
   <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
@@ -291,10 +295,10 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
       <td>Response Strategy</td>
       <td><?php echo $responseStrategy2; ?></td>
     </tr>
-    <tr>
+    <!--<tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?></td>
-    </tr>
+    </tr>-->
     <tr>
       <td>Forecasted Resolution Date</td>
       <td>
@@ -340,7 +344,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
     </tr>
   </tbody>
 </table>
-<div align="center">
+<div align="center"> 
 <?php if($alias == $authUser){ ?> 
 <?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
 <?php if($popup == "false"){?>
@@ -367,6 +371,7 @@ $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $ac
 <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
       &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
       %0D%0AID: <?php echo $ri_id;?>
+      %0D%0AOwner Name: <?php echo $ri_owner;?>
       %0D%0ARisk/Issue Name: <?php echo $name;?>
       %0D%0AType: <?php echo $RILevel . " " . $RIType;?>
       %0D%0AProgram: <?php echo $prog_name;?>

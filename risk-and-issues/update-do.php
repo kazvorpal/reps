@@ -36,6 +36,7 @@ $unframe = $_SESSION['unframe'];
         $changeLogName = "Deleted";
      }
     $userEmail = $row_winuser['Email'];
+    $userName = $row_winuser['CCI_Alias'];
     $createdfrom = $_POST['createdFrom'];
     $usedButton = $_POST['submit2'];
     $userId = $_POST['userId']; // WINDOWS LOGIN NAME
@@ -60,6 +61,7 @@ $unframe = $_SESSION['unframe'];
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 
     $transfer2prgManager = $_POST['transfer2prgManager'];
+    //ASSC CR KEY NULL IF EMPTY 3.1.2023 
     $asscCRKey = $_POST['assCRID']; 
     $project_nm = $_POST['project_nm'];
 
@@ -137,6 +139,16 @@ $unframe = $_SESSION['unframe'];
         $ChangeToPIChangeLog = 1;
     }
     $changeLogReason = $_POST['changeLogReason'];
+
+    $EstActiveDate = NULL;
+    if($_POST['EstActiveDate'] != ""){
+    $EstActiveDate = $_POST['EstActiveDate'];
+    }
+    
+    $EstMigrateDate = NULL;
+    if($_POST['EstMigrateDate'] != ""){
+    $EstMigrateDate = $_POST['EstMigrateDate'];
+    }
     
     $riKeys = $_POST['RiskAndIssue_Key']; //Multiple keys seperated by comma
     $firstRIkeyx = explode(",",$_POST['RiskAndIssue_Key']); //create array for keys
@@ -153,6 +165,16 @@ $unframe = $_SESSION['unframe'];
     }
 
     //LOOK UP KEY VALUES 
+    // GET UID FROM PROJECT NAME
+    $assocProjects_sql = explode(",", $assocProject);
+    $asscProjIN = $assocProjects_sql[0];
+
+    $sql_in = "SELECT* FROM [EPS].[ProjectStage] WHERE PROJ_NM IN ('$asscProjIN')";
+    $stmt_in  = sqlsrv_query( $data_conn, $sql_in  ); 
+    $row_in  = sqlsrv_fetch_array( $stmt_in , SQLSRV_FETCH_ASSOC);
+    $uid = $row_in['PROJ_ID'];
+    //echo $uid;
+
     // IMPACT AREA
     $sql_imp_area = "SELECT* FROM RI_MGT.Impact_Area WHERE ImpactArea_Key = $impactArea";
     $stmt_imp_area  = sqlsrv_query( $data_conn, $sql_imp_area  ); 
@@ -228,7 +250,9 @@ $unframe = $_SESSION['unframe'];
         array($riOpenFlg, SQLSRV_PARAM_IN),// 0 for closed
         array($raidLog, SQLSRV_PARAM_IN),
         array($date, SQLSRV_PARAM_IN), //forcasted resolution date
-        array($DateClosed, SQLSRV_PARAM_IN), 
+        array($DateClosed, SQLSRV_PARAM_IN),
+        array($EstActiveDate, SQLSRV_PARAM_IN),
+        array($EstMigrateDate, SQLSRV_PARAM_IN),
         array($subprogram, SQLSRV_PARAM_IN),
         array($global, SQLSRV_PARAM_IN), 
         array($portfolioType_Key, SQLSRV_PARAM_IN), 
@@ -242,12 +266,12 @@ $unframe = $_SESSION['unframe'];
 
          // DEBUG CODE
             //echo "<br><br>";
-            //echo json_encode($params);
+            //echo str_replace("],[","]<br>[", json_encode($params)) ;
             //echo "<br><br>";
             //exit();
 
         //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
       //EXECUTE PROCEDDURE
     $stmt3 = sqlsrv_query( $data_conn, $tsql_callSP, $params);
@@ -357,6 +381,7 @@ $unframe = $_SESSION['unframe'];
             // BUILD EMAIL BODY
             $message = "<p>A " . $riLevel . " " .$riTypeCode . "  has been " . $changeLogName . ".  Below are the details.</p>";
             $message .="<br><b>ID: </b>" . $riKeys ;
+            $message .="<br><b>Owner Name: </b>" . $userName;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -373,7 +398,7 @@ $unframe = $_SESSION['unframe'];
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=" . $riOpenFlg . "&rikey=" . $riKeys;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/" . $detailPage . ".php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true&uid=";
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/" . $detailPage . ".php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true&uid=" . $uid ;
             }
                            
             // SEND EMAIL USING MAIL FUNCION 
@@ -403,6 +428,7 @@ $unframe = $_SESSION['unframe'];
             // BUILD EMAIL BODY
             $message = "<p>There was an update to a " . $riLevel . " " .$riTypeCode . " that has been flagged for RAID Log.</p>";
             $message .="<br><b>ID: </b>" . $riKeys ;
+            $message .="<br><b>Owner Name: </b>" . $userName;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -419,7 +445,7 @@ $unframe = $_SESSION['unframe'];
             if($global == 1) {
                 $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=" . $riOpenFlg . "&rikey=" . $riKeys;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true&uid=";
+                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $firstRIkey ."&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($project_nm) . "&status=" . $status . "&popup=true&uid=" . $uid ;
             }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){

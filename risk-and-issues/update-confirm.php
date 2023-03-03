@@ -156,6 +156,8 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <input name="portfolioType_Key" type="hidden" id="portfolioType_Key" value="<?php echo $portfolioType_Key?>"> 
     <input name="changeLogActionVal" type="hidden" id="changeLogActionVal" value="<?php echo $changeLogActionVal?>"> 
     <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason?>">
+    <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?php echo $EstMigrateDate?>">
+    <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?php echo $EstActiveDate?>">
 
 <?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
@@ -180,7 +182,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </div>
   </div>
 <?php } ?>
-    
+   
 	<table class="table table-bordered table-striped" width="90%">
   <thead>
     <tr>
@@ -333,9 +335,20 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>
     <tr>
       <td>Change Log Reason</td>
-      <td><?php echo $changeLogReason; ?></td>S
+      <td><?php echo $changeLogReason; ?></td>
     </tr>
 <?php } ?>
+<?php if(!is_null($EstActiveDate)) { ?>
+    <tr>
+      <td>Est. Activation Date</td>
+      <td><?php echo $EstActiveDate?></td>
+    </tr>
+    <tr>
+      <td>Est. Migration Date</td>
+      <td><?php echo $EstMigrateDate?></td>
+    </tr>
+<?php } ?>
+
     <!--<tr>
       <td>Notify Portfolio Team</td>
       <td><?php echo $raidLog; ?>

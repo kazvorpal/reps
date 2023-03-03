@@ -1,9 +1,10 @@
-<?php include ("../includes/functions.php");?>
-<?php include ("../db_conf.php");?>
-<?php include ("../data/emo_data.php");?>
-<?php //include ("../sql/project_by_id.php");?>
-<?php include ("../sql/RI_Internal_External.php");?>
 <?php 
+include ("../includes/functions.php");
+include ("../db_conf.php");
+include ("../data/emo_data.php");
+//include ("../sql/project_by_id.php");
+include ("../sql/RI_Internal_External.php");
+   
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_GET, true)));
 
@@ -68,8 +69,8 @@
 
   //GET REGIONS FROM NAME
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] ()
+                  WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
@@ -92,7 +93,7 @@
       SELECT @temp = COALESCE(@temp+',' ,'') + Region_Cd 
       FROM RI_MGT.fn_GetListOfLocationsForEPSProject(1) Where  EPSProject_key in ($eps_proj_keys)
       SELECT @temp AS Region_Cd ";
-
+      //echo $sql_region_update;
   if($assc_prj_update == "yes") {
 
     $inRegion = $ass_project_regions; //$row_region_update['Region_Cd'];
@@ -100,11 +101,11 @@
     //$IReplace = str_replace(",", "','", $inRegion);
 
     $sql_region_update = "DECLARE @REG_Nms VARCHAR(1000) 
-    SELECT @REG_Nms = COALESCE(@REG_Nms+',','')+ CAST(Region_Cd AS VARCHAR(1000)) 
-    FROM [EPS].[ProjectStage] INNER JOIN [CR_MGT].[Region] on Region_Cd = Region 
+    SELECT @REG_Nms = COALESCE(@REG_Nms+',','')+ CAST(Region_Key AS VARCHAR(1000)) 
+    FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
     WHERE PROJ_NM IN ($IReplace ) 
     SELECT @REG_Nms AS Region_Cd";
-
+    //echo $sql_region_update;
       }
 
   $stmt_region_update = sqlsrv_query( $data_conn, $sql_region_update );
@@ -112,13 +113,12 @@
   //echo "<B>Regions from ASSOC PROJECTS: </B>" . $sql_region_update . "<br><br>";
 
   //GET REGIONS KEYS FOR HIDDEN FIELD
-  $regionkeySQL = " DECLARE @REG_IDs VARCHAR(1000) 
+      $regionkeySQL = " DECLARE @REG_IDs VARCHAR(1000) 
       SELECT @REG_IDs = COALESCE(@REG_IDs+',','')+ CAST(Region_key AS VARCHAR(1000)) 
-      FROM [EPS].[ProjectStage]
-      INNER JOIN [CR_MGT].[Region] on Region_Cd = Region
+      FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
       WHERE PROJ_NM IN ($projFromURL) 
       SELECT @REG_IDs AS Region_key";
-
+      //echo $regionkeySQL;
   if($assc_prj_update == "yes") {
 
       $inRegion = $ass_project_regions; //$row_region_update['Region_Cd'];
@@ -127,10 +127,10 @@
 
       $regionkeySQL = " DECLARE @REG_IDs VARCHAR(100) 
       SELECT @REG_IDs = COALESCE(@REG_IDs+',','')+ CAST(Region_key AS VARCHAR(100)) 
-      FROM [EPS].[ProjectStage]
-      INNER JOIN [CR_MGT].[Region] on Region_Cd = Region
+      FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
       WHERE PROJ_NM IN ($IReplace) 
       SELECT @REG_IDs AS Region_key";
+      //echo $regionkeySQL;
     }
 //echo "<B>Region Keys for Hidden Fields: </B>" . $regionkeySQL;
   $sql_regions_f = "$regionkeySQL";
@@ -146,24 +146,25 @@
 
   //GET ALL REGIONS FOR REGIONS SELECTION
   $sql_regions = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
+                  WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
+  //echo $sql_regions;
   //$row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   //$row_regions['Region'];
 
   //SINGLE REGION FOR NAME CONCATINATION
   $sql_region = "SELECT DISTINCT Region_key, Region
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
+                  WHERE PROJ_NM IN ($regionIN)";
   $stmt_region = sqlsrv_query( $data_conn, $sql_region );
   $row_region = sqlsrv_fetch_array( $stmt_region, SQLSRV_FETCH_ASSOC);
   //echo $sql_region;
 
   //MULTI-REGION CONCATINATION - COUNT
   $sql_regions_con = "SELECT Count(DISTINCT Region_key) as numRows
-                  FROM [EPS].[ProjectStage]
-                  JOIN [CR_MGT].[Region] ON [EPS].[ProjectStage].[Region] = [CR_MGT].[Region].[Region_Cd] WHERE PROJ_NM IN ($regionIN)";
+                  FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
+                  WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions_con  = sqlsrv_query( $data_conn, $sql_regions_con  );
   $row_regions_con = sqlsrv_fetch_array( $stmt_regions_con, SQLSRV_FETCH_ASSOC );
  //echo $sql_regions_con;
@@ -172,7 +173,7 @@
   //echo $numRows;
   //exit();  
     
-  if($numRows == 7){
+  if($numRows == 9){
       $regionCD = "All";
   } else if($numRows == 1) {
       $regionCode =  $row_region['Region'];
@@ -190,8 +191,12 @@
             $regionCD = 'SW';
         } else if($regionCode=='Virginia'){
             $regionCD = 'VA';
+        } else if($regionCode=='East'){
+            $regionCD = 'EA';
+        } else if($regionCode=='West'){
+            $regionCD = 'WS';
         } 
-  } else if($numRows >= 2 && $numRows <= 6){
+  } else if($numRows >= 2 && $numRows <= 8){
       $regionCD= "Multi";
   }
   
@@ -241,13 +246,15 @@
   //REGIONS FROM DATABASE
   $regionkeyUp = $row_region_update['Region_Cd']; //echo "<b></br></br>Regions to update: </b>" .  $regionkeyUp . "</br>";
   $regionkeyUpArray = array_unique(explode(",", $regionkeyUp)); 
-  //echo "" . print_r($regionkeyUpArray);
+  //echo "<br>HERE " . print_r($regionkeyUpArray);
 
   //REGIONS FROM QUERYSTRING
   $regions = $_GET['regions'];
-  if($assc_prj_update == "yes"){
-    $regions = $regionkeyUp;
-  }
+  //THIS WAS COMMENTED OUT ON 3.2 FOR REGION NUMBERS DISPLAYING ON CONFIRMATION FORM
+  //if($assc_prj_update = "yes"){
+  //  $regions = $regionkeyUp;
+  //}
+ 
   //echo "Selected assoc proj: " . $assc_prj_update . "<br>"; //YES/NO HAS NEW PROJECT ASSOCIATIONS COMING FROM PREVIOUSE PAGE
 
   $createDT = date_format($row_risk_issue['Created_Ts'],'Y-m-d');
@@ -414,6 +421,7 @@ if($formaction == "update") {
 }
 
 ?>
+
   <form action="<?php echo $action ?>" method="post" id="programRisk">
 
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="<?php echo $changeLogKey?>"><!-- 4 update, 3 close, 2 create, 1 initialize -->
@@ -530,6 +538,7 @@ if($formaction == "update") {
                   <div style="padding: 0px 0px 0px 30px">
                     <p><strong>Select Regions 
                       </strong><br>
+<?php if($fscl_year <= "2023") { ?>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="All" id="Region" onClick="toggle(this); updatebox()" class="required_group_reg" 
                         <?php if($assc_prj_update == "yes") { if(in_array("All", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("All", $regionArr)) { echo "checked";} } ?> disabled>
@@ -570,6 +579,31 @@ if($formaction == "update") {
                         <?php if($assc_prj_update == "yes") { if(in_array("Virginia", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Virginia", $regionArr)) { echo "checked";} } ?> disabled>
                         Virginia (VA)</label>
                       <br>
+<?php } else { ?>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="All" id="Region" onClick="toggle(this); updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array("All", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("All", $regionArr)) { echo "checked";} } ?> disabled>
+                        All</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="Corporate" id="Region_6" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array(1, $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Corporate", $regionArr)) { echo "checked";} } ?> disabled>
+                        Corporate (COR)</label>
+                      <br><label>
+                        <input type="checkbox" name="Regionx[]" value="Central" id="Region_7" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array(3, $regionkeyUpArray)) { echo "checked";} } else { if(in_array("East", $regionArr)) { echo "checked";} } ?> disabled>
+                        Central (CN)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="East" id="Region_7" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array(2, $regionkeyUpArray)) { echo "checked";} } else { if(in_array("East", $regionArr)) { echo "checked";} } ?> disabled>
+                        East (EA)</label>
+                      <br>
+                      <label>
+                        <input type="checkbox" name="Regionx[]" value="West" id="Region_8" onClick="updatebox()" class="required_group_reg" 
+                        <?php if($assc_prj_update == "yes") { if(in_array(4, $regionkeyUpArray)) { echo "checked";} } else { if(in_array("West", $regionArr)) { echo "checked";} } ?> disabled>
+                        West (WS)</label>
+<?php } ?>
                       </p>
                     </div>
                 </td>
