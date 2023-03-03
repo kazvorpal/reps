@@ -12,7 +12,7 @@ include ("../sql/RI_Internal_External.php");
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
-  $region = $row_prj_region['Region'];
+  // $region = $row_prj_region['Region'];
 
   //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 
@@ -694,64 +694,72 @@ Enter the details of your Project Issue
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
 
 }
+loaded = 0;
+window.onload = () => {
+  console.log(loaded)
+  loaded = 1;
+  showDiv('hidden_div', document.getElementById("changeLogAction"))
+}
+// console.log(loaded)
+
 
 function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "block";
+  // } else {
+  //   x.style.display = "block";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "none";
+  // } else {
+  //   y.style.display = "none";
+  // }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "block";
+  // } else {
+  //   z.style.display = "block";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "none";
+  // } else {
+  //   w.style.display = "none";
+  // }
 
 }
 
@@ -800,9 +808,9 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
-});
+// document.querySelector('[name=submit]').addEventListener('click', () => {
+//   validateGrp()
+// });
 </script>
 <script>
 var date = new Date();
@@ -818,11 +826,11 @@ var today = year + "-" + month + "-" + day;
 document.getElementById('date').value = today;
 </script>
 <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
 <script>
 $('.subscriber :checkbox').change(function () {
@@ -845,10 +853,29 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 </script>
 
 <script>
-function showDiv(divId, element)
-{
-    document.getElementById(divId).style.display = element.value == "5:POR Schedule Update" ? 'block' : 'none';
+var  showDiv
+(showDiv = function(divId, element) {
+    if (element.value == "5:POR Schedule Update"){
+      document.getElementById(divId).style.display = 'block';
+      document.getElementById("EstMigrateDate").required = true;
+    } else {
+      document.getElementById(divId).style.display = 'none';
+      document.getElementById("EstMigrateDate").required = false;
+    }
+    document.logaction = element.value;
+    localStorage.setItem("logaction", element.value);
+})('hidden_div', document.getElementById("changeLogAction"))
+
+if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+  console.log("backbutton")
+  document.logaction = localStorage.getItem("logaction");
+  console.log(document.logaction)
+  document.getElementById("changeLogAction").value = document.logaction;
+  showDiv('hidden_div', document.getElementById("changeLogAction"))
+} else {
+  console.log("Noback")
 }
+
 </script>
 <script src="includes/ri-functions.js"></script>
 </body>
