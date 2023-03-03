@@ -7,7 +7,8 @@ $db_uni = $data_conn; // Production
 // Fiscal Year for Dropdowns - Set to all years to display all dropdown items when cleared button is clicked
 $fiscal_year_d = $fiscal_year ;
 if($fiscal_year ==0) {
-	$fiscal_year_d = '2020|2021|2022';
+	$fiscal_year_d = '2021|2022|2023|2024';
+	//$fiscal_year_d = date('Y');
 }
 
 // program Drop
@@ -48,15 +49,16 @@ $sql_owner_drop = "SELECT [PROJ_OWNR_NM]
 						GROUP BY [PROJ_OWNR_NM]
 						ORDER BY [PROJ_OWNR_NM]";
 $stmt_owner_drop = sqlsrv_query( $db_uni, $sql_owner_drop );
+//echo $sql_owner_drop;
 
 // fiscal_year
 // echo $row_fiscal_yr['id'];
 
 $sql_fiscal_year = "SELECT [FISCL_PLAN_YR]
-From [EPS].[ProjectStage]
-WHERE [FISCL_PLAN_YR] IS NOT NULL
-GROUP BY [FISCL_PLAN_YR]
-ORDER BY [FISCL_PLAN_YR] DESC";
+	From [EPS].[ProjectStage]
+	WHERE [FISCL_PLAN_YR] IS NOT NULL
+	GROUP BY [FISCL_PLAN_YR]
+	ORDER BY [FISCL_PLAN_YR] DESC";
 $stmt_fiscal_year = sqlsrv_query( $db_uni, $sql_fiscal_year );
 
 // subprogram drop - WILL NOT WORK; PENDING FIX FROM AVI/CHRISTOPHE -- COMPLETED

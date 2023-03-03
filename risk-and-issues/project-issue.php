@@ -23,7 +23,7 @@ include ("../sql/RI_Internal_External.php");
   if(isset ($_POST['proj_select'])){
   $daProj = "'" . $projID . "','" . implode("','", $_POST['proj_select']) . "'";
   }
-  echo $daProj ."<br>";
+  //echo $daProj ."<br>";
   
 
   //GET PROJECT NAMES FROM PROJECT UID FOR DISPLAY
@@ -51,7 +51,7 @@ include ("../sql/RI_Internal_External.php");
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
   $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
   $regions_display = $row_regions['PROJ_NM'];
-echo $regions_display;
+  //echo $regions_display;
 
 $forcastDate =  date('m/d/Y');
 

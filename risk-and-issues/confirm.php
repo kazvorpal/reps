@@ -102,6 +102,9 @@ include ("../sql/update-time.php");
     <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $portfolioType?>"> 
     <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
     <input name="global" type="hidden" id="global" value="<?php echo $global?>">
+    <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?php echo $EstMigrateDate?>">
+    <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?php echo $EstActiveDate?>">
+    <input name="regionKeys" type="hidden" id="regionKeys" value="<?php echo $regionKeys?>">
 
 <?php if($messaging  == "update") { ?>
   <div class="alert alert-success">
@@ -270,6 +273,16 @@ include ("../sql/update-time.php");
     <tr>
       <td>Change Log Reason</td>
       <td><?php echo $changeLogReason; ?></td>
+    </tr>
+<?php } ?>
+<?php if(!is_null($EstActiveDate)) { ?>
+    <tr>
+      <td>Est. Activation Date</td>
+      <td><?php echo $EstActiveDate?></td>
+    </tr>
+    <tr>
+      <td>Est. Migration Date</td>
+      <td><?php echo $EstMigrateDate?></td>
     </tr>
 <?php } ?>
 <?php //if($RILevel == "Program") { ?>

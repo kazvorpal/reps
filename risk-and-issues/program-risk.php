@@ -84,7 +84,7 @@
   $stmt_subprg_f = sqlsrv_query( $data_conn, $sql_subprg_f );
   //$row_subprg_f = sqlsrv_fetch_array( $stmt_subprg_f, SQLSRV_FETCH_ASSOC );
   //$row_subprg_f['Sub_Prg'];
-  echo $sql_subprg_f;
+  //echo $sql_subprg_f;
 
 
   if($numRows == 9){

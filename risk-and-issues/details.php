@@ -12,10 +12,10 @@ $proj_name = $_GET['proj_name'];
 $status = $_GET['status']; //0=closed , 1=open
 $popup = $_GET['popup'];
   
-$sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key";
+$sql_risk_issue = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue ($status)  where RiskAndIssue_Key = $RiskAndIssue_Key"; //NEED TO ADD ESTIMATED DATES TO THIS FUNCTION 2.27.2023
 $stmt_risk_issue = sqlsrv_query( $data_conn, $sql_risk_issue );
 $row_risk_issue = sqlsrv_fetch_array($stmt_risk_issue, SQLSRV_FETCH_ASSOC);
-//echo $sql_risk_issue; exit();
+//echo $sql_risk_issue; //exit();
 $ri_name = $row_risk_issue['RI_Nm'];
 $riLog_Key = $row_risk_issue['RiskAndIssueLog_Key'];
 
@@ -33,6 +33,7 @@ $sql_risk_issue_assoc_proj = "DECLARE @temp VARCHAR(MAX)
                               SELECT @temp AS eps_projects";
 $stmt_risk_issue_assoc_proj = sqlsrv_query( $data_conn, $sql_risk_issue_assoc_proj );
 $row_risk_issue_assoc_proj = sqlsrv_fetch_array($stmt_risk_issue_assoc_proj, SQLSRV_FETCH_ASSOC);
+//echo $sql_risk_issue_assoc_proj;
 
 //COUNT ASSOCIATED PROJECTS
 $sql_assoc_proj_cnt = "SELECT COUNT(*) AS AsscPrjCnt FROM RI_MGT.fn_GetListOfAssociatedProjectsForProjectRINm('$ri_name',$status)";
@@ -42,38 +43,36 @@ $assPrjCnt = $row_assoc_proj_cnt['AsscPrjCnt'];
 
 
 // CHECK IF THE USER AND OWNER MATCH
-                //$ri_count = $_GET['count'];	//COUNTS ARE CURRENTLY WRONG. THIS WILL BE FIXED WHEN AVI ADDS THE COUNTS TO THE DPR		
-                //$authUser = trim($_GET['winuser']);
-                $alias = "";
-                if(!empty($row_winuser['CCI_Alias'])){
-                $alias = trim($row_winuser['CCI_Alias']);
-                }
-                //$tempID = uniqid();
-                //$projectOwner = $row_projID['PROJ_OWNR_NM'];
+//$authUser = trim($_GET['winuser']);
+$alias = "";
+if(!empty($row_winuser['CCI_Alias'])){
+$alias = trim($row_winuser['CCI_Alias']);
+}
+//$tempID = uniqid();
 
-                $sql_authorize = "SELECT [CCI_Alias], [PROJ_OWNR_NM], [PROJ_NM], [PROJ_ID],[RI_MGT].[RiskandIssues_Users].[Username]
-                from [RI_MGT].[RiskandIssues_Users]
-                left join [EPS].[ProjectStage] on [PROJ_OWNR_NM] = [CCI_Alias]
-                Where [RI_MGT].[RiskandIssues_Users].[Username] = '$windowsUser' and [PROJ_NM] = '$proj_name'";
+$sql_authorize = "SELECT [CCI_Alias], [PROJ_OWNR_NM], [PROJ_NM], [PROJ_ID],[RI_MGT].[RiskandIssues_Users].[Username]
+from [RI_MGT].[RiskandIssues_Users]
+left join [EPS].[ProjectStage] on [PROJ_OWNR_NM] = [CCI_Alias]
+Where [RI_MGT].[RiskandIssues_Users].[Username] = '$windowsUser' and [PROJ_NM] = '$proj_name'";
 
-								$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
-                $row_authorize = sqlsrv_fetch_array( $stmt_authorize, SQLSRV_FETCH_ASSOC);
+$stmt_authorize = sqlsrv_query( $data_conn, $sql_authorize );
+$row_authorize = sqlsrv_fetch_array( $stmt_authorize, SQLSRV_FETCH_ASSOC);
 
-                $authorized = "";
-                if(!is_null($row_authorize)) {
-                $authorized = $row_authorize['PROJ_OWNR_NM'];
-                }
+$authorized = "";
+if(!is_null($row_authorize)) {
+$authorized = $row_authorize['PROJ_OWNR_NM'];
+}
                 
-                //ACCESS 
-                if($authorized != ''){ 
-                  $access = "true";
-                } else { 
-                  $access = "false";}
-                //PRINT USER SQL TO SCREEN FOR DEBUG
-                //echo $sql_authorize;
+//ACCESS 
+if($authorized != ''){ 
+  $access = "true";
+} else { 
+  $access = "false";}
 
 //DECLARE
 $ri_id = $row_risk_issue['RiskAndIssue_Key'];
+//$projectOwner = $row_projID['PROJ_OWNR_NM'];
+$ri_owner = $row_risk_issue['LastUpdateBy_Nm'];
 $name = trim($row_risk_issue['RI_Nm']);
 $RILevel = $row_risk_issue['RILevel_Cd'];
 $RIType = $row_risk_issue['RIType_Cd'];
@@ -107,6 +106,8 @@ $riskRealized_Raw = $row_risk_issue['RiskRealized_Flg'];
 $crid = $row_risk_issue['AssociatedCR_Key'];
 $changeLogActionVal = $row_risk_issue['RequestAction_Nm'];
 $changeLogReason = $row_risk_issue['Reason_Txt'];
+$EstActiveDate = $row_risk_issue['PRJI_Estimated_Act_Ts'];
+$EstMigrateDate = $row_risk_issue['PRJI_Estimated_Mig_Ts'];
 $uid = $_GET['uid'];
 
 if($riskRealized_Raw == 1){
@@ -151,8 +152,12 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
   <tr>
       <td width="20%">ID</td>
       <td><?php echo $ri_id; ?></td>
-    </tr>
-    <tr>
+  </tr>
+  <tr>
+      <td width="20%">Owner Name</td>
+      <td><?php echo $ri_owner; ?></td>
+  </tr>
+  <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
     </tr>
@@ -280,6 +285,16 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
       <td><?php echo $changeLogReason; ?></td>
     </tr>
 <?php } ?>
+<?php if(!empty($EstActiveDate)) { ?>
+    <tr>
+      <td>Est. Activation Date</td>
+      <td><?php convtimex($EstActiveDate)?></td>
+    </tr>
+    <tr>
+      <td>Est. Migration Date</td>
+      <td><?php convtimex($EstMigrateDate)?></td>
+    </tr>
+<?php } ?>
 <?php if($RILevel == "Program") { ?>
     <tr>
       <td>Notify Porfolio Team</td>
@@ -330,6 +345,7 @@ $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $ac
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
             %0D%0AID: <?php echo $ri_id;?>
+            %0D%0AOwner Name: <?php echo $ri_owner;?>
             %0D%0AName: <?php echo $name;?>
             %0D%0AType: <?php echo $RILevel . " " . $RIType?>
             %0D%0AProject: <?php echo $project_nm?>

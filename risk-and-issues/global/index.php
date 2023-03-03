@@ -247,12 +247,13 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <input name="TransfertoProgramManager" type="hidden" id="TransfertoProgramManager" value="">
   <input name="changeLogAction" type="hidden" id="changeLogAction" value="">
   <input name="changeLogReason" type="hidden" id="changeLogReason" value="">
+  <input name="portfolioType" type="hidden" id="portfolioType" value="" >
   
 
   <div class="container">
   <!--ROW 1 -->
   <div class="row row-eq-height">
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">LRP YEAR*</h3>
@@ -266,7 +267,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">RISK/ISSUE LEVEL*</h3>
@@ -277,18 +278,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">PORTFOLIO TYPE*</h3>
-        </div>
-        <div class="panel-body">
-        <label for="portfolioType"><input type="radio" name="portfolioType" value="1" required> NT 2.0 </label> 
-        <label for="portfolioType1"><input type="radio" name="portfolioType" value="2" required> BAU </label>
-        </div>
-    </div>
-    </div>
-    <div class="col-md-3" align="left">
+    <div class="col-md-4" align="left">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">RISK/ISSUE TYPE*</h3>

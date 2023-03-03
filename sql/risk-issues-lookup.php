@@ -83,6 +83,17 @@ if($_POST['changeLogAction'] != "" && $_POST['changeLogReason'] != ""){
   $changeLogReason = $_POST['changeLogReason']; // reason
   $PRJILog_Flg = 0; //flag
 }
+$EstActiveDate = NULL;
+$EstMigrateDate = NULL;
+
+if(isset($_POST['EstActiveDate'])) {
+  if($_POST['EstActiveDate'] != ""){
+  $EstActiveDate = $_POST['EstActiveDate'];
+  }
+  if($_POST['EstMigrateDate'] != ""){
+  $EstMigrateDate = $_POST['EstMigrateDate'];
+  }
+}
 //echo $PRJILog_Flg . "<br>";
 
 //GLOBAL SUBPROGRAMS

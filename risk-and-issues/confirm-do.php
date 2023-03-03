@@ -28,6 +28,7 @@ $project_nm ="";
         $changeLogName = "Updated";
     }
     $userEmail = $row_winuser['Email'];
+    $userName = $row_winuser['CCI_Alias'];
     $createdfrom = $_POST['createdFrom'];
     $usedButton = $_POST['submit2'];
     $userId = $_POST['userId']; // WINDOWS LOGIN NAME
@@ -117,6 +118,17 @@ $project_nm ="";
     $changeLogReason = $_POST['changeLogReason'];
     }
 
+    $EstActiveDate = NULL;
+    if($_POST['EstActiveDate'] != ""){
+    $EstActiveDate = $_POST['EstActiveDate'];
+    }
+    
+    $EstMigrateDate = NULL;
+    if($_POST['EstMigrateDate'] != ""){
+    $EstMigrateDate = $_POST['EstMigrateDate'];
+    }
+//echo $EstActiveDate;
+//echo $EstMigrateDate;
     //print_r($_POST);
     //exit();
 
@@ -197,6 +209,8 @@ if($global == 1) { include ("../includes/menu.php"); }
         array($description, SQLSRV_PARAM_IN),
         array($actionPlan, SQLSRV_PARAM_IN),
         array($transfer2prgManager, SQLSRV_PARAM_IN),
+        array($EstMigrateDate, SQLSRV_PARAM_IN),
+        array($EstActiveDate, SQLSRV_PARAM_IN),
         array($date, SQLSRV_PARAM_IN), 
         array($DateClosed, SQLSRV_PARAM_IN),
         array($closedByUID, SQLSRV_PARAM_IN),
@@ -218,10 +232,11 @@ if($global == 1) { include ("../includes/menu.php"); }
         );
 
     //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
-    //echo json_encode($params);
+    //echo str_replace("],[","]<br>[", json_encode($params)) ;
+    //echo "<br>" . $raidLog;
     //exit();
 
    //EXECUTE PROCEDDURE
@@ -343,6 +358,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             // BUILD EMAIL BODY
             $message = "<p>A new " . $riLevel . " " .$riTypeCode . " has been created.  Below are the details.</p>";
             $message .="<br><b>ID: </b>" . $SPMaxRI_Id;
+            $message .="<br><b>Owner Name: </b>" . $userName;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>" . $riLevel . " Descriptor: </b>"; $message .= $descriptor ;
@@ -357,9 +373,11 @@ if($global == 1) { include ("../includes/menu.php"); }
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=1&rikey=" . $SPMaxRI_Id;
+                $message .="<br><b>Link: </b>"; 
+                $message .= $menu_root . "/risk-and-issues/global/details.php?status=1&rikey=" . $SPMaxRI_Id;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($asscProjIN) . "&status=1&popup=true&program=" . urlencode($assocProgram) . "&uid=" . $uid ;
+                $message .="<br><b>Link: </b>"; 
+                $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($asscProjIN) . "&status=1&popup=true&program=" . urlencode($assocProgram) . "&uid=" . $uid ;
             }
             
             // SEND EMAIL USING MAIL FUNCION 
@@ -384,11 +402,11 @@ if($global == 1) { include ("../includes/menu.php"); }
             $headers .= 'From: '.$from."\r\n".
                 'Reply-To: '.$from."\r\n" .
                 'X-Mailer: PHP/' . phpversion();
-                
 
             // BUILD EMAIL BODY
             $message = "<p>A new " . $riLevel . " " .$riTypeCode . " has been flagged for RAID Log.</p>";
             $message .="<br><b>ID: </b>" . $SPMaxRI_Id;
+            $message .="<br><b>Owner Name: </b>" . $userName;
             $message .="<br><b>" . $riLevel . " " . $riTypeCode . " Name: </b>"; $message .= $name ; 
             $message .="<br><b>Type: </b>"; $message .= $riLevel . " " . $riTypeCode  ; 
             $message .="<br><b>Issue Descriptor: </b>"; $message .= $descriptor ;
@@ -403,9 +421,11 @@ if($global == 1) { include ("../includes/menu.php"); }
             $message .="<br><b>Action Plan: </b>"; $message .= $actionPlan ;
             $message .="<br><b>Date Closed: </b>"; $message .= $DateClosed ;
             if($global == 1) {
-                $message .="<br><b>Link: </b>"; $message .= $menu_root . "/risk-and-issues/global/details.php?status=1&rikey=" . $SPMaxRI_Id;
+                $message .="<br><b>Link: </b>"; 
+                $message .= $menu_root . "/risk-and-issues/global/details.php?status=1&rikey=" . $SPMaxRI_Id;
             } else {
-                $message .="<br><b>Link: </b>"; $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($sql) . "&status=1&popup=true&program=" . urlencode($assocProgram) . "&uid=" . $uid;
+                $message .="<br><b>Link: </b>"; 
+                $message .= $link . $SPMaxRI_Id  . "&fscl_year=" . $lrpYear . "&proj_name=" . urlencode($asscProjIN) . "&status=1&popup=true&program=" . urlencode($assocProgram) . "&uid=" . $uid;
             }
             // SEND EMAIL USING MAIL FUNCION 
                 if(mail($to, $subject, $message, $headers)){

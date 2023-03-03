@@ -73,6 +73,7 @@ $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
 //echo $row_regions['MLMRegion_Cd'];
 
 //DECLARE
+$ri_owner = $row_glb_prog['LastUpdateBy_Nm'];
 $global = $row_glb_prog['Global_Flg'];
 $ri_id = $row_glb_prog['RiskAndIssue_Key'];
 $name = trim($row_glb_prog['RI_Nm']);
@@ -134,22 +135,17 @@ if($riskRealized_Raw == 1){
   $riskRealized = "No";
 }
 
-//EDIT AUTHIRIZATION - SHOW OR HIDE EDIT BUTTON
+//EDIT AUTHORIZATION - SHOW OR HIDE EDIT BUTTON
 $sql_port_user = "SELECT * FROM [RI_MGT].[RiskandIssues_Users] WHERE Username = '$windowsUser' and [RI_MGT].[RiskandIssues_Users].[Group] = 'PORT'";
 $stmt_port_user   = sqlsrv_query( $data_conn, $sql_port_user ); 
 $row_port_user  = sqlsrv_fetch_array( $stmt_port_user , SQLSRV_FETCH_ASSOC);
 //echo $row_port_user['Username'];
+//echo $sql_port_user;
 
 $portUser = 0; //HIDE BUTTONS
 if(!empty($row_port_user)){
   $portUser = 1; //SHOW BUTTONS
 }
-//echo $portUser;
-//echo $sql_port_user;
-
-//if($RILevel == "Program"){
-  //$portUser = 1; //SHOW BUTTONS
-//}
 
 //LINK FOR EMAIL
 $mailLinkx = $menu_root . "/risk-and-issues/global/details.php?rikey=" . $ri_id . "&status=" . urlencode($status) ; 
@@ -195,6 +191,10 @@ if($unframe == "0") { //NO COLORBOX
       <td width="20%">ID</td>
       <td><?php echo $ri_id; ?></td>
     </tr>
+    <tr>
+      <td width="20%">Owner Name</td>
+      <td><?php echo $ri_owner; ?></td>
+  </tr>
     <tr>
       <td width="20%">Risk/Issue Name</td>
       <td><?php echo $name; ?></td>
@@ -352,7 +352,6 @@ if($unframe == "0") { //NO COLORBOX
       <?php } ?>
 
         <?php if($portUser == 1){
-
             $eregions = "N/A";
               if($regionx != "") {
               $eregions = str_replace("<br>", ", ", $regionx);
@@ -366,6 +365,7 @@ if($unframe == "0") { //NO COLORBOX
             <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
             %0D%0AID: <?php echo $ri_id;?>
+            %0D%0AOwner Name: <?php echo $ri_owner;?>
             %0D%0AName: <?php echo $name;?>
             %0D%0AType: <?php echo $RILevel . " " . $RIType?>
             %0D%0AProgram: <?php echo $programs;?>
