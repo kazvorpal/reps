@@ -108,8 +108,10 @@
         var mt = document.getElementById("maintable");
         mt.appendChild(makeheader("projects"));
       }
-      (mode == "portfolio"&&format != "grid") ? makerow({MLMProgram_Nm: "Portfolio"}, 1, 1) : "";
-      document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
+      if (mode == "portfolio"&&format != "grid") { 
+        makerow({MLMProgram_Nm: "Portfolio"}, 1, 1);
+        document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
+      }
       pagestart = (page*pagesize) - pagesize;
       ps = (page*pagesize);
       maxpages = 2;
