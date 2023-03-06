@@ -41,7 +41,7 @@ if($sqluserresults === false) {
     $userrows[] = array_map("fixutf8", $userrow);
   }
 }
-$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', 2022)";
+$sql_prog = "SELECT * FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$user_id', $thisyear)"; /// this was static of 2022 and changed on 3.3.2023  
 $stmt_prog   = sqlsrv_query( $data_conn, $sql_prog ); 
 if($stmt_prog === false) {
   if(($error = sqlsrv_errors()) != null) {
