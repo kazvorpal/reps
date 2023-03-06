@@ -687,7 +687,7 @@ Enter the details of your Project Issue
         </tr>
       </tbody>
     </table>
-    <div id="hidden_div">I can see this</div>
+    <div id="hidden_div_Extra">I can see this</div>
   </form>
 </div>
 </main>
@@ -862,6 +862,7 @@ var  showDiv
       document.getElementById(divId).style.display = 'none';
       document.getElementById("EstMigrateDate").required = false;
     }
+    // document.getElementById("changeLogReason").required = (element.value != '');
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
 })('hidden_div', document.getElementById("changeLogAction"))
