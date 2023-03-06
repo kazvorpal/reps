@@ -760,16 +760,16 @@ if($match == 0) {
               </table>
               <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
               <div id="hidden_div">
-                <table>
+              <table>
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
-                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php echo date_format($Estimated_Act, "Y-m-d") ?>">
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php if($Estimated_Act != ""){echo date_format($Estimated_Act, "Y-m-d");} ?>">
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
-                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php echo date_format($Estimated_Mig, "Y-m-d") ?>">
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php if($Estimated_Mig !=""){echo date_format($Estimated_Mig, "Y-m-d");} ?>">
                     </td>
                     <td></td>
                     <td></td>
