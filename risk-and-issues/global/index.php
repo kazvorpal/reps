@@ -103,6 +103,10 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
@@ -1069,11 +1073,11 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     disableevent({t: "RILevel", v: "Portfolio", d: ["Region[]", "subprogram", "raidLog"], e: "Portfolio"})
   }
 
-document.getElementsByName("RIType").forEach((o) => {
-  o.addEventListener("click", (e) => {
-    document.getElementById("realizeddiv").style.display = (e.target.value == "Issue") ? "none" : "block";
+  document.getElementsByName("RIType").forEach((o) => {
+    o.addEventListener("click", (e) => {
+      document.getElementById("realizeddiv").style.display = (e.target.value == "Issue") ? "none" : "block";
+    })
   })
-})
 
   $(document).ready(function() {
     document.getElementById(id="programRisk").addEventListener("oninput", () => {nameevent()})
@@ -1150,6 +1154,11 @@ document.getElementsByName("RIType").forEach((o) => {
     document.getElementById("regionsold").style.display = (yer == 2024) ? "none" : "";
     document.getElementById("regionsnew").style.display = (yer != 2024) ? "none" : "";
   })
+
+  $(document).ready(function() {
+    $('#Description').summernote();
+    $('#ActionPlan').summernote();
+  });
 
 </script>
 
