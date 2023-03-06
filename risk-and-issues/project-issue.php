@@ -687,7 +687,7 @@ Enter the details of your Project Issue
         </tr>
       </tbody>
     </table>
-    <div id="hidden_div">I can see this</div>
+    <div id="hidden_div_Extra">I can see this</div>
   </form>
 </div>
 </main>
@@ -855,13 +855,15 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 <script>
 var  showDiv
 (showDiv = function(divId, element) {
+    console.log("showDiv");
     if (element.value == "5:POR Schedule Update"){
       document.getElementById(divId).style.display = 'block';
-      document.getElementById("EstMigrateDate").required = true;
+      document.getElementById("EstMigrateDate").required = document.getElementById("EstActiveDate").required = true;
     } else {
       document.getElementById(divId).style.display = 'none';
-      document.getElementById("EstMigrateDate").required = false;
+      document.getElementById("EstMigrateDate").required = document.getElementById("EstActiveDate").required = false;
     }
+    document.getElementById("changeLogReason").required = (element.value != '');
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
 })('hidden_div', document.getElementById("changeLogAction"))
