@@ -425,7 +425,7 @@ $stmt_por = sqlsrv_query( $data_conn, $sql_por );
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['PRGM']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Sub_Prg']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['PROJ_NM']);?></td>
-	  <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['PROJ_DESC']);?></td>
+	  <td style="padding:2px"><?php echo $row_program_n['PROJ_DESC'];?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['PROJ_OWNR_NM']);?></td>
 	  <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['TECH_PROJ_MGR']);?></td>
 	  <td style="padding:2px" align="center"><?php echo htmlspecialchars($row_program_n['FISCL_PLAN_YR']);?></td>
