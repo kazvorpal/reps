@@ -760,16 +760,16 @@ if($match == 0) {
               </table>
               <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
               <div id="hidden_div">
-                <table>
+              <table>
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
-                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php echo date_format($Estimated_Act, "Y-m-d") ?>">
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php if($Estimated_Act != ""){echo date_format($Estimated_Act, "Y-m-d");} ?>">
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
-                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php echo date_format($Estimated_Mig, "Y-m-d") ?>">
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php if($Estimated_Mig !=""){echo date_format($Estimated_Mig, "Y-m-d");} ?>">
                     </td>
                     <td></td>
                     <td></td>
@@ -981,17 +981,20 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
 
+<script>
 var  showDiv
 (showDiv = function(divId, element) {
-  console.log("showdiv");
+    console.log("showDiv");
     if (element.value == "5:POR Schedule Update"){
       document.getElementById(divId).style.display = 'block';
-      document.getElementById("EstMigrateDate").required = true;
+      document.getElementById("EstMigrateDate").required = document.getElementById("EstActiveDate").required = true;
     } else {
       document.getElementById(divId).style.display = 'none';
-      document.getElementById("EstMigrateDate").required = false;
+      document.getElementById("EstMigrateDate").required = document.getElementById("EstActiveDate").required = false;
     }
+    document.getElementById("changeLogReason").required = (element.value != '');
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
 })('hidden_div', document.getElementById("changeLogAction"))
@@ -1007,8 +1010,8 @@ if (window.performance && window.performance.navigation.type === window.performa
 } else {
   console.log("Noback")
 }
-</script>
 
+</script>
 <script src="includes/ri-functions.js"></script>
 </body>
 </html>

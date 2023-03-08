@@ -83,18 +83,15 @@ if($_POST['changeLogAction'] != "" && $_POST['changeLogReason'] != ""){
   $changeLogReason = $_POST['changeLogReason']; // reason
   $PRJILog_Flg = 0; //flag
 }
-$EstActiveDate = NULL;
-$EstMigrateDate = NULL;
 
-if(isset($_POST['EstActiveDate'])) {
-  if($_POST['EstActiveDate'] != ""){
+//CHANGE LOG ESTIMATED DATES
+if($_POST['changeLogAction'] == "5:POR Schedule Update") {
   $EstActiveDate = $_POST['EstActiveDate'];
-  }
-  if($_POST['EstMigrateDate'] != ""){
   $EstMigrateDate = $_POST['EstMigrateDate'];
-  }
+} else {
+  $EstActiveDate = NULL;
+  $EstMigrateDate = NULL;
 }
-//echo $PRJILog_Flg . "<br>";
 
 //GLOBAL SUBPROGRAMS
 if($global == 1 && $riLevel != "Portfolio") {
