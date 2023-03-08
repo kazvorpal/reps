@@ -637,11 +637,13 @@ Enter the details of your Project Issue
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
                       <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" required>
+                      <input type="checkbox" id="naead"> <b>N/A</b>
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
                       <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" required>
+                      <input type="checkbox" id="naemd"> <b>N/A</b>
                     </td>
                     <td></td>
                     <td></td>
@@ -853,19 +855,35 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 </script>
 
 <script>
+
+let na = {"naead": "EstActiveDate", "naemd": "EstMigrateDate"};
+
+let processlist = (list, event) => {
+  // loop through something like na
+  Object.keys(list).forEach(o => {
+    event(o);
+  });
+}
+let makenaevent = (o) => {
+  // Make event for potentially required field
+  document.getElementById(o).addEventListener("change", e => {
+    checkrequired(o);
+  });
+}
+let checkrequired = (o) => {
+  // see whether to require the item, N/A passing box name
+  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
+}
+
 var  showDiv
 (showDiv = function(divId, element) {
     console.log("showDiv");
-    if (element.value == "5:POR Schedule Update"){
-      document.getElementById(divId).style.display = 'block';
-      document.getElementById("EstMigrateDate").required = document.getElementById("EstActiveDate").required = true;
-    } else {
-      document.getElementById(divId).style.display = 'none';
-      document.getElementById("EstMigrateDate").required = document.getElementById("EstActiveDate").required = false;
-    }
+    document.getElementById(divId).style.display = (element.value == "5:POR Schedule Update") ? "block" : "none";
     document.getElementById("changeLogReason").required = (element.value != '');
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
+    console.log(document.getElementById(divId).style.display);
+    processlist(na, checkrequired)
 })('hidden_div', document.getElementById("changeLogAction"))
 
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
@@ -879,7 +897,7 @@ if (window.performance && window.performance.navigation.type === window.performa
 } else {
   console.log("Noback")
 }
-
+processlist(na, makenaevent);
 </script>
 <script src="includes/ri-functions.js"></script>
 

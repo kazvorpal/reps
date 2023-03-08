@@ -165,6 +165,10 @@ $RegionArr = explode(",", $MLMRegion_Key);
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
   <link rel="stylesheet" href="../includes/ri-styles.css" />
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
@@ -854,6 +858,22 @@ setInterval(function() {
     // document.querySelector("#program").required = true;
     // document.getElementById("subprogram").style.display = "block";
   }, 100);
+
+  let summerprops = {
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'italic', 'clear']],
+      ['fontname', ['fontname']],
+      ['color', ['color']],
+      ['table', ['table']],
+      ['para', ['ul', 'ol', 'paragraph']
+    ]
+  ]};
+
+  $(document).ready(function() {
+    $('#Description').summernote(summerprops);
+    $('#ActionPlan').summernote();
+  });
 
 </script>
 

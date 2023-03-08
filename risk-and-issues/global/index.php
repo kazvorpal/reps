@@ -1155,8 +1155,19 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.getElementById("regionsnew").style.display = (yer != 2024) ? "none" : "";
   })
 
+  let summerprops = {
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'italic', 'clear']],
+      ['fontname', ['fontname']],
+      ['color', ['color']],
+      ['table', ['table']],
+      ['para', ['ul', 'ol', 'paragraph']
+    ]
+  ]};
+
   $(document).ready(function() {
-    $('#Description').summernote();
+    $('#Description').summernote(summerprops);
     $('#ActionPlan').summernote();
   });
 
