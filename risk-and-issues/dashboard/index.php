@@ -596,7 +596,7 @@
       // Create a row in the Project table
       if (typeof ri == "undefined") 
         return false ;
-      const name = ri.RI_Nm;
+      const name = ri.ScopeDescriptor_Txt;
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-1 datarow"});
       const fieldswitch = {
