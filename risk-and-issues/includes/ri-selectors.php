@@ -142,12 +142,26 @@ const idsearch = o => {
 openval = false;
 const openall = (status) => {
   var delay = 100;
+  // opens = $(".in");
+  // opens.each((o => $(opens[o]).collapse("hide")));
+  // opens.each(o => {console.log(opens[o].id)})
+  if (status) {
+    closes = $(".panel:not(.in)");
+    opens.each((o => $(opens[o]).collapse("show")));
+  } else {
+    opens = $(".in");
+    opens.each((o => $(opens[o]).collapse("hide")));
+  }
   setTimeout(() => {
     let bannerlist = document.querySelectorAll("[id^=banner]");
     let reversebanners = (!status) ? $.makeArray(bannerlist).reverse() : $.makeArray(bannerlist);
     reversebanners.forEach(o => {
+      // if ($(o.parent).hasClass("in")) {
+      //   console.log(o.parent);
+      //   $(o.parent).collapse("hide");
+      // } 
       delay += 200;
-      // console.log(delay);
+      // console.log(o.id);
       setTimeout(function() {o.click()}, delay)
     });
   }, 100);

@@ -453,9 +453,7 @@ let portfolioclosed = <?= $closedportfolioout ?>;
       placeholder.push(o)
     });
     // portfolioclosed = placeholder;
-    console.log("portfolioclosed");
-    console.log(portfolioclosed);
-    console.log(placeholder);
+    console.log("portfolioclosed", portfolioclosed);
     const mangerlist = <?= $mangerout ?>;
     const driverlist = <?= $driverout ?>;
     const locationlist = <?= $locationout ?>;

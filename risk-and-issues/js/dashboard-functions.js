@@ -1,7 +1,9 @@
 const resultcounter = (results) => {
     let r = (typeof results == "object") ? results.length : results;
-    console.log("r")
-    console.log(results)
+    // console.trace("r", results);
+    // console.log("r")
+    // console.log(results)
+    // console.table(ridata);
     const s = (r == 1) ? "" : "s";
     document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`
   }

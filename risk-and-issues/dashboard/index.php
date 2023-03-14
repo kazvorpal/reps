@@ -75,8 +75,7 @@
     rifiltered = filtration(ridata);
 
     const populate = (rilist) => {
-      console.log("rilist");
-      console.log(rilist);
+      console.log("rilist", rilist);
       portfoliocount = 0;
       rilist = rilist.sort(function(a, b) {
         if(a.MLMProgram_Nm < b.MLMProgram_Nm)
@@ -113,17 +112,20 @@
         document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
       }
       pagestart = (page*pagesize) - pagesize;
-      ps = (page*pagesize);
+      ps = (mode == "project" || format == "grid") ? (page*pagesize) : 100000;
       maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
-      console.log(list)
+      // console.log(list)
       for (loop = pagestart; loop < pagestop; loop++ ) {
           // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
         if(loop != null && typeof rilist[loop] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
         }
       }
-      resultcounter((ispp(mode) && format != "gridfile") ? result : rilist);
+      // resultcounter((ispp(mode)) ? result : rilist);
+      // resultcounter((ispp(mode) && format != "gridfile") ? result : rilist);
+      console.log(result);
+      console.log(rilist);
       pages = Math.ceil(rilist.length/pagesize);
       if (pages > 0 && page > pages) {
         page = 1;
@@ -134,7 +136,7 @@
         window.history.pushState({}, '', url);
         init(mode);
       }
-      if (mode == "project") {
+      if (mode == "project" || format == "grid") {
         ttt = "";
         paginator = makeelement({e: "div", i: "pagination", t: ttt, c: "pagination"})
         paginator.innerHTML += (page > 1) ? `<a href='/risk-and-issues/dashboard/?mode=${mode}&page=${parseInt(page)-1}&pagesize=${pagesize}' onclick='pager(${parseInt(page)-1});return false';> < </a>` : "";
@@ -351,6 +353,8 @@
               } 
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
+            // console.log("ret");
+            // console.log(ret);
             return ret;
           }, 
           MLMProgram_Nm: () => {
@@ -532,7 +536,7 @@
               // console.log(name)
               // console.log(type)
               const c = (format == "grid") ? "" : (type == "Risk") ? "  " : " issueheader ";
-              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
+              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle active" + c, a: "click here to sort by this field", "j": function() {
                 if (this.innerHTML.indexOf("↓") != -1) {
                   reverse = true;
                 } else {
@@ -544,30 +548,32 @@
               cells.push(rifields[key].name);
               if (rifields[key].name == "ID") {
                   trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2, "c": "p-1 text-center titles align-middle active" + c, "w": "12", a: "click here to sort by this field", "j": function() {
-                  console.log(this)
-                  if (this.innerHTML.indexOf("↓") != -1 && false) {
-                    reverse = true;
-                  } else {
-                    reverse = false;
+                    // console.log(this)
+                    if (this.innerHTML.indexOf("↓") != -1 && false) {
+                      reverse = true;
+                    } else {
+                      reverse = false;
+                    }
+                    sort = "RiskAndIssue_Key";
+                    init(mode);
+                  }}));
+                  if (format == "grid") {
+                    trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 , "c": "text-center titles align-middle active typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
+                      // console.log(this)
+                      if (this.innerHTML.indexOf("↓") != -1 && false) {
+                        reverse = true;
+                      } else {
+                        reverse = false;
+                      }
+                      sort = "RiskAndIssue_Key";
+                      init(mode);
+                    }}));
                   }
-                  sort = "RiskAndIssue_Key";
-                  init(mode);
-                }}));
-                  trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 , "c": "text-center titles align-middle active typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
-                  console.log(this)
-                  if (this.innerHTML.indexOf("↓") != -1 && false) {
-                    reverse = true;
-                  } else {
-                    reverse = false;
-                  }
-                  sort = "RiskAndIssue_Key";
-                  init(mode);
-                }}));
               }
             })
         } else {
             let cells = [];
-            console.log(rifields)
+            // console.log(rifields)
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
@@ -596,7 +602,7 @@
       // Create a row in the Project table
       if (typeof ri == "undefined") 
         return false ;
-      const name = ri.ScopeDescriptor_Txt;
+      const name = ri.RI_Nm;
       const safename = makesafe(ri["RI_Nm"]);
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-1 datarow"});
       const fieldswitch = {
@@ -712,7 +718,6 @@
             return  `${d}${s}`;
           },
           RI_Nm: () => {
-              const url = `/risk-and-issues/details.php?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["EPSProject_Id"]}`;
               return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
           },
           EPSProject_Nm: () => {
@@ -742,10 +747,38 @@
             }
             return counter;
           },
+          programcount: () => {
+              let programs = "";
+              let pc = 0;
+              portfolioprograms.forEach((o) => {
+                let comma = (programs != "") ? ", " : ""
+                if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
+                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
+                  programs = programs + comma + o.Program_Nm;
+                  pc++;
+                } 
+              })
+              if (pc == 0) {
+                pc = 1;
+              }
+              return (pc);
+          },
           subprogram: () => {
             if (ri.MLMProgramRI_Key != null) {
               p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgram_Key];
             }
+            let list = "";
+            let prog = sublist[ri.RiskAndIssue_Key];
+            if (prog != undefined) {
+              for(r of prog) {
+                let comma = (list.length > 0) ? ", " : "";
+                list += comma + r.SubProgram_Nm ;
+              } 
+            }
+            // let ret = (list != "") ? list.slice(0, -2) : ""
+            // console.log("ret");
+            // console.log(ret);
+            return list;
           }, 
         age: () => {
           let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
@@ -774,8 +807,13 @@
         programmanager: () => {
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
           return(r);
+        }, 
+        RiskAndIssue_Key: () => {
+          return  (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : ri.RiskAndIssue_Key;
         }
       };
+      const file = (ri.Global_Flg) ? "global/details.php" : "details.php"
+      const url = `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["EPSProject_Id"]}`;
       const rowValues = [];
       const saferi = makesafe(ri.RI_Nm);
       let c = "plainbox";
@@ -862,46 +900,45 @@
     }
 
     const init = (target) => {
-        mode = target;
-        let url = new URL(window.location);
-        url.searchParams.set("mode", mode);
-        url.searchParams.set("page", page);
-        url.searchParams.set("pagesize", pagesize);
-        window.history.pushState({}, '', url);
-        setdata();
-        setlists();
-        setTimeout(function(){
-          makefilters();
-          dofilters();
-          rifiltered = risort(filtration(ridata), sort);
-          let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
-          console.log("riseed");
-          console.log(riseed);
-          if (ispp(mode)&&format == "grid") {
-            let extralist = [];
-            ["Risk", "Issue"].forEach(x => {
-              for (loop of riseed) {
-                templist = (listri(loop.MLMProgram_Nm, x));
-                templist.forEach(o => {
-                  extralist.push(getprogrambykeyonly(o));
-                });
-              }
-            });
-            riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
-            resultcounter(riseed.length)
-          }
-          setTimeout(function() {
-            populate(riseed);
+      mode = target;
+      let url = new URL(window.location);
+      url.searchParams.set("mode", mode);
+      url.searchParams.set("page", page);
+      url.searchParams.set("pagesize", pagesize);
+      window.history.pushState({}, '', url);
+      setdata();
+      setlists();
+      setTimeout(function(){
+        makefilters();
+        dofilters();
+        rifiltered = risort(filtration(ridata), sort);
+        let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
+        console.log("riseed", riseed);
+        if (ispp(mode)&&format == "grid") {
+          let extralist = [];
+          ["Risk", "Issue"].forEach(x => {
+            for (loop of riseed) {
+              templist = (listri(loop.MLMProgram_Nm, x));
+              templist.forEach(o => {
+                extralist.push(getprogrambykeyonly(o));
+              });
+            }
           });
+          riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
+          resultcounter(riseed.length);
+        }
+        setTimeout(function() {
+          populate(riseed);
         });
-        makeheadline();
-        setTimeout(colorboxschtuff, 2000);
-        makemodebuttons(mode);
-        setTimeout(fixcollapse, 1000);
-      }
+      });
+      makeheadline();
+      setTimeout(colorboxschtuff, 2000);
+      makemodebuttons(mode);
+      setTimeout(fixcollapse, 1000);
+    }
       
-      init(mode);
-      setInterval(colorboxschtuff, 2000);
+    init(mode);
+    setInterval(colorboxschtuff, 2000);
    
   </script>
   </body>
