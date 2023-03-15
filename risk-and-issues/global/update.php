@@ -687,7 +687,7 @@ function toggle(source) {
           </div>
           <div class="collapse in" id="collapseExample">
             <div class="well">
-              <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
+              <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0" style="resize: both"></iframe>
             </div>
           </div>
         </div>
