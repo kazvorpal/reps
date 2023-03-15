@@ -90,7 +90,7 @@
       result = 0;
       window.ricount = [];
       const main = document.getElementById("main");
-      seeall = ` <button value="" class="btn btn-default" onclick="openall(openval)" id="allbutton">Expand All</a>`;
+      seeall = ` <button value="" class="btn btn-default" onclick="toggleall(openval)" id="allbutton">Expand All</a>`;
       initexcel();
       main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default" onclick="togglegrid()" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
       if (ispp(mode) && format != "grid") {

@@ -134,20 +134,34 @@ const idsearch = o => {
   // console.log()
   if(o["RiskAndIssue_Key"].toString().indexOf(document.getElementById("allsearch").value) != -1) {
     var delay = 100;
-    openall(false);
+    toggleall(false);
     return true;
   }
 }
 
 openval = false;
+const toggleall = (status) => {
+  var delay = 100;
+  let prepanels = $(".panel-collapse");
+  let panels = (!status) ? $($.makeArray(prepanels).reverse()) : prepanels;
+  setTimeout(() => {
+    panels.each(o => {
+      setTimeout(function() {$(panels[o]).collapse((status) ? "hide" : "show")}, delay += 200);
+    });
+  }, 100);
+  document.getElementById("allbutton").innerHTML = (status) ? "Expand All" : "Collapse All";
+  openval = (!status);
+}
+
 const openall = (status) => {
   var delay = 100;
-  // opens = $(".in");
-  // opens.each((o => $(opens[o]).collapse("hide")));
-  // opens.each(o => {console.log(opens[o].id)})
   if (status) {
-    closes = $(".panel:not(.in)");
-    opens.each((o => $(opens[o]).collapse("show")));
+    closes = $(".panel-collapse");
+    console.log(closes)
+    closes.each((o => {
+      $(closes[o]).collapse("show")
+      console.log(o);
+    }));
   } else {
     opens = $(".in");
     opens.each((o => $(opens[o]).collapse("hide")));
@@ -156,12 +170,7 @@ const openall = (status) => {
     let bannerlist = document.querySelectorAll("[id^=banner]");
     let reversebanners = (!status) ? $.makeArray(bannerlist).reverse() : $.makeArray(bannerlist);
     reversebanners.forEach(o => {
-      // if ($(o.parent).hasClass("in")) {
-      //   console.log(o.parent);
-      //   $(o.parent).collapse("hide");
-      // } 
       delay += 200;
-      // console.log(o.id);
       setTimeout(function() {o.click()}, delay)
     });
   }, 100);
@@ -169,6 +178,33 @@ const openall = (status) => {
   openval = (!status);
 }
 
+// let openval = false;
+
+// const toggleAllPanels = (openPanels) => {
+//   const panels = openPanels ? $(".panel-collapse:not('.in')") : $(".panel-collapse.in");
+//   panels.each((index, panel) => $(panel).collapse(openPanels ? "show" : "hide"));
+// };
+
+// const toggleAllBanners = (openPanels) => {
+//   const bannerList = Array.from(document.querySelectorAll("[id^=banner]"));
+//   const banners = openPanels ? bannerList.reverse() : bannerList;
+//   let delay = 100;
+//   banners.forEach((banner) => {
+//     delay += 200;
+//     setTimeout(() => banner.click(), delay);
+//   });
+// };
+
+// const toggleAll = (openPanels) => {
+//   toggleAllPanels(openPanels);
+//   toggleAllBanners(openPanels);
+//   document.getElementById("allbutton").innerHTML = openPanels ? "Expand All" : "Collapse All";
+//   openval = !openPanels;
+// };
+
+// const openAll = () => toggleAll(true);
+
+// const closeAll = () => toggleAll(false);
 
 const filtration = (data) => {
   let filtered = data.filter(filterfunction);
