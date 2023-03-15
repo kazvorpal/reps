@@ -172,8 +172,10 @@ $unframe = $_SESSION['unframe'];
     $sql_in = "SELECT* FROM [EPS].[ProjectStage] WHERE PROJ_NM IN ('$asscProjIN')";
     $stmt_in  = sqlsrv_query( $data_conn, $sql_in  ); 
     $row_in  = sqlsrv_fetch_array( $stmt_in , SQLSRV_FETCH_ASSOC);
-    $uid = $row_in['PROJ_ID'];
-    //echo $uid;
+        $uid = "";
+        if(!empty($row_in['PROJ_ID'])) {
+        $uid = $row_in['PROJ_ID'];
+        }
 
     // IMPACT AREA
     $sql_imp_area = "SELECT* FROM RI_MGT.Impact_Area WHERE ImpactArea_Key = $impactArea";
