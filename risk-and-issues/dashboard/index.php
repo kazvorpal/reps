@@ -894,7 +894,7 @@
     }
     const risort = (list, field) => {
       let qs = list.sort((a, b) => {
-        console.log(a[field], b[field]);
+        // console.log(a[field], b[field]);
         return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
       });
       return (!reverse) ? qs : qs.reverse();

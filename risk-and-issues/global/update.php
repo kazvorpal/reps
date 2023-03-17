@@ -687,7 +687,7 @@ function toggle(source) {
           </div>
           <div class="collapse in" id="collapseExample">
             <div class="well">
-              <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0" style="resize: both"></iframe>
+              <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0" style="resize: vertical"></iframe>
             </div>
           </div>
         </div>
@@ -864,7 +864,6 @@ setInterval(function() {
       ['style', ['style']],
       ['font', ['bold', 'underline', 'italic', 'clear']],
       ['fontname', ['fontname']],
-      ['color', ['color']],
       ['table', ['table']],
       ['para', ['ul', 'ol', 'paragraph']
     ]
@@ -872,7 +871,7 @@ setInterval(function() {
 
   $(document).ready(function() {
     $('#Description').summernote(summerprops);
-    $('#ActionPlan').summernote();
+    $('#ActionPlan').summernote(summerprops);
   });
 
 </script>
