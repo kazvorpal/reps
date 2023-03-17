@@ -894,6 +894,7 @@
     }
     const risort = (list, field) => {
       let qs = list.sort((a, b) => {
+        console.log(a[field], b[field]);
         return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
       });
       return (!reverse) ? qs : qs.reverse();
@@ -907,6 +908,7 @@
       url.searchParams.set("pagesize", pagesize);
       window.history.pushState({}, '', url);
       setdata();
+      console.log("default ridata:", ridata);
       setlists();
       setTimeout(function(){
         makefilters();
@@ -914,7 +916,7 @@
         rifiltered = risort(filtration(ridata), sort);
         let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
         console.log("riseed", riseed);
-        if (ispp(mode)&&format == "grid") {
+        if (ispp(mode) && format == "grid") {
           let extralist = [];
           ["Risk", "Issue"].forEach(x => {
             for (loop of riseed) {
@@ -925,10 +927,12 @@
             }
           });
           riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
+          console.log("grid riseed", riseed);
           resultcounter(riseed.length);
         }
+        ridata = riseed;
         setTimeout(function() {
-          populate(riseed);
+          populate(ridata);
         });
       });
       makeheadline();
