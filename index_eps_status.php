@@ -155,7 +155,7 @@ function MM_setTextOfTextfield(objId,x,newText) { //v9.0
         <?php } ?>
       </select></td>
 
-      <td><input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary"></td>
+      <td><input name="Go" type="submit" id="Go" form="formfilter" value="Apply" class="btn btn-primary"></td>
       <td><a href="index_eps_status.php" title="Clear all filters"><span class="btn btn-default">Clear</span></a>    </td>
     </tr>
     <tr>
