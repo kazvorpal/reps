@@ -689,7 +689,6 @@ Enter the details of your Project Issue
         </tr>
       </tbody>
     </table>
-    <div id="hidden_div_Extra">I can see this</div>
   </form>
 </div>
 </main>
