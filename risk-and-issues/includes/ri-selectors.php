@@ -153,59 +153,6 @@ const toggleall = (status) => {
   openval = (!status);
 }
 
-const openall = (status) => {
-  var delay = 100;
-  if (status) {
-    closes = $(".panel-collapse");
-    console.log(closes)
-    closes.each((o => {
-      $(closes[o]).collapse("show")
-      console.log(o);
-    }));
-  } else {
-    opens = $(".in");
-    opens.each((o => $(opens[o]).collapse("hide")));
-  }
-  setTimeout(() => {
-    let bannerlist = document.querySelectorAll("[id^=banner]");
-    let reversebanners = (!status) ? $.makeArray(bannerlist).reverse() : $.makeArray(bannerlist);
-    reversebanners.forEach(o => {
-      delay += 200;
-      setTimeout(function() {o.click()}, delay)
-    });
-  }, 100);
-  document.getElementById("allbutton").innerHTML = (status) ? "Expand All" : "Collapse All";
-  openval = (!status);
-}
-
-// let openval = false;
-
-// const toggleAllPanels = (openPanels) => {
-//   const panels = openPanels ? $(".panel-collapse:not('.in')") : $(".panel-collapse.in");
-//   panels.each((index, panel) => $(panel).collapse(openPanels ? "show" : "hide"));
-// };
-
-// const toggleAllBanners = (openPanels) => {
-//   const bannerList = Array.from(document.querySelectorAll("[id^=banner]"));
-//   const banners = openPanels ? bannerList.reverse() : bannerList;
-//   let delay = 100;
-//   banners.forEach((banner) => {
-//     delay += 200;
-//     setTimeout(() => banner.click(), delay);
-//   });
-// };
-
-// const toggleAll = (openPanels) => {
-//   toggleAllPanels(openPanels);
-//   toggleAllBanners(openPanels);
-//   document.getElementById("allbutton").innerHTML = openPanels ? "Expand All" : "Collapse All";
-//   openval = !openPanels;
-// };
-
-// const openAll = () => toggleAll(true);
-
-// const closeAll = () => toggleAll(false);
-
 const filtration = (data) => {
   let filtered = data.filter(filterfunction);
   results = (mode == "program") ? filtered 
@@ -253,7 +200,7 @@ $(function(){
       subp.push(o.EPSSubprogram_Nm);
     }
   })
-  subp = subp.sort();
+  // subp = subp.sort();
   // console.log(subp);
 
   var newregions = ["West", "East", "Central", "Corporate"];
