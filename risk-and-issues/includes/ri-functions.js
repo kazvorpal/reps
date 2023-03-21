@@ -16,6 +16,7 @@ const closeWarning = () => {
   document.datechanged = true;
 }
 const validateForm = () => {
+  console.log("validateform");
   let invalid = 0;
   let ap = ac = "";
   if (document.getElementById("DateClosed").value != '') {
@@ -47,7 +48,7 @@ Any Fields Still Empty are in RED, Above`;
     } else 
       return true
   }
-}
+A}
 
 const checkprogram = () => {
 }

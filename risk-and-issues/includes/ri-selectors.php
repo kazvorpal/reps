@@ -134,7 +134,7 @@ const idsearch = o => {
   // console.log()
   if(o["RiskAndIssue_Key"].toString().indexOf(document.getElementById("allsearch").value) != -1) {
     var delay = 100;
-    toggleall(false);
+    (ispp(mode) && format != "grid") ? toggleall(false) : "";
     return true;
   }
 }
@@ -215,7 +215,7 @@ $(function(){
     if (key == "daterange") {
       document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
     } else if(key == "searchall") {
-      document.getElementById("row").appendChild(makeelement({e: "div", t: `ID&nbsp;Search<br/><input type='text' id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
+      document.getElementById("row").appendChild(makeelement({e: "div", t: `ID&nbsp;Search<br/><input type='number' id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
     } else if((typeof o.p == "undefined" || o.p.includes(mode))) {
       o.f = (typeof key != "undefined") ? key : o.f;
       o.l = (typeof o.l == "undefined") ? ridata : o.l;

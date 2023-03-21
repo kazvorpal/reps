@@ -451,7 +451,7 @@ Enter the details of your Project Issue
 				  <input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChange="unKnownX()"
+					onChangeDisabled="unKnownX()"
 				  >
 				  <label for="Unknown">Unknown</label> - Overides Resolution Date
 				</div>  
@@ -883,7 +883,10 @@ let makenaevent = (o) => {
 }
 let checkrequired = (o) => {
   // see whether to require the item, N/A passing box name
-  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
+  const checked = (document.getElementById(o).checked)
+  const schedule = (document.getElementById("changeLogAction").value == "5:POR Schedule Update")
+  document.getElementById(na[o]).required = ((!checked) && schedule);
+  document.getElementById(na[o]).disabled = ((checked) && schedule)
 }
 
 var  showDiv

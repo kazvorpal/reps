@@ -107,17 +107,17 @@
         var mt = document.getElementById("maintable");
         mt.appendChild(makeheader("projects"));
       }
-      if (mode == "portfolio"&&format != "grid") { 
-        makerow({MLMProgram_Nm: "Portfolio"}, 1, 1);
-        document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
-      }
+      // if (mode == "portfolio"&&format != "grid") { 
+      //   makerow({MLMProgram_Nm: "Portfolio"}, 1, 1);
+      //   document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
+      // }
       pagestart = (page*pagesize) - pagesize;
       ps = (mode == "project" || format == "grid") ? (page*pagesize) : 100000;
       maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
       // console.log(list)
       for (loop = pagestart; loop < pagestop; loop++ ) {
-          // This loop creates the programs/portfolios (makerow) or projects (createrow), based on what mode. 
+          // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
         if(loop != null && typeof rilist[loop] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
         }
@@ -209,10 +209,12 @@
       // console.log(list);
       if (list.length != 0) {
         document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
+        // console.log("table"+makesafe(programname), list);
         for (rikey of list) {
           result++;
           window.ricount.push(true);
           rowcolor++;
+          // console.log(rikey, type, programname);
           makedata(rikey, type, programname);
           program = getprogrambykeyonly(rikey);
             portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
@@ -224,7 +226,7 @@
     }
 
     const makedata = (id, type, programname) => {            
-        
+        console.log(id, type, programname);
         // Make all the data inside a risk or issue, Program and Portfolio
 
         const fieldswitch = {
@@ -312,9 +314,9 @@
                     list += (!isempty(regions[r.MLMRegion_Cd])) ? regions[r.MLMRegion_Cd] + ", " : (!isempty(regions[r.MLMRegion_Cd])) ? r.MLMRegion_Cd : "";
                   }
                 }
-                return (list.slice(0, -2));
               }
-              return "";
+              return (list.slice(0, -2));
+              // return "";
           },
           regioncount: () => {
               let counter = 0;
@@ -413,11 +415,13 @@
           }
         };
         const ri = getprogrambykeyonly(id, programname);
-        const safename = (ri.RILevel_Cd == "Portfolio") ? "Portfolio" : makesafe(ri.MLMProgram_Nm);
+        // const safename = (ri.RILevel_Cd == "Portfolio") ? "Portfolio" : makesafe(ri.MLMProgram_Nm);
+        const safename = makesafe(ri.MLMProgram_Nm);
         const saferi = makesafe(ri.RI_Nm);
         let url = text = "";
         const trid = "tr" + type + saferi + Math.random();
         let bgclass = (rowcolor % 2 == 0) ? " evenrow" : " oddrow";
+        // console.log("table" + safename, document.getElementById("table" + safename))
         document.getElementById("table" + safename).appendChild(makeelement({e: "tr", i: trid, c: bgclass}));
         const arrow = (p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgramRI_Key] != null ) 
           ? (p4plist[ri.RiskAndIssue_Key + "-" + ri.MLMProgramRI_Key].length != 0) 
@@ -894,7 +898,7 @@
     }
     const risort = (list, field) => {
       let qs = list.sort((a, b) => {
-        console.log(a[field], b[field]);
+        // console.log(a[field], b[field]);
         return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
       });
       return (!reverse) ? qs : qs.reverse();
@@ -930,9 +934,9 @@
           console.log("grid riseed", riseed);
           resultcounter(riseed.length);
         }
-        ridata = riseed;
+        // ridata = riseed;
         setTimeout(function() {
-          populate(ridata);
+          populate(riseed);
         });
       });
       makeheadline();

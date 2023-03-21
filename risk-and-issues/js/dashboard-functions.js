@@ -42,9 +42,11 @@ const resultcounter = (results) => {
   
   function listri(target, type) {
     // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
-    pre = (target == "Portfolio") 
-      ? rifiltered.filter(o => o.RIType_Cd == type && o.RILevel_Cd == "Portfolio")
-      : rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target && o.RILevel_Cd != "Portfolio"); // list of all data with the right program name and risk or issue
+    // pre = (target == "Portfolio") 
+    //   ? rifiltered.filter(o => o.RIType_Cd == type && o.RILevel_Cd == "Portfolio")
+    //   : rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target && o.RILevel_Cd != "Portfolio"); // list of all data with the right program name and risk or issue
+    pre = rifiltered.filter(o => o.RIType_Cd == type && o.MLMProgram_Nm == target); // list of all data with the right program name and risk or issue
+    // pre = rifiltered;
     // console.log(target);
     // console.log(pre);
     post = pre.filter(filterfunction); // run it through the filters

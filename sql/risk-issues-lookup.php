@@ -86,8 +86,8 @@ if($_POST['changeLogAction'] != "" && $_POST['changeLogReason'] != ""){
 
 //CHANGE LOG ESTIMATED DATES
 if($_POST['changeLogAction'] == "5:POR Schedule Update") {
-  $EstActiveDate = $_POST['EstActiveDate'];
-  $EstMigrateDate = $_POST['EstMigrateDate'];
+  $EstActiveDate = (isset($_POST['EstActiveDate'])) ? $_POST['EstActiveDate'] : "";
+  $EstMigrateDate = (isset($_POST['EstMigrateDate'])) ? $_POST['EstMigrateDate'] : "" ;
 } else {
   $EstActiveDate = NULL;
   $EstMigrateDate = NULL;
