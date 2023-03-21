@@ -25,7 +25,6 @@ include ("../sql/RI_Internal_External.php");
   }
   //echo $daProj ."<br>";
   
-
   //GET PROJECT NAMES FROM PROJECT UID FOR DISPLAY
   $sql_projects = " DECLARE @ASSC_PROJ VARCHAR(1000)
   SELECT @ASSC_PROJ = COALESCE(@ASSC_PROJ+'<br>','')+ CAST(PROJ_NM AS VARCHAR(1000))
@@ -36,8 +35,11 @@ include ("../sql/RI_Internal_External.php");
   $row_projects = sqlsrv_fetch_array( $stmt_projects, SQLSRV_FETCH_ASSOC);
   $prj_nm_diplay = $row_projects['PROJ_NM'];
 
-  //echo $prj_nm_diplay;
+  echo $sql_projects;
+  echo $prj_nm_diplay;
   //echo $projID;
+
+
   //GET PROJECT NAMES FOR FIELD
   //echo $prj_nm_diplay;
   $allProjects = str_replace("<br>",",",$prj_nm_diplay);
@@ -159,6 +161,7 @@ function toggle(source) {
   <!-- END PROGRESS BAR -->
 <div align="center">
 <h2>PROJECT ISSUE</h2>
+Enter the details of your Project Issue
 Enter the details of your Project Issue
 	<!-- <table border="0" cellpadding="5">
 	  <tbody>
@@ -342,10 +345,15 @@ Enter the details of your Project Issue
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
+                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
+                    <tr>
                     <td><label>
                       <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
+                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
+                  <?php } ?>
                   <?php } ?>
                   </table></td>
                 <td>
@@ -358,11 +366,15 @@ Enter the details of your Project Issue
                       </svg></a>
                     </tr>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
+                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
                         <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
+                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
+                    <?php } ?>  
                     <?php } ?>  
                     </table>
                   </td>

@@ -329,10 +329,15 @@ function toggle(source) {
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
+                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
+                    <tr>
                     <td><label>
                       <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
+                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
+                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
+                  <?php } ?>
                   <?php } ?>
                   </table></td>
                 <td valign="top">
@@ -345,11 +350,16 @@ function toggle(source) {
                       </svg></a>
                     </tr>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
+                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
                         <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
+                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
+                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
+                    <?php } ?>           
+                  </table>
                     <?php } ?>           
                   </table>
                   </td>
@@ -363,10 +373,17 @@ function toggle(source) {
                         </tr>
                         <?php while($row_probability= sqlsrv_fetch_array( $stmt_probability , SQLSRV_FETCH_ASSOC)) { ?>
                         <tr>
+                        <?php while($row_probability= sqlsrv_fetch_array( $stmt_probability , SQLSRV_FETCH_ASSOC)) { ?>
+                        <tr>
                         <td><label>
                           <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required>
                           <?php echo $row_probability['RiskProbability_Nm'] ?></label></td>
+                          <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required>
+                          <?php echo $row_probability['RiskProbability_Nm'] ?></label></td>
                         </tr>
+                        <?php } ?>
+                    </table>
+                  </div>
                         <?php } ?>
                     </table>
                   </div>
