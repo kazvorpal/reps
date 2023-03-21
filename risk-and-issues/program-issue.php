@@ -113,7 +113,7 @@
   } else if($numRows >= 2 && $numRows <= 8){
       $regionCD= "Multi";
   }
-  echo $regionCD;
+  //echo $regionCD;
 ?>
 <!doctype html>
 <html lang="en">
