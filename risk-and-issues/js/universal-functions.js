@@ -113,6 +113,14 @@ const formatDate = (date) => {
   ].join('-');
 }
 
+const formattime = (date) => {
+  return [
+    padTo2Digits(date.getHours()),
+    padTo2Digits(date.getMinutes()),
+    padTo2Digits(date.getSeconds()),
+  ].join('');
+}
+
 const makestringdate = (dateobject) => {
   if (dateobject != null) {
     const m = padder(new Date(dateobject.date).getMonth()+1, "0", 2);

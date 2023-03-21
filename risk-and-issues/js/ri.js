@@ -12,7 +12,7 @@ const isincluded = (filter, field) => {
 
 const exporter = () => {
     document.workbook.xlsx.writeBuffer().then((buf) => {
-      saveAs(new Blob([buf]), 'ri-' + ((mode == "portfolio") ? "raid-log" : mode) + "-dashboard-" + formatDate(new Date()) + '.xlsx');
+      saveAs(new Blob([buf]), 'ri-' + ((mode == "portfolio") ? "raid-log" : mode) + "-dashboard-" + formatDate(new Date()) + "-" + formattime(new Date()) + '.xlsx');
     });
 }
 
