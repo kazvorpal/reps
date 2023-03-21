@@ -814,6 +814,13 @@
         }, 
         RiskAndIssue_Key: () => {
           return  (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : ri.RiskAndIssue_Key;
+        }, 
+        PRJI_Estimated_Act_Ts: () => {
+          console.log("date", ri.PRJI_Estimated_Act_Ts)
+          return (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "";
+        }, 
+        PRJI_Estimated_Mig_Ts: () => {
+          return (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "";
         }
       };
       const file = (ri.Global_Flg) ? "global/details.php" : "details.php"
