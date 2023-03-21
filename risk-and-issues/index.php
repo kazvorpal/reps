@@ -59,7 +59,7 @@ include ("../sql/update-time.php");
         </div>
         <div class="panel-body">
         A report containing all <u>Program</u> and <u>Portfolio</u> Risk and Issues.
-          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=portfolio"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?portfolio"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@ include ("../sql/update-time.php");
         </div>
         <div class="panel-body">
         A report containing all <u>Program</u> Risk and Issues.<br><br>
-          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=program"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?program"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>

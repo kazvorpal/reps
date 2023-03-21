@@ -709,15 +709,10 @@ if($formaction == "update") {
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
-                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
-                    <tr>
                     <td><label>
                       <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?>>
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
-                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?>>
-                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
-                  <?php } ?>
                   <?php } ?>
                   </table></td>
                 <td valign="top">
@@ -932,7 +927,6 @@ if($formaction == "update") {
               <table width="50%" border="0">
                   <td colspan="2"><strong>Notify Portfolio Team</strong></td>
                   </tr>
-                  <tr>
                   <tr>
                   <td><label>
                     <input type="radio" name="raidLog" value="Yes" id="raid_0"<?php //if($raidLog == 1) {echo "checked";}?>>
