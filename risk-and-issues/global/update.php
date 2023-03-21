@@ -852,12 +852,12 @@ document.getElementById("Unknown").checked = false;
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
 
-setInterval(function() {
+// setInterval(function() {
     // nameevent();
     // document.getElementById("program").style.display = "block";
     // document.querySelector("#program").required = true;
     // document.getElementById("subprogram").style.display = "block";
-  }, 100);
+  // }, 100);
 
   let summerprops = {
     toolbar: [

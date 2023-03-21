@@ -904,7 +904,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
         o.required = required;
         o.setCustomValidity((required) ? "You must select a region" : "");
       });
-      console.log(locations)
       if (locations.length > 4) {
         locations = "MULTI ";
       }
@@ -966,6 +965,13 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     programlevel();
   }
 
+  const disablebyname = (target, disable) => {
+    document.getElementsByName(target).forEach(t2 => {
+      t2.checked = (disable) ? false : t2.checked;
+      t2.disabled = disable;
+      t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
+    })
+  }
   const disableevent = (o) => {
     
     // o is the object, with properties:
@@ -977,18 +983,16 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     if (!document.querySelector(`input[name="${o.t}"]:checked`)) return false; // if you can't find the element to be clicked
     const disable = (document.querySelector(`input[name="${o.t}"]:checked`).value == o.v);
     o.d.forEach(field => {
-      console.log(field)
-      console.log(document.getElementsByName(field).length)
+      console.log(field);
+      console.log(document.getElementsByName(field).length);
       if(document.getElementsByName(field).length == 0) {
         $(`#${field}`).val("").multiselect(disable ? "disable" : "enable");
         $('#subprogram').multiselect("destroy").multiselect(prop);
       } else {
-        document.getElementsByName(field).forEach(t2 => {
-          console.log(disable);
-          t2.checked = (disable) ? false : t2.checked;
-          t2.disabled = disable;
-          t2.title = (disable) ? `Only available for ${o.e}` : `Choose an option for your ${o.e}`;
-        })
+        disablebyname(field, disable)
+        if (field == "Region[]") {
+          disablebyname("allbutton", disable);
+        }
       }
     })
     if (o.v == "Issue") {
@@ -1160,15 +1164,15 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       ['style', ['style']],
       ['font', ['bold', 'underline', 'italic', 'clear']],
       ['fontname', ['fontname']],
-      ['color', ['color']],
       ['table', ['table']],
       ['para', ['ul', 'ol', 'paragraph']
     ]
   ]};
 
+  summercss = {"position": "absolute", "width": "0px", "height": "0px"}
   $(document).ready(function() {
-    $('#Description').summernote(summerprops);
-    $('#ActionPlan').summernote();
+    $('#Description').summernote(summerprops).css(summercss).show();
+    $('#ActionPlan').summernote(summerprops).css(summercss).show();
   });
 
 </script>

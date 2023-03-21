@@ -765,11 +765,13 @@ if($match == 0) {
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
                       <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php if($Estimated_Act != ""){echo date_format($Estimated_Act, "Y-m-d");} ?>">
+                      <input type="checkbox" id="naead"> <b>N/A</b>
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
                       <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php if($Estimated_Mig !=""){echo date_format($Estimated_Mig, "Y-m-d");} ?>">
+                      <input type="checkbox" id="naemd"> <b>N/A</b>
                     </td>
                     <td></td>
                     <td></td>
@@ -984,6 +986,43 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 </script>
 
 <script>
+
+let na = {"naead": "EstActiveDate", "naemd": "EstMigrateDate"};
+
+let processlist = (list, event) => {
+  // loop through something like na
+  Object.keys(list).forEach(o => {
+    console.log(o)
+    event(o);
+  });
+}
+let makenaevent = (o) => {
+  // Make event for potentially required field
+  document.getElementById(na[o]).addEventListener("change", e => {
+    console.log(o)
+    checkrequired(o);
+  });
+  document.getElementById(o).addEventListener("change", e => {
+    console.log(o)
+    checkrequired(o);
+  });
+  const dated = (document.getElementById(na[o]).value != "");
+    console.log(dated)
+    document.getElementById(o).disabled = (dated);
+}
+let checkrequired = (o) => {
+  // see whether to require the item, N/A passing box name
+  // setTimeout(() => {
+    const dated = (document.getElementById(na[o]).value != "");
+    console.log(dated)
+    document.getElementById(o).disabled = (dated);
+  // }, 1000)
+  const checked = (document.getElementById(o).checked)
+  const schedule = (document.getElementById("changeLogAction").value == "5:POR Schedule Update")
+  document.getElementById(na[o]).required = ((!checked) && schedule);
+  document.getElementById(na[o]).disabled = ((checked) && schedule)
+}
+
 var  showDiv
 (showDiv = function(divId, element) {
     console.log("showDiv");
@@ -997,6 +1036,7 @@ var  showDiv
     document.getElementById("changeLogReason").required = (element.value != '');
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
+    processlist(na, checkrequired)
 })('hidden_div', document.getElementById("changeLogAction"))
 
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
@@ -1010,6 +1050,7 @@ if (window.performance && window.performance.navigation.type === window.performa
 } else {
   console.log("Noback")
 }
+processlist(na, makenaevent);
 
 </script>
 <script src="includes/ri-functions.js"></script>
