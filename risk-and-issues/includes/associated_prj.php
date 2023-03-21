@@ -22,7 +22,7 @@ $ri_proj_name = $row_projID['PROJ_NM'];
 <html>
 <head>
 <meta charset="utf-8">
-<title>Project Association</title>
+<title>Project Associations</title>
 <style>
     .box {
     border: 1px solid #BCBCBC;

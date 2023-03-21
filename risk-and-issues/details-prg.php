@@ -153,6 +153,7 @@ $impactArea2 = $row_risk_issue['ImpactArea_Nm'];
 $impactLevel2 = $row_risk_issue['ImpactLevel_Nm'];
 $individual = $row_risk_issue['POC_Nm'];
 $internalExternal = $row_risk_issue['POC_Department'];
+$internalExternal = $row_risk_issue['POC_Department'];
 $responseStrategy2 = $row_risk_issue['ResponseStrategy_Nm'];
 $unknown = ""; // IF DATE IS EMPTY
 $date = $row_risk_issue['ForecastedResolution_Dt'];

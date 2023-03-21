@@ -56,6 +56,8 @@ $unframe = $_SESSION['unframe'];
     $individual = $_POST['individual']; 
     $internalExternal = $_POST['internalExternal']; 
     $poc = $_POST['poc']; // POC Individual
+    $internalExternal = $_POST['internalExternal']; 
+    $poc = $_POST['poc']; // POC Individual
     $pocFlag = (int)$_POST['pocFlag'];
     $descriptor = $_POST['descriptor']; 
     $description = $_POST['description'];
@@ -250,6 +252,7 @@ $unframe = $_SESSION['unframe'];
         array($transfer2prgManager, SQLSRV_PARAM_IN),
         array($riskRealized, SQLSRV_PARAM_IN),
         array($riOpenFlg, SQLSRV_PARAM_IN),// 0 for closed
+        array($raidLog, SQLSRV_PARAM_IN),
         array($raidLog, SQLSRV_PARAM_IN),
         array($date, SQLSRV_PARAM_IN), //forcasted resolution date
         array($DateClosed, SQLSRV_PARAM_IN),
