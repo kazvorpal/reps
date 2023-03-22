@@ -123,7 +123,7 @@ function toggle(source) {
 }
 </script>
 </head>
-<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
+<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
 <main align="center">
   <!-- PROGRESS BAR -->
 <div class="container">       
