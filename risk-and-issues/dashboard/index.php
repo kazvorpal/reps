@@ -816,7 +816,6 @@
           return  (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : ri.RiskAndIssue_Key;
         }, 
         PRJI_Estimated_Act_Ts: () => {
-          console.log("date", ri.PRJI_Estimated_Act_Ts)
           return (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "";
         }, 
         PRJI_Estimated_Mig_Ts: () => {
@@ -926,7 +925,6 @@
         dofilters();
         rifiltered = risort(filtration(ridata), sort);
         let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
-        console.log("riseed", riseed);
         if (ispp(mode) && format == "grid") {
           let extralist = [];
           ["Risk", "Issue"].forEach(x => {
@@ -938,7 +936,6 @@
             }
           });
           riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
-          console.log("grid riseed", riseed);
           resultcounter(riseed.length);
         }
         // ridata = riseed;
