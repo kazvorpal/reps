@@ -265,7 +265,10 @@ $(function(){
   const regiondropdown = () => {
     const list = getuniques(locationlist, "Region_Cd");
     let select = document.getElementById("region");
-    select.options.length = 0;
+    if (select) { 
+      select.options.length = 0;
+     } else 
+     return false;
     // console.log(list)
     for (option in list) { 
       if(isincluded("#fiscal_year", "2024") && newregions.includes(list[option])){
