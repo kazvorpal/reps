@@ -35,8 +35,8 @@ include ("../sql/RI_Internal_External.php");
   $row_projects = sqlsrv_fetch_array( $stmt_projects, SQLSRV_FETCH_ASSOC);
   $prj_nm_diplay = $row_projects['PROJ_NM'];
 
-  echo $sql_projects;
-  echo $prj_nm_diplay;
+  //echo $sql_projects;
+  //echo $prj_nm_diplay;
   //echo $projID;
 
 
@@ -161,7 +161,6 @@ function toggle(source) {
   <!-- END PROGRESS BAR -->
 <div align="center">
 <h2>PROJECT ISSUE</h2>
-Enter the details of your Project Issue
 Enter the details of your Project Issue
 	<!-- <table border="0" cellpadding="5">
 	  <tbody>
@@ -345,15 +344,10 @@ Enter the details of your Project Issue
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
-                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
-                    <tr>
                     <td><label>
                       <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
-                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
-                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
-                  <?php } ?>
                   <?php } ?>
                   </table></td>
                 <td>
@@ -366,15 +360,11 @@ Enter the details of your Project Issue
                       </svg></a>
                     </tr>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
-                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
                         <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
-                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
-                    <?php } ?>  
                     <?php } ?>  
                     </table>
                   </td>
@@ -451,7 +441,7 @@ Enter the details of your Project Issue
 				  <input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChangeDisabled="unKnownX()"
+					onChange="unKnownX()"
 				  >
 				  <label for="Unknown">Unknown</label> - Overides Resolution Date
 				</div>  
@@ -883,10 +873,7 @@ let makenaevent = (o) => {
 }
 let checkrequired = (o) => {
   // see whether to require the item, N/A passing box name
-  const checked = (document.getElementById(o).checked)
-  const schedule = (document.getElementById("changeLogAction").value == "5:POR Schedule Update")
-  document.getElementById(na[o]).required = ((!checked) && schedule);
-  document.getElementById(na[o]).disabled = ((checked) && schedule)
+  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
 }
 
 var  showDiv
