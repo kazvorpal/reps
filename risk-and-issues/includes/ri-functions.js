@@ -40,7 +40,7 @@ Any Fields Still Empty are in RED, Above`;
     return false;
     }
   } else {
-    if (document.querySelector("#program").value == "") {
+    if (document.querySelector("#program") && document.querySelector("#program").value == "") {
       alert("please select a program");
       document.querySelector("#program").parentElement.style.backgroundColor = "#fee";
       window.scrollTo(0, 0);
