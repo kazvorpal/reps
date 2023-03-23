@@ -631,10 +631,8 @@
             return gc;
           },
           RiskAndIssue_Key: () => {
-            let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : (ri.RIActive_Flg == 1) ? " <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>" : " <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>"
-            r =  (ri.RiskAndIssue_Key.toString()) + (status);
-            console.log(status)
-            return r;
+            let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : (ri.RIActive_Flg == 1) ? `${ri["RiskAndIssue_Key"]} <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>` : `${ri["RiskAndIssue_Key"]} <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>`;
+            return status;
           },
           grouptype: () => {
             let gc = 0;
@@ -860,9 +858,7 @@
       processcells();
       for(field in rifields) {
           (function(test) {
-            (field == "RiskAndIssue_Key") && console.log(field, test);
             let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            (field == "RiskAndIssue_Key") && console.log(typeof fieldswitch[test] != "function");
             let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
                             || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
                             ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
