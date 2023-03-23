@@ -72,8 +72,8 @@ $changeLogActionVal = $row_risk_issue['RequestAction_Key'];
 $changeLogReason = $row_risk_issue['Reason_Txt'];
 $changeLogName = $row_risk_issue['RequestAction_Nm'];
 
-$Estimated_Act= $row_risk_issue['PRJI_Estimated_Act_Ts'];
-$Estimated_Mig= $row_risk_issue['PRJI_Estimated_Mig_Ts'];
+$Estimated_Act= ($row_risk_issue['PRJI_Estimated_Act_Ts']) ? $row_risk_issue['PRJI_Estimated_Act_Ts']->format('Y-m-d') : '';
+$Estimated_Mig= ($row_risk_issue['PRJI_Estimated_Mig_Ts']) ? $row_risk_issue['PRJI_Estimated_Mig_Ts']->format('Y-m-d') : '';
 
 
 $groupID = "";
@@ -652,12 +652,12 @@ function toggle(source) {
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
-                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php echo date_format($Estimated_Act, "Y-m-d") ?>">
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php echo $Estimated_Act; ?>">
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
-                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php echo date_format($Estimated_Mig, "Y-m-d") ?>">
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php echo $Estimated_Mig; ?>">
                     </td>
                     <td></td>
                     <td></td>
