@@ -516,7 +516,7 @@
             trri.appendChild(makeelement({e: "th", t: projectfieldnames[field].name, c: "p-1 subtitles", w: projectfieldnames[field].width}));
         }
         return trri;
-    }  
+    }
 
     const makeheader = (name, type) => {
       

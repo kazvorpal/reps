@@ -35,8 +35,8 @@ include ("../sql/RI_Internal_External.php");
   $row_projects = sqlsrv_fetch_array( $stmt_projects, SQLSRV_FETCH_ASSOC);
   $prj_nm_diplay = $row_projects['PROJ_NM'];
 
-  echo $sql_projects;
-  echo $prj_nm_diplay;
+  //echo $sql_projects;
+  //echo $prj_nm_diplay;
   //echo $projID;
 
 
@@ -123,7 +123,7 @@ function toggle(source) {
 }
 </script>
 </head>
-<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
+<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
 <main align="center">
   <!-- PROGRESS BAR -->
 <div class="container">       
@@ -161,7 +161,6 @@ function toggle(source) {
   <!-- END PROGRESS BAR -->
 <div align="center">
 <h2>PROJECT ISSUE</h2>
-Enter the details of your Project Issue
 Enter the details of your Project Issue
 	<!-- <table border="0" cellpadding="5">
 	  <tbody>
@@ -337,44 +336,41 @@ Enter the details of your Project Issue
                 <td valign="top">
                   <table width="200" border="0">
                   <tr>
-                  <strong>Impacted Area * </strong>
-                  <a href="includes/definitions.php?tooltipkey=IMPA" class="iframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                  </svg></a>
+                    <td>
+                      <strong>Impacted Area * </strong>
+                      <a href="includes/definitions.php?tooltipkey=IMPA" class="iframe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                      </svg></a>
+                    </td>
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
-                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
-                    <tr>
-                    <td><label>
+                    <td>
+                      <label>
                       <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
-                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
-                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required>
-                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
-                    </tr>
-                  <?php } ?>
+                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label>
+                    </td>
+                  </tr>
                   <?php } ?>
                   </table></td>
                 <td>
                   <table width="200" border="0">
                     <tr>
+                      <td>
                       <strong>Impact Level * </strong>
                       <a href="includes/definitions.php?tooltipkey=IMPL" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                       </svg></a>
+                      </td>
                     </tr>
-                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
                         <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required>
-                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
-                    <?php } ?>  
                     <?php } ?>  
                     </table>
                   </td>
@@ -451,7 +447,7 @@ Enter the details of your Project Issue
 				  <input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChangeDisabled="unKnownX()"
+					onChange="unKnownX()"
 				  >
 				  <label for="Unknown">Unknown</label> - Overides Resolution Date
 				</div>  
@@ -883,10 +879,7 @@ let makenaevent = (o) => {
 }
 let checkrequired = (o) => {
   // see whether to require the item, N/A passing box name
-  const checked = (document.getElementById(o).checked)
-  const schedule = (document.getElementById("changeLogAction").value == "5:POR Schedule Update")
-  document.getElementById(na[o]).required = ((!checked) && schedule);
-  document.getElementById(na[o]).disabled = ((checked) && schedule)
+  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
 }
 
 var  showDiv

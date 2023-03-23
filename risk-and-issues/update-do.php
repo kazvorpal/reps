@@ -1,4 +1,3 @@
-
 <?php 
 //echo str_replace('  ', '&nbsp; ', nl2br(print_r($_POST, true)));
 include ("../includes/functions.php");
@@ -54,8 +53,6 @@ $unframe = $_SESSION['unframe'];
         $emailAssocProj = str_replace(", ", ",",$drivers);//ASSOCIATED PROJECTS LIST FOR EMAIL // THIS IS DEAD
     $assocProgram = $_POST['program']; // USE ONLY FOR PROGRAM RISK OR ISSUE OTHERWISE EMPTY // MULTI AS OF 4/19
     $individual = $_POST['individual']; 
-    $internalExternal = $_POST['internalExternal']; 
-    $poc = $_POST['poc']; // POC Individual
     $internalExternal = $_POST['internalExternal']; 
     $poc = $_POST['poc']; // POC Individual
     $pocFlag = (int)$_POST['pocFlag'];
@@ -252,7 +249,6 @@ $unframe = $_SESSION['unframe'];
         array($transfer2prgManager, SQLSRV_PARAM_IN),
         array($riskRealized, SQLSRV_PARAM_IN),
         array($riOpenFlg, SQLSRV_PARAM_IN),// 0 for closed
-        array($raidLog, SQLSRV_PARAM_IN),
         array($raidLog, SQLSRV_PARAM_IN),
         array($date, SQLSRV_PARAM_IN), //forcasted resolution date
         array($DateClosed, SQLSRV_PARAM_IN),

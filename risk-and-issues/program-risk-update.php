@@ -56,13 +56,11 @@ include ("../sql/RI_Internal_External.php");
 
   //GET ASSOCIATED PROJECTS FROM 
   $sql_assoc_prj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey,$status)";
-  $sql_assoc_prj = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey,$status)";
   $stmt_assoc_prj = sqlsrv_query( $data_conn, $sql_assoc_prj );
   //$row_assoc_prj= sqlsrv_fetch_array($stmt_assoc_prj, SQLSRV_FETCH_ASSOC);
   //$row_assoc_prj['EPSProject_Nm'];
   //echo $sql_assoc_prj;
 
-  $sql_assoc_prj_keys = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey,$status)";
   $sql_assoc_prj_keys = "select * from RI_Mgt.fn_GetListOfAssociatedProjectsForProgramRIKey($RiskAndIssue_Key,$progrikey,$status)";
   $stmt_assoc_prj_keys  = sqlsrv_query( $data_conn, $sql_assoc_prj_keys  );
   //$_keys = sqlsrv_fetch_array($stmt_assoc_prj_keys , SQLSRV_FETCH_ASSOC);
