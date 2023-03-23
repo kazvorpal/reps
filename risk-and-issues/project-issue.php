@@ -8,7 +8,7 @@ include ("../sql/ri_filters.php");
 include ("../sql/ri_filtered_data.php");
 include ("../sql/RI_Internal_External.php");
     
-  $action = $_GET['action']; //new
+  $action = $_GET['action']; 
   $temp_id = $_GET['tempid'];
   $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
   $ass_project = $row_projID['PROJ_NM'];
