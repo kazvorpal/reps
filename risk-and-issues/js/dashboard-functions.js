@@ -196,8 +196,10 @@ const excelrows = () => {
 }
 
 const trimmer = (target, key) => {
-  return (target.length > textlength) 
-  ? target.substr(0, textlength) + `<a href="#" class="more" id="more${key}" onclick="document.getElementById('desc${key}').style.display='block';this.style.display='none';return false">[more]</a><span style="display:none;" onclick="this.style.display='none';document.getElementById('more${key}').style.display='inline'" id="desc${key}">${target.substr(21)}<a href="#" onclick="return false">[less]</a></div>`
+  let cleaner = document.createElement("div");
+  cleaner.innerHTML = target;
+  return (cleaner.textContent.length > textlength) 
+  ? `<span id="clean${key}">` + cleaner.textContent.substr(0, textlength) + `<a href="#" class="more" id="more${key}" onclick="document.getElementById('desc${key}').style.display='block';document.getElementById('clean${key}').style.display='none';return false">[more]</a></span><span style="display:none;" onclick="this.style.display='none';document.getElementById('clean${key}').style.display='inline'" id="desc${key}">${target}<a href="#" onclick="return false">[less]</a></div>`
   : target;
 }
 

@@ -611,6 +611,7 @@
       const trri = makeelement({"e": "tr", "i": "row" + safename, "t": "", "c":"p-1 datarow"});
       const fieldswitch = {
           //    Specific fields that need extra calculation
+
           mangerlist: () => {
               if (ri["MLMProgram_Key"]) {
                   const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
@@ -630,8 +631,10 @@
             return gc;
           },
           RiskAndIssue_Key: () => {
-            let status = format == "grid" ? "" : (ri.RIActive_Flg == 1) ? " <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>" : " <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>"
-            return (ri.RiskAndIssue_Key.toString()) + (status);
+            let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : (ri.RIActive_Flg == 1) ? " <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>" : " <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>"
+            r =  (ri.RiskAndIssue_Key.toString()) + (status);
+            console.log(status)
+            return r;
           },
           grouptype: () => {
             let gc = 0;
@@ -812,9 +815,6 @@
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
           return(r);
         }, 
-        RiskAndIssue_Key: () => {
-          return  (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : ri.RiskAndIssue_Key;
-        }, 
         PRJI_Estimated_Act_Ts: () => {
           return (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "";
         }, 
@@ -860,17 +860,22 @@
       processcells();
       for(field in rifields) {
           (function(test) {
+            (field == "RiskAndIssue_Key") && console.log(field, test);
             let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+            (field == "RiskAndIssue_Key") && console.log(typeof fieldswitch[test] != "function");
             let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
                             || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
                             ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
+            //  (field == "RiskAndIssue_Key") && console.log(texter)
             trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
           })(field);
           if (rifields[field].name == "ID") {
+            console.log("addons")
               trri.appendChild(header);
               trri.appendChild(type);
-          }
+          } //else 
+          // console.log(field, rifields[field])
       }
       return trri;
     }  
