@@ -6,11 +6,11 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/RI_Internal_External.php");
 
-  //$action = $_GET['action']; //new
-  //$temp_id = $_GET['tempid'];
+//$action = $_GET['action']; //new
+//$temp_id = $_GET['tempid'];
 $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
-  //$ass_project = $row_projID['PROJ_NM'];
-  //$forcastDate =  date('m/d/Y');
+//$ass_project = $row_projID['PROJ_NM'];
+//$forcastDate =  date('m/d/Y');
 
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_POST['rikey'];
