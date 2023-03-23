@@ -6,11 +6,11 @@ include ("../db_conf.php");
 include ("../data/emo_data.php");
 include ("../sql/RI_Internal_External.php");
 
-  //$action = $_GET['action']; //new
-  //$temp_id = $_GET['tempid'];
-  $user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
-  //$ass_project = $row_projID['PROJ_NM'];
-  //$forcastDate =  date('m/d/Y');
+//$action = $_GET['action']; //new
+//$temp_id = $_GET['tempid'];
+$user_id = preg_replace("/^.+\\\\/", "", $_SERVER["AUTH_USER"]);
+//$ass_project = $row_projID['PROJ_NM'];
+//$forcastDate =  date('m/d/Y');
 
 //FIND PROJECT RISK AND ISSUES
 $RiskAndIssue_Key = $_POST['rikey'];
@@ -456,17 +456,10 @@ function toggle(source) {
                   </tr>
                   <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
-                  <?php while($row_impArea= sqlsrv_fetch_array( $stmt_impArea , SQLSRV_FETCH_ASSOC)) { ?>
-                    <tr>
                     <td><label>
                       <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?>>
                       <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
-                      <input type="radio" name="ImpactArea" value="<?php echo $row_impArea['ImpactArea_Key'] ?>" id="ImpactArea_<?php echo $row_impArea['ImpactArea_Key'] ?>" required <?php if($impactArea2==$row_impArea['ImpactArea_Nm']){echo "checked";}?>>
-                      <?php echo $row_impArea['ImpactArea_Nm'] ?></label></td>
                     </tr>
-                  <?php } ?>
-                  </table>
-                </td>
                   <?php } ?>
                   </table>
                 </td>
@@ -480,15 +473,11 @@ function toggle(source) {
                       </svg></a>
                     </tr>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
-                    <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
                       <td><label>
                         <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required <?php if($impactLevel2==$row_imLevel['ImpactLevel_Nm']){echo "checked";}?>>
                         <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
-                        <input name="ImpactLevel" type="radio" id="ImpactLevel_<?php echo $row_imLevel['ImpactLevel_Key'] ?>" value="<?php echo $row_imLevel['ImpactLevel_Key'] ?>" required <?php if($impactLevel2==$row_imLevel['ImpactLevel_Nm']){echo "checked";}?>>
-                        <?php echo $row_imLevel['ImpactLevel_Nm'] ?></label></td>
                       </tr>
-                    <?php } ?>  
                     <?php } ?>  
                     </table>
                   </td>
@@ -502,15 +491,10 @@ function toggle(source) {
                         </tr>
                         <?php while($row_probability= sqlsrv_fetch_array( $stmt_probability , SQLSRV_FETCH_ASSOC)) { ?>
                         <tr>
-                        <?php while($row_probability= sqlsrv_fetch_array( $stmt_probability , SQLSRV_FETCH_ASSOC)) { ?>
-                        <tr>
                         <td><label>
                           <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required <?php if($probability==$row_probability['RiskProbability_Nm']){echo "checked";}?>>
                           <?php echo $row_probability['RiskProbability_Nm'] ?></label></td>
-                          <input name="RiskProbability" type="radio" id="RiskProbability_<?php echo $row_probability['RiskProbability_Key'] ?>" value="<?php echo $row_probability['RiskProbability_Key'] ?>" required <?php if($probability==$row_probability['RiskProbability_Nm']){echo "checked";}?>>
-                          <?php echo $row_probability['RiskProbability_Nm'] ?></label></td>
                         </tr>
-                        <?php } ?>
                         <?php } ?>
                       </table>
                     </div>
@@ -546,13 +530,6 @@ function toggle(source) {
           </div>
           </td>
           </tr>
-          <script>
-            document.getElementById("indy").addEventListener("change", function(){
-            const v = this.value.split(" : ");
-            this.value = v[0];
-            document.getElementById("InternalExternal").value = v[1];
-            });
-          </script>
           <script>
             document.getElementById("indy").addEventListener("change", function(){
             const v = this.value.split(" : ");
