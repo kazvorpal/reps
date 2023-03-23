@@ -802,12 +802,12 @@
         RIDescription_Txt: () => {
           let desc = ri.RIDescription_Txt;
           let key = ri.RiskAndIssue_Key;
-          return trimmer(desc, key);
+          return trimmer(desc, key, "desc");
         },
         ActionPlanStatus_Cd: () => {
           let plan = ri.ActionPlanStatus_Cd;
           let key = ri.RiskAndIssue_Key;
-          return trimmer(plan, key);
+          return trimmer(plan, key, "plan");
         },
         programmanager: () => {
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
