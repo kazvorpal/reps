@@ -5,7 +5,7 @@ const resultcounter = (results) => {
     // console.log(results)
     // console.table(ridata);
     const s = (r == 1) ? "" : "s";
-    document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`
+    document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`;
   }
   
   const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
