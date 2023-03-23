@@ -102,8 +102,8 @@ $changeLogActionVal = $row_risk_issue['RequestAction_Key'];
 $changeLogReason = $row_risk_issue['Reason_Txt'];
 $changeLogName = $row_risk_issue['RequestAction_Nm'];
 
-$Estimated_Act= $row_risk_issue['PRJI_Estimated_Act_Ts'];
-$Estimated_Mig= $row_risk_issue['PRJI_Estimated_Mig_Ts'];
+$Estimated_Act= ($row_risk_issue['PRJI_Estimated_Act_Ts']) ? $row_risk_issue['PRJI_Estimated_Act_Ts']->format('Y-m-d') : '';
+$Estimated_Mig= ($row_risk_issue['PRJI_Estimated_Mig_Ts']) ? $row_risk_issue['PRJI_Estimated_Mig_Ts']->format('Y-m-d') : '';
 
 if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
   $forecastMin = date_format($date, "Y-m-d");
@@ -778,13 +778,13 @@ if($match == 0) {
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
-                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" value="<?= $Estimated_Act->format('Y-m-d') ?>" size="40" required>
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" value="<?= $Estimated_Act ?>" size="40" required>
                       <input type="checkbox" id="naead"> <b>N/A</b>
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
-                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40"  value="<?= $Estimated_Mig->format('Y-m-d') ?>"  required>
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40"  value="<?= $Estimated_Mig ?>"  required>
                       <input type="checkbox" id="naemd"> <b>N/A</b>
                     </td>
                     <td></td>
@@ -1011,6 +1011,7 @@ let processlist = (list, event) => {
 let makenaevent = (o) => {
   // Make event for potentially required field
   document.getElementById(o).checked = (document.getElementById(na[o]).value == '');
+  checkrequired(o);
   document.getElementById(o).addEventListener("change", e => {
     checkrequired(o);
   });
