@@ -215,7 +215,7 @@ $(function(){
     if (key == "daterange") {
       document.getElementById("row").appendChild(makeelement({e: "div", t: "Resolution&nbsp;Date&nbsp;Range<br/><input type='text' id='dateranger' class='daterange form-control' />", c: "filtercol"}));
     } else if(key == "searchall") {
-      document.getElementById("row").appendChild(makeelement({e: "div", t: `ID&nbsp;Search<br/><input type='number' id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
+      document.getElementById("row").appendChild(makeelement({e: "div", t: `ID&nbsp;Search<br/><input type='number' title="This only searches in the current Status filter" id='allsearch' size="4" class="searchfield form-control" />`, c: "filtercol"}));
     } else if((typeof o.p == "undefined" || o.p.includes(mode))) {
       o.f = (typeof key != "undefined") ? key : o.f;
       o.l = (typeof o.l == "undefined") ? ridata : o.l;
