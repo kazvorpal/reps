@@ -90,6 +90,8 @@ $DateClosed = $row_risk_issue['RIClosed_Dt'];
 $driverList = rtrim($_POST['drivertime'], ",");
 $driverArr = explode(",", $driverList);
 $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
+// $EstMigrateDate = $row_risk_issue['EstMigrateDate'];
+// $EstActiveDate = $row_risk_issue['EstActiveDate'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
 $department = $row_risk_issue['POC_Department'];
 $add_proj_select = NULL;
@@ -100,8 +102,8 @@ $changeLogActionVal = $row_risk_issue['RequestAction_Key'];
 $changeLogReason = $row_risk_issue['Reason_Txt'];
 $changeLogName = $row_risk_issue['RequestAction_Nm'];
 
-$Estimated_Act= $row_risk_issue['PRJI_Estimated_Act_Ts'];
-$Estimated_Mig= $row_risk_issue['PRJI_Estimated_Mig_Ts'];
+$Estimated_Act= ($row_risk_issue['PRJI_Estimated_Act_Ts']) ? $row_risk_issue['PRJI_Estimated_Act_Ts']->format('Y-m-d') : '';
+$Estimated_Mig= ($row_risk_issue['PRJI_Estimated_Mig_Ts']) ? $row_risk_issue['PRJI_Estimated_Mig_Ts']->format('Y-m-d') : '';
 
 if(!empty($row_risk_issue['ForecastedResolution_Dt'])) {
   $forecastMin = date_format($date, "Y-m-d");
@@ -507,6 +509,15 @@ if($match == 0) {
                 <td valign="top">
                   <table width="200" border="0">
                     <tr>
+<<<<<<< HEAD
+                      <td>
+                        <strong>Impact Level*</strong>
+                        <a href="includes/definitions.php?tooltipkey=IMPL" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                          <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg></a>
+                      </td>
+=======
                     <td>
                       <strong>Impact Level* </strong>
                       <a href="includes/definitions.php?tooltipkey=IMPL" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -514,6 +525,7 @@ if($match == 0) {
                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                       </svg></a>
                     </td? 
+>>>>>>> 6bf77144dcdd39d20bb8f9df99ba12503ea9b2f3
                     </tr>
                     <?php while($row_imLevel = sqlsrv_fetch_array( $stmt_imLevel , SQLSRV_FETCH_ASSOC)) { ?>
                     <tr>
@@ -762,24 +774,26 @@ if($match == 0) {
               </table>
               <!--ESTAMATED DATES NEED TO BE FINSIHED 2.27.2023  -->
               <div id="hidden_div">
-              <table>
+                <table>
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
-                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" value="<?php if($Estimated_Act != ""){echo date_format($Estimated_Act, "Y-m-d");} ?>">
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" value="<?= $Estimated_Act ?>" size="40" required>
+                      <input type="checkbox" id="naead"> <b>N/A</b>
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
-                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" value="<?php if($Estimated_Mig !=""){echo date_format($Estimated_Mig, "Y-m-d");} ?>">
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40"  value="<?= $Estimated_Mig ?>"  required>
+                      <input type="checkbox" id="naemd"> <b>N/A</b>
                     </td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                  </tr>
-                </table>  
+                   </tr>
+              </table>   
               </div>
             </div>
           </td>
@@ -938,7 +952,7 @@ function validateGrp() {
   }
   if (checked) {
     things[things.length - 1].setCustomValidity("");
-    document.getElementById('checkGroup').submit();
+    document.getElementById('checkGroup') ? document.getElementById('checkGroup').submit() : '';
   } else {
     things[things.length - 1].setCustomValidity("type='radio' name='Drivers'");
     things[things.length - 1].reportValidity();
@@ -986,6 +1000,28 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 </script>
 
 <script>
+let na = {"naead": "EstActiveDate", "naemd": "EstMigrateDate"};
+
+let processlist = (list, event) => {
+  // loop through something like na
+  Object.keys(list).forEach(o => {
+    event(o);
+  });
+}
+let makenaevent = (o) => {
+  // Make event for potentially required field
+  document.getElementById(o).checked = (document.getElementById(na[o]).value == '');
+  checkrequired(o);
+  document.getElementById(o).addEventListener("change", e => {
+    checkrequired(o);
+  });
+}
+let checkrequired = (o) => {
+  // see whether to require the item, N/A passing box name
+  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
+}
+
+
 var  showDiv
 (showDiv = function(divId, element) {
     console.log("showDiv");
@@ -999,6 +1035,7 @@ var  showDiv
     document.getElementById("changeLogReason").required = (element.value != '');
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
+    processlist(na, checkrequired)
 })('hidden_div', document.getElementById("changeLogAction"))
 
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
@@ -1012,6 +1049,7 @@ if (window.performance && window.performance.navigation.type === window.performa
 } else {
   console.log("Noback")
 }
+processlist(na, makenaevent);
 
 </script>
 <script src="includes/ri-functions.js"></script>
