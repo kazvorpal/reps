@@ -90,6 +90,8 @@ $DateClosed = $row_risk_issue['RIClosed_Dt'];
 $driverList = rtrim($_POST['drivertime'], ",");
 $driverArr = explode(",", $driverList);
 $RIClosed_Dt = $row_risk_issue['RIClosed_Dt'];
+// $EstMigrateDate = $row_risk_issue['EstMigrateDate'];
+// $EstActiveDate = $row_risk_issue['EstActiveDate'];
 $raidLog = $row_risk_issue['RaidLog_Flg'];
 $department = $row_risk_issue['POC_Department'];
 $add_proj_select = NULL;
@@ -776,13 +778,13 @@ if($match == 0) {
                   <tr>
                     <td width="213px">
                       <label for="EstActiveDate">Est. Activation Date*</label>
-                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" size="40" required>
+                      <input name="EstActiveDate" type="date" class="form-control" id="EstActiveDate" value="<?= $Estimated_Act->format('Y-m-d') ?>" size="40" required>
                       <input type="checkbox" id="naead"> <b>N/A</b>
                     </td>
                     <td width="20px"></td>
                     <td>
                       <label for="EstMigrateDate">Est. Migration Date*</label>
-                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40" required>
+                      <input name="EstMigrateDate" type="date" class="form-control" id="EstMigrateDate" size="40"  value="<?= $Estimated_Mig->format('Y-m-d') ?>"  required>
                       <input type="checkbox" id="naemd"> <b>N/A</b>
                     </td>
                     <td></td>
