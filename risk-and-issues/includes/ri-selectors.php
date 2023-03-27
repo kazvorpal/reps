@@ -203,7 +203,9 @@ $(function(){
   // subp = subp.sort();
   // console.log(subp);
 
-  var newregions = ["West", "East", "Central", "Corporate"];
+  const oldyears = [2018, 2019, 2020, 2021, 2022, 2023];
+  const newregions = ["West", "East", "Central", "Corporate"];
+  const oldregions = ["California", "Central", "Northeast", "Southeast", "Southwest", "Virginia"];
   const makeselect = (o, key) => {
     // Make a dropdown
     // Takes a properties object, o
@@ -269,21 +271,13 @@ $(function(){
     select.options.length = 0;
     } else 
     return false;
-    // console.log(list)
-    for (option in list) { 
-      if(isincluded("#fiscal_year", "2024") && newregions.includes(list[option])){
-        // console.log("list[option]" + list[option])
-        select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
-      } else if ($("#fiscal_year").val().includes("2023") && !newregions.includes(list[option])){
-        // console.log("list[option]" + list[option])
-        select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
-      } else {
-        // console.log($("#fiscal_year").val().includes("2023") +":"+ !newregions.includes(list[option]))
-        // console.log(list[option])
+    list.forEach(option => { 
+      if($("#fiscal_year").val().some(year => parseInt(year) >= 2024) && newregions.includes(option)){
+        select.appendChild(makeelement({e: "option", v: option, t: option}));
+      } else if ($("#fiscal_year").val().some(year => parseInt(year) < 2024) && oldregions.includes(option)) {
+        select.appendChild(makeelement({e: "option", v: option, t: option}));
       }
-      // document.getElementById("regions").appendChild(select)
-    }
-    // console.log("regiondropdown")
+    })
     $("#region").multiselect("destroy").multiselect(longprops);
     // dofilters();
   };
@@ -405,15 +399,11 @@ $(function(){
 
   const processfilters = () => {
       // filter form button
-      // let riseed = (ispp(mode)) ? getwholeuniques(ridata, "MLMProgram_Nm") : ridata;
-      // populate(filtration(ridata));
-      // colorboxschtuff();
       let url = new URL(window.location);
-        url.searchParams.set("mode", mode);
-        url.searchParams.set("page", page);
-        url.searchParams.set("pagesize", pagesize);
-        // url.searchParams.set("page", mode);
-        window.history.pushState({}, '', url);
+      url.searchParams.set("mode", mode);
+      url.searchParams.set("page", page);
+      url.searchParams.set("pagesize", pagesize);
+      window.history.pushState({}, '', url);
       rifiltered = filtration(ridata);
       let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
       setTimeout(function() {

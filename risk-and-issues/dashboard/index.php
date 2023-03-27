@@ -116,10 +116,17 @@
       maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
       // console.log(list)
+      if (mode == "project" || format == "grid") {
+        rilist.forEach(o => {
+          // console.log("x", o)
+          createrow(o, true);
+        })
+      }
       for (loop = pagestart; loop < pagestop; loop++ ) {
           // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
         if(loop != null && typeof rilist[loop] != "undefined") {
-          (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop]));
+          (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop], false));
+          // console.log("o", rilist[loop])
         }
       }
       // resultcounter((ispp(mode)) ? result : rilist);
@@ -204,29 +211,23 @@
       if (programname == "null" || programname == null) return false;
       safename = makesafe(programname);
       let list = listri(programname, type);
-      document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">` + type.charAt(0).toUpperCase() + ":" + list.length + "</span> ";
-      // console.log(ri.MLMProgram_Nm + "makeri: ");
-      // console.log(list);
+      document.getElementById("banner" + safename).innerHTML += `  <span title="${capitalize(type)} Count">${type.charAt(0).toUpperCase()}:${list.length}</span>`;
       if (list.length != 0) {
         document.getElementById("table"+makesafe(programname)).appendChild(makeheader(programname, type));
-        // console.log("table"+makesafe(programname), list);
         for (rikey of list) {
           result++;
           window.ricount.push(true);
           rowcolor++;
-          // console.log(rikey, type, programname);
           makedata(rikey, type, programname);
           program = getprogrambykeyonly(rikey);
             portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
             projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
           }
-          // console.log((ri.MLMProgram_Nm == "Portfolios") ? "result:" + result : ri)
       } else {
       }
     }
 
     const makedata = (id, type, programname) => {            
-        console.log(id, type, programname);
         // Make all the data inside a risk or issue, Program and Portfolio
 
         const fieldswitch = {
@@ -602,7 +603,7 @@
         return trri;
     }
 
-    const createrow = (ri) => {
+    const createrow = (ri, excel) => {
       // Create a row in the Project table
       if (typeof ri == "undefined") 
         return false ;
@@ -837,43 +838,44 @@
           t: "<div style='overflow:hidden'>" + ri.RIType_Cd + "</div>", 
           c:"p-1 " + c,
       });
-      for (field in excelfields) {
-        (function(test) {
-            let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
-            rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
-        })(field);
-      }
-      let newrow = document.worksheet.addRow(rowValues);
-      const logValues = [];
-      if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
-        for (field in changelog) {
+      if (excel) {
+        for (field in excelfields) {
           (function(test) {
-              const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-              logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+              let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
+              rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
           })(field);
         }
-        let newlog = document.changelog.addRow(logValues);
-      }
-      processcells();
-      for(field in rifields) {
-          (function(test) {
-            let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-            let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
-                            || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
-                            ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
-             let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
-            //  (field == "RiskAndIssue_Key") && console.log(texter)
-            trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
-          })(field);
-          if (rifields[field].name == "ID") {
-            console.log("addons")
+        let newrow = document.worksheet.addRow(rowValues);
+        const logValues = [];
+        if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
+          for (field in changelog) {
+            (function(test) {
+              const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+            })(field);
+          }
+          let newlog = document.changelog.addRow(logValues);
+        }
+        processcells();
+      } else {
+        for(field in rifields) {
+            (function(test) {
+              let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
+                              || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
+                              ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
+              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
+              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
+            })(field);
+            if (rifields[field].name == "ID") {
+              console.log("addons")
               trri.appendChild(header);
               trri.appendChild(type);
-          } //else 
-          // console.log(field, rifields[field])
+            };
+        }
+        return trri;
       }
-      return trri;
     }  
     var modebutton = (target) => {
         let url = `<a href='/risk-and-issues/dashboard/?mode=${target}&page=${page}' style='color:#fff' onclick='return false';>`;
