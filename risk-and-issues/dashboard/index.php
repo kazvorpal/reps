@@ -76,7 +76,7 @@
 
     const populate = (rilist) => {
       console.log("rilist", rilist);
-      rilist.forEach(o => console.log(o[sort]));
+      // rilist.forEach(o => console.log(typeof o[sort], o[sort], o, sort));
       portfoliocount = 0;
       // rilist = rilist.sort(function(a, b) {
       //   if(a.MLMProgram_Nm < b.MLMProgram_Nm)
@@ -520,6 +520,10 @@
         return trri;
     }
 
+    const sortable = (key) => {
+      return (format == "grid" && !(key in fieldmap));
+    }
+
     const makeheader = (name, type) => {
       
       // Make the header for Grids
@@ -535,14 +539,15 @@
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
-                direction = (format != "grid") ? "" : (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
-                b1 = (format == "grid") ? "<u>" : "";
-                b2 = (format == "grid") ? "</u>" : "";
+                direction = sortable(key) ? "" : (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
+                b1 = sortable(key) ? "<u>" : "";
+                b2 = sortable(key) ? "</u>" : "";
               }
-              // console.log(name)
-              // console.log(type)
-              const c = (format == "grid") ? " active" : (type == "Risk") ? "  " : " issueheader ";
-              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: "click here to sort by this field", "j": function() {
+              console.log(type)
+              console.log(sortable(key))
+              const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
+              const title = sortable(key) ? "click here to sort by this field" : "Sorry, sorting by this column is not yet supported";
+              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
                 if (format == "grid") {
                   if (this.innerHTML.indexOf("↓") != -1) {
                     reverse = true;
@@ -909,12 +914,37 @@
         o.style.overflow = "initial";
       })
     }
+
+    const fieldmap = {
+      "subprogram": "",
+      "actionplandate": "", 
+      "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
+      "ForecastedResolution_Dt": "ForecastedResolution_Dt.date"
+  }
+
     const risort = (list, field) => {
+      // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
       let qs = list.sort((a, b) => {
         return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
       });
       return (!reverse) ? qs : qs.reverse();
     }
+    // const fieldMap = {
+    //   "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
+    //   "ForecastedResolution_Dt": "ForecastedResolution_Dt.date"
+    // };
+    // const risort = (list, field) => {
+    //   console.log(aplist, list)
+    //   let qs = list.sort((a, b) => {
+    //     let aField = fieldMap[field] || field;
+    //     let bField = fieldMap[field] || field;
+    //     let aVal = (aField.includes(".")) ? aField.split(".").reduce((obj, key) => obj[key], a) : a[aField];
+    //     let bVal = (bField.includes(".")) ? bField.split(".").reduce((obj, key) => obj[key], b) : b[bField];
+    //     console.log(aVal, bVal, aField, bField)
+    //     return (aVal < bVal) ? -1 : (aVal > bVal) ? 1 : 0;
+    //   });
+    //   return qs;
+    // };
 
     const init = (target) => {
       mode = target;
@@ -943,12 +973,12 @@
           });
           console.log("riseed", sort)
           riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
-          riseed.forEach(o => console.log(o[sort]));
+          // riseed.forEach(o => console.log(o[sort]));
           riseed = risort(riseed, sort);
           resultcounter(riseed.length);
           setTimeout(function() {
             console.log("two")
-            riseed.forEach(o => console.log(o[sort]));
+            // riseed.forEach(o => console.log(o[sort]));
             populate(riseed);
           });
         } else {
