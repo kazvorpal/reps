@@ -842,6 +842,7 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 <script>
 
   const getuniques = (list, field) => {
+    console.log("sort", sort);
     return list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index).sort();
   }
   const makeselect = (o) => {

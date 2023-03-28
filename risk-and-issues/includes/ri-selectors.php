@@ -32,11 +32,6 @@ const jq = `
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 `;
 
-// window.jQuery || document.write(jq);
-
-
-// typeof $().emulateTransitionEnd == 'function' || document.write(bs);
-
 </script>
 
 
@@ -44,24 +39,6 @@ const jq = `
         <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
           <div class="form-group">
             <div id="filterpanel" class="container-fluid"><div class="row" id="row"></div></div>
-            <!-- <br> -->
- <!-- <table cellspacing="0" cellpadding="0">
-  <tbody>
-    <tr>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-  </tbody>
-</table> -->
 </div>
 	</form>
 
@@ -111,16 +88,6 @@ const filterfunction = (o) => {
           || idsearch(o))
   );
 }
-
-// const ridatasearch = () => {
-//   ridata.forEach(o => {
-//     for (key in o) {
-//         if(typeof o[key] == "string" && o[key].toLowerCase().indexOf(document.getElementById("allsearch").value.toLowerCase()) != -1) {
-//             console.log(o[key]);
-//         }
-//     }
-//   })
-// }
 
 const propsearch = o => {
     for (key in o) {
@@ -177,19 +144,15 @@ $(function(){
 
   var subp = [];
   for (item in p4plist) {
-    // console.log(item)
     p4plist[item].forEach(e => {
       if (!subp.includes(e.Subprogram_nm)) {
         subp.push(e.Subprogram_nm);
       }
     })
   }
-  // console.log(subp);
   for (item in sublist) {
-    // console.log(item)
     sublist[item].forEach(e => {
       if (!subp.includes(e.SubProgram_Nm)) {
-        // console.log(e.SubProgram_Nm);
         subp.push(e.SubProgram_Nm);
       }
     })
@@ -245,16 +208,11 @@ $(function(){
           regiondropdown();
         }, 1000);
         select.addEventListener("change", () => {
-          // console.log("change")
         })
         setTimeout(() => {
-          // console.log("select")
-          // console.log(select)
         }, 1000);
       } else {
         const list = getuniques(o.l, o.f);
-        // console.log(list)
-        // console.log(o.i)
         for (option in list) 
         if(list[option] != ""&& list[option] != null)
         select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
@@ -282,17 +240,6 @@ $(function(){
     // dofilters();
   };
   var yearcache = "";
-  // const checkyear = setInterval(() => {
-  //   if (JSON.stringify(yearcache) != JSON.stringify($("#fiscal_year").val())) {
-  //     regiondropdown();
-  //     console.log((yearcache != $("#fiscal_year").val()));
-  //     console.log(yearcache);9Twitter
-  //     console.log($("#fiscal_year").val());
-  //     yearcache = $("#fiscal_year").val();
-  //   } else {
-  //     console.log(".");
-  //   }
-  // }, 1000);
 
   var programnames;
   const makefilters = () => {
@@ -353,21 +300,15 @@ $(function(){
     longprops["numberDisplayed"] = 2;
     longprops["includeResetOption"] = true;
     let yearprops = structuredClone(longprops);
-    // yearprops["onChange"] = () => {
-    //   console.log("change");
-    //   regiondropdown();
-    // }
     $('#fiscal_year').val(new Date().getFullYear()).multiselect({
       includeSelectAllOption: true,
       onChange: (option, checked, select) => {
-        // console.log("change");
         regiondropdown();
         return true;
       },
       async: false
     });
     testlist = [1, 2, 3, 4, 5, 12, 11, 13, 23, 24, 22];
-    // console.log(shortprops)
     $("#level").multiselect(longprops);
     $("#pStatus").val(1).multiselect("destroy").multiselect(shortprops);
 		$('#category').multiselect(shortprops);
@@ -379,19 +320,6 @@ $(function(){
     $('#facility').multiselect(longprops);
 		$('#risk_issue').multiselect(shortprops);
 		$('#impact_level').multiselect(shortprops);
-    // $('#allsearch').autoComplete({
-    //   minLength: 1,
-    //   search: function(string,)
-    // })
-    
-    // $('#allsearch').change(function () {
-    //   alert($('#allsearch').val());
-    // })
-
-    // document.getElementById("fiscal_year").addEventListener("change", () => {
-    //   console.log("event");
-    //   regiondropdown();
-    // })
     document.getElementById("Go").onclick = function () {processfilters();
       return false;
     }
@@ -418,10 +346,6 @@ $(function(){
   const resetform = () => {
     document.getElementById("formfilter").reset();
     init(mode);
-    // location.href = window.location.href.split('?')[0] + "?mode=" + mode;
-    // document.getElementById("formfilter").reset();
-    // document.getElementById("fiscal_year").value = new Date().getFullYear();
-    // $("select").multiselect("rebuild");
   }
 </script>
 <script language="javascript">

@@ -76,16 +76,17 @@
 
     const populate = (rilist) => {
       console.log("rilist", rilist);
+      rilist.forEach(o => console.log(o[sort]));
       portfoliocount = 0;
-      rilist = rilist.sort(function(a, b) {
-        if(a.MLMProgram_Nm < b.MLMProgram_Nm)
-          return -1;
-        else if (a.MLMProgram_Nm > b.MLMProgram_Nm)
-          return 1;
-        else 
-          return 0;
+      // rilist = rilist.sort(function(a, b) {
+      //   if(a.MLMProgram_Nm < b.MLMProgram_Nm)
+      //     return -1;
+      //   else if (a.MLMProgram_Nm > b.MLMProgram_Nm)
+      //     return 1;
+      //   else 
+      //     return 0;
 
-      })
+      // })
       resultcounter(rilist);
       result = 0;
       window.ricount = [];
@@ -559,7 +560,7 @@
                     } else {
                       reverse = false;
                     }
-                    sort = "RiskAndIssue_Key";
+                    sort = "RI_Nm";
                     init(mode);
                   }}));
                   if (format == "grid") {
@@ -570,7 +571,7 @@
                       } else {
                         reverse = false;
                       }
-                      sort = "RiskAndIssue_Key";
+                      sort = "RIType_Cd";
                       init(mode);
                     }}));
                   }
@@ -907,7 +908,6 @@
     }
     const risort = (list, field) => {
       let qs = list.sort((a, b) => {
-        // console.log(a[field], b[field]);
         return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
       });
       return (!reverse) ? qs : qs.reverse();
@@ -921,7 +921,7 @@
       url.searchParams.set("pagesize", pagesize);
       window.history.pushState({}, '', url);
       setdata();
-      console.log("default ridata:", ridata);
+      // console.log("default ridata:", ridata);
       setlists();
       setTimeout(function(){
         makefilters();
@@ -938,13 +938,22 @@
               });
             }
           });
+          console.log("riseed", sort)
           riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
+          riseed.forEach(o => console.log(o[sort]));
+          riseed = risort(riseed, sort);
           resultcounter(riseed.length);
+          setTimeout(function() {
+            console.log("two")
+            riseed.forEach(o => console.log(o[sort]));
+            populate(riseed);
+          });
+        } else {
+          setTimeout(function() {
+            populate(riseed);
+          });
         }
         // ridata = riseed;
-        setTimeout(function() {
-          populate(riseed);
-        });
       });
       makeheadline();
       setTimeout(colorboxschtuff, 2000);
