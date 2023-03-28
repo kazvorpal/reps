@@ -534,8 +534,6 @@
             let namefield = (format == "grid") ? "R/I Name" : type;
             let cells = ["Risk/Issue"];
             rowcolor = 1;
-            // console.log("rifields");
-            // console.log(rifields);
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
@@ -543,8 +541,6 @@
                 b1 = sortable(key) ? "<u>" : "";
                 b2 = sortable(key) ? "</u>" : "";
               }
-              console.log(type)
-              console.log(sortable(key))
               const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
               const title = sortable(key) ? "click here to sort by this field" : "Sorry, sorting by this column is not yet supported";
               trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
