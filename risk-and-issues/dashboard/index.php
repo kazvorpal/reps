@@ -544,7 +544,7 @@
               const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
               const title = sortable(key) ? "click here to sort by this field" : "Sorry, sorting by this column is not yet supported";
               trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
-                if (format == "grid") {
+                if (sortable(key)) {
                   if (this.innerHTML.indexOf("↓") != -1) {
                     reverse = true;
                   } else {
@@ -557,7 +557,7 @@
               cells.push(rifields[key].name);
               if (rifields[key].name == "ID") {
                   trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: "click here to sort by this field", "j": function() {
-                    if (format == "grid") {
+                    if (sortable(key)) {
                       if (this.innerHTML.indexOf("↓") != -1 && false) {
                         reverse = true;
                       } else {
@@ -567,7 +567,7 @@
                       init(mode);
                     }
                   }}));
-                  if (format == "grid") {
+                  if (sortable(key)) {
                     trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 , "c": "text-center titles align-middle typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
                       // console.log(this)
                       if (this.innerHTML.indexOf("↓") != -1 && false) {
