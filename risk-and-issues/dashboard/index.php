@@ -535,7 +535,7 @@
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
-                direction = (format == "grid") ? "" : (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
+                direction = (format != "grid") ? "" : (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
                 b1 = (format == "grid") ? "<u>" : "";
                 b2 = (format == "grid") ? "</u>" : "";
               }
