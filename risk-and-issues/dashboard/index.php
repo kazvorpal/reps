@@ -535,19 +535,39 @@
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
-                direction = (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
-                b1 = "<u>";
-                b2 = "</u>";
+                direction = (format == "grid") ? "" : (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
+                b1 = (format == "grid") ? "<u>" : "";
+                b2 = (format == "grid") ? "</u>" : "";
               }
               // console.log(name)
               // console.log(type)
-              const c = (format == "grid") ? "" : (type == "Risk") ? "  " : " issueheader ";
-              trri.appendChild(makeelement({"e": "th", "t": value.name, "c": "p-1 titles align-middle" + c, a: "click here to sort by this field"}));
+              const c = (format == "grid") ? " active" : (type == "Risk") ? "  " : " issueheader ";
+              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: "click here to sort by this field", "j": function() {
+                if (format == "grid") {
+                  if (this.innerHTML.indexOf("↓") != -1) {
+                    reverse = true;
+                  } else {
+                    reverse = false;
+                  }
+                  sort = key;
+                  init(mode);
+                } else ""
+              }}));
               cells.push(rifields[key].name);
               if (rifields[key].name == "ID") {
-                  trri.appendChild(makeelement({"e": "th", "t": namefield, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: "click here to sort by this field"}));
+                  trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: "click here to sort by this field", "j": function() {
+                    if (format == "grid") {
+                      if (this.innerHTML.indexOf("↓") != -1 && false) {
+                        reverse = true;
+                      } else {
+                        reverse = false;
+                      }
+                      sort = "RI_Nm";
+                      init(mode);
+                    }
+                  }}));
                   if (format == "grid") {
-                    trri.appendChild(makeelement({"e": "th", "t": "Type", "c": "text-center titles align-middle typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
+                    trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 , "c": "text-center titles align-middle typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
                       // console.log(this)
                       if (this.innerHTML.indexOf("↓") != -1 && false) {
                         reverse = true;
