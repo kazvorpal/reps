@@ -212,7 +212,7 @@ var prepage = params.get("pagesize");
 var pagesize = (prepage > 0) ? prepage : 50;
 var textlength = params.get("textlength");
 var textlength = (textlength == null) ? 100 : textlength;
-console.log(textlength);
+// console.log(textlength);
 // mode = (window.location.href.indexOf("program")>=0) ? "program" : 
 // (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
 alt = (mode == "project") ? "program" : "project";

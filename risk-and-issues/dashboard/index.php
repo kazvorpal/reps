@@ -132,8 +132,8 @@
       }
       // resultcounter((ispp(mode)) ? result : rilist);
       // resultcounter((ispp(mode) && format != "gridfile") ? result : rilist);
-      console.log(result);
-      console.log(rilist);
+      // console.log(result);
+      // console.log(rilist);
       pages = Math.ceil(rilist.length/pagesize);
       if (pages > 0 && page > pages) {
         page = 1;
@@ -874,7 +874,7 @@
               trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
             })(field);
             if (rifields[field].name == "ID") {
-              console.log("addons")
+              // console.log("addons")
               trri.appendChild(header);
               trri.appendChild(type);
             };
@@ -967,13 +967,13 @@
               });
             }
           });
-          console.log("riseed", sort)
+          // console.log("riseed", sort)
           riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
           // riseed.forEach(o => console.log(o[sort]));
           riseed = risort(riseed, sort);
           resultcounter(riseed.length);
           setTimeout(function() {
-            console.log("two")
+            // console.log("two")
             // riseed.forEach(o => console.log(o[sort]));
             populate(riseed);
           });
