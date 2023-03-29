@@ -927,14 +927,17 @@
       "subprogram": "",
       "actionplandate": "", 
       "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
-      "ForecastedResolution_Dt": "ForecastedResolution_Dt.date"
+      "ForecastedResolution_Dt": "ForecastedResolution_Dt.date",
+      "RIDescription_Txt": "",
+      "ActionPlanStatus_Cd": ""
   }
 
     const risort = (list, field) => {
       // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
       let qs = list.sort((a, b) => {
         e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
-        console.log(a[field], e ? "<" : ">", b[field])
+        // console.log(a[field], e ? "<" : ">", b[field])
+        console.log(field)
         return e;
       });
       return (!reverse) ? qs : qs.reverse();
