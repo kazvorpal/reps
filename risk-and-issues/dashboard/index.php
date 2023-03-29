@@ -537,7 +537,7 @@
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
-                direction = sortable(key) ? "" : (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
+                direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
                 b1 = sortable(key) ? "<u>" : "";
                 b2 = sortable(key) ? "</u>" : "";
               }
@@ -545,6 +545,7 @@
               const title = sortable(key) ? "click here to sort by this field" : "Sorry, sorting by this column is not yet supported";
               trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
                 if (sortable(key)) {
+                  console.log(this.innerHTML.indexOf("↓"))
                   if (this.innerHTML.indexOf("↓") != -1) {
                     reverse = true;
                   } else {
@@ -587,19 +588,22 @@
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
-                direction = (!reverse) ? "&nbsp;↓" : "&nbsp;↑";
-                b1 = "<u>";
-                b2 = "</u>";
+                direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+                b1 = sortable(key) ? "<u>" : "";
+                b2 = sortable(key) ? "</u>" : "";
               }
               let name = (typeof value == "object") ? value.name : value;
-              trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle active", a: "click here to sort by this field", "j": function() {
-                if (this.innerHTML.indexOf("↓") != -1) {
-                  reverse = true;
-                } else {
-                  reverse = false;
+              let c = sortable(key) ? " active" : "";
+              trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle" + c, a: "click here to sort by this field", "j": function() {
+                if (sortable(key)) {
+                  if (this.innerHTML.indexOf("↓") != -1) {
+                    reverse = true;
+                  } else {
+                    reverse = false;
+                  }
+                  sort = key;
+                  init(mode);
                 }
-                sort = key;
-                init(mode);
               }}));
               cells.push(value);
             })
@@ -921,7 +925,9 @@
     const risort = (list, field) => {
       // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
       let qs = list.sort((a, b) => {
-        return (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
+        e = (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
+        console.log(a[field], e ? "<" : ">", b[field])
+        return e;
       });
       return (!reverse) ? qs : qs.reverse();
     }

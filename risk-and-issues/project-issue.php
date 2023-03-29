@@ -876,11 +876,20 @@ let makenaevent = (o) => {
   document.getElementById(o).addEventListener("change", e => {
     checkrequired(o);
   });
+  document.getElementById(na[o]).addEventListener("change", e => {
+    checkdate(o);
+  });
+  checkdate(o)
 }
 let checkrequired = (o) => {
   // see whether to require the item, N/A passing box name
-  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
+  document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked);
+  document.getElementById(na[o]).disabled = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && document.getElementById(o).checked);
 }
+const checkdate = (o) => {
+  document.getElementById(o).disabled = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && document.getElementById(na[o]).value != "");
+}
+
 
 var  showDiv
 (showDiv = function(divId, element) {
@@ -890,7 +899,7 @@ var  showDiv
     document.logaction = element.value;
     localStorage.setItem("logaction", element.value);
     console.log(document.getElementById(divId).style.display);
-    processlist(na, checkrequired)
+    processlist(na, checkrequired);
 })('hidden_div', document.getElementById("changeLogAction"))
 
 if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {

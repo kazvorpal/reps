@@ -1000,15 +1000,23 @@ let processlist = (list, event) => {
 }
 let makenaevent = (o) => {
   // Make event for potentially required field
-  document.getElementById(o).checked = (document.getElementById(na[o]).value == '');
+  document.getElementById(o).checked = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && document.getElementById(na[o]).value == '');
   checkrequired(o);
   document.getElementById(o).addEventListener("change", e => {
     checkrequired(o);
   });
+  document.getElementById(na[o]).addEventListener("change", e => {
+    checkdate(o);
+  });
+  checkdate(o)
 }
 let checkrequired = (o) => {
   // see whether to require the item, N/A passing box name
   document.getElementById(na[o]).required = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && !document.getElementById(o).checked)
+  document.getElementById(na[o]).disabled = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && document.getElementById(o).checked);
+}
+const checkdate = (o) => {
+  document.getElementById(o).disabled = (document.getElementById("changeLogAction").value == "5:POR Schedule Update" && document.getElementById(na[o]).value != "");
 }
 
 
