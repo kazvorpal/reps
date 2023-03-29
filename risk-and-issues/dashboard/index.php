@@ -227,7 +227,7 @@
       } else {
       }
     }
-
+    const richtextfields = ["RIDescription_Txt", "ActionPlanStatus_Cd"];
     const makedata = (id, type, programname) => {            
         // Make all the data inside a risk or issue, Program and Portfolio
 
@@ -451,9 +451,9 @@
             (function(test) {
               let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
               let bgcolor = ((test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date()))
-                              || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite"
-                               : ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
-              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
+                              || (checkage(29, test, texter))) ? " hilite"
+                               : (checkage(14, test, texter)) ? " blulite" : "";
+              let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
               tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + textalign(texter) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
@@ -475,6 +475,7 @@
         }
     }    
 
+    const checkage = (limit, test, texter) => ("age" == test && texter.replace(/\D/g, '') > limit); // check age of test against number of days in limit
 
     const makeprojects = (projects, programname, tableid, saferi) => {
 
@@ -557,40 +558,53 @@
               }}));
               cells.push(rifields[key].name);
               if (rifields[key].name == "ID") {
-                  trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: "click here to sort by this field", "j": function() {
-                    if (sortable(key)) {
-                      if (this.innerHTML.indexOf("↓") != -1 && false) {
-                        reverse = true;
-                      } else {
-                        reverse = false;
-                      }
-                      sort = "RI_Nm";
-                      init(mode);
-                    }
-                  }}));
+                if (sort == "RI_Nm") {
+                  direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+                  b1 = sortable(key) ? "<u>" : "";
+                  b2 = sortable(key) ? "</u>" : "";
+                } else direction = b1 = b2 = "";
+                const c = sortable("RI_Nm") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
+                trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2 + direction, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: "click here to sort by this field", "j": function() {
                   if (sortable(key)) {
-                    trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 , "c": "text-center titles align-middle typecolumn ", "w": "12", a: "click here to sort by this field", "j": function() {
-                      // console.log(this)
-                      if (this.innerHTML.indexOf("↓") != -1 && false) {
-                        reverse = true;
-                      } else {
-                        reverse = false;
-                      }
-                      sort = "RIType_Cd";
-                      init(mode);
-                    }}));
+                    console.log(this)
+                    if (this.innerHTML.indexOf("↓") != -1) {
+                      reverse = true;
+                    } else {
+                      reverse = false;
+                    }
+                    sort = "RI_Nm";
+                    init(mode);
                   }
+                }}));
+                if (sortable(key)) {
+                  if (sort == "RIType_Cd") {
+                    direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+                    b1 = sortable(key) ? "<u>" : "";
+                    b2 = sortable(key) ? "</u>" : "";
+                  } else direction = b1 = b2 = "";
+                  const c = sortable("RIType_Cd") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
+                  trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 + direction, "c": "text-center titles align-middle typecolumn " + c, "w": "12", a: "click here to sort by this field", "j": function() {
+                    // console.log(this)
+                    if (this.innerHTML.indexOf("↓") != -1) {
+                      reverse = true;
+                    } else {
+                      reverse = false;
+                    }
+                    sort = "RIType_Cd";
+                    init(mode);
+                  }}));
+                }
               }
             })
-        } else {
-            let cells = [];
-            // console.log(rifields)
-            Object.entries(rifields).forEach(([key, value]) => {
-              let direction = b1 = b2 = "";
-              if (sort == key) {
-                direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                b1 = sortable(key) ? "<u>" : "";
-                b2 = sortable(key) ? "</u>" : "";
+          } else {
+              let cells = [];
+              // console.log(rifields)
+              Object.entries(rifields).forEach(([key, value]) => {
+                let direction = b1 = b2 = "";
+                if (sort == key) {
+                  direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+                  b1 = sortable(key) ? "<u>" : "";
+                  b2 = sortable(key) ? "</u>" : "";
               }
               let name = (typeof value == "object") ? value.name : value;
               let c = sortable(key) ? " active" : "";
@@ -802,17 +816,13 @@
           return  `${d}${s}`;
         },
         actionplandate: () => {
-          let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
-          return(r);
+          return (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
         },
         changelogdate: () => {
-          let r = (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
-          return(r);
+          return (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
         },
         RIDescription_Txt: () => {
-          let desc = ri.RIDescription_Txt;
-          let key = ri.RiskAndIssue_Key;
-          return trimmer(desc, key, "desc");
+          return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
         },
         ActionPlanStatus_Cd: () => {
           let plan = ri.ActionPlanStatus_Cd;
@@ -823,9 +833,7 @@
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
           return(r);
         }, 
-        PRJI_Estimated_Act_Ts: () => {
-          return (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "";
-        }, 
+        PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "", 
         PRJI_Estimated_Mig_Ts: () => {
           return (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "";
         }
@@ -872,9 +880,9 @@
             (function(test) {
               let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
               let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
-                              || ("age" == test && texter.replace(/\D/g, '') > 29)) ? " hilite" : 
-                              ("age" == test && texter.replace(/\D/g, '') > 14) ? " blulite" : "";
-              let wrapping = (["RIDescription_Txt", "ActionPlanStatus_Cd"].includes(test)) ? " overflow-everything" : "";
+                              || (checkage(29, test, texter))) ? " hilite" : 
+                              (checkage(14, test, texter)) ? " blulite" : "";
+              let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
               trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
             })(field);
             if (rifields[field].name == "ID") {
@@ -926,7 +934,7 @@
       // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
       let qs = list.sort((a, b) => {
         e = (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
-        console.log(a[field], e ? "<" : ">", b[field])
+        // console.log(a[field], e ? "<" : ">", b[field])
         return e;
       });
       return (!reverse) ? qs : qs.reverse();
