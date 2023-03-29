@@ -933,7 +933,7 @@
     const risort = (list, field) => {
       // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
       let qs = list.sort((a, b) => {
-        e = (a[field] < b[field]) ? -1 : (a[field] < b[field]) ? 1 : 0;
+        e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
         console.log(a[field], e ? "<" : ">", b[field])
         return e;
       });
