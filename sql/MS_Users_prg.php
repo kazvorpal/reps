@@ -19,13 +19,13 @@ if(!empty($_GET['fscl_year'])){
 		$fsclYear = $_POST['fiscalYer'];
 	}
 
-//PROGRAM OWNERS
+//PROGRAM OWNERS //Function changed on 4.4.2023
 $sql_winuser_prg = "SELECT *
 FROM (
 	SELECT * 
-	FROM [RI_Mgt].[fn_GetListOfOwnersInfoForProgram]($fsclYear, '$program')
+	FROM [RI_MGT].[fn_GetListOfMLMProgramAccessforUserUID]('$windowsUser',$fsclYear)
 ) a
-WHERE User_UID = '$windowsUser'";
+WHERE Program_Nm = '$program'";
 $stmt_winuser_prg = sqlsrv_query( $data_conn, $sql_winuser_prg ); 
 $row_winuser_prg = sqlsrv_fetch_array( $stmt_winuser_prg, SQLSRV_FETCH_ASSOC);
 //$row_winuser_prg['User_UID']

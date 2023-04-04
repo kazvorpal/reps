@@ -364,8 +364,8 @@ $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $ac
 
             <span style="font-size: 24px;"> | </span> 
 
-          <a href="includes/associated_prj_manage.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Add Project Association"><span class="btn btn-primary">+</span></a>
-          <a href="includes/associated_prj_manage_remove.php?ri_level=prj&fscl_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Remove Project Association"><span class="btn btn-primary">-</span></a>
+          <a href="includes/associated_prj_manage.php?ri_level=prj&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Add Project Association"><span class="btn btn-primary">+</span></a>
+          <a href="includes/associated_prj_manage_remove.php?ri_level=prj&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Remove Project Association"><span class="btn btn-primary">-</span></a>
         <?php } ?>
       <?php } ?>
     </div>
