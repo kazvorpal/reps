@@ -86,8 +86,8 @@ if($_POST['changeLogAction'] != "" && $_POST['changeLogReason'] != ""){
 
 //CHANGE LOG ESTIMATED DATES
 if($_POST['changeLogAction'] == "5:POR Schedule Update") {
-  $EstActiveDate = (isset($_POST['EstActiveDate'])) ? $_POST['EstActiveDate'] : "";
-  $EstMigrateDate = (isset($_POST['EstMigrateDate'])) ? $_POST['EstMigrateDate'] : "" ;
+  $EstActiveDate = $_POST['EstActiveDate'];
+  $EstMigrateDate = $_POST['EstMigrateDate'];
 } else {
   $EstActiveDate = NULL;
   $EstMigrateDate = NULL;
@@ -149,13 +149,13 @@ if($_POST['changeLogKey']==3 || ($_POST['changeLogKey']==4 && $global != 1) || (
     $region_confirm = substr($_POST['Region'],0, -1);
     $region_conx = $region_confirm;
     //$region_conx_dsply = str_replace(",","<br>",$region_conx);
-    $region_conx_dsply = str_replace(",", "<br>", $_POST['Region']);
+    $region_conx_dsply = str_replace(",", "<br>", implode(',', array_unique(explode(',', $_POST['Region']))));
   }
 } else {
   if(!empty($_POST['Region'])) {
     $region = implode(',', $_POST['Region']);
     $regionx = $region;
-    $region_confirm = implode(',', $_POST['Region']);
+    $region_confirm = implode(',', array_unique($_POST['Region']));
     $region_conx = $region_confirm;
     $region_conx_dsply = str_replace(",","<br>",$region_conx);
     //$region_conx_dsply = str_replace(",", "<br>", $_POST['Region']);
@@ -204,7 +204,6 @@ $unknown = 'off';
   $unknown = $_POST['Unknown'];
   }
 
-//LOGIC FOR CURRENT POC
 //LOGIC FOR CURRENT POC
 $individual = ""; 
   if(isset($_POST['Individual'])) {
