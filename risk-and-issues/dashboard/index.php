@@ -937,7 +937,7 @@
       let qs = list.sort((a, b) => {
         e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
         // console.log(a[field], e ? "<" : ">", b[field])
-        console.log(field)
+        // console.log(field)
         return e;
       });
       return (!reverse) ? qs : qs.reverse();

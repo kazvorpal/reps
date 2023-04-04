@@ -327,12 +327,13 @@ $(function(){
 
   const processfilters = () => {
       // filter form button
+      // init(mode);
       let url = new URL(window.location);
       url.searchParams.set("mode", mode);
       url.searchParams.set("page", page);
       url.searchParams.set("pagesize", pagesize);
       window.history.pushState({}, '', url);
-      rifiltered = filtration(ridata);
+      rifiltered = risort(filtration(ridata));
       let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
       setTimeout(function() {
         populate(riseed);
