@@ -119,12 +119,12 @@ $project_nm ="";
     }
 
     $EstActiveDate = NULL;
-    if($_POST['EstActiveDate'] != ""){
+    if($_POST['EstActiveDate'] != "" && $_POST['EstActiveDate'] != "N/A"){
     $EstActiveDate = $_POST['EstActiveDate'];
     }
     
     $EstMigrateDate = NULL;
-    if($_POST['EstMigrateDate'] != ""){
+    if($_POST['EstMigrateDate'] != "" && $_POST['EstMigrateDate'] !=  "N/A"){
     $EstMigrateDate = $_POST['EstMigrateDate'];
     }
 //echo $EstActiveDate;
