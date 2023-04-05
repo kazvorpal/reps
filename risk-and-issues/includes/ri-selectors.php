@@ -108,9 +108,11 @@ const idsearch = o => {
 
 openval = false;
 const toggleall = (status) => {
+  console.log(status)
   var delay = 100;
-  let prepanels = $(".panel-collapse");
+  let prepanels = $('.panel-collapse[id^="row"]');
   let panels = (!status) ? $($.makeArray(prepanels).reverse()) : prepanels;
+  console.log(panels.toArray());
   setTimeout(() => {
     panels.each(o => {
       setTimeout(function() {$(panels[o]).collapse((status) ? "hide" : "show")}, delay += 200);
@@ -324,6 +326,7 @@ $(function(){
       reverse = false;
       sort = "RiskAndIssue_Key";
       init(mode);
+      openval = false;
       return false;
     }
   }

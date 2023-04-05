@@ -176,7 +176,7 @@
       const safename = makesafe(target.MLMProgram_Nm);
       const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
       const banner = makebanner(safename);
-      const collapse = makeelement({e: "div", i: "collapse" + safename, c: "panel-collapse collapse"});
+      const collapse = makeelement({e: "div", i: "row" + safename, c: "panel-collapse collapse"});
       const body = makeelement({e: "div", i: "body" + safename, c: "accordion-body"});
       const table = makeelement({e: "table", i: "table" + safename, c: "table"});
       
@@ -195,7 +195,7 @@
     const makebanner = (safename) => {
       
       // Program Start
-      const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#collapse" + safename, "data-target": "#collapse" + safename, "data-toggle": "collapse", "aria-controls": "collapse" + safename};
+      const bannerfields = {"aria-labelledby": "banner" + safename, "data-bs-target": "#row" + safename, "data-target": "#row" + safename, "data-toggle": "collapse", "aria-controls": "row" + safename};
       const banner = document.createElement("div");
       banner.id = "banner" + safename;
       banner.className = "accordion-banner";
@@ -356,8 +356,7 @@
               } 
             }
             let ret = (list != "") ? list.slice(0, -2) : ""
-            // console.log("ret");
-            // console.log(ret);
+            // console.log("ret", ret);
             return ret;
           }, 
           MLMProgram_Nm: () => {
@@ -933,11 +932,11 @@
 // }
 
   const risort = (list, field) => {
-    field = (field === "category") ? "Global_Flg" : (field == "LastUpdateBy_Nm") ? "LastUpdate_By" : field;
+    // field = (field === "category") ? "Global_Flg" : (field == "LastUpdateBy_Nm") ? "LastUpdate_By" : field;
     let qs = list.sort((a, b) => {
-      const aValue = a[field] === null ? Infinity : (typeof a[field] === "boolean" ? (a[field] ? 1 : 0) : a[field]);
-      const bValue = b[field] === null ? Infinity : (typeof b[field] === "boolean" ? (b[field] ? 1 : 0) : b[field]);
-      console.log(aValue, (aValue < bValue) ? "<" : ">", bValue)
+      const aValue = a[field] === null ? "ZZZZ" : (typeof a[field] === "boolean" ? (a[field] ? 1 : 0) : a[field]);
+      const bValue = b[field] === null ? "ZZZZ" : (typeof b[field] === "boolean" ? (b[field] ? 1 : 0) : b[field]);
+      // console.log(aValue, (aValue < bValue) ? "<" : ">", bValue)
 
       return aValue === bValue ? 0 : (aValue < bValue ? -1 : 1);
     });
