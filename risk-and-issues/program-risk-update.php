@@ -536,7 +536,7 @@ if($formaction == "update") {
               <tr>
                 <td>
                   <div style="padding: 0px 0px 0px 30px">
-                    <p><strong>Select Regions 
+                    <p><strong>Selected Regions 
                       </strong><br>
 <?php if($fscl_year <= "2023") { ?>
                       <label>
@@ -546,37 +546,37 @@ if($formaction == "update") {
                       <br>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="Corporate" id="Region_6" onClick="updatebox()" class="required_group_reg" 
-                        <?php if($assc_prj_update == "yes") { if(in_array("Corporate", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Corporate", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("Corporate", $regionkeyUpArray) || (in_array(1, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("Corporate", $regionArr)) { echo "checked";} } ?> disabled>
                         Corporate (COR)</label>
                       <br>
                       <label>
                         <input type="checkbox" name="Regioxn[]" value="California" id="Region_0" onClick="updatebox()" class="required_group_reg" 
-                        <?php if($assc_prj_update == "yes") { if(in_array("California", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("California", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("California", $regionkeyUpArray) || (in_array(2, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("California", $regionArr)) { echo "checked";} } ?> disabled>
                         California (CA)</label>
                       <br>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="Central" id="Region_1" onClick="updatebox()" class="required_group_reg" 
-                        <?php if($assc_prj_update == "yes") { if(in_array("Central", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Central", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("Central", $regionkeyUpArray) || (in_array(3, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("Central", $regionArr)) { echo "checked";} } ?> disabled>
                         Central (CE)</label>
                       <br>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="Northeast" id="Region_2" onClick="updatebox()" class="required_group_reg" 
-                        <?php if($assc_prj_update == "yes") { if(in_array("Northeast", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Northeast", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("Northeast", $regionkeyUpArray) || (in_array(4, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("Northeast", $regionArr)) { echo "checked";} } ?> disabled>
                         Northeast (NE)</label>
                       <br>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="Southeast" id="Region_3" onClick="updatebox()" class="required_group_reg" 
-                        <?php if($assc_prj_update == "yes") { if(in_array("Southeast", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Southeast", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("Southeast", $regionkeyUpArray) || (in_array(5, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("Southeast", $regionArr)) { echo "checked";} } ?> disabled>
                         Southeast (SE)</label>
                       <br>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="Southwest" id="Region_4" onClick="updatebox()" class="required_group_reg"
-                        <?php if($assc_prj_update == "yes") { if(in_array("Southwest", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Southwest", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("Southwest", $regionkeyUpArray) || (in_array(6, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("Southwest", $regionArr)) { echo "checked";} } ?> disabled>
                         Southwest (SW)</label>
                       <br>
                       <label>
                         <input type="checkbox" name="Regionx[]" value="Virginia" id="Region_5" onClick="updatebox()" class="required_group_reg" 
-                        <?php if($assc_prj_update == "yes") { if(in_array("Virginia", $regionkeyUpArray)) { echo "checked";} } else { if(in_array("Virginia", $regionArr)) { echo "checked";} } ?> disabled>
+                        <?php if($assc_prj_update == "yes") { if(in_array("Virginia", $regionkeyUpArray) || (in_array(7, $regionkeyUpArray))) { echo "checked";} } else { if(in_array("Virginia", $regionArr)) { echo "checked";} } ?> disabled>
                         Virginia (VA)</label>
                       <br>
 <?php } else { ?>

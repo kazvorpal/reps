@@ -155,12 +155,13 @@ include ("../sql/update-time.php");
       <td><?php echo $program ; ?></td>
     </tr>
 <?php } ?>
-<?php if($programs != "") { ?>
-  <tr>
+
+<?php // if($programs != "") { ?>
+  <!--<tr>
       <td>Program</td>
       <td><?php echo $programs ; ?></td>
-    </tr>
-<?php } ?>
+    </tr> -->
+<?php //} ?>
 
 <?php if(!empty($subprogram) && $global != 1) { ?>
     <tr>
