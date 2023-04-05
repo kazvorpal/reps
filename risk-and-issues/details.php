@@ -285,16 +285,18 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
       <td><?php echo $changeLogReason; ?></td>
     </tr>
 <?php } ?>
-<?php if(!empty($EstActiveDate)) { ?>
+<!-- POR SCHEDULE DATES -->
+<?php if($changeLogActionVal == "POR Schedule Update") { ?>
     <tr>
       <td>Est. Activation Date</td>
-      <td><?php convtimex($EstActiveDate)?></td>
+      <td><?php convtimexNA($EstActiveDate)?></td>
     </tr>
     <tr>
       <td>Est. Migration Date</td>
-      <td><?php convtimex($EstMigrateDate)?></td>
+      <td><?php convtimexNA($EstMigrateDate)?></td>
     </tr>
 <?php } ?>
+<!-- END -->
 <?php if($RILevel == "Program") { ?>
     <tr>
       <td>Notify Porfolio Team</td>
