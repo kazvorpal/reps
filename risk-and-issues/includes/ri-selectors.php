@@ -320,20 +320,22 @@ $(function(){
     $('#facility').multiselect(longprops);
 		$('#risk_issue').multiselect(shortprops);
 		$('#impact_level').multiselect(shortprops);
-    document.getElementById("Go").onclick = function () {processfilters();
+    document.getElementById("Go").onclick = function () {
+      reverse = false;
+      sort = "RiskAndIssue_Key";
+      init(mode);
       return false;
     }
   }
 
   const processfilters = () => {
       // filter form button
-      // init(mode);
       let url = new URL(window.location);
       url.searchParams.set("mode", mode);
       url.searchParams.set("page", page);
       url.searchParams.set("pagesize", pagesize);
       window.history.pushState({}, '', url);
-      rifiltered = risort(filtration(ridata));
+      rifiltered = filtration(ridata);
       let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
       setTimeout(function() {
         populate(riseed);
@@ -346,7 +348,7 @@ $(function(){
 
   const resetform = () => {
     document.getElementById("formfilter").reset();
-    init(mode);
+    init(mode, true);
   }
 </script>
 <script language="javascript">

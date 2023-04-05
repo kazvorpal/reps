@@ -78,15 +78,14 @@
       console.log("rilist", rilist);
       // rilist.forEach(o => console.log(typeof o[sort], o[sort], o, sort));
       portfoliocount = 0;
-      // rilist = rilist.sort(function(a, b) {
-      //   if(a.MLMProgram_Nm < b.MLMProgram_Nm)
-      //     return -1;
-      //   else if (a.MLMProgram_Nm > b.MLMProgram_Nm)
-      //     return 1;
-      //   else 
-      //     return 0;
-
-      // })
+      rilist = (ispp(mode) && format != "grid") ? rilist.sort(function(a, b) {
+        if(a.MLMProgram_Nm < b.MLMProgram_Nm)
+          return -1;
+        else if (a.MLMProgram_Nm > b.MLMProgram_Nm)
+          return 1;
+        else 
+          return 0;
+      }) : rilist;
       resultcounter(rilist);
       result = 0;
       window.ricount = [];
@@ -163,7 +162,7 @@
     }
     const pager = (target) => {
       page = target;
-      processfilters();
+      init(mode);
     }
 
     const makerow = (target, risks, issues) => {
@@ -402,15 +401,11 @@
             return  `${d}${s}`;
           },
           RIDescription_Txt: () => {
-          let desc = ri.RIDescription_Txt;
-          let key = ri.RiskAndIssue_Key;
-          return trimmer(desc, key, "desc");
-        },
-        ActionPlanStatus_Cd: () => {
-          let plan = ri.ActionPlanStatus_Cd;
-          let key = ri.RiskAndIssue_Key;
-          return trimmer(plan, key, "plan");
-        },
+            return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
+          },
+          ActionPlanStatus_Cd: () => {
+            return trimmer(ri.ActionPlanStatus_Cd, ri.RiskAndIssue_Key, "plan");
+          },
           actionplandate: () => {
             let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
             return(r);
@@ -521,14 +516,27 @@
         return trri;
     }
 
+    const sortcol = (key, target) => {
+      if (sortable(key)) {
+        console.log(target.innerHTML)
+        if (target.innerHTML.indexOf("↓") != -1) {
+          reverse = true;
+        } else {
+          reverse = false;
+        }
+        sort = key;
+        init(mode);
+      }
+    }
+
     const sortable = (key) => {
-      return (format == "grid" && !(key in fieldmap));
+      return ((format == "grid" || mode == "project") && !(key in fieldmap));
     }
 
     const makeheader = (name, type) => {
       
       // Make the header for Grids
-      
+        const sortthisstring = "click here to sort by this field";
         const safename = makesafe(name);
         const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-1<?= $headerposition ?>"});
         if (ispp(mode)) {
@@ -543,18 +551,9 @@
                 b2 = sortable(key) ? "</u>" : "";
               }
               const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-              const title = sortable(key) ? "click here to sort by this field" : "Sorry, sorting by this column is not yet supported";
+              const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
               trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
-                if (sortable(key)) {
-                  console.log(this.innerHTML.indexOf("↓"))
-                  if (this.innerHTML.indexOf("↓") != -1) {
-                    reverse = true;
-                  } else {
-                    reverse = false;
-                  }
-                  sort = key;
-                  init(mode);
-                } else ""
+                  sortcol(key, this)
               }}));
               cells.push(rifields[key].name);
               if (rifields[key].name == "ID") {
@@ -564,17 +563,8 @@
                   b2 = sortable(key) ? "</u>" : "";
                 } else direction = b1 = b2 = "";
                 const c = sortable("RI_Nm") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-                trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2 + direction, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: "click here to sort by this field", "j": function() {
-                  if (sortable(key)) {
-                    console.log(this)
-                    if (this.innerHTML.indexOf("↓") != -1) {
-                      reverse = true;
-                    } else {
-                      reverse = false;
-                    }
-                    sort = "RI_Nm";
-                    init(mode);
-                  }
+                trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2 + direction, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: sortthisstring, "j": function() {
+                  sortcol("RI_Nm", this)
                 }}));
                 if (sortable(key)) {
                   if (sort == "RIType_Cd") {
@@ -583,15 +573,8 @@
                     b2 = sortable(key) ? "</u>" : "";
                   } else direction = b1 = b2 = "";
                   const c = sortable("RIType_Cd") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-                  trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 + direction, "c": "text-center titles align-middle typecolumn " + c, "w": "12", a: "click here to sort by this field", "j": function() {
-                    // console.log(this)
-                    if (this.innerHTML.indexOf("↓") != -1) {
-                      reverse = true;
-                    } else {
-                      reverse = false;
-                    }
-                    sort = "RIType_Cd";
-                    init(mode);
+                  trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 + direction, "c": "text-center titles align-middle typecolumn " + c, "w": "12", a: sortthisstring, "j": function() {
+                    sortcol("RIType_Cd", this)
                   }}));
                 }
               }
@@ -608,16 +591,9 @@
               }
               let name = (typeof value == "object") ? value.name : value;
               let c = sortable(key) ? " active" : "";
-              trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle" + c, a: "click here to sort by this field", "j": function() {
-                if (sortable(key)) {
-                  if (this.innerHTML.indexOf("↓") != -1) {
-                    reverse = true;
-                  } else {
-                    reverse = false;
-                  }
-                  sort = key;
-                  init(mode);
-                }
+              const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
+              trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
+                sortcol(key, this)
               }}));
               cells.push(value);
             })
@@ -899,7 +875,7 @@
         let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
         return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-1","j": function() {
             console.log("changing mode to " + target);
-            init(target);
+            init(target, true);
         }})
     }
     const makemodebuttons = () => {
@@ -934,10 +910,12 @@
 
     const risort = (list, field) => {
       // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
+      field = (field == "category") ? "Global_Flg" : field;
       let qs = list.sort((a, b) => {
-        e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
-        // console.log(a[field], e ? "<" : ">", b[field])
-        // console.log(field)
+        // e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
+        e = a[field] === b[field] ? 0 : a[field] < b[field] ? -1 : 1;
+        console.log(a[field], e ? "<" : ">", b[field])
+        console.log(field)
         return e;
       });
       return (!reverse) ? qs : qs.reverse();
@@ -959,7 +937,7 @@
     //   return qs;
     // };
 
-    const init = (target) => {
+    const init = (target, modechange) => {
       mode = target;
       let url = new URL(window.location);
       url.searchParams.set("mode", mode);
@@ -970,8 +948,11 @@
       // console.log("default ridata:", ridata);
       setlists();
       setTimeout(function(){
-        makefilters();
-        dofilters();
+        if(modechange) {
+          console.log("mode change");
+          makefilters();
+          dofilters();
+        } else console.log("Not changing mode")
         rifiltered = risort(filtration(ridata), sort);
         let riseed = (ispp(mode)) ? getwholeuniques(rifiltered, "MLMProgram_Nm") : rifiltered;
         if (ispp(mode) && format == "grid") {
