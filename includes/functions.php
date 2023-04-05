@@ -40,6 +40,17 @@ if($_SERVER["HTTPS"] != "on")
 			echo $timex;
 		}
 	}
+
+// Time conversion sql to php for POR SCHEDULE UPDATE IN PROJET ISSUE
+
+	function  convtimexNA($tx) {
+		if (is_null($tx)) {
+			echo 'N/A';
+		} else { 
+			$timex = date_format($tx, 'm-d-Y');
+			echo $timex;
+		}
+	}
 	
 	//convtimex("2019-09-23");
 	//convtimex("2019-09-23 08:05:06.310");

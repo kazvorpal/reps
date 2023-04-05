@@ -144,8 +144,19 @@ include ("../sql/RI_Internal_External.php");
   //exit(); 
   //echo "<br>Its here" . $row_regions_f['Region_key'];
 
+  //GET REGIONS FOR HIDDEN FIELD [Regions]
+  $sql_reg4hiddden =" DECLARE @REG_NMS VARCHAR(1000) 
+      SELECT @REG_NMS = COALESCE(@REG_NMS+',','')+ CAST(Region AS VARCHAR(1000)) 
+      FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
+      WHERE PROJ_NM IN ($regionIN) 
+      SELECT @REG_NMS AS Regions";
+  $stmt_reg4hiddden = sqlsrv_query( $data_conn, $sql_reg4hiddden );
+  $row_reg4hiddden = sqlsrv_fetch_array( $stmt_reg4hiddden, SQLSRV_FETCH_ASSOC);
+  //echo $row_reg4hiddden['Regions'];
+  //echo $sql_reg4hiddden;
+
   //GET ALL REGIONS FOR REGIONS SELECTION
-  $sql_regions = "SELECT DISTINCT Region_key, Region
+  $sql_region = "SELECT DISTINCT Region_key, Region
                   FROM [RI_MGT].[fn_GetListOfRegionForEPSProject] () 
                   WHERE PROJ_NM IN ($regionIN)";
   $stmt_regions = sqlsrv_query( $data_conn, $sql_regions );
@@ -249,7 +260,7 @@ include ("../sql/RI_Internal_External.php");
   //echo "<br>HERE " . print_r($regionkeyUpArray);
 
   //REGIONS FROM QUERYSTRING
-  $regions = $_GET['regions'];
+  $regions = $row_reg4hiddden['Regions'];
   //THIS WAS COMMENTED OUT ON 3.2 FOR REGION NUMBERS DISPLAYING ON CONFIRMATION FORM
   //if($assc_prj_update = "yes"){
   //  $regions = $regionkeyUp;
