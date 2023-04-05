@@ -835,7 +835,12 @@
         for (field in excelfields) {
           (function(test) {
               let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-              t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
+              // if (typeof t == "string") {
+              //   tempnode = document.createElement("div");
+              //   tempnode.innerHTML = t;
+              //   t = tempnode.textContent;
+                t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
+              // }
               rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
           })(field);
         }
@@ -891,7 +896,6 @@
     }  
     const makeheadline = () => {
       document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
-        
     }
     const fixcollapse = () => {
       document.querySelectorAll(".collapse").forEach(o => {
@@ -905,7 +909,8 @@
       "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
       "ForecastedResolution_Dt": "ForecastedResolution_Dt.date",
       "RIDescription_Txt": "",
-      "ActionPlanStatus_Cd": ""
+      "ActionPlanStatus_Cd": "",
+      programcount: ""
   }
 
     const risort = (list, field) => {
