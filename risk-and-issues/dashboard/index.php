@@ -835,12 +835,13 @@
         for (field in excelfields) {
           (function(test) {
               let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-              // if (typeof t == "string") {
-              //   tempnode = document.createElement("div");
-              //   tempnode.innerHTML = t;
-              //   t = tempnode.textContent;
-                t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
-              // }
+              if (typeof t == "string") {
+                tempnode = document.createElement("div");
+                tempnode.innerHTML = t;
+                t = tempnode.textContent;
+                // t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
+              }
+              t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
               rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
           })(field);
         }
@@ -913,18 +914,47 @@
       programcount: ""
   }
 
-    const risort = (list, field) => {
-      // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
-      field = (field == "category") ? "Global_Flg" : field;
-      let qs = list.sort((a, b) => {
-        // e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
-        e = a[field] === b[field] ? 0 : a[field] < b[field] ? -1 : 1;
-        console.log(a[field], e ? "<" : ">", b[field])
-        console.log(field)
-        return e;
-      });
-      return (!reverse) ? qs : qs.reverse();
-    }
+//   const risort = (list, field) => {
+//   field = (field === "category") ? "Global_Flg" : field;
+
+//   const getSortableValue = (val) => {
+//     if (val === null) return -Infinity;
+//     return val;
+//   }
+
+//   const sortedList = list.sort((a, b) => {
+//     const aValue = getSortableValue(a[field]);
+//     const bValue = getSortableValue(b[field]);
+
+//     return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+//   });
+
+//   return !reverse ? sortedList : sortedList.reverse();
+// }
+
+  const risort = (list, field) => {
+    field = (field === "category") ? "Global_Flg" : (field == "LastUpdateBy_Nm") ? "LastUpdate_By" : field;
+    let qs = list.sort((a, b) => {
+      const aValue = a[field] === null ? Infinity : (typeof a[field] === "boolean" ? (a[field] ? 1 : 0) : a[field]);
+      const bValue = b[field] === null ? Infinity : (typeof b[field] === "boolean" ? (b[field] ? 1 : 0) : b[field]);
+      console.log(aValue, (aValue < bValue) ? "<" : ">", bValue)
+
+      return aValue === bValue ? 0 : (aValue < bValue ? -1 : 1);
+    });
+    return !reverse ? qs : qs.reverse();
+  };
+    // const risort = (list, field) => {
+    //   // new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)
+    //   field = (field == "category") ? "Global_Flg" : field;
+    //   let qs = list.sort((a, b) => {
+    //     // e = (!b[field] || a[field] < b[field]) ? -1 : (!a[field] || a[field] > b[field]) ? 1 : 0;
+    //     e = a[field] === b[field] ? 0 : a[field] < b[field] ? -1 : 1;
+    //     console.log(a[field], e ? "<" : ">", b[field])
+    //     console.log(field)
+    //     return e;
+    //   });
+    //   return (!reverse) ? qs : qs.reverse();
+    // }
     // const fieldMap = {
     //   "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
     //   "ForecastedResolution_Dt": "ForecastedResolution_Dt.date"
