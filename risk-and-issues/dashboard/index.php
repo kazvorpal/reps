@@ -814,7 +814,7 @@
         }
       };
       const file = (ri.Global_Flg) ? "global/details.php" : "details.php"
-      const url = `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["EPSProject_Id"]}`;
+      const url = `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["EPSProject_Id"]}&unframe=false`;
       const rowValues = [];
       const saferi = makesafe(ri.RI_Nm);
       let c = "plainbox";
@@ -834,22 +834,19 @@
         for (field in excelfields) {
           (function(test) {
               let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
-              if (typeof t == "string") {
-                tempnode = document.createElement("div");
-                tempnode.innerHTML = t;
-                t = tempnode.textContent;
-                // t = (typeof t == "string") ? t.replace("&nbsp;", " ") : t;
-              }
+              t = striptags(t);
               t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
               rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
-          })(field);
-        }
-        let newrow = document.worksheet.addRow(rowValues);
-        const logValues = [];
-        if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
-          for (field in changelog) {
-            (function(test) {
-              const t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+            })(field);
+          }
+          let newrow = document.worksheet.addRow(rowValues);
+          const logValues = [];
+          if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
+            for (field in changelog) {
+              (function(test) {
+                t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+                t = striptags(t);
+                t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
               logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
             })(field);
           }

@@ -79,4 +79,11 @@ const colorboxschtuff = () => {
   document.cbrun = true;
 }
 
-
+// Pure function returns either the string without HTML tags in it, or the non-string intact as it was
+const striptags = (html) => 
+  typeof html == "string" 
+  ? ((div) => {
+    div.innerHTML = html;
+    return div.textContent;
+  })(document.createElement("div")) 
+  : html;
