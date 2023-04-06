@@ -932,7 +932,7 @@
 // }
 
   const risort = (list, field) => {
-    // field = (field === "category") ? "Global_Flg" : (field == "LastUpdateBy_Nm") ? "LastUpdate_By" : field;
+    field = (field === "category") ? "Global_Flg" : (field == "LastUpdateBy_Nm") ? "LastUpdate_By" : field;
     let qs = list.sort((a, b) => {
       const aValue = a[field] === null ? "ZZZZ" : (typeof a[field] === "boolean" ? (a[field] ? 1 : 0) : a[field]);
       const bValue = b[field] === null ? "ZZZZ" : (typeof b[field] === "boolean" ? (b[field] ? 1 : 0) : b[field]);
