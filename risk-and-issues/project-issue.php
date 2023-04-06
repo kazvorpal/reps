@@ -113,7 +113,6 @@ $forcastDate =  date('m/d/Y');
         });
   </script>
 
-
 <script language="JavaScript">
 function toggle(source) {
   checkboxes = document.getElementsByName('proj_select');
@@ -123,7 +122,7 @@ function toggle(source) {
 }
 </script>
 </head>
-<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="myFunction(); Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
+<body style="background: #F8F8F8; font-family:Mulish, serif;" onload="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
 <main align="center">
   <!-- PROGRESS BAR -->
 <div class="container">       
@@ -185,7 +184,7 @@ Enter the details of your Project Issue
 ?>
 </div>
 <div style="padding: 20px;">
-  <form action="confirm.php" method="post" id="projectRisk"  oninput="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
+  <form action="confirm.php" method="post" id="projectRisk" oninput="Namex.value = NameA.value +' '+ Descriptor.value  + ' ' +NameC.value">
 
   <input name="changeLogKey" type="hidden" id="changeLogKey" value="2">
   <input name="userId" type="hidden" id="userId " value="<?php echo $user_id ?>">
@@ -230,7 +229,7 @@ Enter the details of your Project Issue
               <tr>
                 <td><label for="Created From">Name</label>
                   <br>
-                  <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >
+                  <input name="Namex" type="text" id="Namex" readonly required="required" class="form-control" value="<?php echo $row_projID['PRGM'] . " " . $row_projID['Sub_Prg'] . " " . $row_projID['EPSLocation_Cd'] . "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>">
                   <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'] . " " . $row_projID['Sub_Prg'] . " " . $row_projID['EPSLocation_Cd'];?>">
                   <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>"></td>
                 </tr>
