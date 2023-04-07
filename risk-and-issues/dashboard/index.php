@@ -813,8 +813,11 @@
           return (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "";
         }
       };
-      const file = (ri.Global_Flg) ? "global/details.php" : "details.php"
-      const url = `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["EPSProject_Id"]}&unframe=false`;
+      console.log(ri.Global_Flg, ri);
+      const file = (ri.Global_Flg) ? "global/details.php" : (ri.RILevel_Cd == "Program") ? "details-prg.php" : "details.php"
+      const url = (["Program", "Portfolio"].includes(ri.RILevel_Cd)) 
+        ? `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&program=${ri.MLMProgram_Nm}&proj_name=null&unframe=false`
+        : `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&proj_name=${ri["EPSProject_Nm"]}&uid=${ri["EPSProject_Id"]}&unframe=false`;
       const rowValues = [];
       const saferi = makesafe(ri.RI_Nm);
       let c = "plainbox";
