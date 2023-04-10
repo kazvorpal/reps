@@ -267,6 +267,25 @@ $(function(){
       Facility_Cd: {i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", p: ["project"], l: locationlist},
       searchall: {}
     }
+
+    function createSelectDropdown(options) {
+  const select = document.createElement('select');
+
+  for (const option of options) {
+    const optionElement = document.createElement('option');
+    optionElement.value = option;
+    optionElement.text = option;
+    select.appendChild(optionElement);
+  }
+
+  return select;
+}
+
+const options = ['Option 1', 'Option 2', 'Option 3'];
+const selectDropdown = createSelectDropdown(options);
+
+document.getElementById('spacey').appendChild(selectDropdown);
+    
     // This loop makes all of the filters
     Object.entries(selectors).forEach(([key, value]) => {
       makeselect(value, key);

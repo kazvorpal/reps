@@ -129,6 +129,7 @@
           // console.log("o", rilist[loop])
         }
       }
+      (ispp(mode) && format != "grid") && resultcounter(result);
       // resultcounter((ispp(mode)) ? result : rilist);
       // resultcounter((ispp(mode) && format != "gridfile") ? result : rilist);
       // console.log(result);
@@ -813,7 +814,7 @@
           return (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "";
         }
       };
-      console.log(ri.Global_Flg, ri);
+      // console.log(ri.Global_Flg, ri);
       const file = (ri.Global_Flg) ? "global/details.php" : (ri.RILevel_Cd == "Program") ? "details-prg.php" : "details.php"
       const url = (["Program", "Portfolio"].includes(ri.RILevel_Cd)) 
         ? `/risk-and-issues/${file}?au=false&status=${ri["RIActive_Flg"]}&popup=true&rikey=${ri["RiskAndIssue_Key"]}&fscl_year=${ri["Fiscal_Year"]}&program=${ri.MLMProgram_Nm}&proj_name=null&unframe=false`
@@ -973,6 +974,7 @@
 
     const init = (target, modechange) => {
       mode = target;
+      firstload = (typeof firstload == "undefined") ? true : false;
       let url = new URL(window.location);
       url.searchParams.set("mode", mode);
       url.searchParams.set("page", page);

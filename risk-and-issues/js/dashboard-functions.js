@@ -1,5 +1,6 @@
 const resultcounter = (results) => {
     let r = (typeof results == "object") ? results.length : results;
+    (firstload) && r--;
     // console.trace("r", results);
     // console.log("r")
     // console.log(results)
