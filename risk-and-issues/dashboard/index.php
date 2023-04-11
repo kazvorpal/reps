@@ -78,62 +78,45 @@
       console.log("rilist", rilist);
       // rilist.forEach(o => console.log(typeof o[sort], o[sort], o, sort));
       portfoliocount = 0;
-      rilist = (ispp(mode) && format != "grid") ? rilist.sort(function(a, b) {
-        if(a.MLMProgram_Nm < b.MLMProgram_Nm)
-          return -1;
-        else if (a.MLMProgram_Nm > b.MLMProgram_Nm)
-          return 1;
-        else 
-          return 0;
-      }) : rilist;
+
+      rilist = (ispp(mode) && format != "grid") ? risort(rilist, "MLMProgram_Nm") : rilist;
+      
       resultcounter(rilist);
       result = 0;
       window.ricount = [];
+      pagestart = (page*pagesize) - pagesize;
+      ps = (mode == "project" || format == "grid") ? (page*pagesize) : 100000;
+      maxpages = 2;
+      pagestop = (rilist.length < pagesize) ? rilist.length : ps;
+
       const main = document.getElementById("main");
-      seeall = ` <button value="" class="btn btn-default" onclick="toggleall(openval)" id="allbutton">Expand All</a>`;
       initexcel();
       main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default" onclick="togglegrid()" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
       if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
-            p = ", Portfolio";
-            n = "RAID Log";
+          p = ", Portfolio";
+          n = "RAID Log";
         } else {
-            p = ", Projects";
-            n = capitalize(mode);
+          p = ", Projects";
+          n = capitalize(mode);
         }
-        main.innerHTML += `<div class="header">${capitalize(mode)} Name (Risks, Issues${p})${seeall}</div>`;
+        sa = makeelement({e: "button", v: "", c: "btn btn-default", j: () => {toggleall(openval) }, i: "allbutton", t: "Expand All"});
+        bn = makeelement({e: "div", c: "header", t: `${capitalize(mode)} Name (Risks, Issues${p}) `});
+        main.appendChild(bn).appendChild(sa);
       } else {
         main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
         var mt = document.getElementById("maintable");
         mt.appendChild(makeheader("projects"));
       }
-      // if (mode == "portfolio"&&format != "grid") { 
-      //   makerow({MLMProgram_Nm: "Portfolio"}, 1, 1);
-      //   document.getElementById("itemPortfolio").style.display = (portfoliocount > 0) ? "block" : "none";
-      // }
-      pagestart = (page*pagesize) - pagesize;
-      ps = (mode == "project" || format == "grid") ? (page*pagesize) : 100000;
-      maxpages = 2;
-      pagestop = (rilist.length < pagesize) ? rilist.length : ps;
-      // console.log(list)
-      if (mode == "project" || format == "grid") {
-        rilist.forEach(o => {
-          // console.log("x", o)
-          createrow(o, true);
-        })
-      }
+      if (mode == "project" || format == "grid") 
+        rilist.forEach(o => { createrow(o, true); })
       for (loop = pagestart; loop < pagestop; loop++ ) {
           // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
         if(loop != null && typeof rilist[loop] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop], false));
-          // console.log("o", rilist[loop])
         }
       }
       (ispp(mode) && format != "grid") && resultcounter(result);
-      // resultcounter((ispp(mode)) ? result : rilist);
-      // resultcounter((ispp(mode) && format != "gridfile") ? result : rilist);
-      // console.log(result);
-      // console.log(rilist);
       pages = Math.ceil(rilist.length/pagesize);
       if (pages > 0 && page > pages) {
         page = 1;
