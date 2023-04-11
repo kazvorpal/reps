@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Risk & Issues Dashboard</title>
+    <title>Risk & Issues Dashboard 2.0</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     <script src="../js/universal-functions.js"></script>
     <script src="../js/dashboard-functions.js"></script>
@@ -47,7 +47,7 @@
     <div class="row" align="center">
       <div style="width:98%">
         <div class="col-lg-12 text-center">
-        <h1 id="title">R&I Dashboard</h1>
+        <h1 id="title">R&I Dashboard 2.0</h1>
         <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
 
       <?php 
@@ -896,7 +896,7 @@
         });
     }  
     const makeheadline = () => {
-      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard`;
+      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard 2.0`;
     }
     const fixcollapse = () => {
       document.querySelectorAll(".collapse").forEach(o => {
