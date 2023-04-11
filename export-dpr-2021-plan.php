@@ -20,7 +20,6 @@ $sql_por = "$bmysql";
 $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
 //$stmt_por = sqlsrv_query( $conn_COX_QA, $sql_por );
 
-
 //echo $bmysql;
 //exit();
 
@@ -79,7 +78,7 @@ $stmt_por = sqlsrv_query( $conn_COXProd, $sql_por );
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['Location_Abb']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['EPS_Owner']);?></td>
       <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['EPSProject_Nm']);?></td>
-      <td style="padding:2px"><?php echo htmlspecialchars($row_program_n['EquipPlan_Id']);?></td>
+      <td style="padding:2px"><?php echo $row_program_n['EquipPlan_Id'];?></td>
       <td style="padding:2px; background-color: #96d7ed;" align="center"><?php echo convtimex($row_program_n['POR_NeedBy_Dt']);?></td>
       <td style="padding:2px; background-color: #96d7ed;" align="center"><?php echo convtimex($row_program_n['POR_Activation_Dt']);?></td>
       <td style="padding:2px; background-color: #96d7ed;" align="center"><?php echo convtimex($row_program_n['POR_Migration_Dt']);?></td>
