@@ -15,6 +15,7 @@
     <link rel="shortcut icon" href="favicon.ico"/>
     <script src="../js/universal-functions.js"></script>
     <script src="../js/dashboard-functions.js"></script>
+    <script src="../js/reactfunctions.js"></script>
     <?php 
         $mode = (stripos($_SERVER['REQUEST_URI'], "program")) ? "program" : "project";
         include ("../../includes/load.php");
@@ -1015,5 +1016,8 @@
     setInterval(colorboxschtuff, 2000);
    
   </script>
+  <div id="config-lightbox-container"></div>
+  <button onclick="renderLightbox()">Open Lightbox</button>
+
   </body>
 </html>
