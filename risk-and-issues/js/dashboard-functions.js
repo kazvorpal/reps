@@ -210,7 +210,7 @@ var page = params.get("page");
 var page = (page > 1) ? page : 1;
 var format = params.get("format");
 var prepage = params.get("pagesize");
-var pagesize = (prepage > 0) ? prepage : 50;
+var pagesize = (prepage > 0) ? prepage : 500;
 var textlength = params.get("textlength");
 var textlength = (textlength == null) ? 100 : textlength;
 // console.log(textlength);

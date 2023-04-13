@@ -1172,8 +1172,8 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
 
   summercss = {"position": "absolute", "width": "0px", "height": "0px"}
   $(document).ready(function() {
-    $('#Description').summernote(summerprops).css(summercss).show();
-    $('#ActionPlan').summernote(summerprops).css(summercss).show();
+    // $('#Description').summernote(summerprops).css(summercss).show();
+    // $('#ActionPlan').summernote(summerprops).css(summercss).show();
   });
 
 </script>

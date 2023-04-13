@@ -384,10 +384,12 @@
             return  `${d}${s}`;
           },
           RIDescription_Txt: () => {
-            return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
+            return ri.RIDescription_Txt
+            // return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
           },
           ActionPlanStatus_Cd: () => {
-            return trimmer(ri.ActionPlanStatus_Cd, ri.RiskAndIssue_Key, "plan");
+            return ri.ActionPlanStatus_Cd;
+            // return trimmer(ri.ActionPlanStatus_Cd, ri.RiskAndIssue_Key, "plan");
           },
           actionplandate: () => {
             let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
@@ -781,12 +783,14 @@
           return (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
         },
         RIDescription_Txt: () => {
-          return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
+          return ri.RIDescription_Txt;
+          // return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
         },
         ActionPlanStatus_Cd: () => {
           let plan = ri.ActionPlanStatus_Cd;
           let key = ri.RiskAndIssue_Key;
-          return trimmer(plan, key, "plan");
+          return plan;
+          // return trimmer(plan, key, "plan");
         },
         programmanager: () => {
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
