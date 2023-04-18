@@ -15,6 +15,7 @@
     <link rel="shortcut icon" href="favicon.ico"/>
     <script src="../js/universal-functions.js"></script>
     <script src="../js/dashboard-functions.js"></script>
+    <script src="../js/reactfunctions.js"></script>
     <?php 
         $mode = (stripos($_SERVER['REQUEST_URI'], "program")) ? "program" : "project";
         include ("../../includes/load.php");
@@ -384,9 +385,11 @@
             return  `${d}${s}`;
           },
           RIDescription_Txt: () => {
+            // return ri.RIDescription_Txt
             return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
           },
           ActionPlanStatus_Cd: () => {
+            // return ri.ActionPlanStatus_Cd;
             return trimmer(ri.ActionPlanStatus_Cd, ri.RiskAndIssue_Key, "plan");
           },
           actionplandate: () => {
@@ -781,11 +784,13 @@
           return (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
         },
         RIDescription_Txt: () => {
+          // return ri.RIDescription_Txt;
           return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
         },
         ActionPlanStatus_Cd: () => {
           let plan = ri.ActionPlanStatus_Cd;
           let key = ri.RiskAndIssue_Key;
+          // return plan;
           return trimmer(plan, key, "plan");
         },
         programmanager: () => {
@@ -1011,5 +1016,8 @@
     setInterval(colorboxschtuff, 2000);
    
   </script>
+  <!-- <div id="config-lightbox-container"></div>
+  <button onclick="renderLightbox()">Open Lightbox</button> -->
+
   </body>
 </html>
