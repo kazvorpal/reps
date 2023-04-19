@@ -186,11 +186,11 @@
           <th data-field="SC_Next30DaysDemand_Qty" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">NEXT 30 DAYS DEMAND QTY</th>
           <th data-field="SC_TotalDemand_Qty" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">TOTAL DEMAND QTY</th>
           <th data-field="Calc_DeliveryWindow_Cd" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">CALCULATED DELIVERY WINDOW</th>
-           </tr>
+           </tr> 
     </thead>
     <tbody style="font-size:11px">
     <div align="center" class="alert alert-danger">"Site is down due to maintenance, please use Project Snapshot to obtain order history information."</div>
-    <?php while( $row_eqh = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC)){?>
+    <!--<?php while( $row_eqh = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC)){?>
     		<tr style="font-size:11px">
             
               <td><?php echo htmlspecialchars($row_eqh['OrderType_Cd'])?></td>
@@ -271,7 +271,7 @@
               <td><?php echo htmlspecialchars($row_eqh['SC_Next30DaysDemand_Qty'])?></td>
               <td><?php echo htmlspecialchars($row_eqh['SC_TotalDemand_Qty'])?></td>
               <td><?php echo htmlspecialchars($row_eqh['Calc_DeliveryWindow_Cd'])?></td>
-        	</tr>
+        	</tr> -->
     <?php } ?>
     </tbody>
 </table>
