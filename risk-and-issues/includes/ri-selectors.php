@@ -105,7 +105,7 @@ const idsearch = o => {
     return true;
   }
 }
-
+var ta;
 openval = false;
 const toggleall = (status) => {
   // console.log(status)
@@ -118,7 +118,8 @@ const toggleall = (status) => {
       setTimeout(function() {$(panels[o]).collapse((status) ? "hide" : "show")}, delay += 200);
     });
   }, 100);
-  document.getElementById("allbutton").innerHTML = (status) ? "Expand All" : "Collapse All";
+  ta = document.getElementById("allbutton");
+  ta && (ta.innerHTML = status ? "Expand All" : "Collapse All");
   openval = (!status);
 }
 

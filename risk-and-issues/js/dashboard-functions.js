@@ -210,12 +210,9 @@ var page = params.get("page");
 var page = (page > 1) ? page : 1;
 var format = params.get("format");
 var prepage = params.get("pagesize");
-var pagesize = (prepage > 0) ? prepage : 500;
+var pagesize = (prepage > 0) ? prepage : 8192;
 var textlength = params.get("textlength");
-var textlength = (textlength == null) ? 1024 : textlength;
-// console.log(textlength);
-// mode = (window.location.href.indexOf("program")>=0) ? "program" : 
-// (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
+var textlength = (textlength == null) ? 8192 : textlength;
 alt = (mode == "project") ? "program" : "project";
 document.title = capitalize(mode) + " R&I Dashboard";
 var sort = "RiskAndIssue_Key";
