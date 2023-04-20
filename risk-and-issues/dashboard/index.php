@@ -98,7 +98,7 @@
           p = ", Portfolio";
           n = "RAID Log";
         } else {
-          p = ", Projects";
+          p = ", Programs";
           n = capitalize(mode);
         }
         sa = makeelement({e: "button", v: "", c: "btn btn-default", j: () => {toggleall(openval) }, i: "allbutton", t: "Expand All"});

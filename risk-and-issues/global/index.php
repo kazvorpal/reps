@@ -1165,7 +1165,6 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
       ['style', ['style']],
       ['font', ['bold', 'underline', 'italic', 'clear']],
       ['fontname', ['fontname']],
-      ['table', ['table']],
       ['para', ['ul', 'ol', 'paragraph']
     ]
   ]};
