@@ -437,7 +437,7 @@ function toggle(source) {
             min="<?php echo $closeDateMax ?>"
             class="form-control" 
             id="date" 
-            value="<?php echo $forcastDate;?>"
+            value=""
             onChange="forCastedX()"  
             oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
             oninput="this.setCustomValidity('')"	 
@@ -738,7 +738,7 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-document.getElementById('date').value = today;
+document.getElementById('dateXXX').value = today;
 </script>
 
 <script>

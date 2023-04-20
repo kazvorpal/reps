@@ -540,7 +540,7 @@ function toggle(source) {
                   min="<?php echo $closeDateMax ?>"
                   class="form-control" 
                   id="date" 
-                  value="2022-01-01"
+                  value=""
                   onChange="forCastedX()"  
                   oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                   oninput="this.setCustomValidity('')">
@@ -846,8 +846,9 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('date').value = today;
+  document.getElementById('dateXXX').value = today;
   </script>
+
   <script>
   document.getElementById("indy").addEventListener("change", function(){
   const v = this.value.split(" : ");
