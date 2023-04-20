@@ -632,7 +632,7 @@ function toggle(source) {
                   min="<?php echo $closeDateMax ?>"
                   class="form-control" 
                   id="date" 
-                  value="2022-01-01"
+                  value=""
                   onChange="forCastedx()"  
                   oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                   oninput="this.setCustomValidity('')">
@@ -995,8 +995,9 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-document.getElementById('date').value = today;
+document.getElementById('datexxx').value = today;
 </script>
+
 <script>
   document.getElementById("indy").addEventListener("change", function(){
   const v = this.value.split(" : ");
@@ -1004,6 +1005,7 @@ document.getElementById('date').value = today;
   document.getElementById("InternalExternal").value = v[1];
   });
 </script>
+
 <script>
 $('.subscriber :checkbox').change(function () {
     var $cs = $(this).closest('.subscriber').find(':checkbox:checked');

@@ -186,92 +186,13 @@
           <th data-field="SC_Next30DaysDemand_Qty" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">NEXT 30 DAYS DEMAND QTY</th>
           <th data-field="SC_TotalDemand_Qty" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">TOTAL DEMAND QTY</th>
           <th data-field="Calc_DeliveryWindow_Cd" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">CALCULATED DELIVERY WINDOW</th>
-           </tr>
+           </tr> 
     </thead>
     <tbody style="font-size:11px">
-    <?php while( $row_eqh = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC)){?>
-    		<tr style="font-size:11px">
-            
-              <td><?php echo htmlspecialchars($row_eqh['OrderType_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Order_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['OrderLine_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Requisition_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['RequisitionSource_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WATTSSubOrder_Num'])?></td>
-              <td><?php echo convtimex($row_eqh['RequisitionCreation_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['RequisitionApproved_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['NeedBy_Dt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['PPM_Num'])?></td>
-              <!--SPRINT 15 Added Columns-->
-              <td><?php echo htmlspecialchars($row_eqh['EquipPlan_Id'])?></td>
-              <!---->
-              <!--SPRINT 11 Added Columns-->
-              <td><?php echo htmlspecialchars($row_eqh['EPS_Program_Nm'])?></td>
-              <!---->
-              <td><?php echo htmlspecialchars($row_eqh['EPS_Project_Nm'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['GL_Project_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['GL_Project_Nm'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['DestinationOrg_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Location_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Region_Cd'])?></td>
-              <!--SPRINT 11 Added Columns-->
-              <td><?php echo htmlspecialchars($row_eqh['EPS_Owner_Nm'])?></td>
-              <!---->
-              <td><?php echo convtimex($row_eqh['ScheduledShip_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['WWT_ScheduledShip_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['Pick_Release_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['Pick_Confirm_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['Actual_Shipment_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['WWT_Shipment_Dt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['OrderOpen_Flg'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['OrderStatus_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['OrderNotes_Txt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Ordered_Qty']) . ' x ' . htmlspecialchars($row_eqh['Ordered_UOM'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Shipped_Qty']) . ' x ' . htmlspecialchars($row_eqh['Shipped_UOM'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Cancelled_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['TotalLine_Amt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Outstanding_Amt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['BackOrdered_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['ReadyToRelease_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Picked_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['COX_Part_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['ItemDescription_Txt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Vendor_Nm'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Vendor_Part_Num'])?></td>
-               <td><?php echo htmlspecialchars($row_eqh['WWT_Quote_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WWT_Franchise_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WWT_Project_Desc'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WWT_SubTotal_Amt'])?></td>
-              <td><?php echo convtimex($row_eqh['WWT_COXRequest_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['WWT_PromiseOnSite_Dt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WWT_COX_OrderStatus_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WWT_Carrier_Nm'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['WWT_Waybill_Num'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Requester_Nm'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Preparer_Nm'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['OPTIX_Id'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['DeliverToAddress_Txt'])?></td>
-              <td><?php echo convtimex($row_eqh['LastOracleUpdate_Dt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['HelpDeskTicket_Num'])?></td>
-              <td><?php echo convtimex($row_eqh['PDC_Ship_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['PDC_AFCReceipt_Dt'])?></td>
-              <td><?php echo convtimex($row_eqh['PDC_AvailablePickUp_Dt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['SourceOrgType_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['SourceOrg_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['GL_Segments'])?></td>
-              <td></td><!--Leave Empty-->
-             <!-- Hidden Fields-->
-              <td><?php echo htmlspecialchars($row_eqh['GL_Project_Id'])?></td>
-              <td><?php echo convtimex($row_eqh['GL_ProjectStart_Dt'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['OrderStatus_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['LOB_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['PurchaseType_Cd'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['SC_TotalOnHand_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['SC_Next30DaysDemand_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['SC_TotalDemand_Qty'])?></td>
-              <td><?php echo htmlspecialchars($row_eqh['Calc_DeliveryWindow_Cd'])?></td>
-        	</tr>
-    <?php } ?>
+    <div align="center" class="alert alert-danger">Site is down due to maintenance, please use Project Snapshot to obtain order history information. 
+      <br>If you need any assistance, please submit a ticket to our <a href="https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Lists/EPS%20Support%20%20Enhancement%20Portal/AllItems.aspx" target="_blank">EES Support Portal</a>.
+    </div>
+    
     </tbody>
 </table>
 <!-- End DataTable-->

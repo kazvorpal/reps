@@ -258,7 +258,7 @@ function toggle(source2) {
                         <th bgcolor="#EFEFEF">Facility</th>
                     </tr>
                     <tr>
-                            <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" value="" disabled></td> <!-- NO CHECKBOX -->
+                            <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" value="" disabled checked></td> <!-- NO CHECKBOX -->
                             <td bgcolor="#d9edf7"></td>
                             <td bgcolor="#d9edf7"><?php echo $row_ri['PROJ_NM'] ?> [ORIGINATING PROJECT]</td>
                             <td bgcolor="#d9edf7"><?php echo $row_ri['PRGM'] ?></td>

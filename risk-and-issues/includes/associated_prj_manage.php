@@ -272,6 +272,14 @@ function toggle(source2) {
                           <th bgcolor="#EFEFEF">Market</th>
                           <th bgcolor="#EFEFEF">Facility</th>
                       </tr>
+                      <tr>
+                          <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" checked disabled></td> <!-- CHECK BOX FOR PROJECT SELECT -->
+                          <td bgcolor="#d9edf7"><?php echo $row_projID['PROJ_NM'] ?> [ORIGINATING PROJECT]</td>
+                          <td bgcolor="#d9edf7"><?php echo $row_projID['PRGM'] ?></td>
+                          <td bgcolor="#d9edf7"><?php echo $row_projID['Region'] ?></td>
+                          <td bgcolor="#d9edf7"><?php echo $row_projID['Market'] ?></td>
+                          <td bgcolor="#d9edf7"><?php echo $row_projID['Facility'] ?></td>
+                      </tr>
                       <?php while($row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC)) { ?>
                           <tr>
                               <td><input type="checkbox" name="add_proj_select[]" id="add_proj_select" value="<?php echo $row_por['PROJ_NM'];?>"></td> <!-- CHECK BOX FOR PROJECT SELECT -->
