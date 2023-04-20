@@ -572,7 +572,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
                     min="<?php echo $closeDateMax ?>"
                     class="form-control" 
                     id="date" 
-                    value="2022-01-01"
+                    value=""
                     onChange="//forCastedX()"  
                     oninvalidDisabled="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninputDisabled="this.setCustomValidity('')">
@@ -813,7 +813,7 @@ jQuery(function ($) {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('date').value = today;
+  document.getElementById('datexxx').value = today;
   /*** This whole item is commented out, now/
   document.getElementById("indy").addEventListener("change", function(){
     const v = this.value.split(" : ");
