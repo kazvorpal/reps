@@ -20,15 +20,15 @@
 	
 	$sql_eqh = "Select * 
 				From OrdMgt.fn_GetOrderHistoryEquipmentId(2021)
-				WHERE  GL_Project_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR Order_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR Requisition_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR PPM_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR OPTIX_Id IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR HelpDeskTicket_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR WWT_Quote_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
-							  OR EquipPlan_Id IN ('$oracleCD')
-							  OR EPS_Project_Nm IN ('$oracleCD')
+				WHERE  cast(GL_Project_Num IN as varchar(256)) (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(Order_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(Requisition_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(PPM_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(OPTIX_Id as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(HelpDeskTicket_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(WWT_Quote_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
+							  OR cast(EquipPlan_Id as varchar(256)) IN ('$oracleCD')
+							  OR cast(EPS_Project_Nm as varchar(256)) IN ('$oracleCD')
 				";
 				
 	$stmt_eqh = sqlsrv_query( $conn_COXProd, $sql_eqh ); //$conn_COXProd is Cox Datebase on SQL Production //$conn_COX_QA is test Datebase 
