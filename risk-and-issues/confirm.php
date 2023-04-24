@@ -74,7 +74,7 @@ include ("../sql/update-time.php");
     <input name="name" type="hidden" id="name" value="<?php echo $name ?>">
     <input name="createdFrom" type="hidden" id="createdFrom" value="<?php echo $createdFrom ?>">
     <input name="descriptor" type="hidden" id="descriptor" value="<?php echo $descriptor ?>">
-    <input name="description" type="hidden" id="description" value="<?php echo $description ?>">
+    <input name="description" type="hidden" id="description" value="<?php echo htmlspecialchars($description, ENT_QUOTES); ?>">
     <input name="drivers" type="hidden" id="drivers" value="<?php echo $Driversx ?>">
     <input name="impactArea" type="hidden" id="impactArea" value="<?php echo $impactArea ?>">
     <input name="impactLevel" type="hidden" id="impactLevel" value="<?php echo $impactLevel ?>">
@@ -86,7 +86,7 @@ include ("../sql/update-time.php");
     <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?php echo $transfer2prgManager ?>">
     <input name="opportunity" type="hidden" id="opportunity" value="<?php echo $opportunity?>">
     <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
-    <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo $actionPlan ?>">
+    <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo htmlspecialchars($actionPlan, ENT_QUOTES); ?>">
     <input name="DateClosed" type="hidden" id="DateClosed" value="<?php echo $DateClosed ?>">
     <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">
     <input name="programs" type="hidden" id="programs" value="<?php echo $programs ?>">
