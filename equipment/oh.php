@@ -13,6 +13,7 @@
 <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css'>
 <link rel='stylesheet' href='https://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css'>
+
 <link rel="stylesheet" href="https://unpkg.com/jquery-resizable-columns@0.2.3/dist/jquery.resizableColumns.css">
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/extensions/sticky-header/bootstrap-table-sticky-header.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/akottr/dragtable@master/dragtable.css">
@@ -185,10 +186,9 @@
           <th data-field="SC_Next30DaysDemand_Qty" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">NEXT 30 DAYS DEMAND QTY</th>
           <th data-field="SC_TotalDemand_Qty" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">TOTAL DEMAND QTY</th>
           <th data-field="Calc_DeliveryWindow_Cd" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">CALCULATED DELIVERY WINDOW</th>
-           </tr> 
+           </tr>
     </thead>
     <tbody style="font-size:11px">
-    <div align="center" class="alert alert-danger">"Site is down due to maintenance, please use Project Snapshot to obtain order history information."</div>
     <?php while( $row_eqh = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC)){?>
     		<tr style="font-size:11px">
             
