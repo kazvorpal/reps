@@ -50,7 +50,8 @@ const colorboxschtuff = () => {
     iframe:true, 
     width:"80%", 
     height:"70%", 
-    scrolling:true
+    scrolling:true,
+    fixed: true
   });
   $(".callbacks").colorbox({
       onOpen:function(){ alert('onOpen: colorbox is about to open'); },
