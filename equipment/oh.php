@@ -188,7 +188,6 @@
            </tr> 
     </thead>
     <tbody style="font-size:11px">
-    <div align="center" class="alert alert-danger">"Site is down due to maintenance, please use Project Snapshot to obtain order history information."</div>
     <?php while( $row_eqh = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC)){?>
     		<tr style="font-size:11px">
             
