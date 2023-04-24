@@ -19,7 +19,7 @@
 	}
 	
 	$sql_eqh = "Select * 
-				From OrdMgt.fn_GetOrderHistoryEquipmentId(2021)
+				From OrdMgt.fn_GetOrderHistoryEquipmentId(2023)
 				WHERE  GL_Project_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
 							  OR Order_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
 							  OR Requisition_Num IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
