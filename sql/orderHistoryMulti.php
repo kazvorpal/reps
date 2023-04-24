@@ -19,7 +19,7 @@
 	}
 	
 	$sql_eqh = "Select * 
-				From OrdMgt.fn_GetOrderHistoryEquipmentId(2021)
+				From OrdMgt.fn_GetOrderHistoryEquipmentId(2023)
 				WHERE  cast(GL_Project_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
 							  OR cast(Order_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
 							  OR cast(Requisition_Num as varchar(256)) IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
@@ -31,7 +31,7 @@
 							  OR cast(EPS_Project_Nm as varchar(256)) IN ('$oracleCD')
 				";
 				
-				// echo $sql_eqh;
+				 echo $sql_eqh;
 				// die();
 	$stmt_eqh = sqlsrv_query( $conn_COXProd, $sql_eqh ); //$conn_COXProd is Cox Datebase on SQL Production //$conn_COX_QA is test Datebase 
 
