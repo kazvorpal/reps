@@ -575,14 +575,15 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
                     value=""
                     onChange="//forCastedX()"  
                     oninvalidDisabled="this.setCustomValidity('You must select a date or check Unknown ')"
-                    oninputDisabled="this.setCustomValidity('')">
+                    oninputDisabled="this.setCustomValidity('')"
+                    required>
           </div>
         <br>
           <div id="forcastedDate">
                 <input type="checkbox" 
                     name="Unknown" 
                     id="Unknown" 
-                    onChange="unKnownX()">
+                    onChange="//unKnownX()">
                 <label for="Unknown"> Unknown</label> - Overrides Resolution Date
           </div>
         </div>
@@ -794,8 +795,9 @@ function unKnown() {
 }
 
 jQuery(function ($) {
-    let $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
+    let $inputs = $('input[name=date],input[name=Unknown]');
+    $inputs.on('input', function (e) {
+      console.log(e)
         // Set the required property of the other input to false if this input is not empty.
         $inputs.not(this).prop('required', !$(this).val().length);
     });
