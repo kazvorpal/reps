@@ -1162,20 +1162,23 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.getElementById("regionsnew").style.display = (yer != 2024) ? "none" : "";
   })
 
-  let summerprops = {
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'underline', 'italic', 'clear']],
-      ['fontname', ['fontname']],
-      ['para', ['ul', 'ol', 'paragraph']
-    ]
-  ]};
 
-  summercss = {"position": "absolute", "width": "0px", "height": "0px"}
-  $(document).ready(function() {
-    $('#Description').summernote(summerprops).css(summercss).show();
-    $('#ActionPlan').summernote(summerprops).css(summercss).show();
-  });
+  
+  let summerprops = {
+  toolbar: [
+    ['style', ['style']],
+    ['font', ['bold', 'underline', 'italic', 'clear']],
+    ['fontname', ['fontname', 'fontsize']],
+    ['para', ['ul', 'ol', 'paragraph']]
+  ],
+  fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '96'], 
+};
+
+summercss = {"position": "absolute", "width": "0px", "height": "0px"}
+$(document).ready(function() {
+  $('#Description').summernote(summerprops).css(summercss).show();
+  $('#ActionPlan').summernote(summerprops).css(summercss).show();
+});
 
 </script>
 

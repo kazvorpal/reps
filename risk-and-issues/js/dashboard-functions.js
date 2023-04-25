@@ -199,7 +199,8 @@ const excelrows = () => {
 const trimmer = (target, key, kind) => {
   console.log(target, key, kind);
   let cleaner = document.createElement("div");
-  cleaner.innerHTML = target.replace(/<\/p><p>/g, '<br/>');
+  cleaner.innerHTML = target;
+  // cleaner.innerHTML = target.replace(/<\/p><p>/g, '<br/>');
   console.log(cleaner.innerHTML);
   return (cleaner.textContent.length > textlength) 
   ? `<span id="clean${kind}${key}">` + cleaner.textContent.substr(0, textlength) + `<a href="#" class="more" id="more${kind}${key}" onclick="document.getElementById('desc${kind}${key}').style.display='block';document.getElementById('clean${kind}${key}').style.display='none';return false">[more]</a></span><span style="display:none;" onclick="this.style.display='none';document.getElementById('clean${kind}${key}').style.display='inline'" id="desc${kind}${key}">${target}<a href="#" onclick="return false">[less]</a></div>`
