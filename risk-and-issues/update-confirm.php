@@ -230,7 +230,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>
     <tr>
       <td>Description</td>
-      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $description); ?></td>
+      <td><?= $description; ?></td>
     </tr>
 <?php if(!empty($region_conx)){ ?>
     <tr>
