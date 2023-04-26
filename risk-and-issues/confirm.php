@@ -57,64 +57,64 @@ include ("../sql/update-time.php");
             </div>
   </div>
   <!-- END PROGRESS BAR -->
-	<div align="center"><h2>CONFIRM <?php echo strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
+	<div align="center"><h2>CONFIRM <?= strtoupper($RILevel)  . " " . strtoupper($RIType); ?></h2></div>
 	<div align="center">Please review your risk or issue.  If you need to make an update, use the Edit button below.</div>
 	<div style="padding: 20px" class="alert">  </div>
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
-    <input name="changeLogKey" type="hidden" id="changeLogKey " value="<?php echo $changeLogKey ?>">
-    <input name="userId" type="hidden" id="userId " value="<?php echo $userId ?>">
-    <input name="formName" type="hidden" id="formName" value="<?php echo $formName ?>">
-    <input name="formType" type="hidden" id="formType" value="<?php echo $formType ?>">
-    <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?php echo $fiscalYer ?>">
-    <input name="RIType" type="hidden" id="RIType" value="<?php echo $RIType ?>">
-    <input name="RILevel" type="hidden" id="RILevel" value="<?php echo $RILevel ?>">
-    <input name="assocRegions" type="hidden" id="assocRegions" value="<?php echo $regionx ?>">
-    <input name="poc" type="hidden" id="poc" value="<?php echo $poc ?>">
-    <input name="pocFlag" type="hidden" id="pocFlag" value="<?php echo $pocFlag ?>">
-    <input name="name" type="hidden" id="name" value="<?php echo $name ?>">
-    <input name="createdFrom" type="hidden" id="createdFrom" value="<?php echo $createdFrom ?>">
-    <input name="descriptor" type="hidden" id="descriptor" value="<?php echo $descriptor ?>">
-    <input name="description" type="hidden" id="description" value="<?php echo htmlspecialchars($description, ENT_QUOTES); ?>">
-    <input name="drivers" type="hidden" id="drivers" value="<?php echo $Driversx ?>">
-    <input name="impactArea" type="hidden" id="impactArea" value="<?php echo $impactArea ?>">
-    <input name="impactLevel" type="hidden" id="impactLevel" value="<?php echo $impactLevel ?>">
-    <input name="individual" type="hidden" id="individual" value="<?php echo $individual ?>">
-    <input name="internalExternal" type="hidden" id="internalExternal" value="<?php echo $internalExternal ?>">
-    <input name="responseStrategy" type="hidden" id="responseStrategy" value="<?php echo $responseStrategy ?>">
-    <input name="date" type="hidden" id="date" value="<?php echo $date ?>">
-    <input name="unknown" type="hidden" id="unknown" value="<?php echo $unknown ?>">
-    <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?php echo $transfer2prgManager ?>">
-    <input name="opportunity" type="hidden" id="opportunity" value="<?php echo $opportunity?>">
-    <input name="assocProjects" type="hidden" id="assocProjects" value="<?php echo $assocProject ?>">
-    <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo htmlspecialchars($actionPlan, ENT_QUOTES); ?>">
-    <input name="DateClosed" type="hidden" id="DateClosed" value="<?php echo $DateClosed ?>">
-    <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">
-    <input name="programs" type="hidden" id="programs" value="<?php echo $programs ?>">
-    <input name="program" type="hidden" id="program" value="<?php echo $program ?>"> <!-- ESP PROGRAM -->
-    <input name="raidLog" type="hidden" id="raidLog" value="<?php echo $raidLog ?>">
-    <input name="riskRealized" type="hidden" id="riskRealized" value="<?php echo $riskRealized ?>">
-    <input name="groupID" type="hidden" id="groupID" value="<?php echo $groupID ?>">
-    <input name="assCRID" type="hidden" id="assCRID" value="<?php echo $assCRID?>"> 
-    <input name="changeLogActionVal" type="hidden" id="changeLogActionVal" value="<?php echo $changeLogActionVal?>"> 
-    <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason?>"> 
-    <input name="PRJILog_Flg" type="hidden" id="PRJILog_Flg" value="<?php echo $PRJILog_Flg ?>">
+    <input name="changeLogKey" type="hidden" id="changeLogKey " value="<?= $changeLogKey ?>">
+    <input name="userId" type="hidden" id="userId " value="<?= $userId ?>">
+    <input name="formName" type="hidden" id="formName" value="<?= $formName ?>">
+    <input name="formType" type="hidden" id="formType" value="<?= $formType ?>">
+    <input name="fiscalYer" type="hidden" id="fiscalYer" value="<?= $fiscalYer ?>">
+    <input name="RIType" type="hidden" id="RIType" value="<?= $RIType ?>">
+    <input name="RILevel" type="hidden" id="RILevel" value="<?= $RILevel ?>">
+    <input name="assocRegions" type="hidden" id="assocRegions" value="<?= $regionx ?>">
+    <input name="poc" type="hidden" id="poc" value="<?= $poc ?>">
+    <input name="pocFlag" type="hidden" id="pocFlag" value="<?= $pocFlag ?>">
+    <input name="name" type="hidden" id="name" value="<?= $name ?>">
+    <input name="createdFrom" type="hidden" id="createdFrom" value="<?= $createdFrom ?>">
+    <input name="descriptor" type="hidden" id="descriptor" value="<?= $descriptor ?>">
+    <input name="description" type="hidden" id="description" value="<?= str_replace(["'", '"'], ['&#39;', '&quot;'], $description); ?>">
+    <input name="drivers" type="hidden" id="drivers" value="<?= $Driversx ?>">
+    <input name="impactArea" type="hidden" id="impactArea" value="<?= $impactArea ?>">
+    <input name="impactLevel" type="hidden" id="impactLevel" value="<?= $impactLevel ?>">
+    <input name="individual" type="hidden" id="individual" value="<?= $individual ?>">
+    <input name="internalExternal" type="hidden" id="internalExternal" value="<?= $internalExternal ?>">
+    <input name="responseStrategy" type="hidden" id="responseStrategy" value="<?= $responseStrategy ?>">
+    <input name="date" type="hidden" id="date" value="<?= $date ?>">
+    <input name="unknown" type="hidden" id="unknown" value="<?= $unknown ?>">
+    <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?= $transfer2prgManager ?>">
+    <input name="opportunity" type="hidden" id="opportunity" value="<?= $opportunity?>">
+    <input name="assocProjects" type="hidden" id="assocProjects" value="<?= $assocProject ?>">
+    <input name="actionPlan" type="hidden" id="actionPlan" value="<?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?>">
+    <input name="DateClosed" type="hidden" id="DateClosed" value="<?= $DateClosed ?>">
+    <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?= $riskProbability ?>">
+    <input name="programs" type="hidden" id="programs" value="<?= $programs ?>">
+    <input name="program" type="hidden" id="program" value="<?= $program ?>"> <!-- ESP PROGRAM -->
+    <input name="raidLog" type="hidden" id="raidLog" value="<?= $raidLog ?>">
+    <input name="riskRealized" type="hidden" id="riskRealized" value="<?= $riskRealized ?>">
+    <input name="groupID" type="hidden" id="groupID" value="<?= $groupID ?>">
+    <input name="assCRID" type="hidden" id="assCRID" value="<?= $assCRID?>"> 
+    <input name="changeLogActionVal" type="hidden" id="changeLogActionVal" value="<?= $changeLogActionVal?>"> 
+    <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?= $changeLogReason?>"> 
+    <input name="PRJILog_Flg" type="hidden" id="PRJILog_Flg" value="<?= $PRJILog_Flg ?>">
 <!-- new for global portfolio/program-->
-    <input name="portfolioType" type="hidden" id="portfolioType" value="<?php echo $portfolioType?>"> 
-    <input name="subprogram" type="hidden" id="subprogram" value="<?php echo $subprogram?>"> 
-    <input name="global" type="hidden" id="global" value="<?php echo $global?>">
-    <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?php echo $EstMigrateDate?>">
-    <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?php echo $EstActiveDate?>">
-    <input name="regionKeys" type="hidden" id="regionKeys" value="<?php echo $regionKeys?>">
+    <input name="portfolioType" type="hidden" id="portfolioType" value="<?= $portfolioType?>"> 
+    <input name="subprogram" type="hidden" id="subprogram" value="<?= $subprogram?>"> 
+    <input name="global" type="hidden" id="global" value="<?= $global?>">
+    <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?= $EstMigrateDate?>">
+    <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?= $EstActiveDate?>">
+    <input name="regionKeys" type="hidden" id="regionKeys" value="<?= $regionKeys?>">
 
 <?php if($messaging  == "update") { ?>
   <div class="alert alert-success">
     <div align="left">
       <span class="glyphicon glyphicon-warning-sign"></span> 
-      You are about to add the following project(s) to this <?php echo $RILevel . " " . $RIType; ?>.  If you need to edit this list, please use the edit button.
+      You are about to add the following project(s) to this <?= $RILevel . " " . $RIType; ?>.  If you need to edit this list, please use the edit button.
     </div>
 <hr>
     <div>
-      <?php echo $assocProject_dsply; ?>
+      <?= $assocProject_dsply; ?>
     </div>
   </div>
 <?php } ?>
@@ -129,22 +129,22 @@ include ("../sql/update-time.php");
   <tbody>
     <tr>
       <td width="20%">Risk/Issue Name</td>
-      <td><?php echo $name; ?></td>
+      <td><?=  $name; ?></td>
     </tr>
     <tr>
       <td width="20%">Type</td>
-      <td><?php echo ucfirst($RILevel) . " " . ucfirst($RIType); ?></td>
+      <td><?= ucfirst($RILevel) . " " . ucfirst($RIType); ?></td>
     </tr>
 <?php if($portfolioType != "") { ?>
     <tr>
       <td>Portfolio</td>
-      <td><?php echo $portfolio_Nm; ?></td>
+      <td><?= $portfolio_Nm; ?></td>
     </tr>
 <?php } ?>
 <?php if(!empty($_POST['assCRID'])) { ?>
     <tr>
       <td>Associated CR ID</td>
-      <td><?php echo $assCRID; ?></td>
+      <td><?= $assCRID; ?></td>
     </tr>
 <?php } ?>
 
@@ -152,76 +152,76 @@ include ("../sql/update-time.php");
   if($program != "") { ?>
     <tr>
       <td>Program</td>
-      <td><?php echo $program ; ?></td>
+      <td><?= $program ; ?></td>
     </tr>
 <?php } ?>
 
 <?php // if($programs != "") { ?>
   <!--<tr>
       <td>Program</td>
-      <td><?php echo $programs ; ?></td>
+      <td><?= $programs ; ?></td>
     </tr> -->
 <?php //} ?>
 
 <?php if(!empty($subprogram) && $global != 1) { ?>
     <tr>
       <td>Subprogram</td>
-      <td><?php echo $subprogram ; ?></td>
+      <td><?= $subprogram ; ?></td>
     </tr>
 <?php } ?>
 <?php if($global == 1 && $RILevel != "Portfolio") { ?>
     <tr>
       <td>Subprogram</td>
-      <td><?php echo $subprogram_glb ; ?></td>
+      <td><?= $subprogram_glb ; ?></td>
     </tr>
 <?php } ?>
 
     <tr>
       <td>Descriptor</td>
-      <td><?php echo $descriptor ; ?></td>
+      <td><?= $descriptor ; ?></td>
     </tr>
     <tr>
       <td>Description</td>
-      <td><?php echo $description; ?></td>
+      <td><?= $description; ?></td>
     </tr>
 <?php if(!empty($region_conx)){ ?>
     <tr>
       <td>Region</td>
-      <td><?php echo $region_conx_dsply; ?></td>
+      <td><?= $region_conx_dsply; ?></td>
     </tr>
 <?php } ?>
     <tr>
     <tr>
       <td>Drivers</td>
-      <td><?php echo $Drivers_conx; ?></td>
+      <td><?= $Drivers_conx; ?></td>
     </tr>
     <tr>
       <td>Impact Area</td>
-      <td><?php echo $impactArea2; ?></td>
+      <td><?= $impactArea2; ?></td>
     </tr>
     <tr>
       <td>Impact Level</td>
-      <td><?php echo $impactLevel2; ?></td>
+      <td><?= $impactLevel2; ?></td>
     </tr>
 <?php if(!empty($riskProbability)) { ?>
     <tr>
       <td>Risk Probability</td>
-      <td><?php echo $riskProbability2; ?></td>
+      <td><?= $riskProbability2; ?></td>
     </tr>
 <?php } ?>
 <!--
     <tr>
       <td>Individual POC</td>
-      <td><?php echo $individual; ?></td>
+      <td><?= $individual; ?></td>
     </tr>
     <tr>
       <td>POC Team</td>
-      <td><?php echo $internalExternal; ?></td>
+      <td><?= $internalExternal; ?></td>
     </tr>
 -->
     <tr>
       <td>Response Strategy</td>
-      <td><?php echo $responseStrategy2; ?></td>
+      <td><?= $responseStrategy2; ?></td>
     </tr>
     <tr>
       <td>Forecasted Resolution Date</td>
@@ -259,12 +259,12 @@ include ("../sql/update-time.php");
 <?php if(!isset($_POST['global'])) { ?>
     <tr>
       <td>Associated Projects</td>
-      <td><?php echo $assocProject_dsply; ?></td>
+      <td><?= $assocProject_dsply; ?></td>
     </tr>
     <?php } ?>
     <tr>
       <td>Action Plan</td>
-      <td><?php echo $actionPlan; ?></td>
+      <td><?= $actionPlan; ?></td>
     </tr>
 <?php if(!empty($_POST['changeLogAction'])) { ?>
     <tr>
@@ -273,23 +273,23 @@ include ("../sql/update-time.php");
     </tr>
     <tr>
       <td>Change Log Reason</td>
-      <td><?php echo $changeLogReason; ?></td>
+      <td><?= $changeLogReason; ?></td>
     </tr>
 <?php } ?>
 <?php if(!is_null($EstActiveDate)) { ?>
     <tr>
       <td>Est. Activation Date</td>
-      <td><?php echo $EstActiveDate?></td>
+      <td><?= $EstActiveDate?></td>
     </tr>
     <tr>
       <td>Est. Migration Date</td>
-      <td><?php echo $EstMigrateDate?></td>
+      <td><?= $EstMigrateDate?></td>
     </tr>
 <?php } ?>
 <?php //if($RILevel == "Program") { ?>
     <!--<tr>
       <td>Notify Portfolio Team</td>
-      <td><?php echo $raidLog; ?></td>
+      <td><?= $raidLog; ?></td>
     </tr>-->
 <?php //} ?>
 <?php if($RIType == "Risk") { ?>

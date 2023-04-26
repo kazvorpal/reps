@@ -174,8 +174,8 @@ if($unframe == "0") { //NO COLORBOX
 
 ?>
 <div id='dlist'></div> 
-	<div align="center"><h3>GLOBAL <?php echo strtoupper($RILevel) . " " . strtoupper($RIType) ?> DETAILS</h3></div>
-	<div align="center"><?php echo $name ?></div>
+	<div align="center"><h3>GLOBAL <?= strtoupper($RILevel) . " " . strtoupper($RIType) ?> DETAILS</h3></div>
+	<div align="center"><?= $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
 
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
@@ -189,80 +189,80 @@ if($unframe == "0") { //NO COLORBOX
   <tbody>
     <tr>
       <td width="20%">ID</td>
-      <td><?php echo $ri_id; ?></td>
+      <td><?= $ri_id; ?></td>
     </tr>
     <tr>
       <td width="20%">Owner Name</td>
-      <td><?php echo $ri_owner; ?></td>
+      <td><?= $ri_owner; ?></td>
   </tr>
     <tr>
       <td width="20%">Risk/Issue Name</td>
-      <td><?php echo $name; ?></td>
+      <td><?= $name; ?></td>
     </tr>
     <tr>
       <td width="20%">Type</td>
-      <td><?php echo $RILevel . " " . $RIType; ?></td>
+      <td><?= $RILevel . " " . $RIType; ?></td>
     </tr>
 <?php if(!empty($portfolio)) { ?>
     <tr>
       <td width="20%">Portfolio</td>
-      <td><?php echo $portfolio ?></td>
+      <td><?= $portfolio ?></td>
     </tr>
 <?php } ?>
     <tr>
       <td width="20%">Program</td>
-      <td><?php echo $programs ?></td>
+      <td><?= $programs ?></td>
     </tr>
 <?php if(!empty($subprograms)) {?>
     <tr>
       <td width="20%">Subprograms</td>
-      <td><?php echo $subprograms ?></td>
+      <td><?= $subprograms ?></td>
     </tr>
 <?php } ?>
 <?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td><?= $createdFrom ; ?></td>
     </tr>
 <?php } ?>
 <?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td><?= $createdFrom ; ?></td>
     </tr>
 <?php } ?>
     <tr>
       <td>Issue Descriptor</td>
-      <td><?php echo $descriptor ; ?></td>
+      <td><?= $descriptor ; ?></td>
     </tr>
     <tr>
       <td>Description</td>
-      <td><?php echo $description; ?></td>
+      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $description); ?></td>
     </tr>
 <?php if($RILevel == "Program" && $global == 1){ ?>
     <tr>
       <td>Region</td>
-      <td><?php echo $regionx; ?></td>
+      <td><?= $regionx; ?></td>
     </tr>
 <?php } ?>
     <tr>
       <td>Drivers</td>
       <td>
-        <?php echo $Driversx;?>
+        <?= $Driversx;?>
       </td>
     </tr>
     <tr>
       <td>Impact Area</td>
-      <td><?php echo $impactArea2; ?></td>
+      <td><?= $impactArea2; ?></td>
     </tr>
     <tr>
       <td>Impact Level</td>
-      <td><?php echo $impactLevel2; ?></td>
+      <td><?= $impactLevel2; ?></td>
     </tr>
     <?php if(!empty($riskProbability)) {?>
     <tr>
       <td>Risk Probibility</td>
-      <td><?php echo $riskProbability; ?></td>
+      <td><?= $riskProbability; ?></td>
     </tr>
     <?php } ?>
     <!--
@@ -277,7 +277,7 @@ if($unframe == "0") { //NO COLORBOX
     -->
     <tr>
       <td>Response Strategy</td>
-      <td><?php echo $responseStrategy2; ?></td>
+      <td><?= $responseStrategy2; ?></td>
     </tr>
     <tr>
       <td>Forecasted Resolution Date</td>
@@ -303,11 +303,11 @@ if($unframe == "0") { //NO COLORBOX
 <?php } ?>
     <tr>
       <td>Action Plan <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-calendar"></span></a></td>
-      <td><?php echo $actionPlan; ?>
+      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?>
 
         <div class="collapse" id="collapseExample">
           <div class="well">
-          <iframe id="actionPlan" src="../action_plan.php?rikey=<?php echo $ri_id?>" width="100%" frameBorder="0"></iframe>
+          <iframe id="actionPlan" src="../action_plan.php?rikey=<?= $ri_id?>" width="100%" frameBorder="0"></iframe>
           </div>
         </div>
 
@@ -329,7 +329,7 @@ if($unframe == "0") { //NO COLORBOX
 <?php if($RIType == "Risk"){ ?>
     <tr>
       <td width="20%">Risk Realized</td>
-      <td><?php echo $riskRealized ; ?></td>
+      <td><?= $riskRealized ; ?></td>
     </tr>
 <?php } ?>
     <tr>
@@ -361,26 +361,26 @@ if($unframe == "0") { //NO COLORBOX
             $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
 
             ?>
-            <a href="../global/update.php?&id=<?php echo $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
-            <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
+            <a href="../global/update.php?&id=<?= $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+            <a href="mailto:?subject=RISKS AND ISSUES - <?= $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
-            %0D%0AID: <?php echo $ri_id;?>
-            %0D%0AOwner Name: <?php echo $ri_owner;?>
-            %0D%0AName: <?php echo $name;?>
-            %0D%0AType: <?php echo $RILevel . " " . $RIType?>
-            %0D%0AProgram: <?php echo $programs;?>
-            %0D%0ARegion(s): <?php echo $eregions;?>
-            %0D%0ADescriptor: <?php echo $descriptor ?>
-            %0D%0ADescription: <?php echo $desc?>
-            %0D%0ADriver: <?php echo $Driversx?>
-            %0D%0AImpact Area: <?php echo $impactArea2?>
-            %0D%0AImpact Level: <?php echo $impactLevel2?>
-            %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
+            %0D%0AID: <?= $ri_id;?>
+            %0D%0AOwner Name: <?= $ri_owner;?>
+            %0D%0AName: <?= $name;?>
+            %0D%0AType: <?= $RILevel . " " . $RIType?>
+            %0D%0AProgram: <?= $programs;?>
+            %0D%0ARegion(s): <?= $eregions;?>
+            %0D%0ADescriptor: <?= $descriptor ?>
+            %0D%0ADescription: <?= $desc?>
+            %0D%0ADriver: <?= $Driversx?>
+            %0D%0AImpact Area: <?= $impactArea2?>
+            %0D%0AImpact Level: <?= $impactLevel2?>
+            %0D%0AResponse Strategy: <?= $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
-            %0D%0ATransfer to Program Manager: <?php echo $opportunityIndicator;?>
-            %0D%0AAction Plan: <?php echo $act?>
+            %0D%0ATransfer to Program Manager: <?= $opportunityIndicator;?>
+            %0D%0AAction Plan: <?= $act?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-            %0D%0ALink: <?php echo $mailLink;?>
+            %0D%0ALink: <?= $mailLink;?>
             " 
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
             <?php// } ?>
