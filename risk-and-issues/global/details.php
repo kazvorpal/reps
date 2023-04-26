@@ -357,8 +357,10 @@ if($unframe == "0") { //NO COLORBOX
               $eregions = str_replace("<br>", ", ", $regionx);
               }
             $programs = str_replace("<br>", ", ", $programs);
-            $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
-            $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
+            $desc = strip_tags(str_replace(['<ul>', '</ul>', '<ol>', '</ol>', '<li>', '</li>'], ["%0D%0A", "%0D%0A", "%0D%0A", "%0D%0A- ", "%0D%0A"], $description));
+            $desc = (strlen($desc) > 100) ? substr($desc, 0, 100) . "[...]" : $desc;
+            $act = strip_tags(str_replace(['<ul>', '</ul>', '<ol>', '</ol>', '<li>', '</li>'], ["%0D%0A", "%0D%0A", "%0D%0A", "%0D%0A- ", "%0D%0A"], $actionPlan));
+            $act = (strlen($act) > 100) ? substr($act, 0, 100) . "[...]" : $act;
 
             ?>
             <a href="../global/update.php?&id=<?= $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
@@ -371,7 +373,7 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AProgram: <?= $programs;?>
             %0D%0ARegion(s): <?= $eregions;?>
             %0D%0ADescriptor: <?= $descriptor ?>
-            %0D%0ADescription: <?= strip_tags($desc) ?>
+            %0D%0ADescription: <?= $desc ?>
             %0D%0ADriver: <?= $Driversx?>
             %0D%0AImpact Area: <?= $impactArea2?>
             %0D%0AImpact Level: <?= $impactLevel2?>
