@@ -860,14 +860,14 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
   // }, 100);
 
   let summerprops = {
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'underline', 'italic', 'clear']],
-      ['fontname', ['fontname']],
-      ['table', ['table']],
-      ['para', ['ul', 'ol', 'paragraph']
-    ]
-  ]};
+  toolbar: [
+    ['style', ['style']],
+    ['font', ['bold', 'underline', 'italic', 'clear']],
+    ['fontname', ['fontname', 'fontsize']],
+    ['para', ['ul', 'ol', 'paragraph']]
+  ],
+  fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '96'], 
+};
 
   $(document).ready(function() {
     $('#Description').summernote(summerprops);
