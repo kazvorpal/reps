@@ -237,7 +237,7 @@ if($unframe == "0") { //NO COLORBOX
     </tr>
     <tr>
       <td>Description</td>
-      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $description); ?></td>
+      <td><?= $description ?></td>
     </tr>
 <?php if($RILevel == "Program" && $global == 1){ ?>
     <tr>
@@ -303,7 +303,7 @@ if($unframe == "0") { //NO COLORBOX
 <?php } ?>
     <tr>
       <td>Action Plan <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-calendar"></span></a></td>
-      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?>
+      <td><?= $actionPlan; ?>
 
         <div class="collapse" id="collapseExample">
           <div class="well">
