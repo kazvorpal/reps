@@ -436,7 +436,7 @@ function toggle(source) {
           <h3 class="panel-title">DESCRIPTION*</h3>
         </div>
         <div class="panel-body">
-        <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"><?php echo $RIDescription_Txt ?></textarea>
+        <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $RIDescription_Txt); ?></textarea>
         </div>
       </div>      
     </div>
@@ -678,7 +678,7 @@ function toggle(source) {
           <h3 class="panel-title">ACTION PLAN</h3>
         </div>
         <div class="panel-body">
-          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
+          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?></textarea>  
           <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
           <input type="hidden" name="user" value="<?php echo $user_id ?>">
           <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
