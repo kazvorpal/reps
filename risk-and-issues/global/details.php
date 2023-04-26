@@ -371,14 +371,14 @@ if($unframe == "0") { //NO COLORBOX
             %0D%0AProgram: <?= $programs;?>
             %0D%0ARegion(s): <?= $eregions;?>
             %0D%0ADescriptor: <?= $descriptor ?>
-            <!-- %0D%0ADescription: <?= str_replace(["'", '"'], ['&#39;', '&quot;'], $desc) ?>?> -->
+            %0D%0ADescription: <?= strip_tags($desc) ?>
             %0D%0ADriver: <?= $Driversx?>
             %0D%0AImpact Area: <?= $impactArea2?>
             %0D%0AImpact Level: <?= $impactLevel2?>
             %0D%0AResponse Strategy: <?= $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
             %0D%0ATransfer to Program Manager: <?= $opportunityIndicator;?>
-            %0D%0AAction Plan: <?= str_replace(["'", '"'], ['&#39;', '&quot;'], $act)?>
+            %0D%0AAction Plan: <?= strip_tags($act)?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?= $mailLink;?>
             " 
