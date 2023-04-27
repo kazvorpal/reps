@@ -357,7 +357,7 @@ if($unframe == "0") { //NO COLORBOX
               $eregions = str_replace("<br>", ", ", $regionx);
               }
             $programs = str_replace("<br>", ", ", $programs);
-            $desc = strip_tags(str_replace(['<ul>', '</ul>', '<ol>', '</ol>', '<li>', '</li>'], ["%0D%0A", "%0D%0A", "%0D%0A", "%0D%0A- ", "%0D%0A"], $description));
+            $desc = strip_tags(str_replace(['<li>'], ["%0D%0A• "], $description));
             $desc = (strlen($desc) > 100) ? substr($desc, 0, 100) . "[...]" : $desc;
             $act = strip_tags(str_replace(['<ul>', '</ul>', '<ol>', '</ol>', '<li>', '</li>'], ["%0D%0A", "%0D%0A", "%0D%0A", "%0D%0A- ", "%0D%0A"], $actionPlan));
             $act = (strlen($act) > 100) ? substr($act, 0, 100) . "[...]" : $act;
