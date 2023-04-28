@@ -362,7 +362,7 @@
               portprog.forEach(o => {
                 let comma = (programs != "") ? ", " : "";
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key) {
-                  programs = programs + comma + o.Program_Nm;
+                  programs = (programs.indexOf(o.Program_Nm) == -1) ? programs + comma + o.Program_Nm : programs;
                 }
               })
               if (programs == "" ) {
@@ -379,9 +379,10 @@
               portfolioprograms.forEach((o) => {
                 let comma = (programs != "") ? ", " : ""
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
-                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
+                  && programs.indexOf(o.MLMProgram_Nm) == -1 && programs.indexOf(o.Program_Nm) == -1) {
                     console.log(o);
-                  programs = programs + comma + o.Program_Nm;
+                  programs = (programs.indexOf(o.Program_Nm) == -1) ? programs + comma + o.Program_Nm : programs;
+                  // programs = programs + comma + o.Program_Nm;
                   pc++;
                 } 
               });
