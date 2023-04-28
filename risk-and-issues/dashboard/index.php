@@ -215,6 +215,17 @@
     const makedata = (id, type, programname) => {            
         // Make all the data inside a risk or issue, Program and Portfolio
 
+        const programlist = () => {
+          portfolioprograms.forEach((o) => {
+                let comma = (programs != "") ? ", " : ""
+                if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
+                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
+                    console.log(o);
+                  programs = programs + comma + o.Program_Nm;
+                  pc++;
+                } 
+              });
+        }
         const fieldswitch = {
           //    Specific fields that need extra calculation
           //    Add any field to rifields that you want to be a column,
@@ -369,10 +380,13 @@
                 let comma = (programs != "") ? ", " : ""
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
                   && programs.indexOf(o.MLMProgram_Nm) == -1) {
+                    console.log(o);
                   programs = programs + comma + o.Program_Nm;
                   pc++;
                 } 
-              })
+              });
+              if (ri.RiskAndIssue_Key == 2181) 
+                console.log("pc", programs);
               if (pc == 0) {
                 pc = 1;
               }

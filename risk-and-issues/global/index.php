@@ -566,7 +566,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
           </h3> 
         </div>
         <div class="panel-body">
-          <div id="dateUnknown">
+          <!-- <div id="dateUnknown">
                 <input name="date" 
                     type="date"
                     min="<?php echo $closeDateMax ?>"
@@ -574,7 +574,7 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
                     id="date" 
                     value=""
                     onChange="//forCastedX()"  
-                    oninvalidDisabled="this.setCustomValidity('You must select a date or check Unknown ')"
+                    oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninputDisabled="this.setCustomValidity('')"
                     required>
           </div>
@@ -585,7 +585,25 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
                     id="Unknown" 
                     onChange="//unKnownX()">
                 <label for="Unknown"> Unknown</label> - Overrides Resolution Date
-          </div>
+          </div> -->
+          <div class="panel-body">
+  <div id="dateUnknown">
+    <input name="date" 
+        type="date"
+        min="<?php echo $closeDateMax ?>"
+        class="form-control" 
+        id="date" 
+        value=""
+        required>
+  </div>
+  <br>
+  <div id="forcastedDate">
+    <input type="checkbox" 
+        name="Unknown" 
+        id="Unknown">
+    <label for="Unknown"> Unknown</label> - Overrides Resolution Date
+  </div>
+</div>
         </div>
       </div>
     </div>
@@ -794,14 +812,69 @@ function unKnown() {
   }
 }
 
-jQuery(function ($) {
-    let $inputs = $('input[name=date],input[name=Unknown]');
-    $inputs.on('input', function (e) {
-      console.log(e)
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
+// document.getElementById("date").setCustomValidity("Enter a Date or select Unknown");
+
+$(document).ready(function() {
+  let $dateInput = $('input[name="date"]');
+  let $unknownCheckbox = $('input[name="Unknown"]');
+
+  // Set initial custom validity message
+  $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
+
+  // Check the initial state on page load
+  if ($dateInput.val()) {
+    $unknownCheckbox.prop('disabled', true);
+    $dateInput.get(0).setCustomValidity('');
+  } else {
+    $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
+  }
+
+  if ($unknownCheckbox.is(':checked')) {
+    $dateInput.prop('disabled', true).prop('required', false);
+  }
+
+  $dateInput.on('input', function() {
+    if ($(this).val()) {
+      $unknownCheckbox.prop('disabled', true);
+    } else {
+      $unknownCheckbox.prop('disabled', false);
+    }
+    this.setCustomValidity('');
+  });
+
+  $unknownCheckbox.on('change', function() {
+    if ($(this).is(':checked')) {
+      $dateInput.prop('disabled', true).prop('required', false);
+    } else {
+      $dateInput.prop('disabled', false).prop('required', true);
+    }
+  });
 });
+// jQuery(function ($) {
+//     let $inputs = $('input[name=date],input[name=Unknown]');
+//     $inputs.on('input', function (e) {
+//       console.log(e)
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
+// jQuery(function ($) {
+//   let $inputs = $('input[name=date],input[name=Unknown]');
+
+//   $inputs.on('input', function (e) {
+//     // Set the required property of the other input to false if this input is not empty.
+//     $inputs.not(this).prop('required', !$(this).val().length);
+
+//     // Set the custom validation message only when the input is empty and required.
+//     $inputs.not(this).each(function () {
+//       if ($(this).prop('required') && !$(this).val().length) {
+//         this.setCustomValidity("Enter a Date or select Unknown");
+//       } else {
+//         this.setCustomValidity("");
+//       }
+//     });
+//   });
+// });
 </script>
 
 <script>

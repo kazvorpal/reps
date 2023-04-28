@@ -781,13 +781,51 @@ function unKnown() {
   }
 }
 
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
+$(document).ready(function() {
+  let $dateInput = $('input[name="date"]');
+  let $unknownCheckbox = $('input[name="Unknown"]');
+
+  // Set initial custom validity message
+  $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
+
+  // Check the initial state on page load
+  if ($dateInput.val()) {
+    $unknownCheckbox.prop('disabled', true);
+    $dateInput.get(0).setCustomValidity('');
+  } else {
+    $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
+  }
+
+  if ($unknownCheckbox.is(':checked')) {
+    $dateInput.prop('disabled', true).prop('required', false);
+  }
+
+  $dateInput.on('input', function() {
+    if ($(this).val()) {
+      $unknownCheckbox.prop('disabled', true);
+    } else {
+      $unknownCheckbox.prop('disabled', false);
+    }
+    this.setCustomValidity('');
+  });
+
+  $unknownCheckbox.on('change', function() {
+    if ($(this).is(':checked')) {
+      $dateInput.prop('disabled', true).prop('required', false);
+    } else {
+      $dateInput.prop('disabled', false).prop('required', true);
+    }
+  });
 });
+
+
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 </script>
 
 <script>
