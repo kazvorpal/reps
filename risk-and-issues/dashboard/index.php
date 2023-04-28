@@ -216,15 +216,17 @@
         // Make all the data inside a risk or issue, Program and Portfolio
 
         const programlist = () => {
+          // programs = ri.MLMProgram_Nm;
+          programs = ri.Program_Nm;
           portfolioprograms.forEach((o) => {
-                let comma = (programs != "") ? ", " : ""
-                if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
-                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
-                    console.log(o);
-                  programs = programs + comma + o.Program_Nm;
-                  pc++;
-                } 
-              });
+            let comma = (programs != "") ? ", " : ""
+            if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
+              && programs.indexOf(o.MLMProgram_Nm) == -1
+              && programs.indexOf(o.Program_Nm) == -1) {
+                console.log(o);
+              programs = programs + comma + o.Program_Nm;
+            } 
+          });
         }
         const fieldswitch = {
           //    Specific fields that need extra calculation

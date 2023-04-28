@@ -48,7 +48,47 @@ Any Fields Still Empty are in RED, Above`;
     } else 
       return true
   }
-A}
+}
+
+const unknowndate = () => {
+  console.log("running unknowndate")
+  let $dateInput = $('input[name="date"]');
+  let $unknownCheckbox = $('input[name="Unknown"]');
+
+  // Set initial custom validity message
+  $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
+
+  // Check the initial state on page load
+  if ($dateInput.val()) {
+    $unknownCheckbox.prop('disabled', true);
+    $dateInput.get(0).setCustomValidity('');
+  } else {
+    $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
+  }
+
+  if ($unknownCheckbox.is(':checked')) {
+    $dateInput.prop('disabled', true).prop('required', false);
+  }
+
+  $dateInput.on('input', function() {
+    console.log("invoking date event")
+    if ($(this).val()) {
+      $unknownCheckbox.prop('disabled', true);
+    } else {
+      $unknownCheckbox.prop('disabled', false);
+    }
+    this.setCustomValidity('');
+  });
+
+  $unknownCheckbox.on('change', function() {
+    console.log("invoking unknown checkbox event")
+    if ($(this).is(':checked')) {
+      $dateInput.prop('disabled', true).prop('required', false);
+    } else {
+      $dateInput.prop('disabled', false).prop('required', true);
+    }
+  });
+}
 
 const checkprogram = () => {
 }

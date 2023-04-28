@@ -633,7 +633,6 @@ function toggle(source) {
               class="form-control" 
               id="date" 
               value=""
-              onChange="forCastedX()"  
               required	 
             > 
           </div>
@@ -641,7 +640,6 @@ function toggle(source) {
             <input type="checkbox" 
             name="Unknown" 
             id="Unknown" 
-            onChange="unKnownX()"
             required
             >
               <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -726,64 +724,64 @@ function toggle(source) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
 
 }
 
 function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "block";
+  // } else {
+  //   x.style.display = "block";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "none";
+  // } else {
+  //   y.style.display = "none";
+  // }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "block";
+  // } else {
+  //   z.style.display = "block";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "none";
+  // } else {
+  //   w.style.display = "none";
+  // }
 
 }
 
@@ -980,9 +978,9 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
-});
+// document.querySelector('[name=submit]').addEventListener('click', () => {
+//   validateGrp()
+// });
 </script>
 
 <script>
@@ -997,15 +995,15 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-document.getElementById('datexxx').value = today;
+// document.getElementById('datexxx').value = today;
 </script>
 
 <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
 
 <script>
@@ -1029,19 +1027,23 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const inputs = Array.from(
-      document.querySelectorAll('input[name=date], input[name=Unknown]')
-    );
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const inputs = Array.from(
+  //     document.querySelectorAll('input[name=date], input[name=Unknown]')
+  //   );
 
-    const inputListener = e => {
-      inputs
-        .filter(i => i !== e.target)
-        .forEach(i => (i.required = !e.target.value.length));
-    };
+  //   const inputListener = e => {
+  //     inputs
+  //       .filter(i => i !== e.target)
+  //       .forEach(i => (i.required = !e.target.value.length));
+  //   };
 
-    inputs.forEach(i => i.addEventListener('input', inputListener));
+  //   inputs.forEach(i => i.addEventListener('input', inputListener));
+  // });
+  $(document).ready(function() {
+    unknowndate();
   });
+
 </script>
 
 <script src="includes/ri-functions.js"></script>

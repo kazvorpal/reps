@@ -297,7 +297,7 @@ function toggle(source) {
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a><br>
                   </label>
-                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()">  
+                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="//updatebox()">  
                 </td>
               </tr>
               <tr>
@@ -541,7 +541,7 @@ function toggle(source) {
               class="form-control" 
               id="date" 
               value=""
-              onChange="forCastedX()"  
+              onChange="//forCastedX()"  
               required	 
             > 
           </div>
@@ -549,7 +549,7 @@ function toggle(source) {
               <input type="checkbox" 
                 name="Unknown" 
                 id="Unknown" 
-                onChange="unKnownX()"
+                onChange="//unKnownX()"
                 required
               >
               <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -725,34 +725,34 @@ function toggle(source) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
-
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
+//????
 }
 
 function myFunctionOff() {
@@ -832,9 +832,9 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
-});
+// document.querySelector('[name=submit]').addEventListener('click', () => {
+//   validateGrp()
+// });
 </script>
 
 <script>
@@ -848,15 +848,15 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('dateXXX').value = today;
+  // document.getElementById('dateXXX').value = today;
   </script>
 
   <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
 
 <script>
@@ -880,19 +880,11 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const inputs = Array.from(
-      document.querySelectorAll('input[name=date], input[name=Unknown]')
-    );
+  $(document).ready(function() {
+    console.log("running ready()")
+    unknowndate();
+});
 
-    const inputListener = e => {
-      inputs
-        .filter(i => i !== e.target)
-        .forEach(i => (i.required = !e.target.value.length));
-    };
-
-    inputs.forEach(i => i.addEventListener('input', inputListener));
-  });
 </script>
 
 <script src="includes/ri-functions.js"></script>

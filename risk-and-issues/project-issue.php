@@ -833,7 +833,7 @@ if (month < 10) month = "0" + month;
 if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
-document.getElementById('dateXXX').value = today;
+// document.getElementById('dateXXX').value = today;
 </script>
 <script>
   // document.getElementById("indy").addEventListener("change", function(){
@@ -918,19 +918,25 @@ processlist(na, makenaevent);
 </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const inputs = Array.from(
-      document.querySelectorAll('input[name=date], input[name=Unknown]')
-    );
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const inputs = Array.from(
+  //     document.querySelectorAll('input[name=date], input[name=Unknown]')
+  //   );
 
-    const inputListener = e => {
-      inputs
-        .filter(i => i !== e.target)
-        .forEach(i => (i.required = !e.target.value.length));
-    };
+  //   const inputListener = e => {
+  //     inputs
+  //       .filter(i => i !== e.target)
+  //       .forEach(i => (i.required = !e.target.value.length));
+  //   };
 
-    inputs.forEach(i => i.addEventListener('input', inputListener));
+  //   inputs.forEach(i => i.addEventListener('input', inputListener));
+  // });
+
+  $(document).ready(function() {
+    unknowndate();
   });
+
+
 </script>
 
 <script src="includes/ri-functions.js"></script>
