@@ -439,8 +439,7 @@ function toggle(source) {
             id="date" 
             value=""
             onChange="forCastedX()"  
-            oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-            oninput="this.setCustomValidity('')"	 
+            required	 
 					> 
       </div>  
 				</td>
@@ -452,6 +451,7 @@ function toggle(source) {
 					name="Unknown" 
 					id="Unknown" 
 					onChange="unKnownX()"
+          required
 			  >
         <label for="Unknown">Unknown</label> - Overrides Resolution Date
         </div> 
@@ -805,6 +805,22 @@ $(function() {
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const inputs = Array.from(
+      document.querySelectorAll('input[name=date], input[name=Unknown]')
+    );
+
+    const inputListener = e => {
+      inputs
+        .filter(i => i !== e.target)
+        .forEach(i => (i.required = !e.target.value.length));
+    };
+
+    inputs.forEach(i => i.addEventListener('input', inputListener));
+  });
 </script>
 
 <script src="includes/ri-functions.js"></script>
