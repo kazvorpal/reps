@@ -729,67 +729,67 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
 
 <script>
 
-function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+// function myFunction() {
+//   var x = document.getElementById("myDIV");
+//   if (x.style.display === "none") {
+//     x.style.display = "none";
+//   } else {
+//     x.style.display = "none";
+//   }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+//   var y = document.getElementById("myDIV2");
+//   if (y.style.display === "none") {
+//     y.style.display = "block";
+//   } else {
+//     y.style.display = "block";
+//   }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+//   var z = document.getElementById("myIssue");
+//   if (z.style.display === "none") {
+//     z.style.display = "none";
+//   } else {
+//     z.style.display = "none";
+//   }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
+//   var w = document.getElementById("myRisk");
+//   if (w.style.display === "none") {
+//     w.style.display = "block";
+//   } else {
+//     w.style.display = "block";
+//   }
 
-}
+// }
 
-function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
+// function myFunctionOff() {
+//   var x = document.getElementById("myDIV");
+//   if (x.style.display === "none") {
+//     x.style.display = "block";
+//   } else {
+//     x.style.display = "block";
+//   }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
+//   var y = document.getElementById("myDIV2");
+//   if (y.style.display === "none") {
+//     y.style.display = "none";
+//   } else {
+//     y.style.display = "none";
+//   }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
+//   var z = document.getElementById("myIssue");
+//   if (z.style.display === "none") {
+//     z.style.display = "block";
+//   } else {
+//     z.style.display = "block";
+//   }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
+//   var w = document.getElementById("myRisk");
+//   if (w.style.display === "none") {
+//     w.style.display = "none";
+//   } else {
+//     w.style.display = "none";
+//   }
 
-}
+// }
 
 </script>
 <script>
@@ -815,40 +815,7 @@ function unKnown() {
 // document.getElementById("date").setCustomValidity("Enter a Date or select Unknown");
 
 $(document).ready(function() {
-  let $dateInput = $('input[name="date"]');
-  let $unknownCheckbox = $('input[name="Unknown"]');
-
-  // Set initial custom validity message
-  $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
-
-  // Check the initial state on page load
-  if ($dateInput.val()) {
-    $unknownCheckbox.prop('disabled', true);
-    $dateInput.get(0).setCustomValidity('');
-  } else {
-    $dateInput.get(0).setCustomValidity('You must select a date or check Unknown');
-  }
-
-  if ($unknownCheckbox.is(':checked')) {
-    $dateInput.prop('disabled', true).prop('required', false);
-  }
-
-  $dateInput.on('input', function() {
-    if ($(this).val()) {
-      $unknownCheckbox.prop('disabled', true);
-    } else {
-      $unknownCheckbox.prop('disabled', false);
-    }
-    this.setCustomValidity('');
-  });
-
-  $unknownCheckbox.on('change', function() {
-    if ($(this).is(':checked')) {
-      $dateInput.prop('disabled', true).prop('required', false);
-    } else {
-      $dateInput.prop('disabled', false).prop('required', true);
-    }
-  });
+  unknowndate();
 });
 // jQuery(function ($) {
 //     let $inputs = $('input[name=date],input[name=Unknown]');
@@ -888,7 +855,7 @@ $(document).ready(function() {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('datexxx').value = today;
+  // document.getElementById('datexxx').value = today;
   /*** This whole item is commented out, now/
   document.getElementById("indy").addEventListener("change", function(){
     const v = this.value.split(" : ");
