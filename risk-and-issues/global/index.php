@@ -566,26 +566,6 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
           </h3> 
         </div>
         <div class="panel-body">
-          <!-- <div id="dateUnknown">
-                <input name="date" 
-                    type="date"
-                    min="<?php echo $closeDateMax ?>"
-                    class="form-control" 
-                    id="date" 
-                    value=""
-                    onChange="//forCastedX()"  
-                    oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-                    oninputDisabled="this.setCustomValidity('')"
-                    required>
-          </div>
-        <br>
-          <div id="forcastedDate">
-                <input type="checkbox" 
-                    name="Unknown" 
-                    id="Unknown" 
-                    onChange="//unKnownX()">
-                <label for="Unknown"> Unknown</label> - Overrides Resolution Date
-          </div> -->
           <div class="panel-body">
   <div id="dateUnknown">
     <input name="date" 
@@ -793,58 +773,10 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
 
 </script>
 <script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-// document.getElementById("date").setCustomValidity("Enter a Date or select Unknown");
 
 $(document).ready(function() {
   unknowndate();
 });
-// jQuery(function ($) {
-//     let $inputs = $('input[name=date],input[name=Unknown]');
-//     $inputs.on('input', function (e) {
-//       console.log(e)
-//         // Set the required property of the other input to false if this input is not empty.
-//         $inputs.not(this).prop('required', !$(this).val().length);
-//     });
-// });
-// jQuery(function ($) {
-//   let $inputs = $('input[name=date],input[name=Unknown]');
-
-//   $inputs.on('input', function (e) {
-//     // Set the required property of the other input to false if this input is not empty.
-//     $inputs.not(this).prop('required', !$(this).val().length);
-
-//     // Set the custom validation message only when the input is empty and required.
-//     $inputs.not(this).each(function () {
-//       if ($(this).prop('required') && !$(this).val().length) {
-//         this.setCustomValidity("Enter a Date or select Unknown");
-//       } else {
-//         this.setCustomValidity("");
-//       }
-//     });
-//   });
-// });
-</script>
-
-<script>
   var date = new Date();
   var day = date.getDate();
   var month = date.getMonth() + 1;
@@ -855,15 +787,6 @@ $(document).ready(function() {
 
   var today = year + "-" + month + "-" + day;
 
-  // document.getElementById('datexxx').value = today;
-  /*** This whole item is commented out, now/
-  document.getElementById("indy").addEventListener("change", function(){
-    const v = this.value.split(" : ");
-    this.value = v[0];
-    // document.getElementById("InternalExternal").value = v[1];
-    // ^^^^ This refers to an element that's commented out
-  });
-  */
 </script>
 
 <script>

@@ -438,7 +438,6 @@ function toggle(source) {
             class="form-control" 
             id="date" 
             value=""
-            onChange="forCastedX()"  
             required	 
 					> 
       </div>  
@@ -450,7 +449,6 @@ function toggle(source) {
 				<input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChange="unKnownX()"
           required
 			  >
         <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -614,95 +612,77 @@ function toggle(source) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
 
 }
 
 function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "block";
+  // } else {
+  //   x.style.display = "block";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "none";
+  // } else {
+  //   y.style.display = "none";
+  // }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "block";
+  // } else {
+  //   z.style.display = "block";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "none";
+  // } else {
+  //   w.style.display = "none";
+  // }
 
 }
 
 </script>
 <script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
 
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
-});
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 </script>
 
 <script>

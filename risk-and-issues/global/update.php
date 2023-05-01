@@ -600,7 +600,6 @@ function toggle(source) {
                     class="form-control" 
                     id="date" 
                     value="2022-01-01"
-                    onChange="forCastedX()"  
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -609,7 +608,6 @@ function toggle(source) {
                 <input type="checkbox" 
                     name="Unknown" 
                     id="Unknown" 
-                    onChange="unKnownX()"
                     <?php if(empty($ForecastedResolution_Dt)){ echo "checked";} ?>
                 >
                 <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -762,25 +760,6 @@ function toggle(source) {
 </div>
 </main>
 <script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
 $(document).ready(function() {
   unknowndate();
 });
@@ -793,9 +772,6 @@ $(document).ready(function() {
 //         $inputs.not(this).prop('required', !$(this).val().length);
 //     });
 // });
-</script>
-
-<script>
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
   let checked = 0;

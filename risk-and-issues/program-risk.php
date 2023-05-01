@@ -541,7 +541,6 @@ function toggle(source) {
               class="form-control" 
               id="date" 
               value=""
-              onChange="//forCastedX()"  
               required	 
             > 
           </div>
@@ -549,7 +548,6 @@ function toggle(source) {
               <input type="checkbox" 
                 name="Unknown" 
                 id="Unknown" 
-                onChange="//unKnownX()"
                 required
               >
               <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -786,37 +784,13 @@ function myFunctionOff() {
 
 }
 
-</script>
-<script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
-});
-</script>
-
-<script>
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
   let checked = 0;
