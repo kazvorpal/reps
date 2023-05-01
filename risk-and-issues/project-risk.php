@@ -191,11 +191,7 @@ function toggle(source) {
           <th colspan="3" align="left">
             <div id="myRisk">
               <h4 style="color: #00aaf5">PROJECT RISK</h4>
-              </div>
-            <div id="myIssue">
-              <h4 style="color: #00aaf5">PROJECT ISSUE</h4>
-              </div>
-            
+              </div>      
           </th>
           </tr>
         <tr>
