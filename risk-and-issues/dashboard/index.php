@@ -353,8 +353,10 @@
                 list += comma + r.SubProgram_Nm ;
               } 
             }
-            let ret = (list != "") ? list.slice(0, -2) : ""
-            // console.log("ret", ret);
+            console.log(list)
+            let ret = (list != "") ? list : ""
+            // let ret = (list != "") ? list.slice(0, -2) : ""
+            console.log("ret", ret);
             return ret;
           }, 
           MLMProgram_Nm: () => {
