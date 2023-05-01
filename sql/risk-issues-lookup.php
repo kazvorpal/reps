@@ -170,7 +170,10 @@ if($_POST['changeLogKey']==3 || ($_POST['changeLogKey']==4 && $global != 1) || (
 
 //$userId = $_POST['userId']; // WINDOWS LOGIN NAME
 
-$riskProbability = (isset($_POST['RiskProbability']))? $_POST['RiskProbability'] : "";
+$riskProbability = "";
+  if(isset($_POST['RiskProbability'])) {
+    $riskProbability = $_POST['RiskProbability'];
+  }
 
 $project_nm = "";
 if(isset($_POST['project_nm'])) {
@@ -188,22 +191,34 @@ if(isset($_POST['add_proj_select'])) {
 
 $assocProject_dsply = str_replace(",","<br>",$assocProject);
 
-$actionPlan = (empty($_POST['ActionPlan'])) ? $_POST['ActionPlan_b'] : $_POST['ActionPlan'];
+$actionPlan = $_POST['ActionPlan'];
+  if(empty($_POST['ActionPlan'])) {
+    $actionPlan = $_POST['ActionPlan_b'];
+  }
 
 $responseStrategy = $_POST['ResponseStrategy']; 
+
+$date = "";
+if(isset($_POST['date']));
 $date = $_POST['date']; // FORCASTED RESOLUTION DATE
 
 
-$DateClosed = (!empty($_POST['DateClosed'])) ? $_POST['DateClosed'] : NULL;
+$DateClosed = NULL;
+if (!empty($_POST['DateClosed'])) {
+$DateClosed = $_POST['DateClosed']; 
+}
 
-$unknown = (!empty($_POST['Unknown'])) ? $_POST['Unknown'] : 'off';
+$unknown = 'off';
+  if(!empty($_POST['Unknown'])) {
+  $unknown = $_POST['Unknown'];
+  }
 
 //LOGIC FOR CURRENT POC
 $individual = ""; 
-if(isset($_POST['Individual'])) {
-  $individual = $_POST['Individual']; 
-  $pocFlag = 1;
-}
+  if(isset($_POST['Individual'])) {
+    $individual = $_POST['Individual']; 
+    $pocFlag = 1;
+  }
 
 //DEPARTMENT ($internalExternal) GET DEPARTMENT FROM POC NAME ($individual)
 $internalExternal = "";
