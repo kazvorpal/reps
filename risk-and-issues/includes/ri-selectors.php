@@ -371,6 +371,7 @@ document.getElementById('spacey').appendChild(selectDropdown);
 
   const resetform = () => {
     document.getElementById("formfilter").reset();
+    openval = false;
     init(mode, true);
   }
 </script>
