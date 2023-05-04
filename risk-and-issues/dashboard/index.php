@@ -879,7 +879,7 @@
         });
     }  
     const makeheadline = () => {
-      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard 2.0`;
+      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log 2.0" : `${capitalize(mode)} R&I Dashboard 2.0`;
     }
     const fixcollapse = () => {
       document.querySelectorAll(".collapse").forEach(o => {
