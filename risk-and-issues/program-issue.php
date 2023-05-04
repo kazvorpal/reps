@@ -627,21 +627,21 @@ function toggle(source) {
                       </svg></a></label>
           <div id="dateUnknown">
               
-              <input name="date" 
-                  type="date"
-                  min="<?php echo $closeDateMax ?>"
-                  class="form-control" 
-                  id="date" 
-                  value="2022-01-01"
-                  onChange="forCastedx()"  
-                  oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-                  oninput="this.setCustomValidity('')">
+            <input name="date" 
+              type="date"
+              min="<?php echo $closeDateMax ?>"
+              class="form-control" 
+              id="date" 
+              value=""
+              required	 
+            > 
           </div>
           <div id="forcastedDate">
-              <input type="checkbox" 
-                  name="Unknown" 
-                  id="Unknown" 
-                  onChange="unKnownx()">
+            <input type="checkbox" 
+            name="Unknown" 
+            id="Unknown" 
+            required
+            >
               <label for="Unknown">Unknown</label> - Overrides Resolution Date
           </div>
           </div>
@@ -724,95 +724,75 @@ function toggle(source) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
 
 }
 
 function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "block";
+  // } else {
+  //   x.style.display = "block";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "none";
+  // } else {
+  //   y.style.display = "none";
+  // }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "block";
+  // } else {
+  //   z.style.display = "block";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "none";
+  // } else {
+  //   w.style.display = "none";
+  // }
 
 }
 
-</script>
-<script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
 
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
-});
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 </script>
 <SCRIPT LANGUAGE="JavaScript">
 <!-- 	
@@ -978,9 +958,9 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
-});
+// document.querySelector('[name=submit]').addEventListener('click', () => {
+//   validateGrp()
+// });
 </script>
 
 <script>
@@ -995,15 +975,17 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-document.getElementById('date').value = today;
+// document.getElementById('datexxx').value = today;
 </script>
+
 <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
+
 <script>
 $('.subscriber :checkbox').change(function () {
     var $cs = $(this).closest('.subscriber').find(':checkbox:checked');
@@ -1022,6 +1004,26 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
+<script>
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const inputs = Array.from(
+  //     document.querySelectorAll('input[name=date], input[name=Unknown]')
+  //   );
+
+  //   const inputListener = e => {
+  //     inputs
+  //       .filter(i => i !== e.target)
+  //       .forEach(i => (i.required = !e.target.value.length));
+  //   };
+
+  //   inputs.forEach(i => i.addEventListener('input', inputListener));
+  // });
+  $(document).ready(function() {
+    unknowndate();
+  });
+
 </script>
 
 <script src="includes/ri-functions.js"></script>

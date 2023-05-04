@@ -297,7 +297,7 @@ function toggle(source) {
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a><br>
                   </label>
-                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()">  
+                  <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="//updatebox()">  
                 </td>
               </tr>
               <tr>
@@ -535,21 +535,21 @@ function toggle(source) {
   <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
 </svg></a></label>
 			  <div id="dateUnknown">
-              <input name="date" 
-                  type="date"
-                  min="<?php echo $closeDateMax ?>"
-                  class="form-control" 
-                  id="date" 
-                  value="2022-01-01"
-                  onChange="forCastedX()"  
-                  oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-                  oninput="this.setCustomValidity('')">
+            <input name="date" 
+              type="date"
+              min="<?php echo $closeDateMax ?>"
+              class="form-control" 
+              id="date" 
+              value=""
+              required	 
+            > 
           </div>
           <div id="forcastedDate">
               <input type="checkbox" 
-                  name="Unknown" 
-                  id="Unknown" 
-                  onChange="unKnownX()">
+                name="Unknown" 
+                id="Unknown" 
+                required
+              >
               <label for="Unknown">Unknown</label> - Overrides Resolution Date
           </div>
           </div></td>
@@ -723,34 +723,34 @@ function toggle(source) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
-
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
+//????
 }
 
 function myFunctionOff() {
@@ -784,37 +784,13 @@ function myFunctionOff() {
 
 }
 
-</script>
-<script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
-});
-</script>
-
-<script>
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
   let checked = 0;
@@ -830,9 +806,9 @@ function validateGrp() {
   }
 }
 
-document.querySelector('[name=submit]').addEventListener('click', () => {
-  validateGrp()
-});
+// document.querySelector('[name=submit]').addEventListener('click', () => {
+//   validateGrp()
+// });
 </script>
 
 <script>
@@ -846,14 +822,15 @@ document.querySelector('[name=submit]').addEventListener('click', () => {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('date').value = today;
+  // document.getElementById('dateXXX').value = today;
   </script>
+
   <script>
-  document.getElementById("indy").addEventListener("change", function(){
-  const v = this.value.split(" : ");
-  this.value = v[0];
-  document.getElementById("InternalExternal").value = v[1];
-  });
+  // document.getElementById("indy").addEventListener("change", function(){
+  // const v = this.value.split(" : ");
+  // this.value = v[0];
+  // document.getElementById("InternalExternal").value = v[1];
+  // });
 </script>
 
 <script>
@@ -874,6 +851,14 @@ document.getElementById("Unknown").checked = false;
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
+<script>
+  $(document).ready(function() {
+    console.log("running ready()")
+    unknowndate();
+});
+
 </script>
 
 <script src="includes/ri-functions.js"></script>

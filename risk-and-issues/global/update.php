@@ -436,7 +436,7 @@ function toggle(source) {
           <h3 class="panel-title">DESCRIPTION*</h3>
         </div>
         <div class="panel-body">
-        <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"><?php echo $RIDescription_Txt ?></textarea>
+        <textarea name="Description" cols="120" rows="6" required="required" class="form-control" id="Description"><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $RIDescription_Txt); ?></textarea>
         </div>
       </div>      
     </div>
@@ -600,7 +600,6 @@ function toggle(source) {
                     class="form-control" 
                     id="date" 
                     value="2022-01-01"
-                    onChange="forCastedX()"  
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -609,7 +608,6 @@ function toggle(source) {
                 <input type="checkbox" 
                     name="Unknown" 
                     id="Unknown" 
-                    onChange="unKnownX()"
                     <?php if(empty($ForecastedResolution_Dt)){ echo "checked";} ?>
                 >
                 <label for="Unknown">Unknown</label> - Overrides Resolution Date
@@ -678,8 +676,8 @@ function toggle(source) {
           <h3 class="panel-title">ACTION PLAN</h3>
         </div>
         <div class="panel-body">
-          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?php echo $actionPlan; ?></textarea>  
-          <input type="hidden" value="<?php echo $actionPlan_b?>" name="ActionPlan_b">
+          <textarea name="ActionPlan" cols="120" class="form-control" id="ActionPlan" ><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?></textarea>  
+          <input type="hidden" value="<?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan_b); ?>" name="ActionPlan_b">
           <input type="hidden" name="user" value="<?php echo $user_id ?>">
           <input type="hidden" name="tempID"value="<?php //echo $temp_id ?>">
           <div align="right" style="margin-top:10px; margin-bottom:10px;">  
@@ -762,35 +760,18 @@ function toggle(source) {
 </div>
 </main>
 <script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
+$(document).ready(function() {
+  unknowndate();
 });
-</script>
 
-<script>
+
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
   let checked = 0;
@@ -863,11 +844,11 @@ document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.prev
     toolbar: [
       ['style', ['style']],
       ['font', ['bold', 'underline', 'italic', 'clear']],
-      ['fontname', ['fontname']],
-      ['table', ['table']],
-      ['para', ['ul', 'ol', 'paragraph']
-    ]
-  ]};
+      ['fontname', ['fontname', 'fontsize']],
+      ['para', ['ul', 'ol', 'paragraph']]
+    ],
+    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '96'], 
+  };
 
   $(document).ready(function() {
     $('#Description').summernote(summerprops);

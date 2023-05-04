@@ -421,42 +421,42 @@ Enter the details of your Project Issue
 			<table width="100%" border="0">
             <tbody>
               <tr>
-                <td colspan="2">
-				  <label for="date">Forecasted Resolution Date *  <a href="includes/definitions.php?tooltipkey=FRRD" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-            </svg></a></label>
+                <td colspan="3">
+				<label for="date">Forecasted Resolution Date * <a href="includes/definitions.php?tooltipkey=FRRD" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+</svg></a></label>
 				  <div id="dateUnknown" >
-					<input name="date" 
+				  <input name="date" 
             type="date"
             min="<?php echo $closeDateMax ?>"
             class="form-control" 
             id="date" 
-						value="2022-01-01"
-						onChange="forCastedX()"  
-            oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-            oninput="this.setCustomValidity('')"	 
+            value=""
+            required	 
 					> 
-            	  </div>  
+      </div>  
 				</td>
-                </tr>
-              <tr>
-                <td>
+      </tr>
+      <tr>
+        <td>
 				<div id="forcastedDate">
-				  <input type="checkbox" 
+				<input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChange="unKnownX()"
-				  >
-				  <label for="Unknown">Unknown</label> - Overides Resolution Date
-				</div>  
+          required
+			  >
+        <label for="Unknown">Unknown</label> - Overrides Resolution Date
+        </div> 
 				</td>
-                <td><input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">
-          			<label for="TransfertoProgramManager">Transfer to Program Manager <a href="includes/definitions.php?tooltipkey=TTPM" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-            </svg></a></label>
-				  </td>
+        <td>
+					<input type="checkbox" name="TransfertoProgramManager" id="TransfertoProgramManager">
+					<label for="TransfertoProgramManager">Transfer to Program Manager</label>  <a href="includes/definitions.php?tooltipkey=TTPM" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></a>
+				</td>
+                <td>&nbsp;</td>
               </tr>
             </tbody>
           </table>
@@ -771,36 +771,13 @@ function myFunctionOff() {
 
 }
 
-</script>
-<script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
-});
-</script>
-<script>
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 function validateGrp() {
   let things = document.querySelectorAll('.required_group')
   let checked = 0;
@@ -831,7 +808,7 @@ if (month < 10) month = "0" + month;
 if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
-document.getElementById('date').value = today;
+// document.getElementById('dateXXX').value = today;
 </script>
 <script>
   // document.getElementById("indy").addEventListener("change", function(){
@@ -914,6 +891,29 @@ if (window.performance && window.performance.navigation.type === window.performa
 }
 processlist(na, makenaevent);
 </script>
+
+<script>
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const inputs = Array.from(
+  //     document.querySelectorAll('input[name=date], input[name=Unknown]')
+  //   );
+
+  //   const inputListener = e => {
+  //     inputs
+  //       .filter(i => i !== e.target)
+  //       .forEach(i => (i.required = !e.target.value.length));
+  //   };
+
+  //   inputs.forEach(i => i.addEventListener('input', inputListener));
+  // });
+
+  $(document).ready(function() {
+    unknowndate();
+  });
+
+
+</script>
+
 <script src="includes/ri-functions.js"></script>
 
 </body>

@@ -249,3 +249,8 @@ body {
 .typecolumn {
   width: 0;
 }
+/* table td ul,
+table td ol {
+  padding-left: 0;
+  list-style-position: inside;;
+} */

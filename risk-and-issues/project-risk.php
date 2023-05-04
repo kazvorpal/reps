@@ -191,11 +191,7 @@ function toggle(source) {
           <th colspan="3" align="left">
             <div id="myRisk">
               <h4 style="color: #00aaf5">PROJECT RISK</h4>
-              </div>
-            <div id="myIssue">
-              <h4 style="color: #00aaf5">PROJECT ISSUE</h4>
-              </div>
-            
+              </div>      
           </th>
           </tr>
         <tr>
@@ -204,20 +200,13 @@ function toggle(source) {
 			<table width="100%" border="0" cellpadding="10" cellspacing="10">
             <tbody>
               <tr>
-                <td><div id="myDIV">
-                  <label for="Created From">Created From</label>
-                  <br>
-                  <input name="CreatedFrom" type="text" class="form-control" id="Created From">
-                </div></td>
-                </tr>
-              <tr>
                 <td><label for="Created From">Name</label>
                   <br>
                   <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >
                   <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'] . " " . $row_projID['Sub_Prg'] . " " . $row_projID['EPSLocation_Cd'];?>">
                   <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>">
                 </td>
-                </tr>
+              </tr>
               <tr>
                 <td></br><label for="Created From">Risk Descriptor * <a href="includes/definitions.php?tooltipkey=RSKD" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -437,10 +426,8 @@ function toggle(source) {
             min="<?php echo $closeDateMax ?>"
             class="form-control" 
             id="date" 
-            value="<?php echo $forcastDate;?>"
-            onChange="forCastedX()"  
-            oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
-            oninput="this.setCustomValidity('')"	 
+            value=""
+            required	 
 					> 
       </div>  
 				</td>
@@ -451,7 +438,7 @@ function toggle(source) {
 				<input type="checkbox" 
 					name="Unknown" 
 					id="Unknown" 
-					onChange="unKnownX()"
+          required
 			  >
         <label for="Unknown">Unknown</label> - Overrides Resolution Date
         </div> 
@@ -614,95 +601,77 @@ function toggle(source) {
 
 <script>
 function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "none";
+  // } else {
+  //   x.style.display = "none";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "block";
+  // } else {
+  //   y.style.display = "block";
+  // }
 
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "none";
+  // } else {
+  //   z.style.display = "none";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "block";
+  // } else {
+  //   w.style.display = "block";
+  // }
 
 }
 
 function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
+  // var x = document.getElementById("myDIV");
+  // if (x.style.display === "none") {
+  //   x.style.display = "block";
+  // } else {
+  //   x.style.display = "block";
+  // }
   
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
+  // var y = document.getElementById("myDIV2");
+  // if (y.style.display === "none") {
+  //   y.style.display = "none";
+  // } else {
+  //   y.style.display = "none";
+  // }
   
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
+  // var z = document.getElementById("myIssue");
+  // if (z.style.display === "none") {
+  //   z.style.display = "block";
+  // } else {
+  //   z.style.display = "block";
+  // }
 
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
+  // var w = document.getElementById("myRisk");
+  // if (w.style.display === "none") {
+  //   w.style.display = "none";
+  // } else {
+  //   w.style.display = "none";
+  // }
 
 }
 
 </script>
 <script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
 
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
-});
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 </script>
 
 <script>
@@ -738,7 +707,7 @@ if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
 
-document.getElementById('date').value = today;
+// document.getElementById('dateXXX').value = today;
 </script>
 
 <script>
@@ -805,6 +774,26 @@ $(function() {
 <script>
 document.querySelector("#date").addEventListener("keydown", (e) => {e.preventDefault()});
 document.querySelector("#DateClosed").addEventListener("keydown", (e) => {e.preventDefault()});
+</script>
+
+<script>
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const inputs = Array.from(
+  //     document.querySelectorAll('input[name=date], input[name=Unknown]')
+  //   );
+
+  //   const inputListener = e => {
+  //     inputs
+  //       .filter(i => i !== e.target)
+  //       .forEach(i => (i.required = !e.target.value.length));
+  //   };
+
+  //   inputs.forEach(i => i.addEventListener('input', inputListener));
+  // });
+  $(document).ready(function() {
+    unknowndate();
+  });
+
 </script>
 
 <script src="includes/ri-functions.js"></script>

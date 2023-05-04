@@ -125,7 +125,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <input name="name" type="hidden" id="name" value="<?php echo $name ?>">
     <input name="createdFrom" type="hidden" id="createdFrom" value="<?php echo $createdFrom ?>">
     <input name="descriptor" type="hidden" id="descriptor" value="<?php echo $descriptor ?>">
-    <input name="description" type="hidden" id="description" value="<?php echo $description ?>">
+    <input name="description" type="hidden" id="description" value="<?= str_replace(["'", '"'], ['&#39;', '&quot;'], $description); ?>">
     <input name="drivers" type="hidden" id="drivers" value="<?php echo $Driversx ?>">
     <input name="impactArea" type="hidden" id="impactArea" value="<?php echo $impactArea ?>">
     <input name="impactLevel" type="hidden" id="impactLevel" value="<?php echo $impactLevel ?>">
@@ -137,7 +137,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <input name="transfer2prgManager" type="hidden" id="transfer2prgManager" value="<?php echo $transfer2prgManager ?>">
     <input name="opportunity" type="hidden" id="opportunity" value="<?php echo $opportunity?>">
     <input name="assocProjects" type="hidden" id="assocProjects" value="<?php while ($row_ri_assoc_prj = sqlsrv_fetch_array($stmt_ri_assoc_prj, SQLSRV_FETCH_ASSOC)) { echo $row_ri_assoc_prj['proj_nm'] . '<br>'; } ?>">
-    <input name="actionPlan" type="hidden" id="actionPlan" value="<?php echo $actionPlan ?>">
+    <input name="actionPlan" type="hidden" id="actionPlan" value="<?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?>">
     <input name="DateClosed" type="hidden" id="DateClosed" value="<?php echo $DateClosed ?>">
     <input name="RiskProbability" type="hidden" id="RiskProbability" value="<?php echo $riskProbability ?>">
     <input name="programs" type="hidden" id="programs" value="<?php echo $programs ?>">
@@ -230,7 +230,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>
     <tr>
       <td>Description</td>
-      <td><?php echo $description; ?></td>
+      <td><?= $description; ?></td>
     </tr>
 <?php if(!empty($region_conx)){ ?>
     <tr>
@@ -325,7 +325,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>
     <tr>
       <td>Action Plan</td>
-      <td><?php echo $actionPlan; ?>
+      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?>
     </td>
     </tr>
 <?php if($PRJILog_Flg == 1) { ?>

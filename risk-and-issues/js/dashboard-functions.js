@@ -197,25 +197,48 @@ const excelrows = () => {
 }
 
 const trimmer = (target, key, kind) => {
+  // console.log(target, key, kind);
   let cleaner = document.createElement("div");
   cleaner.innerHTML = target;
+  // cleaner.innerHTML = target.replace(/<\/p><p>/g, '<br/>');
+  // console.log(cleaner.innerHTML);
   return (cleaner.textContent.length > textlength) 
   ? `<span id="clean${kind}${key}">` + cleaner.textContent.substr(0, textlength) + `<a href="#" class="more" id="more${kind}${key}" onclick="document.getElementById('desc${kind}${key}').style.display='block';document.getElementById('clean${kind}${key}').style.display='none';return false">[more]</a></span><span style="display:none;" onclick="this.style.display='none';document.getElementById('clean${kind}${key}').style.display='inline'" id="desc${kind}${key}">${target}<a href="#" onclick="return false">[less]</a></div>`
-  : target;
+  : cleaner.innerHTML;
 }
+// const trimmer = (target, key, kind) => {
+//   console.log(target, key, kind)
+//   let cleaner = document.createElement("div");
+//   cleaner.innerHTML = target;
+//   const paragraphs = cleaner.getElementsByTagName('p');
+//   for (let i = 0; i < paragraphs.length - 1; i++) {
+//     const breakElement = document.createElement('br');
+//     paragraphs[i].parentNode.insertBefore(breakElement, paragraphs[i].nextSibling);
+//   }
 
+//   let result = '';
+
+//   for (let i = 0; i < paragraphs.length; i++) {
+//     result += paragraphs[i].innerHTML;
+//     if (i < paragraphs.length - 1) {
+//       result += '<br>';
+//     }
+//   }
+//   console.log(result);
+//   cleaner.innerHTML = result;
+//   return (cleaner.textContent.length > textlength) 
+//   ? `<span id="clean${kind}${key}">` + result.textContent.substr(0, textlength) + `<a href="#" class="more" id="more${kind}${key}" onclick="document.getElementById('desc${kind}${key}').style.display='block';document.getElementById('clean${kind}${key}').style.display='none';return false">[more]</a></span><span style="display:none;" onclick="this.style.display='none';document.getElementById('clean${kind}${key}').style.display='inline'" id="desc${kind}${key}">${target}<a href="#" onclick="return false">[less]</a></div>`
+//   : target;
+// }
 var params = new URLSearchParams(window.location.search);
 var mode = (params.get("mode") == null) ? "project" : params.get("mode");
 var page = params.get("page");
 var page = (page > 1) ? page : 1;
 var format = params.get("format");
 var prepage = params.get("pagesize");
-var pagesize = (prepage > 0) ? prepage : 50;
+var pagesize = (prepage > 0) ? prepage : 8192;
 var textlength = params.get("textlength");
-var textlength = (textlength == null) ? 100 : textlength;
-// console.log(textlength);
-// mode = (window.location.href.indexOf("program")>=0) ? "program" : 
-// (window.location.href.indexOf("portfolio")>=0) ? "portfolio" : "project";
+var textlength = (textlength == null) ? 8192 : textlength;
 alt = (mode == "project") ? "program" : "project";
 document.title = capitalize(mode) + " R&I Dashboard";
 var sort = "RiskAndIssue_Key";
