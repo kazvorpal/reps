@@ -566,25 +566,24 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
           </h3> 
         </div>
         <div class="panel-body">
-          <div id="dateUnknown">
-                <input name="date" 
-                    type="date"
-                    min="<?php echo $closeDateMax ?>"
-                    class="form-control" 
-                    id="date" 
-                    value="2022-01-01"
-                    onChange="//forCastedX()"  
-                    oninvalidDisabled="this.setCustomValidity('You must select a date or check Unknown ')"
-                    oninputDisabled="this.setCustomValidity('')">
-          </div>
-        <br>
-          <div id="forcastedDate">
-                <input type="checkbox" 
-                    name="Unknown" 
-                    id="Unknown" 
-                    onChange="unKnownX()">
-                <label for="Unknown"> Unknown</label> - Overrides Resolution Date
-          </div>
+          <div class="panel-body">
+  <div id="dateUnknown">
+    <input name="date" 
+        type="date"
+        min="<?php echo $closeDateMax ?>"
+        class="form-control" 
+        id="date" 
+        value=""
+        required>
+  </div>
+  <br>
+  <div id="forcastedDate">
+    <input type="checkbox" 
+        name="Unknown" 
+        id="Unknown">
+    <label for="Unknown"> Unknown</label> - Overrides Resolution Date
+  </div>
+</div>
         </div>
       </div>
     </div>
@@ -710,99 +709,9 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
 
 <script>
 
-function myFunction() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "none";
-  } else {
-    x.style.display = "none";
-  }
-  
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "block";
-  } else {
-    y.style.display = "block";
-  }
-
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "none";
-  } else {
-    z.style.display = "none";
-  }
-
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "block";
-  } else {
-    w.style.display = "block";
-  }
-
-}
-
-function myFunctionOff() {
-  var x = document.getElementById("myDIV");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "block";
-  }
-  
-  var y = document.getElementById("myDIV2");
-  if (y.style.display === "none") {
-    y.style.display = "none";
-  } else {
-    y.style.display = "none";
-  }
-  
-  var z = document.getElementById("myIssue");
-  if (z.style.display === "none") {
-    z.style.display = "block";
-  } else {
-    z.style.display = "block";
-  }
-
-  var w = document.getElementById("myRisk");
-  if (w.style.display === "none") {
-    w.style.display = "none";
-  } else {
-    w.style.display = "none";
-  }
-
-}
-
-</script>
-<script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-jQuery(function ($) {
-    let $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
+$(document).ready(function() {
+  unknowndate();
 });
-</script>
-
-<script>
   var date = new Date();
   var day = date.getDate();
   var month = date.getMonth() + 1;
@@ -813,15 +722,6 @@ jQuery(function ($) {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('date').value = today;
-  /*** This whole item is commented out, now/
-  document.getElementById("indy").addEventListener("change", function(){
-    const v = this.value.split(" : ");
-    this.value = v[0];
-    // document.getElementById("InternalExternal").value = v[1];
-    // ^^^^ This refers to an element that's commented out
-  });
-  */
 </script>
 
 <script>
@@ -1160,21 +1060,23 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     document.getElementById("regionsnew").style.display = (yer != 2024) ? "none" : "";
   })
 
-  let summerprops = {
-    toolbar: [
-      ['style', ['style']],
-      ['font', ['bold', 'underline', 'italic', 'clear']],
-      ['fontname', ['fontname']],
-      ['table', ['table']],
-      ['para', ['ul', 'ol', 'paragraph']
-    ]
-  ]};
 
-  summercss = {"position": "absolute", "width": "0px", "height": "0px"}
-  $(document).ready(function() {
-    // $('#Description').summernote(summerprops).css(summercss).show();
-    // $('#ActionPlan').summernote(summerprops).css(summercss).show();
-  });
+  
+  let summerprops = {
+  toolbar: [
+    ['style', ['style']],
+    ['font', ['bold', 'underline', 'italic', 'clear']],
+    ['fontname', ['fontname', 'fontsize']],
+    ['para', ['ul', 'ol', 'paragraph']]
+  ],
+  fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '96'], 
+};
+
+summercss = {"position": "absolute", "width": "0px", "height": "0px"}
+$(document).ready(function() {
+  $('#Description').summernote(summerprops).css(summercss).show();
+  $('#ActionPlan').summernote(summerprops).css(summercss).show();
+});
 
 </script>
 

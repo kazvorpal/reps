@@ -563,7 +563,6 @@ function toggle(source) {
 					class="form-control" 
 					id="date" 
 					value=""
-					onChange="forCastedx()"  
 					oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
 					oninput="this.setCustomValidity('')"	 
 					> 
@@ -573,7 +572,7 @@ function toggle(source) {
               <tr>
                 <td>
 				<div id="forcastedDate">
-				<input type="checkbox" name="Unknown" id="Unknown" onChange="unKnownx()" <?php if(empty($date)){ echo "checked"; } ?> >
+				<input type="checkbox" name="Unknown" id="Unknown" <?php if(empty($date)){ echo "checked"; } ?> >
             <label for="Unknown" <?php if(is_null($date)){ echo "checked";  } ?>>Unknown</label> - Overides Resolution Date
           </div>  
 				</td>
@@ -846,35 +845,18 @@ function myFunctionOff() {
   }
 
 }
+// jQuery(function ($) {
+//     var $inputs = $('input[name=date],input[name=unknown]');
+//     $inputs.on('input', function () {
+//         // Set the required property of the other input to false if this input is not empty.
+//         $inputs.not(this).prop('required', !$(this).val().length);
+//     });
+// });
 
-</script>
-<script>
-function forCasted() {
-  var x = document.getElementById("forcastedDate");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function unKnown() {
-  var x = document.getElementById("dateUnknown");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-
-jQuery(function ($) {
-    var $inputs = $('input[name=date],input[name=unknown]');
-    $inputs.on('input', function () {
-        // Set the required property of the other input to false if this input is not empty.
-        $inputs.not(this).prop('required', !$(this).val().length);
-    });
+$(document).ready(function() {
+  unknowndate();
 });
+
 
 var date = new Date();
 

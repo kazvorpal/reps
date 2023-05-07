@@ -98,7 +98,7 @@
           p = ", Portfolio";
           n = "RAID Log";
         } else {
-          p = ", Projects";
+          p = ", Programs";
           n = capitalize(mode);
         }
         sa = makeelement({e: "button", v: "", c: "btn btn-default", j: () => {toggleall(openval) }, i: "allbutton", t: "Expand All"});
@@ -215,6 +215,19 @@
     const makedata = (id, type, programname) => {            
         // Make all the data inside a risk or issue, Program and Portfolio
 
+        const programlist = () => {
+          // programs = ri.MLMProgram_Nm;
+          programs = ri.Program_Nm;
+          portfolioprograms.forEach((o) => {
+            let comma = (programs != "") ? ", " : ""
+            if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
+              && programs.indexOf(o.MLMProgram_Nm) == -1
+              && programs.indexOf(o.Program_Nm) == -1) {
+                console.log(o);
+              programs = programs + comma + o.Program_Nm;
+            } 
+          });
+        }
         const fieldswitch = {
           //    Specific fields that need extra calculation
           //    Add any field to rifields that you want to be a column,
@@ -340,8 +353,10 @@
                 list += comma + r.SubProgram_Nm ;
               } 
             }
-            let ret = (list != "") ? list.slice(0, -2) : ""
-            // console.log("ret", ret);
+            console.log(list)
+            let ret = (list != "") ? list : ""
+            // let ret = (list != "") ? list.slice(0, -2) : ""
+            console.log("ret", ret);
             return ret;
           }, 
           MLMProgram_Nm: () => {
@@ -351,7 +366,7 @@
               portprog.forEach(o => {
                 let comma = (programs != "") ? ", " : "";
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key) {
-                  programs = programs + comma + o.Program_Nm;
+                  programs = (programs.indexOf(o.Program_Nm) == -1) ? programs + comma + o.Program_Nm : programs;
                 }
               })
               if (programs == "" ) {
@@ -368,11 +383,15 @@
               portfolioprograms.forEach((o) => {
                 let comma = (programs != "") ? ", " : ""
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
-                  && programs.indexOf(o.MLMProgram_Nm) == -1) {
-                  programs = programs + comma + o.Program_Nm;
+                  && programs.indexOf(o.MLMProgram_Nm) == -1 && programs.indexOf(o.Program_Nm) == -1) {
+                    console.log(o);
+                  programs = (programs.indexOf(o.Program_Nm) == -1) ? programs + comma + o.Program_Nm : programs;
+                  // programs = programs + comma + o.Program_Nm;
                   pc++;
                 } 
-              })
+              });
+              if (ri.RiskAndIssue_Key == 2181) 
+                console.log("pc", programs);
               if (pc == 0) {
                 pc = 1;
               }
@@ -385,12 +404,12 @@
             return  `${d}${s}`;
           },
           RIDescription_Txt: () => {
-            return ri.RIDescription_Txt
-            // return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
+            // return ri.RIDescription_Txt
+            return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
           },
           ActionPlanStatus_Cd: () => {
-            return ri.ActionPlanStatus_Cd;
-            // return trimmer(ri.ActionPlanStatus_Cd, ri.RiskAndIssue_Key, "plan");
+            // return ri.ActionPlanStatus_Cd;
+            return trimmer(ri.ActionPlanStatus_Cd, ri.RiskAndIssue_Key, "plan");
           },
           actionplandate: () => {
             let r = (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
@@ -784,14 +803,14 @@
           return (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
         },
         RIDescription_Txt: () => {
-          return ri.RIDescription_Txt;
-          // return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
+          // return ri.RIDescription_Txt;
+          return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
         },
         ActionPlanStatus_Cd: () => {
           let plan = ri.ActionPlanStatus_Cd;
           let key = ri.RiskAndIssue_Key;
-          return plan;
-          // return trimmer(plan, key, "plan");
+          // return plan;
+          return trimmer(plan, key, "plan");
         },
         programmanager: () => {
           let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";

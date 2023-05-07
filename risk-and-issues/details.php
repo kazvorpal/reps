@@ -124,7 +124,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 <html>
 <head>
 <meta charset="utf-8">
-<title><?php echo $name ?></title>
+<title><?= $name ?></title>
 </head>
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
@@ -136,8 +136,8 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 
 <body style="font-family:Mulish, serif;">
 <div id='dlist'></div> 
-	<div align="center"><h3>PROJECT <?php echo strtoupper($RIType) ?> DETAILS</h3></div>
-	<div align="center"><?php echo $name ?></div>
+	<div align="center"><h3>PROJECT <?= strtoupper($RIType) ?> DETAILS</h3></div>
+	<div align="center"><?= $name ?></div>
 	<div style="padding: 10px" class="alert">  </div>
 
   <form action="confirm-do.php" method="post" name="confirmation" id="confirmation">
@@ -151,49 +151,49 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
   <tbody>  
   <tr>
       <td width="20%">ID</td>
-      <td><?php echo $ri_id; ?></td>
+      <td><?= $ri_id; ?></td>
   </tr>
   <tr>
       <td width="20%">Owner Name</td>
-      <td><?php echo $ri_owner; ?></td>
+      <td><?= $ri_owner; ?></td>
   </tr>
   <tr>
       <td width="20%">Risk/Issue Name</td>
-      <td><?php echo $name; ?></td>
+      <td><?= $name; ?></td>
     </tr>
 <?php if(!empty($crid)){ ?>
     <tr>
       <td width="20%">Associated CR ID</td>
-      <td><?php echo $crid; ?></td>
+      <td><?= $crid; ?></td>
     </tr>
 <?php } ?>
     <tr>
       <td width="20%">Type</td>
-      <td><?php echo $RILevel . " " . $RIType; ?></td>
+      <td><?= $RILevel . " " . $RIType; ?></td>
     </tr>
 <?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td><?= $createdFrom ; ?></td>
     </tr>
 <?php } ?>
 <?php if(isset($_POST['CreatedFrom'])) { ?>
     <tr>
       <td>Created From</td>
-      <td><?php echo $createdFrom ; ?></td>
+      <td><?= $createdFrom ; ?></td>
     </tr>
 <?php } ?>
     <tr>
       <td>Project</td>
-      <td><?php echo $project_nm ; ?></td>
+      <td><?= $project_nm ; ?></td>
     </tr>
     <tr>
       <td>Issue Descriptor</td>
-      <td><?php echo $descriptor ; ?></td>
+      <td><?= $descriptor ; ?></td>
     </tr>
     <tr>
       <td>Description</td>
-      <td><?php echo $description; ?></td>
+      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $description); ?></td>
     </tr>
     <!--<tr>
       <td>Region</td>
@@ -202,21 +202,21 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
     <tr>
       <td>Drivers</td>
       <td>
-        <?php echo $Driversx;?>
+        <?= $Driversx;?>
       </td>
     </tr>
     <tr>
       <td>Impact Area</td>
-      <td><?php echo $impactArea2; ?></td>
+      <td><?= $impactArea2; ?></td>
     </tr>
     <tr>
       <td>Impact Level</td>
-      <td><?php echo $impactLevel2; ?></td>
+      <td><?= $impactLevel2; ?></td>
     </tr>
     <?php if(!empty($riskProbability)) {?>
     <tr>
       <td>Risk Probibility</td>
-      <td><?php echo $riskProbability; ?></td>
+      <td><?= $riskProbability; ?></td>
     </tr>
     <?php } ?>
     <!--
@@ -231,7 +231,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
     -->
     <tr>
       <td>Response Strategy</td>
-      <td><?php echo $responseStrategy2; ?></td>
+      <td><?= $responseStrategy2; ?></td>
     </tr>
     <tr>
       <td>Forecasted Resolution Date</td>
@@ -256,20 +256,20 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
     </tr>
 <?php } ?>
     <tr>
-      <td>Associated Projects (<?php echo $assPrjCnt; ?>)   
+      <td>Associated Projects (<?= $assPrjCnt; ?>)   
         </td>
       <td>
-        <?php echo $assocProject; 
+        <?= $assocProject; 
         ?>
       </td>
     </tr>
     <tr>
       <td>Action Plan <a data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon glyphicon-calendar"></span></a></td>
-      <td><?php echo $actionPlan; ?>
+      <td><?= str_replace(["'", '"'], ['&#39;', '&quot;'], $actionPlan); ?>
 
         <div class="collapse" id="collapseExample">
           <div class="well">
-          <iframe id="actionPlan" src="action_plan.php?rikey=<?php echo $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
+          <iframe id="actionPlan" src="action_plan.php?rikey=<?= $RiskAndIssue_Key?>" width="100%" frameBorder="0"></iframe>
           </div>
         </div>
 
@@ -278,11 +278,11 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 <?php if(!empty($changeLogActionVal)) { ?>
     <tr>
       <td>Change Log Action</td>
-      <td><?php echo $changeLogActionVal; ?></td>
+      <td><?= $changeLogActionVal; ?></td>
     </tr>
     <tr>
       <td>Change Log Reason</td>
-      <td><?php echo $changeLogReason; ?></td>
+      <td><?= $changeLogReason; ?></td>
     </tr>
 <?php } ?>
 <!-- POR SCHEDULE DATES -->
@@ -313,7 +313,7 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
 <?php if($RIType == "Risk"){ ?>
     <tr>
       <td width="20%">Risk Realized</td>
-      <td><?php echo $riskRealized ; ?></td>
+      <td><?= $riskRealized ; ?></td>
     </tr>
 <?php } ?>
     <tr>
@@ -337,37 +337,37 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
       <?php } ?>
         <?php if($access=="true"){?>  
           <?php if($status == 1){ ?>
-            <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?php echo $fscl_year?>&name=<?php echo urlencode($name)?>&proj_name=<?php echo $project_nm?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&status=<?php echo $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+            <a href="includes/associated_prj_update.php?ri_level=prj&fscl_year=<?= $fscl_year?>&name=<?= urlencode($name)?>&proj_name=<?= $project_nm?>&ri_type=<?= $RIType ?>&rikey=<?= $RiskAndIssue_Key?>&status=<?= $status ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
 
             <?php 
 $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
 $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
 ?>
 
-            <a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
+            <a href="mailto:?subject=RISKS AND ISSUES - <?= $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
-            %0D%0AID: <?php echo $ri_id;?>
-            %0D%0AOwner Name: <?php echo $ri_owner;?>
-            %0D%0AName: <?php echo $name;?>
-            %0D%0AType: <?php echo $RILevel . " " . $RIType?>
-            %0D%0AProject: <?php echo $project_nm?>
-            %0D%0ADescriptor: <?php echo $descriptor ?>
-            %0D%0ADescription: <?php echo $desc?>
-            %0D%0ADriver: <?php echo $Driversx?>
-            %0D%0AImpact Area: <?php echo $impactArea2?>
-            %0D%0AImpact Level: <?php echo $impactLevel2?>
-            %0D%0AResponse Strategy: <?php echo $responseStrategy2?>
+            %0D%0AID: <?= $ri_id;?>
+            %0D%0AOwner Name: <?= $ri_owner;?>
+            %0D%0AName: <?= $name;?>
+            %0D%0AType: <?= $RILevel . " " . $RIType?>
+            %0D%0AProject: <?= $project_nm?>
+            %0D%0ADescriptor: <?= $descriptor ?>
+            %0D%0ADescription: <?= $desc?>
+            %0D%0ADriver: <?= $Driversx?>
+            %0D%0AImpact Area: <?= $impactArea2?>
+            %0D%0AImpact Level: <?= $impactLevel2?>
+            %0D%0AResponse Strategy: <?= $responseStrategy2?>
             %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
-            %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject)?>
-            %0D%0AAction Plan: <?php echo $act?>
+            %0D%0AAssociated Project(s): <?= str_replace("<br>", ", ", $assocProject)?>
+            %0D%0AAction Plan: <?= $act?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-            %0D%0ALink: <?php echo $link;?>"
+            %0D%0ALink: <?= $link;?>"
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
 
             <span style="font-size: 24px;"> | </span> 
 
-          <a href="includes/associated_prj_manage.php?ri_level=prj&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Add Project Association"><span class="btn btn-primary">+</span></a>
-          <a href="includes/associated_prj_manage_remove.php?ri_level=prj&fiscal_year=<?php echo $fscl_year;?>&name=<?php echo $row_risk_issue['RI_Nm'];?>&proj_name=<?php echo $proj_name;?>&ri_type=<?php echo $row_risk_issue['RIType_Cd'];?>&rikey=<?php echo $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?php echo $uid;?>&action=update&inc=<?php echo $row_risk_issue['RIIncrement_Num']; ?>" title="Remove Project Association"><span class="btn btn-primary">-</span></a>
+          <a href="includes/associated_prj_manage.php?ri_level=prj&fiscal_year=<?= $fscl_year;?>&name=<?= $row_risk_issue['RI_Nm'];?>&proj_name=<?= $proj_name;?>&ri_type=<?= $row_risk_issue['RIType_Cd'];?>&rikey=<?= $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?= $uid;?>&action=update&inc=<?= $row_risk_issue['RIIncrement_Num']; ?>" title="Add Project Association"><span class="btn btn-primary">+</span></a>
+          <a href="includes/associated_prj_manage_remove.php?ri_level=prj&fiscal_year=<?= $fscl_year;?>&name=<?= $row_risk_issue['RI_Nm'];?>&proj_name=<?= $proj_name;?>&ri_type=<?= $row_risk_issue['RIType_Cd'];?>&rikey=<?= $row_risk_issue['RiskAndIssue_Key']; ?>&status=1&uid=<?= $uid;?>&action=update&inc=<?= $row_risk_issue['RIIncrement_Num']; ?>" title="Remove Project Association"><span class="btn btn-primary">-</span></a>
         <?php } ?>
       <?php } ?>
     </div>

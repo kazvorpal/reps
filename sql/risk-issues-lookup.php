@@ -197,8 +197,12 @@ $actionPlan = $_POST['ActionPlan'];
   }
 
 $responseStrategy = $_POST['ResponseStrategy']; 
-$date = $_POST['date']; // FORCASTED RESOLUTION DATE
 
+// FORCASTED RESOLUTION DATE 5.1.2023
+$date = "";
+if(isset($_POST['date'])){
+$date = $_POST['date']; 
+}
 
 $DateClosed = NULL;
 if (!empty($_POST['DateClosed'])) {
