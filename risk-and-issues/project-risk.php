@@ -200,20 +200,13 @@ function toggle(source) {
 			<table width="100%" border="0" cellpadding="10" cellspacing="10">
             <tbody>
               <tr>
-                <td><div id="myDIV">
-                  <label for="Created From">Created From</label>
-                  <br>
-                  <input name="CreatedFrom" type="text" class="form-control" id="Created From">
-                </div></td>
-                </tr>
-              <tr>
                 <td><label for="Created From">Name</label>
                   <br>
                   <input name="Namex" type="text" readonly required="required" class="form-control" id="Namex" >
                   <input name="NameA" type="hidden" id="NameA" value="<?php echo $row_projID['PRGM'] . " " . $row_projID['Sub_Prg'] . " " . $row_projID['EPSLocation_Cd'];?>">
                   <input name="NameC" type="hidden" id="NameC" value="<?php echo "POR" . substr($row_projID['FISCL_PLAN_YR'], -2) ?>">
                 </td>
-                </tr>
+              </tr>
               <tr>
                 <td></br><label for="Created From">Risk Descriptor * <a href="includes/definitions.php?tooltipkey=RSKD" class="dno"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>

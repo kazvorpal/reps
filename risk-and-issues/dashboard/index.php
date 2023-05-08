@@ -353,10 +353,10 @@
                 list += comma + r.SubProgram_Nm ;
               } 
             }
-            console.log(list)
+            // console.log(list)
             let ret = (list != "") ? list : ""
             // let ret = (list != "") ? list.slice(0, -2) : ""
-            console.log("ret", ret);
+            // console.log("ret", ret);
             return ret;
           }, 
           MLMProgram_Nm: () => {
@@ -384,7 +384,7 @@
                 let comma = (programs != "") ? ", " : ""
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
                   && programs.indexOf(o.MLMProgram_Nm) == -1 && programs.indexOf(o.Program_Nm) == -1) {
-                    console.log(o);
+                    // console.log(o);
                   programs = (programs.indexOf(o.Program_Nm) == -1) ? programs + comma + o.Program_Nm : programs;
                   // programs = programs + comma + o.Program_Nm;
                   pc++;
@@ -454,7 +454,7 @@
                               || (checkage(29, test, texter))) ? " hilite"
                                : (checkage(14, test, texter)) ? " blulite" : "";
               let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + textalign(texter) + bgcolor, w: w}));
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + textalign(field) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
               tridobj.appendChild(header);
@@ -872,7 +872,7 @@
                               || (checkage(29, test, texter))) ? " hilite" : 
                               (checkage(14, test, texter)) ? " blulite" : "";
               let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
-              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(texter) + bgcolor }));
+              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(field) + bgcolor }));
             })(field);
             if (rifields[field].name == "ID") {
               // console.log("addons")
@@ -903,7 +903,7 @@
         });
     }  
     const makeheadline = () => {
-      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log" : `${capitalize(mode)} R&I Dashboard 2.0`;
+      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log 2.0" : `${capitalize(mode)} R&I Dashboard 2.0`;
     }
     const fixcollapse = () => {
       document.querySelectorAll(".collapse").forEach(o => {
