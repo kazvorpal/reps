@@ -1,11 +1,13 @@
 const configLightbox = (props) => {
     const [state, setState] = React.useState({
       mode: { use: false },
-      format: { type: "radio", options: ["grid", "accordion"] },
+      format: { type: "checkbox", name: "format" },
+      // format: { type: "radio", options: ["grid", "accordion"] },
       pagesize: { type: "text" },
     });
   
     const handleInputChange = (event, key) => {
+      console.log(event.target.checked, key)
       const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
       setState({ ...state, [key]: { ...state[key], value } });
     };
@@ -42,7 +44,7 @@ const configLightbox = (props) => {
                 "label",
                 null,
                 key + ":",
-                React.createElement("input", { type: "checkbox", onChange: (event) => handleInputChange(event, key) })
+                React.createElement("input", { type: "checkbox", id: key, name: key, onChange: (event) => handleInputChange(event, key) })
             )
             );
         } else if (config.type === "text") {
@@ -61,14 +63,14 @@ const configLightbox = (props) => {
     };
   
     return React.createElement(
-        "div",
-        {
-          className: "config-lightbox",
-          onClick: (e) => e.stopPropagation(),
-        },
-        Object.entries(state).map(([key, config]) => renderInput(key, config))
-      );
-};
+      "dialog",
+      {
+        className: "config-lightbox",
+        onClick: (e) => e.stopPropagation(),
+      },
+      Object.entries(state).map(([key, config]) => renderInput(key, config))
+    );
+  };
 
 function renderLightbox() {
     console.log("in render")
@@ -77,17 +79,20 @@ function renderLightbox() {
 }
   
 function showLightbox() {
-    console.log("showing config-lightbox");
-    const container = document.getElementById("config-lightbox-container");
-    container.style.display = "block";
-    container.classList.add("config-lightbox-container");
-    container.onclick = () => hideLightbox();
+  console.log("showing config-lightbox");
+  const container = document.getElementById("config-lightbox-container");
+  container.style.display = "block";
+  container.classList.add("config-lightbox-container");
+  // container.onclick = () => hideLightbox();
+  const dialog = container.querySelector("dialog");
+  dialog.showModal();
 }
-  
+
 function hideLightbox() {
-    console.log("hide")
-    const container = document.getElementById("config-lightbox-container");
-    container.style.display = "none";
-    container.classList.remove("config-lightbox-container");
+  console.log("hide");
+  const container = document.getElementById("config-lightbox-container");
+  const dialog = container.querySelector("dialog");
+  dialog.close();
+  container.style.display = "none";
+  container.classList.remove("config-lightbox-container");
 }
-    
