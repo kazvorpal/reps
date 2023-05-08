@@ -32,6 +32,15 @@ const removenullproperty = (list, field) => {
     })
 }
 
+function fixEncodingIssues(text) {
+  return text
+    .replace(/^\uFEFF/g, '')
+    .replace(/Ã¯»¿/g, '')
+    .replace(/Ã¯ » ¿/g, '')
+    .replace(/Ã¢â¬Â¢|Ã¢â¬â¢/g, '•')
+    .replace(/Â|Ã/g, ' ')
+    .replace(/Ã¢ââ¹|Ã¢â¬â/g, '—');
+}
 const getuniqueobjects = (list, field) => {
     const objectlist = list.map(item => item[field]).filter((value, index, self) => self.indexOf(value) === index);
     let returnlist = [];

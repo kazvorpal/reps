@@ -353,10 +353,10 @@
                 list += comma + r.SubProgram_Nm ;
               } 
             }
-            console.log(list)
+            // console.log(list)
             let ret = (list != "") ? list : ""
             // let ret = (list != "") ? list.slice(0, -2) : ""
-            console.log("ret", ret);
+            // console.log("ret", ret);
             return ret;
           }, 
           MLMProgram_Nm: () => {
@@ -384,7 +384,7 @@
                 let comma = (programs != "") ? ", " : ""
                 if (o.RiskAndIssue_Key == ri.RiskAndIssue_Key 
                   && programs.indexOf(o.MLMProgram_Nm) == -1 && programs.indexOf(o.Program_Nm) == -1) {
-                    console.log(o);
+                    // console.log(o);
                   programs = (programs.indexOf(o.Program_Nm) == -1) ? programs + comma + o.Program_Nm : programs;
                   // programs = programs + comma + o.Program_Nm;
                   pc++;

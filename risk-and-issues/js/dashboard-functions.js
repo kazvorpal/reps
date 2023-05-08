@@ -199,7 +199,7 @@ const excelrows = () => {
 const trimmer = (target, key, kind) => {
   // console.log(target, key, kind);
   let cleaner = document.createElement("div");
-  cleaner.innerHTML = target;
+  cleaner.innerHTML = fixEncodingIssues(target);
   // cleaner.innerHTML = target.replace(/<\/p><p>/g, '<br/>');
   // console.log(cleaner.innerHTML);
   return (cleaner.textContent.length > textlength) 
