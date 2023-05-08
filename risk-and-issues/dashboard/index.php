@@ -449,12 +449,13 @@
         }
         for (field of Object.keys(rifields)) {
             (function(test) {
-              let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              let texter = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
+              // let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
               let bgcolor = ((test == "ForecastedResolution_Dt" && (Date.parse(texter)+86400000) < Date.parse(new Date()))
                               || (checkage(29, test, texter))) ? " hilite"
                                : (checkage(14, test, texter)) ? " blulite" : "";
               let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + textalign(field) + bgcolor, w: w}));
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + " "+ textalign(field) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
               tridobj.appendChild(header);
@@ -463,7 +464,7 @@
         var rowValues = [];
         for (field in excelfields) {
             (function(test) {
-                let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+                let t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
                 t = ((typeof t == "string" && t.indexOf("span") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</span>"))) :t);
                 rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) :t);
             })(field);
@@ -844,7 +845,7 @@
       if (excel) {
         for (field in excelfields) {
           (function(test) {
-              let t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              let t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
               t = striptags(t);
               t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
               rowValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
@@ -855,7 +856,7 @@
           if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
             for (field in changelog) {
               (function(test) {
-                t = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+                t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
                 t = striptags(t);
                 t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
               logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
@@ -867,12 +868,12 @@
       } else {
         for(field in rifields) {
             (function(test) {
-              let texter = (typeof fieldswitch[test] != "function") ? ri[test] : fieldswitch[test]();
+              let texter = (typeof fieldfilter(ri, test, url) != "function") ? ri[test] : fieldfilter(ri, test, url)();
               let bgcolor = (("ForecastedResolution_Dt" == test && (Date.parse(texter)+86400000) < Date.parse(new Date()))
                               || (checkage(29, test, texter))) ? " hilite" : 
                               (checkage(14, test, texter)) ? " blulite" : "";
               let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
-              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping + textalign(field) + bgcolor }));
+              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping +  " "+ textalign(field) + bgcolor }));
             })(field);
             if (rifields[field].name == "ID") {
               // console.log("addons")
