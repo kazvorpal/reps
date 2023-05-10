@@ -35,6 +35,7 @@ const removenullproperty = (list, field) => {
 function fixEncodingIssues(text) {
   return text
     .replace(/^\uFEFF|Ã¯ » ¿|Ã¯»¿/g, '')
+    .replace(/Ã¯.*¿/g, '')
     .replace(/Ã¢â¬Â¢|Ã¢â¬â¢/g, '•')
     .replace(/Â|Ã/g, ' ')
     .replace(/Ã¢ââ¹|Ã¢â¬â/g, '—');
