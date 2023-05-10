@@ -82,7 +82,7 @@ const toggler = (target, o) => {
 
   const initexcel = () => {
     document.workbook = new ExcelJS.Workbook();
-    document.workbook.creator = "RePS Website";
+    document.workbook.creator = "R&I Dashboard Export";
     document.workbook.lastModifiedBy = "Kaz";
     document.workbook.created = new Date();
     const Mode = (mode == "portfolio") ? "Raid Log" : capitalize(mode);
