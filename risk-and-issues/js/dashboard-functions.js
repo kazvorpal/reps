@@ -76,7 +76,7 @@ const toggler = (target, o) => {
   const getprogrambykeyonly = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target);
   const getlocationbykey = (key) =>  locationlist.find(o => o.EPSProject_key == key);
   
-  const textalign = (field) => (typeof rifields[field].align != "undefined") || "text-center";
+  const textalign = (field) => (rifields[field].align) || "text-center";
   // const textalign = (field) => (field == null || parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
 
 
