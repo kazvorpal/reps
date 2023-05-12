@@ -5,14 +5,16 @@ const sortby = (list, property) => {
     return rv;
   }
 
-  const isempty = (target) => {
-    return ([undefined, null, "null", ""].includes(target));
-  }
-
-  const capitalize = (target) => {
-      return target.charAt(0).toUpperCase() + target.slice(1);
-  }
-
+  const isempty = (target) => ([undefined, null, "null", ""].includes(target));
+  const capitalize = (target) => target.charAt(0).toUpperCase() + target.slice(1);
+  // Sanitize a string
+  const makesafe = (target) => (target in ["null", null]) ? "makesafedatamissing" : target.replace(/[.\s&]/g,'');
+  const padTo2Digits = (num) => num.toString().padStart(2, '0');
+  const padder = (target, character, size) => character.repeat(target.toString().length) + target.toString();
+  const splitdate = (datestring) => datestring.split(" - ");
+  const makedate = (dateobject) => dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
+  
+  
   const makeelement = (o) => {
 
     // o is an (o)bject with these optional properties:
@@ -98,12 +100,6 @@ const sortby = (list, property) => {
   }
 
 
-  // Sanitize a string
-const makesafe = (target) => {
-  return  (target in ["null", null]) ? "makesafedatamissing" : target.replace(/[.\s&]/g,'');
-}
-
-const padTo2Digits = (num) => num.toString().padStart(2, '0');
 
 const formatDate = (date) => {
   return [
@@ -132,15 +128,7 @@ const makestringdate = (dateobject) => {
     return "";
 }
 
-const padder = (target, character, size) => {
-  tl = target.toString();
-  return character.repeat(size-tl.length) + target.toString();
-}
 
-const splitdate = (datestring) => {
-  let newdate = datestring.split(" - ");
-  return newdate;
-}  
 
 const betweendate = (dates, tween) => {
   let s = splitdate(dates);
@@ -155,13 +143,9 @@ const betweendate = (dates, tween) => {
   return r;
 }  
 
-const makedate = (dateobject) => {
-  return dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
-}
 
-const ranger = (daterange) => {
-  // get start and end date from a date range set via Bootstrap date range picker
-  const dates = {};
-  dates.start = daterange.substring(0, daterange.indexOf(" - ")+1);
-  dates.end = daterange.substring(daterange.indexOf(" - ")+4);
-  return dates; } 
+// get start and end date from a date range set via Bootstrap date range picker
+const ranger = (daterange) => ({
+  start: daterange.substring(0, daterange.indexOf(" - ")+1), 
+  end: daterange.substring(daterange.indexOf(" - ")+4)
+}); 
