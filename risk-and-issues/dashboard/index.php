@@ -267,7 +267,7 @@
                               || (checkage(29, test, texter))) ? " hilite"
                                : (checkage(14, test, texter)) ? " blulite" : "";
               let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
-              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + " "+ textalign(field) + bgcolor, w: w}));
+              tridobj.appendChild(makeelement({e: "td", t: texter, c: "p-1 datacell align-middle " + wrapping + " "+  textalign(field) + bgcolor, w: w}));
             })(field);
             if (rifields[field].name == "ID") {
               tridobj.appendChild(header);
@@ -478,7 +478,7 @@
                               || (checkage(29, test, texter))) ? " hilite" : 
                               (checkage(14, test, texter)) ? " blulite" : "";
               let wrapping = (richtextfields.includes(test)) ? " overflow-everything" : "";
-              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping +  " "+ textalign(field) + bgcolor }));
+              trri.appendChild(makeelement({"e": "td", "t": texter, "c": "p-1 datacell align-middle" + wrapping +  " " + textalign(field) + bgcolor }));
             })(field);
             if (rifields[field].name == "ID") {
               // console.log("addons")
