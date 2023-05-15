@@ -324,7 +324,6 @@
             })
           } else {
               let cells = [];
-              // console.log(rifields)
               Object.entries(rifields).forEach(([key, value]) => {
                 let direction = b1 = b2 = "";
                 if (sort == key) {
@@ -368,7 +367,8 @@
       c = griddy() ? "plainbox" : (arrow == "" || mode == "portfolio") ? "plainbox" : "namebox";
       const w = (mode == "portfolio") ? "" : "";
       const header = makeelement(etemp(saferi, ri.RI_Nm));
-      // const type = makeelement(etemp(saferi, ri.RIType_Cd));
+      if (griddy()) 
+        type = makeelement(etemp(saferi, ri.RIType_Cd));
       const tridobj = document.getElementById(trid);
       let newrow = document.worksheet.addRow(makeexcel(ri));
       const logValues = [];
@@ -400,42 +400,42 @@
       }
     }
   }  
-    var modebutton = (target) => {
-        let url = `<a href='/risk-and-issues/dashboard/?mode=${target}&page=${page}' style='color:#fff' onclick='return false';>`;
-        let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
-        return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-1","j": function() {
-            console.log("changing mode to " + target);
-            init(target, true);
-        }})
-    }
-    const makemodebuttons = () => {
-        let m = document.getElementById("modebuttons");
-        while (m.firstChild) {
-            m.removeChild(m.lastChild);
-        }
-        modes.forEach(element => {
-          let e = (element != mode) ? modebutton(element) :"";
-            (e != "") ? m.appendChild(e):"";
-            m.appendChild(document.createTextNode(" "));
-        });
-    }  
-    const makeheadline = () => {
-      document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log 2.0" : `${capitalize(mode)} R&I Dashboard 2.0`;
-    }
-    const fixcollapse = () => {
-      document.querySelectorAll(".collapse").forEach(o => {
-        o.style.overflow = "initial";
-      })
-    }
+  var modebutton = (target) => {
+      let url = `<a href='/risk-and-issues/dashboard/?mode=${target}&page=${page}' style='color:#fff' onclick='return false';>`;
+      let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
+      return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-1","j": function() {
+          console.log("changing mode to " + target);
+          init(target, true);
+      }})
+  }
+  const makemodebuttons = () => {
+      let m = document.getElementById("modebuttons");
+      while (m.firstChild) {
+          m.removeChild(m.lastChild);
+      }
+      modes.forEach(element => {
+        let e = (element != mode) ? modebutton(element) :"";
+          (e != "") ? m.appendChild(e):"";
+          m.appendChild(document.createTextNode(" "));
+      });
+  }
+  const makeheadline = () => {
+    document.title = document.getElementById("title").innerHTML = (mode == "portfolio") ? "RAID Log 2.0" : `${capitalize(mode)} R&I Dashboard 2.0`;
+  }
+  const fixcollapse = () => {
+    document.querySelectorAll(".collapse").forEach(o => {
+      o.style.overflow = "initial";
+    })
+  }
 
-    const fieldmap = {
-      "subprogram": "",
-      "actionplandate": "", 
-      "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
-      "ForecastedResolution_Dt": "ForecastedResolution_Dt.date",
-      "RIDescription_Txt": "",
-      "ActionPlanStatus_Cd": "",
-      programcount: ""
+  const fieldmap = {
+    "subprogram": "",
+    "actionplandate": "", 
+    "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
+    "ForecastedResolution_Dt": "ForecastedResolution_Dt.date",
+    "RIDescription_Txt": "",
+    "ActionPlanStatus_Cd": "",
+    programcount: ""
   }
 
 
@@ -480,14 +480,10 @@
               });
             }
           });
-          // console.log("riseed", sort)
           riseed = getwholeuniques(riseed.concat(extralist), "RiskAndIssue_Key");
-          // riseed.forEach(o => console.log(o[sort]));
           riseed = risort(riseed, sort);
           resultcounter(riseed.length);
           setTimeout(function() {
-            // console.log("two")
-            // riseed.forEach(o => console.log(o[sort]));
             populate(riseed);
           });
         } else {
@@ -495,7 +491,6 @@
             populate(riseed);
           });
         }
-        // ridata = riseed;
       });
       makeheadline();
       setTimeout(colorboxschtuff, 2000);
@@ -508,7 +503,7 @@
    
   </script>
   <div id="config-lightbox-container"></div>
-  <button onclick="renderLightbox()">Open Lightbox</button>
+  <button id="settingsbutton" style="display:none" onclick="renderLightbox()">Open Lightbox</button>
 
   </body>
 </html>
