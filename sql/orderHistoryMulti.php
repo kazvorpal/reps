@@ -30,7 +30,7 @@
 							  OR EquipPlan_Id IN ('$oracleCD')
 							  OR EPS_Project_Nm IN ('$oracleCD')
 				";
-				//echo $sql_eqh;
+				echo $sql_eqh;
 	$stmt_eqh = sqlsrv_query( $conn, $sql_eqh ); //$conn_COXProd is Cox Datebase on SQL Production //$conn_COX_QA is test Datebase 
 
 	// OR EPS_Project_Nm IN (SELECT convert(varchar, value) FROM string_split('$oracleCD', ','))
