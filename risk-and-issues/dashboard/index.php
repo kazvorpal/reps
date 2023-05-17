@@ -428,22 +428,30 @@
     })
   }
 
+  // Exclude from sorting
   const fieldmap = {
     "subprogram": "",
-    "actionplandate": "", 
-    "age": "aplist[list.RiskAndIssue_Key].LastUpdate.date", 
-    "ForecastedResolution_Dt": "ForecastedResolution_Dt.date",
-    "RIDescription_Txt": "",
-    "ActionPlanStatus_Cd": "",
     programcount: ""
   }
-
+  const apfields = {
+    "actionplandate": "LastUpdate", 
+    "age": "LastUpdate", 
+    "ActionPlanStatus_Cd": "ActionPlanStatus_Cd",
+  }
 
   const risort = (list, field) => {
     field = (field === "category") ? "Global_Flg" : (field == "LastUpdateBy_Nm") ? "LastUpdate_By" : field;
     let qs = list.sort((a, b) => {
-      const aValue = a[field] === null ? "ZZZZ" : (typeof a[field] === "boolean" ? (a[field] ? 1 : 0) : a[field]);
-      const bValue = b[field] === null ? "ZZZZ" : (typeof b[field] === "boolean" ? (b[field] ? 1 : 0) : b[field]);
+      apfields.hasOwnProperty(field) && (a[field] = aplist[a.RiskAndIssue_Key][apfields[field]]);
+      apfields.hasOwnProperty(field) && (b[field] = aplist[b.RiskAndIssue_Key][apfields[field]]);
+      const aValue = a[field] === null ? "ZZZZ" 
+        : (typeof a[field] === "boolean" ? (a[field] ? 1 : 0) 
+        : (typeof a[field] != "undefined" && typeof a[field].date != "undefined") ? a[field].date 
+        : a[field]);
+      const bValue = b[field] === null ? "ZZZZ" 
+        : (typeof b[field] === "boolean" ? (b[field] ? 1 : 0) 
+        : (typeof b[field] != "undefined" && typeof b[field].date != "undefined") ? b[field].date 
+        : b[field]);
       // console.log(aValue, (aValue < bValue) ? "<" : ">", bValue)
 
       return aValue === bValue ? 0 : (aValue < bValue ? -1 : 1);
