@@ -412,7 +412,7 @@ $unframe = $_SESSION['unframe'];
 
         //START - EMAIL RAID ADMIN
         if($raidLog == 1) {
-            $to = "CCI-EngineeringPortfolioManagement@cox.com";
+            $to = "CCI-EngineeringPortfolioManagement@cox.com," . $mlmEmails;
             $subject = "Updated Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 
