@@ -242,7 +242,8 @@ const fieldfilter = (ri, test, url) => {
       return gc;
     },
     RiskAndIssue_Key: () => {
-      let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : (ri.RIActive_Flg == 1) ? `${ri["RiskAndIssue_Key"]} <span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>` : `${ri["RiskAndIssue_Key"]} <span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>`;
+      let oc = (ri.RIActive_Flg == 1) ? `<span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>` : `<span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>`;
+      let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : `${ri["RiskAndIssue_Key"]} ${oc}`;
       return status;
     },
     grouptype: () => {
@@ -422,10 +423,8 @@ const fieldfilter = (ri, test, url) => {
     let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
     return(r);
   }, 
-  PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "", 
-  PRJI_Estimated_Mig_Ts: () => {
-    return (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "";
-  }
+  PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
+  PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A"
 };
 return fieldswitch[test];
 }

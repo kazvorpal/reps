@@ -17,8 +17,14 @@ $ri_id = $_GET['id'];
 
 //GET GLOBAL PROGRAM BY ID
 $sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue](1) WHERE RiskAndIssue_Key = $ri_id";
+// echo $sql_glb_prog;
 $stmt_glb_prog   = sqlsrv_query( $data_conn, $sql_glb_prog ); 
 $row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
+if( $stmt_glb_prog === false ) {
+  die( print_r( sqlsrv_errors(), true));
+}
+
+  // print_r($row_glb_prog);
 // $row_glb_prog[''];
 //echo $sql_glb_prog;
 
@@ -68,13 +74,14 @@ $global = 1;
 //MAX AND MIN FOR CLOSING DATE
 $createDT = date_format($row_glb_prog['Created_Ts'],'Y-m-d');
 
-if(!empty($row_glb_prog['ForecastedResolution_Dt'])) {
-  $forecastMin = date_format($ForecastedResolution_Dt, "Y-m-d");
-} else {
-  $forecastMin = $closeDateMax;
-}
+// if(!empty($row_glb_prog['ForecastedResolution_Dt'])) {
+  $forecastMin = (!empty($row_glb_prob['ForecasedResolution_Dt'])) ? date_format($ForecastedResolution_Dt, "Y-m-d") : "";
+// } else {
+//   echo "<p>FRD='".$row_glb_prog['ForecastedResolution_Dt']."'</p>";
+//   $forecastMin = $closeDateMax;
+// }
 
-if($RILevel_Cd == "Program") {
+if($RILevel_Cd == "Program") {  
   //PROGRAM FOR PROGRAM RI (SINGLE PRGRAM)
   $sql_prog = "select * from mlm.fn_getlistofPrograms($Fiscal_Year) where Program_Nm = '$MLMProgram_Nm' ";
   $stmt_prog = sqlsrv_query( $data_conn, $sql_prog ); 
@@ -599,7 +606,7 @@ function toggle(source) {
                     min="<?php echo $closeDateMax ?>"
                     class="form-control" 
                     id="date" 
-                    value="2022-01-01"
+                    value="<?= $ForecastedResolution_Dt ?>"
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -803,7 +810,7 @@ function validateGrp() {
 
   var today = year + "-" + month + "-" + day;
 
-  document.getElementById('date').value = today;
+  // document.getElementById('date').value = today;
   </script>
   <script>
     // the indy field is commented out, so I'm commenting this out
