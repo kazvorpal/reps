@@ -28,8 +28,20 @@ FROM (
 WHERE Program_Nm = '$program'";
 $stmt_winuser_prg = sqlsrv_query( $data_conn, $sql_winuser_prg ); 
 $row_winuser_prg = sqlsrv_fetch_array( $stmt_winuser_prg, SQLSRV_FETCH_ASSOC);
-//$row_winuser_prg['User_UID']
+//echo $row_winuser_prg['User_UID'];
 
 //DEBUG
 //echo $sql_winuser_prg;
+
+//GET MLM USER EMAILS
+$sql_mlm = "DECLARE @mlmu VARCHAR(1000) 
+					SELECT @mlmu = COALESCE(@mlmu+', ' ,'') + CAST(User_Email AS VARCHAR(1000)) 
+					FROM [RI_MGT].[fn_GetListOfOwnersInfoForProgram]($fsclYear,'$program') 
+					SELECT @mlmu AS User_Email";
+$stmt_mlm  = sqlsrv_query( $data_conn, $sql_mlm);  
+$row_mlm  = sqlsrv_fetch_array( $stmt_mlm, SQLSRV_FETCH_ASSOC);
+
+//echo $sql_mlm ;
+$mlmEmails = $row_mlm['User_Email'] ;
+//exit();
 ?>

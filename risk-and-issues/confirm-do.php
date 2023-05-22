@@ -392,7 +392,7 @@ if($global == 1) { include ("../includes/menu.php"); }
 
         //START - EMAIL RAID ADMIN
         if($raidLog == 1) {
-            $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com";
+            $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com," . $mlmEmails;
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 

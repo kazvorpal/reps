@@ -404,6 +404,7 @@ if($global == 1 && $formType == "Update") {
       SELECT @SUBP_IDs AS SubProgram_Nm";
     $stmt_subprg = sqlsrv_query( $data_conn, $sql_subprg );
     $row_subprg = sqlsrv_fetch_array( $stmt_subprg, SQLSRV_FETCH_ASSOC);
+    
     $subprogram_glb = $row_subprg['SubProgram_Nm'];
   } else {
     $region_glb = $_POST['Region'];
