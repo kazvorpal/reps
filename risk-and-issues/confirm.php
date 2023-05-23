@@ -105,6 +105,7 @@ include ("../sql/update-time.php");
     <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?= $EstMigrateDate?>">
     <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?= $EstActiveDate?>">
     <input name="regionKeys" type="hidden" id="regionKeys" value="<?= $regionKeys?>">
+    <input name="tags" type="hidden" id="tags" value="<?= $tags ?>">
 
 <?php if($messaging  == "update") { ?>
   <div class="alert alert-success">
@@ -190,7 +191,7 @@ include ("../sql/update-time.php");
       <td><?= $region_conx_dsply; ?></td>
     </tr>
 <?php } ?>
-    <tr>
+    <tr>  
     <tr>
       <td>Drivers</td>
       <td><?= $Drivers_conx; ?></td>
@@ -311,6 +312,14 @@ include ("../sql/update-time.php");
         ?>
     </td>
     </tr>
+<?php if(!empty($tags)){?>
+    <tr>
+      <td>Tags</td>
+      <td>
+        <?php echo $tags; ?>
+    </td>
+    </tr>
+<?php } ?>
   </tbody>
 </table>
 <div align="right">

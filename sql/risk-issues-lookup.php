@@ -15,6 +15,11 @@ $lrpYear = $_POST['fiscalYer']; // FISCAL YEAR OF THE PROJECT
 $riTypeCode = $_POST['RIType']; // RISK OR ISSUE
 $riLevel = $_POST['RILevel']; // PRJECT OR PROGRAM
 
+$tags=""; 
+if(isset($_POST['tags'])) {
+  $tags=$_POST['tags'];
+}
+
 $createdFrom = "";
 if(isset($_POST['CreatedFrom'])){
 $createdFrom = $_POST['CreatedFrom']; // THE RISK THE ISSUE WAS CREATED FROM - FOR ISSUE ONLY

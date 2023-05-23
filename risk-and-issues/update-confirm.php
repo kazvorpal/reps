@@ -158,6 +158,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason?>">
     <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?php echo $EstMigrateDate?>">
     <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?php echo $EstActiveDate?>">
+    <input name="tags" type="hidden" id="tags" value="<?= $tags ?>">
 
 <?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
@@ -373,6 +374,14 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
         ?>
     </td>
     </tr>
+<?php if(!empty($tags)){?>
+    <tr>
+      <td>Tags</td>
+      <td>
+        <?php echo $tags; ?>
+    </td>
+    </tr>
+<?php } ?>
   </tbody>
 </table>
   <div align="right">
