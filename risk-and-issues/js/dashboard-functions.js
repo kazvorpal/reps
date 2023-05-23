@@ -203,8 +203,6 @@ const uniques = () => (mode == "program")
   : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
   : getwholeuniques(d1, "RiskAndIssue_Key");
 
-
-
   const modes = ["project", "program", "portfolio"];
 var togglegrid = () => {
   format = (format == "grid") ? "accordion" : "grid";
@@ -216,13 +214,28 @@ var togglegrid = () => {
 }
 
 const fieldfilter = (ri, test, url) => {
-  // console.log("fieldfilter", ri);
+  // This will end up returning either a function value via fieldswitch, 
+  // or else just the built-in value of the field in question, 
+  // if there isn't a specific function for it.
   const fieldswitch = {
     //    Specific fields that need extra calculation
 
-    RiskAndIssue_Key: () => {
-      return (ispp(mode)) ? `<span style='font-weight:900'>${text}</span>` : ri.RiskAndIssueLog_Key;
-    },
+    RiskAndIssue_Key: () => (ispp(mode)) ? `<span style='font-weight:900'>${text}</span>` : ri.RiskAndIssueLog_Key,
+    RIActive_Flg: () => ri.RIActive_Flg) ? "Open" : "Closed",
+    Created_Ts: () => formatDate(new Date(ri.Created_Ts.date)),
+    Last_Update_Ts: () => formatDate(new Date(ri.Last_Update_Ts.date)),
+    RIClosed_Dt: () => (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "",
+    RiskRealized_Flg: () => ri.RiskRealized_Flg) ? "Y" : "N",
+    RaidLog_Flg: () => (ri.RaidLog_Flg) ? "Y" : "N",
+    actionplandate: () => (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
+    changelogdate: () => (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
+    RIDescription_Txt: () => trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc"),
+    monthcreated: () => new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' }),
+    monthclosed: () => (ri.RIClosed_Dt != null) ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "",
+    RIIncrement_Num: () => (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "",
+    programmanager: () => (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "", 
+    PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
+    PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A",
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {
             const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
@@ -253,29 +266,11 @@ const fieldfilter = (ri, test, url) => {
       })
       return (gc > 1) ? "Multi" : "Single";
     },
-    RIActive_Flg: () => {
-      return (ri.RIActive_Flg) ? "Open" : "Closed";
-    },
     ForecastedResolution_Dt: () => {
       if (ri.ForecastedResolution_Dt != undefined)
         return formatDate(new Date(ri.ForecastedResolution_Dt.date));
       else 
         return "Unknown";
-    },
-    Created_Ts: () => {
-      return  formatDate(new Date(ri.Created_Ts.date));
-    },
-    Last_Update_Ts: () => {
-      return  formatDate(new Date(ri.Last_Update_Ts.date));
-    },
-    RIClosed_Dt: () => {
-      return  (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "";
-    },
-    RiskRealized_Flg: () => {
-      return  (ri.RiskRealized_Flg) ? "Y" : "N";
-    },
-    RaidLog_Flg: () => {
-      return  (ri.RaidLog_Flg) ? "Y" : "N";
     },
     RIOpen_Hours: () => {
       let d = Math.floor(ri.RIOpen_Hours/24);
@@ -311,15 +306,6 @@ const fieldfilter = (ri, test, url) => {
       }
       return counter;
     },
-    monthcreated: () => {
-      return new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' });
-    },
-    monthclosed: () => {
-      return (ri.RIClosed_Dt != null) ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "";
-    },
-    RIIncrement_Num: () => {
-      return (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "";
-    },
     quartercreated: () => {
       const m = new Date(ri.Created_Ts.date).getMonth();
       return (m < 3) ? "Q1" : (m < 3) ? "Q2" : (m < 9) ? "Q3" : "Q4";
@@ -334,9 +320,7 @@ const fieldfilter = (ri, test, url) => {
       let s = (d == 1) ? " day" : (d == "") ? "" : " days";
       return  `${d}${s}`;
     },
-    RI_Nm: () => {
-        return `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`;
-    },
+    RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     EPSProject_Nm: () => {
         const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
         return "<a href='" + url + "' class='miframe cboxElement'>" + ri.EPSProject_Nm + "</a>";
@@ -397,36 +381,21 @@ const fieldfilter = (ri, test, url) => {
       // console.log(ret);
       return list;
     }, 
-  age: () => {
-    let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
-    const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24)));
-    let s = (d == 1) ? "&nbsp;day" : (d == "") ? "" : "&nbsp;days";
-    return  `${d}${s}`;
-  },
-  actionplandate: () => {
-    return (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
-  },
-  changelogdate: () => {
-    return (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "";
-  },
-  RIDescription_Txt: () => {
-    // return ri.RIDescription_Txt;
-    return trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc");
-  },
-  ActionPlanStatus_Cd: () => {
-    let plan = ri.ActionPlanStatus_Cd;
-    let key = ri.RiskAndIssue_Key;
-    // return plan;
-    return trimmer(plan, key, "plan");
-  },
-  programmanager: () => {
-    let r = (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "";
-    return(r);
-  }, 
-  PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
-  PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A"
-};
-return fieldswitch[test];
+    age: () => {
+      let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
+      const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24)));
+      let s = (d == 1) ? "&nbsp;day" : (d == "") ? "" : "&nbsp;days";
+      return  `${d}${s}`;
+    },
+    ActionPlanStatus_Cd: () => {
+      let plan = ri.ActionPlanStatus_Cd;
+      let key = ri.RiskAndIssue_Key;
+      // return plan;
+      return trimmer(plan, key, "plan");
+    }, 
+    tags: () => ri.taglist.split(", ").map(target => `<a href="#">${target}</a>`).join(" | ")
+  };
+  return fieldswitch[test];
 }
 
 const makeexcel = (ri) => {
