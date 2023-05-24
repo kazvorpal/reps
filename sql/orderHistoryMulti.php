@@ -30,20 +30,31 @@
 							  OR EquipPlan_Id IN ('$oracleCD')
 							  OR EPS_Project_Nm IN ('$oracleCD')
 				";
-				echo $sql_eqh; //FIXED 5/16/2023
-	$stmt_eqh = sqlsrv_query( $conn, $sql_eqh ); //$conn_COXProd is Cox Datebase on SQL Production //$conn_COX_QA is test Datebase 
+				// echo $sql_eqh; //FIXED 5/16/2023
+$stmt_eqh = sqlsrv_query($data_conn, $sql_eqh);
+if ($stmt_eqh === false) {
+    die(print_r(sqlsrv_errors(), true));
+}
 
-// Fetch and print all rows
+$rows_affected = sqlsrv_rows_affected($stmt_eqh);
+
+// if ($rows_affected === false) {
+//     die(print_r(sqlsrv_errors(), true));
+// } elseif ($rows_affected == -1) {
+//     echo "No information available.<br />";
+// } else {
+//     echo $rows_affected . " rows were affected.<br />";
+// }
+
 if( $stmt_eqh === false ) {
-	echo "NOOOOOOOOOOOOOOOOOOOOOOOO!,.";
     die( print_r( sqlsrv_errors(), true));
 }
-echo "<br/>:::::<br/>";
-while( $row = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC) ) {
-	echo "<p>PRINTING OUTPUT: '";
-    print_r($row);
-	echo "'</p>";
-}
+// echo "<br/>:::::<br/>";
+// while( $row = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC) ) {
+// 	echo "<p>PRINTING OUTPUT: '";
+//     print_r($row);
+// 	echo "'</p>";
+// }
 
 // Reset pointer to the first row
 // sqlsrv_data_seek($stmt_eqh, 0);
