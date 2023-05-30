@@ -110,8 +110,13 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
+  <link rel="stylesheet" href="/risk-and-issues/css/tagsinput.css" type='text/css'> 
   <link rel="stylesheet" href="../includes/ri-styles.css" />
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
+  <!-- <script src="/risk-and-issues/js/typeahead.js"></script> -->
+  <!-- <script src="/risk-and-issues/js/tagsinput.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
   
   <script>
    let prop = {
@@ -676,6 +681,16 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         </div>
       </div>       
     </div>
+    <div class="col-md-4" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Tags</h3>
+        </div>
+        <div class="panel-body">
+          <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" on>
+        </div>
+      </div>       
+    </div>
     <div class="col-md-4" align="left" style="display:none" id="npt">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -1077,7 +1092,46 @@ $(document).ready(function() {
   $('#Description').summernote(summerprops).css(summercss).show();
   $('#ActionPlan').summernote(summerprops).css(summercss).show();
 });
+var suggestions = ['apple', 'banana', 'cherry', 'date']; // Example list of suggested completions
 
+var taglist = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  local: [
+    { name: 'hardware' },
+    { name: 'hardwires' },
+    { name: 'handcars' },
+    { name: 'locations' },
+    { name: 'antidisestablishmentarianistically' }
+  ]
+});
+
+taglist.initialize();
+
+$('#tags').tagsinput({
+  typeaheadjs: {
+    name: 'taglist',
+    displayKey: 'name',
+    valueKey: 'name',
+    source: taglist.ttAdapter()
+  }
+});
+// $('#tags').tagsinput({
+//     confirmKeys: [13, 188]
+//   });
+
+//   $('#tags').on('keypress', function(e){
+//     if (e.keyCode == 13){
+//       e.keyCode = 188;
+//       e.preventDefault();
+//     };
+//   });
+
+// $('#tags').tagsinput({
+//   typeahead: {
+//     source: suggestions
+//   }
+// });
 </script>
 
 <script src="../includes/ri-functions.js"></script>
