@@ -44,7 +44,7 @@ const jq = `
 
     <script>
 
-
+var searchtag;
 const filterfunction = (o) => {
   return (
       (fieldempty("fiscal_year") 
@@ -85,7 +85,9 @@ const filterfunction = (o) => {
       ((fieldempty("dateranger") 
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))  && 
       (fieldempty("allsearch")
-          || idsearch(o))
+          || idsearch(o)) && 
+      ((searchtag == "" || typeof searchtag == "undefined") 
+       || (o.Global_Tags && o.Global_Tags.includes(searchtag)))
   );
 }
 
@@ -229,9 +231,9 @@ $(function(){
     const list = getuniques(locationlist, "Region_Cd");
     let select = document.getElementById("region");
     if (select) { 
-    select.options.length = 0;
+      select.options.length = 0;
     } else 
-    return false;
+      return false;
     list.forEach(option => { 
       if($("#fiscal_year").val().some(year => parseInt(year) >= 2024) && newregions.includes(option)){
         select.appendChild(makeelement({e: "option", v: option, t: option}));
@@ -270,22 +272,22 @@ $(function(){
     }
 
     function createSelectDropdown(options) {
-  const select = document.createElement('select');
+      const select = document.createElement('select');
 
-  for (const option of options) {
-    const optionElement = document.createElement('option');
-    optionElement.value = option;
-    optionElement.text = option;
-    select.appendChild(optionElement);
-  }
+      for (const option of options) {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.text = option;
+        select.appendChild(optionElement);
+      }
 
-  return select;
-}
+      return select;
+    }
 
-const options = ['Option 1', 'Option 2', 'Option 3'];
-const selectDropdown = createSelectDropdown(options);
+    const options = ['Option 1', 'Option 2', 'Option 3'];
+    const selectDropdown = createSelectDropdown(options);
 
-document.getElementById('spacey').appendChild(selectDropdown);
+    document.getElementById('spacey').appendChild(selectDropdown);
     
     // This loop makes all of the filters
     Object.entries(selectors).forEach(([key, value]) => {
@@ -354,6 +356,7 @@ document.getElementById('spacey').appendChild(selectDropdown);
   const processfilters = () => {
       // filter form button
       let url = new URL(window.location);
+      url.searchParams.set("tag", searchtag);
       url.searchParams.set("mode", mode);
       url.searchParams.set("page", page);
       url.searchParams.set("pagesize", pagesize);

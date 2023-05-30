@@ -278,3 +278,10 @@ body {
 .config-lightbox input {
   margin: 4px;
 }
+
+.tt-suggestion {
+  background-color: white;
+}
+.tt-menu, .tt-open {
+  background-color: white !important;
+}

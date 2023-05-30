@@ -44,3 +44,19 @@
 #hidden_div {
     display: none;
 }
+
+.tt-menu {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 0;
+  }
+  
+  .tt-suggestion {
+    padding: 3px 12px;
+    cursor: pointer;
+  }
+  
+  .tt-suggestion:hover {
+    background-color: #ddd;
+  }

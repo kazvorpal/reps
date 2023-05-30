@@ -207,7 +207,6 @@
             portfoliocount += (program.RI_Nm.toLowerCase().indexOf("portfolio")>-1) ? 1 : 0;
             projectcount += (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key] != null ) ? (p4plist[program.RiskAndIssue_Key + "-" + program.MLMProgramRI_Key].length != 0) : 0;
           }
-      } else {
       }
     }
     var c;
@@ -283,62 +282,62 @@
         const safename = makesafe(name);
         const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-1<?= $headerposition ?>"});
         if (ispp(mode)) {
-            let namefield = (format == "grid") ? "R/I Name" : type;
-            let cells = ["Risk/Issue"];
-            rowcolor = 1;
+          let namefield = (format == "grid") ? "R/I Name" : type;
+          let cells = ["Risk/Issue"];
+          rowcolor = 1;
+          Object.entries(rifields).forEach(([key, value]) => {
+            let direction = b1 = b2 = "";
+            if (sort == key) {
+              direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+              b1 = sortable(key) ? "<u>" : "";
+              b2 = sortable(key) ? "</u>" : "";
+            }
+            const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
+            const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
+            trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
+                sortcol(key, this)
+            }}));
+            cells.push(rifields[key].name);
+            if (rifields[key].name == "ID") {
+              if (sort == "RI_Nm") {
+                direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+                b1 = sortable(key) ? "<u>" : "";
+                b2 = sortable(key) ? "</u>" : "";
+              } else direction = b1 = b2 = "";
+              const c = sortable("RI_Nm") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
+              trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2 + direction, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: sortthisstring, "j": function() {
+                sortcol("RI_Nm", this)
+              }}));
+              if (sortable(key)) {
+                if (sort == "RIType_Cd") {
+                  direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+                  b1 = sortable(key) ? "<u>" : "";
+                  b2 = sortable(key) ? "</u>" : "";
+                } else direction = b1 = b2 = "";
+                const c = sortable("RIType_Cd") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
+                trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 + direction, "c": "text-center titles align-middle typecolumn " + c, "w": "12", a: sortthisstring, "j": function() {
+                  sortcol("RIType_Cd", this)
+                }}));
+              }
+            }
+          })
+        } else {
+            let cells = [];
             Object.entries(rifields).forEach(([key, value]) => {
               let direction = b1 = b2 = "";
               if (sort == key) {
                 direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
                 b1 = sortable(key) ? "<u>" : "";
                 b2 = sortable(key) ? "</u>" : "";
-              }
-              const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-              const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
-              trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
-                  sortcol(key, this)
-              }}));
-              cells.push(rifields[key].name);
-              if (rifields[key].name == "ID") {
-                if (sort == "RI_Nm") {
-                  direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                  b1 = sortable(key) ? "<u>" : "";
-                  b2 = sortable(key) ? "</u>" : "";
-                } else direction = b1 = b2 = "";
-                const c = sortable("RI_Nm") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-                trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2 + direction, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: sortthisstring, "j": function() {
-                  sortcol("RI_Nm", this)
-                }}));
-                if (sortable(key)) {
-                  if (sort == "RIType_Cd") {
-                    direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                    b1 = sortable(key) ? "<u>" : "";
-                    b2 = sortable(key) ? "</u>" : "";
-                  } else direction = b1 = b2 = "";
-                  const c = sortable("RIType_Cd") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-                  trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 + direction, "c": "text-center titles align-middle typecolumn " + c, "w": "12", a: sortthisstring, "j": function() {
-                    sortcol("RIType_Cd", this)
-                  }}));
-                }
-              }
-            })
-          } else {
-              let cells = [];
-              Object.entries(rifields).forEach(([key, value]) => {
-                let direction = b1 = b2 = "";
-                if (sort == key) {
-                  direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                  b1 = sortable(key) ? "<u>" : "";
-                  b2 = sortable(key) ? "</u>" : "";
-              }
-              let name = (typeof value == "object") ? value.name : value;
-              let c = sortable(key) ? " active" : "";
-              const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
-              trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
-                sortcol(key, this)
-              }}));
-              cells.push(value);
-            })
+            }
+            let name = (typeof value == "object") ? value.name : value;
+            let c = sortable(key) ? " active" : "";
+            const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
+            trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
+              sortcol(key, this)
+            }}));
+            cells.push(value);
+          })
         }
         excelrows();
         return trri;
@@ -431,7 +430,7 @@
   // Exclude from sorting
   const fieldmap = {
     "subprogram": "",
-    programcount: ""
+    "programcount": ""
   }
   const apfields = {
     "actionplandate": "LastUpdate", 

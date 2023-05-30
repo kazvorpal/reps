@@ -221,11 +221,11 @@ const fieldfilter = (ri, test, url) => {
     //    Specific fields that need extra calculation
 
     RiskAndIssue_Key: () => (ispp(mode)) ? `<span style='font-weight:900'>${text}</span>` : ri.RiskAndIssueLog_Key,
-    RIActive_Flg: () => ri.RIActive_Flg) ? "Open" : "Closed",
+    RIActive_Flg: () => ri.RIActive_Flg ? "Open" : "Closed",
     Created_Ts: () => formatDate(new Date(ri.Created_Ts.date)),
     Last_Update_Ts: () => formatDate(new Date(ri.Last_Update_Ts.date)),
     RIClosed_Dt: () => (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "",
-    RiskRealized_Flg: () => ri.RiskRealized_Flg) ? "Y" : "N",
+    RiskRealized_Flg: () => ri.RiskRealized_Flg ? "Y" : "N",
     RaidLog_Flg: () => (ri.RaidLog_Flg) ? "Y" : "N",
     actionplandate: () => (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
     changelogdate: () => (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
@@ -236,6 +236,8 @@ const fieldfilter = (ri, test, url) => {
     programmanager: () => (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "", 
     PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
     PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A",
+    RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
+    Global_Tag: () => (!ri.Global_Tag) ? "" : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(" | "),
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {
             const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
@@ -320,7 +322,6 @@ const fieldfilter = (ri, test, url) => {
       let s = (d == 1) ? " day" : (d == "") ? "" : " days";
       return  `${d}${s}`;
     },
-    RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     EPSProject_Nm: () => {
         const url = `/ri2.php?prj_name=${ri.EPSProject_Nm}&count=2&uid=${ri.EPSProject_Id}&fscl_year=${ri.Fiscal_Year}`;
         return "<a href='" + url + "' class='miframe cboxElement'>" + ri.EPSProject_Nm + "</a>";
@@ -392,8 +393,7 @@ const fieldfilter = (ri, test, url) => {
       let key = ri.RiskAndIssue_Key;
       // return plan;
       return trimmer(plan, key, "plan");
-    }, 
-    tags: () => ri.taglist.split(", ").map(target => `<a href="#">${target}</a>`).join(" | ")
+    }
   };
   return fieldswitch[test];
 }

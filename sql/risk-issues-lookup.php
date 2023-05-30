@@ -17,7 +17,8 @@ $riLevel = $_POST['RILevel']; // PRJECT OR PROGRAM
 
 $tags=""; 
 if(isset($_POST['tags'])) {
-  $tags=$_POST['tags'];
+  $tags_array = explode(",", $_POST['tags']);
+  $tags = json_encode($tags_array);
 }
 
 $createdFrom = "";

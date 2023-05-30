@@ -465,40 +465,58 @@ let portfolioclosed = <?= $closedportfolioout ?>;
 
     let portfoliofull = syncportfolio(portfolioopen).concat(syncportfolio(placeholder));
     portfoliofull = sortby(portfoliofull, "RiskAndIssue_Key");
+    defaulttags = ["elvis", "fubar", "moo", "kluge", "sesquipedalian", "concommittal", "magnificat", "wap"]
 
-    const cleandata = (list) => {
-      Object.keys(list).forEach(key => {
-        if(list[key].RiskAndIssue_Key == "undefined") {
-          delete list[key];
+function getRandomTags() {
+    const numOfTags = Math.floor(Math.random() * defaulttags.length) + 1;
+    const tags = [];
+    for(let i = 0; i < numOfTags; i++) {
+        const randomIndex = Math.floor(Math.random() * defaulttags.length);
+        const randomTag = defaulttags[randomIndex];
+        if (!tags.includes(randomTag)) {
+            tags.push(randomTag);
         }
-      })
-      return(list);
     }
+    return tags;
+}
 
-      var ridata, d1, d1, rifiltered;
-      const setdata = () => {
-        ridata = d1 = d1 = rifiltered = "";
-          if (mode == "program") {
-            const localportfolios = portfoliofull.filter(o => {
-                return o.RaidLog_Flg == 0;
-              })
-              ridata = programfull;
-              d1 = programopen;
-              d2 = programclosed;
-          } else if (mode == "portfolio") {
-              const globalprograms = programfull.filter(o => {
-                return o.RaidLog_Flg == 1;
-              })
-              ridata = cleandata(portfoliofull).concat(globalprograms)
-              d1 = portfolioopen;
-              d2 = portfolioclosed;
-          } else {
-              ridata = projectfull;
-              d1 = projectopen;
-              d2 = projectclosed;
-          }
-      }
-      setdata();
+const cleandata = (list) => {
+    Object.keys(list).forEach(key => {
+        if(list[key].RiskAndIssue_Key == "undefined") {
+            delete list[key];
+        }
+        // if (!list[key] || !list[key].Global_Tag) {
+        //     if (!list[key]) list[key] = {};
+        //     list[key].Global_Tag = getRandomTags();
+        // }
+    })
+    return list;
+}
+
+    var ridata, d1, d1, rifiltered;
+    const setdata = () => {
+      ridata = d1 = d1 = rifiltered = "";
+        if (mode == "program") {
+          const localportfolios = portfoliofull.filter(o => {
+              return o.RaidLog_Flg == 0;
+            })
+            ridata = programfull;
+            d1 = programopen;
+            d2 = programclosed;
+        } else if (mode == "portfolio") {
+            const globalprograms = programfull.filter(o => {
+              return o.RaidLog_Flg == 1;
+            })
+            ridata = cleandata(portfoliofull).concat(globalprograms)
+            d1 = portfolioopen;
+            d2 = portfolioclosed;
+        } else {
+            ridata = projectfull;
+            d1 = projectopen;
+            d2 = projectclosed;
+        }
+    }
+    setdata();
 
       $(document).ready(function(){
           //Examples of how to assign the Colorbox event to elements
@@ -523,7 +541,7 @@ let portfolioclosed = <?= $closedportfolioout ?>;
       : ["Project Name", "Facility", "Owner", "Subprogram"];
 
   rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 4}, "MLMProgram_Nm": {name: "Program", width: 9}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 5}, "ImpactLevel_Nm": {name: "Impact Level", width: 5}, ScopeDescriptor_Txt: {name: "Descriptor", width: 6}, "RIDescription_Txt": {name: "Description", width: 17, align: "text-left"}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 17, align: "text-left"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 6}, "ResponseStrategy_Cd": {name: "Response Strategy", width: 3}, "RIOpen_Hours": {name: "Open Duration", width: 5}} 
-    : (mode == "portfolio") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 3}, "MLMProgram_Nm": {name: "Programs", width: 9}, programcount: {name: "Program Count", width: 2}, "subprogram": {name: "Sub-program", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 6}, "ImpactLevel_Nm": {name: "Impact", width: 6}, ScopeDescriptor_Txt: {name: "Descriptor", width: 6}, "RIDescription_Txt": {name: "Description", width: 18, align: "text-left"}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 18, align: "text-left"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 5}, "ResponseStrategy_Nm": {name: "Response Strategy", width: 4}, "RIOpen_Hours": {name: "Open Duration", width: 6}}
+    : (mode == "portfolio") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 3}, "MLMProgram_Nm": {name: "Programs", width: 9}, programcount: {name: "Program Count", width: 2}, "subprogram": {name: "Sub-program", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 6}, "ImpactLevel_Nm": {name: "Impact", width: 6}, ScopeDescriptor_Txt: {name: "Descriptor", width: 6}, "RIDescription_Txt": {name: "Description", width: 18, align: "text-left"}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 18, align: "text-left"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 5}, "ResponseStrategy_Nm": {name: "Response Strategy", width: 4}, "RIOpen_Hours": {name: "Open Duration", width: 6}, Global_Tag: {name: "Tags", width:8}}
     : {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "RIDescription_Txt": "Description", actionplandate: "Action Plan Date", age: "Age", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
 
   excelfields = (mode == "program") ? {"Fiscal_Year": "FY",	"RIActive_Flg": "Status", "MLMProgram_Nm": "Program", "subprogram": "Subprogram", "LastUpdateBy_Nm": "Owner", "RiskAndIssue_Key": "ID", "RIType_Cd": "Type", "MLMRegion_Cd": "Region", "regioncount": "Reg Count", "category": "Category", "projectcount": "Assoc Proj Count", "RI_Nm": "Name", "ScopeDescriptor_Txt": "Descriptor", "RIDescription_Txt": "Description", "driver": "Driver", "ImpactArea_Nm": "Impact Area", "ImpactLevel_Nm": "Impact Level",	"RiskProbability_Nm": "Probability", "ResponseStrategy_Nm": "Response", "POC_Nm": "POC Name", "POC_Department": "POC Group", age: "Age", actionplandate: "Action Plan Date", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Resolution Date", "RIOpen_Hours": "Duration", "AssociatedCR_Key": "CR", "RaidLog_Flg": "Portfolio Notified", "RiskRealized_Flg": "Risk Realized", "RIClosed_Dt": "Date Closed", "Created_Ts": "Creation Date", "LastUpdateBy_Nm": "Last Update By", "Last_Update_Ts": "Last Update Date", "quartercreated": "Quarter Created", "quarterclosed": "Quarter Closed", "monthcreated": "Month Created", "monthclosed": "Month Closed"} 
