@@ -105,7 +105,7 @@ include ("../sql/update-time.php");
     <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?= $EstMigrateDate?>">
     <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?= $EstActiveDate?>">
     <input name="regionKeys" type="hidden" id="regionKeys" value="<?= $regionKeys?>">
-    <input name="tags" type="hidden" id="tags" value="<?= $tags ?>">
+    <input name="tags" type="hidden" id="tags" value='<?= $tags ?>'>
 
 <?php if($messaging  == "update") { ?>
   <div class="alert alert-success">
@@ -316,7 +316,17 @@ include ("../sql/update-time.php");
     <tr>
       <td>Tags</td>
       <td>
-        <?php echo $tags; ?>
+      <p id="tagdisp"></p>
+        <?php 
+          // THIS IS TRASH BELOW
+          // $x = str_replace("[" , "", $tags);
+          // $y = str_replace("]" , "", $x);
+          // $a = str_replace('","' , ", ", $y);
+          // $z = array($a);
+          // $tagcomma = implode(", ", $z);
+          //echo $tagcomma; 
+          //echo $tags;
+        ?>
     </td>
     </tr>
 <?php } ?>
@@ -334,4 +344,10 @@ include ("../sql/update-time.php");
     //print_r($_POST);
 ?>
 </body>
+
+<script>
+  const tags = <?php echo $tags ?>;
+  document.getElementById("tagdisp").innerHTML = tags;
+</script>
+
 </html>

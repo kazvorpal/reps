@@ -158,7 +158,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <input name="changeLogReason" type="hidden" id="changeLogReason" value="<?php echo $changeLogReason?>">
     <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?php echo $EstMigrateDate?>">
     <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?php echo $EstActiveDate?>">
-    <input name="tags" type="hidden" id="tags" value="<?= $tags ?>">
+    <input name="tags" type="hidden" id="tags" value='<?= $tags ?>'>
 
 <?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
@@ -378,8 +378,8 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <tr>
       <td>Tags</td>
       <td>
-        <?php echo $tags; ?>
-    </td>
+        <p id="tagdisp"></p>
+      </td>
     </tr>
 <?php } ?>
   </tbody>
@@ -396,4 +396,10 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
 
 ?>
 </body>
+
+<script>
+  const tags = <?php echo $tags ?>;
+  document.getElementById("tagdisp").innerHTML = tags;
+</script>
+
 </html>
