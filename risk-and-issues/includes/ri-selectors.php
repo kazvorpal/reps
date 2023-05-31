@@ -86,8 +86,8 @@ const filterfunction = (o) => {
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))  && 
       (fieldempty("allsearch")
           || idsearch(o)) && 
-      ((searchtag == "" || typeof searchtag == "undefined") 
-       || (o.Global_Tags && o.Global_Tags.includes(searchtag)))
+      (((searchtag == "" || typeof searchtag == "undefined") && fieldempty("tags")) 
+       || (o.Global_Tag && (o.Global_Tag.includes(searchtag) || o.Global_Tag.includes(document.getElementById("tags").value))))
   );
 }
 
@@ -207,20 +207,30 @@ $(function(){
         for (option in o.l) 
           if(o.l[option] != ""&& o.l[option] != null)
             select.appendChild(makeelement({e: "option", v: o.l[option], t: o.l[option]}));
+      } else if (o.i == "tags") {
+        let taglist = [];
+        ridata.forEach(tl => {
+          if (tl.Global_Tag && typeof tl.Global_Tag == "object") 
+            tl.Global_Tag.forEach(stl => (!taglist.includes(stl)) && taglist.push(stl));
+        })
+        console.log(taglist);
+        for (option in taglist) 
+          if(taglist[option] != ""&& taglist[option] != null)
+            select.appendChild(makeelement({e: "option", v: taglist[option], t: taglist[option]}));
       } else if (o.i == "region") {
         const list = getuniques(o.l, o.f);
         setTimeout(function() {
           regiondropdown();
         }, 1000);
-        select.addEventListener("change", () => {
-        })
-        setTimeout(() => {
-        }, 1000);
+        // select.addEventListener("change", () => {
+        // })
+        // setTimeout(() => {
+        // }, 1000);
       } else {
         const list = getuniques(o.l, o.f);
         for (option in list) 
-        if(list[option] != ""&& list[option] != null)
-        select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
+          if(list[option] != ""&& list[option] != null)
+            select.appendChild(makeelement({e: "option", v: list[option], t: list[option]}));
       }
       td.appendChild(select);
       document.getElementById("row").appendChild(td);
@@ -230,9 +240,9 @@ $(function(){
   const regiondropdown = () => {
     const list = getuniques(locationlist, "Region_Cd");
     let select = document.getElementById("region");
-    if (select) { 
+    if (select) 
       select.options.length = 0;
-    } else 
+    else 
       return false;
     list.forEach(option => { 
       if($("#fiscal_year").val().some(year => parseInt(year) >= 2024) && newregions.includes(option)){
@@ -268,6 +278,7 @@ $(function(){
       Region_Cd: {i: "region", n: "region", t: "Region<br/>", p: ["project"], l: locationlist},
       Market_Cd: {i: "market", n: "market", t: "Market<br/>", p: ["project"], l: locationlist},
       Facility_Cd: {i: "facility", n: "facility", t: "Facility<br/>", c: " selectpicker", p: ["project"], l: locationlist},
+      tags: {i: "tags", n: "tags", t: "Tags<br/>", c: " selectpicker", p: ["portfolio", "program"]},
       searchall: {}
     }
 
@@ -351,7 +362,47 @@ $(function(){
       openval = false;
       return false;
     }
-  }
+    tagprops = structuredClone(shortprops);
+    tagprops["onChange"] = (option, checked) => {
+      if (checked) {
+          var selectedOptions = $('#tags option:selected');
+          if (selectedOptions.length > 1) {
+              selectedOptions.each(function() {
+                  if ($(this).val() !== $(option).val()) {
+                      $(this).prop('selected', false);
+                  }
+              });
+
+              // Refresh the multiselect
+              $('#tags').multiselect('refresh');
+          }
+      }
+      searchtag = $("#tags").val()[0];
+      processfilters();
+    }
+    $('#tags').multiselect(tagprops);
+
+    // $('#tags').multiselect({
+//       onChange: function(option, checked) {
+//           // If a new option is selected, deselect all others
+//           if (checked) {
+//               var selectedOptions = $('#mySelect option:selected');
+//               if (selectedOptions.length > 1) {
+//                   selectedOptions.each(function() {
+//                       if ($(this).val() !== $(option).val()) {
+//                           $(this).prop('selected', false);
+//                       }
+//                   });
+
+//                   // Refresh the multiselect
+//                   $('#mySelect').multiselect('refresh');
+//               }
+//           }
+//       },
+//       maxHeight: 200,
+//       nonSelectedText: 'Select an Option'
+//     });
+}
 
   const processfilters = () => {
       // filter form button
@@ -375,6 +426,7 @@ $(function(){
   const resetform = () => {
     document.getElementById("formfilter").reset();
     openval = false;
+    searchtag = '';
     init(mode, true);
   }
 </script>

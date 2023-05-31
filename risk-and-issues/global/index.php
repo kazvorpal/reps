@@ -110,11 +110,11 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
-  <link rel="stylesheet" href="/risk-and-issues/css/tagsinput.css" type='text/css'> 
   <link rel="stylesheet" href="../includes/ri-styles.css" />
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
   <!-- <script src="/risk-and-issues/js/typeahead.js"></script> -->
   <!-- <script src="/risk-and-issues/js/tagsinput.js"></script> -->
+  <link rel="stylesheet" href="/risk-and-issues/css/tagsinput.css" type='text/css'> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
   

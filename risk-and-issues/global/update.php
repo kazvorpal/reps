@@ -68,7 +68,8 @@ $actionPlan_b = $row_glb_prog['ActionPlanStatus_Cd'];
 $RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
 $AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
 $RaidLog_Flg = $row_glb_prog['RaidLog_Flg'];
-
+$jsonArray = json_decode($row_glb_prog["Global_Tag"]);
+$tags = implode(",", $jsonArray);
 $global = 1;
 
 //MAX AND MIN FOR CLOSING DATE
@@ -179,6 +180,9 @@ $RegionArr = explode(",", $MLMRegion_Key);
   <link rel="stylesheet" href="../steps/style.css" type='text/css'> 
   <link rel="stylesheet" href="../includes/ri-styles.css" />
   <link rel="stylesheet" href="../../colorbox-master/example1/colorbox.css" />
+  <link rel="stylesheet" href="/risk-and-issues/css/tagsinput.css" type='text/css'> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
   
   <script>
   $(document).ready(function(){
@@ -757,6 +761,17 @@ function toggle(source) {
           <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>">
         </div>
       </div>
+    </div>
+    <div class="col-md-3" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Tags</h3>
+        </div>
+        <div class="panel-body">
+        <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" value="<?= $tags ?>" on>
+   <!-- <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10" value="<?php echo $AssociatedCR_Key ?>"> -->
+        </div>
+      </div>       
     </div>
   </div>
 </div>

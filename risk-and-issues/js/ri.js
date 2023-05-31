@@ -6,7 +6,7 @@ const mapper = "RiskAndIssue_Key";
 
 const fieldempty = (field) => (document.getElementById(field).value == '');
 const isincluded = (filter, field) => {
-  // console.log(filter)
+  console.log(filter, field)
   return ($(filter).val().includes(field));
 }
 

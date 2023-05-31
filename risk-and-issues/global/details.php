@@ -79,6 +79,8 @@ $ri_id = $row_glb_prog['RiskAndIssue_Key'];
 $name = trim($row_glb_prog['RI_Nm']);
 $RILevel = $row_glb_prog['RILevel_Cd'];
 $RIType = $row_glb_prog['RIType_Cd'];
+$jsonArray = json_decode($row_glb_prog["Global_Tag"]);
+$tags = implode(",", $jsonArray);
 $createdFrom  = "";
 
 if(!empty($row_glb_prog['PortfolioType_Key'])) {
@@ -342,6 +344,12 @@ if($unframe == "0") { //NO COLORBOX
           convtimex($dateClosed);  
         }
         ?>
+    </td>
+    </tr>   
+    <tr>
+      <td>Tags</td>
+      <td>
+        <?= $tags ?>
     </td>
     </tr>   
   </tbody>

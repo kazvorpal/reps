@@ -237,7 +237,10 @@ const fieldfilter = (ri, test, url) => {
     PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
     PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A",
     RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
-    Global_Tag: () => (!ri.Global_Tag) ? "" : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(" | "),
+    Global_Tag: () => {
+      console.log(typeof ri.Global_Tag)
+      return (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(" | ")
+    },
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {
             const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];

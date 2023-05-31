@@ -38,6 +38,9 @@ PPC;
     $programrows = array();
     $count = 1;
     while($programrow = sqlsrv_fetch_array($programquery, SQLSRV_FETCH_ASSOC)) {
+      if (isset($programrow['Global_Tag']) && is_string($programrow['Global_Tag'])) {
+          $programrow['Global_Tag'] = json_decode(stripslashes($programrow['Global_Tag']), true);
+      }
       $programrows[] = array_map("fixutf8", $programrow);
     }
 
@@ -126,25 +129,33 @@ PPC;
 
 
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')";
-  // print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
   $portfolioquery = sqlsrv_query($data_conn, $sqlstr);
-  // print($data_conn);
+  
   if($portfolioquery === false) {
-    if(($error = sqlsrv_errors()) != null) {
-      foreach($error as $errors) {
-        echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-        echo "code: ".$error[ 'code']."<br />";
-        echo "message: ".$error[ 'message']."<br />";
+      if(($error = sqlsrv_errors()) != null) {
+          foreach($error as $errors) {
+              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+              echo "code: ".$error[ 'code']."<br />";
+              echo "message: ".$error[ 'message']."<br />";
+          }
       }
-    }
   }  else {
-    $portfoliorows = array();
-    $count = 1;
-    while($portfoliorow = sqlsrv_fetch_array($portfolioquery, SQLSRV_FETCH_ASSOC)) {
-      $portfoliorows[] = array_map("fixutf8", $portfoliorow);
-    }
+      $portfoliorows = array();
+  
+      while($portfoliorow = sqlsrv_fetch_array($portfolioquery, SQLSRV_FETCH_ASSOC)) {
+          $portfoliorow = array_map("fixutf8", $portfoliorow);
+          
+          // If Global_Tag is set and is a JSON string, decode it into a PHP array
+          if (isset($portfoliorow['Global_Tag']) && is_string($portfoliorow['Global_Tag'])) {
+              $portfoliorow['Global_Tag'] = json_decode(stripslashes($portfoliorow['Global_Tag']), true);
+          }
+          
+          $portfoliorows[] = $portfoliorow;
+      }
 
+  
+  $portfolioout = json_encode($portfoliorows);
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio')";
     // echo $sqlstr;
     ini_set('mssql.charset', 'UTF-8');
@@ -161,7 +172,10 @@ PPC;
       $closedportfoliorows = array();
       $count = 1;
       while($row = sqlsrv_fetch_array($closedportfolio, SQLSRV_FETCH_ASSOC)) {
-        $closedportfoliorows[] = array_map("fixutf8", $row);
+        if (isset($row['Global_Tag']) && is_string($row['Global_Tag'])) {
+            $row['Global_Tag'] = json_decode(stripslashes($row['Global_Tag']), true);
+        }
+    $closedportfoliorows[] = array_map("fixutf8", $row);
       }
     }
     foreach ($portfoliorows as $row)  {
@@ -500,7 +514,7 @@ const cleandata = (list) => {
           const localportfolios = portfoliofull.filter(o => {
               return o.RaidLog_Flg == 0;
             })
-            ridata = programfull;
+            ridata = cleandata(programfull);
             d1 = programopen;
             d2 = programclosed;
         } else if (mode == "portfolio") {
@@ -540,7 +554,7 @@ const cleandata = (list) => {
   projectfieldnames = (mode == "program") ? [{name: "Project Name", width: "38"}, {name: "Subprogram", width: "5"}, {name: "Owner", width: "28"}, {name: "Region", width: "9"}, {name: "Market", width: "9"}, {name: "Facility", width: "9"}]
       : ["Project Name", "Facility", "Owner", "Subprogram"];
 
-  rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 4}, "MLMProgram_Nm": {name: "Program", width: 9}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 5}, "ImpactLevel_Nm": {name: "Impact Level", width: 5}, ScopeDescriptor_Txt: {name: "Descriptor", width: 6}, "RIDescription_Txt": {name: "Description", width: 17, align: "text-left"}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 17, align: "text-left"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 6}, "ResponseStrategy_Cd": {name: "Response Strategy", width: 3}, "RIOpen_Hours": {name: "Open Duration", width: 5}} 
+  rifields = (mode == "program") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 4}, "MLMProgram_Nm": {name: "Program", width: 9}, "subprogram": {name: "Subprogram", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 5}, "ImpactLevel_Nm": {name: "Impact Level", width: 5}, ScopeDescriptor_Txt: {name: "Descriptor", width: 6}, "RIDescription_Txt": {name: "Description", width: 17, align: "text-left"}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 17, align: "text-left"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 6}, "ResponseStrategy_Cd": {name: "Response Strategy", width: 3}, "RIOpen_Hours": {name: "Open Duration", width: 5}, Global_Tag: {name: "Tags", width:8}} 
     : (mode == "portfolio") ? {"RiskAndIssue_Key": {name: "ID", width: 3}, "category": {name: "category", width: 3}, "Fiscal_Year": {name: "FY", width: 3}, "MLMProgram_Nm": {name: "Programs", width: 9}, programcount: {name: "Program Count", width: 2}, "subprogram": {name: "Sub-program", width: 9}, "MLMRegion_Cd": {name: "Region", width: 6}, "LastUpdateBy_Nm": {name: "Owner", width: 6}, "ImpactLevel_Nm": {name: "Impact", width: 6}, ScopeDescriptor_Txt: {name: "Descriptor", width: 6}, "RIDescription_Txt": {name: "Description", width: 18, align: "text-left"}, actionplandate: {name: "Action Plan Date", width: 6}, age: {name: "Age", width: 3}, "ActionPlanStatus_Cd": {name: "Action Plan", width: 18, align: "text-left"}, "ForecastedResolution_Dt": {name: "Forecast Res Date", width: 5}, "ResponseStrategy_Nm": {name: "Response Strategy", width: 4}, "RIOpen_Hours": {name: "Open Duration", width: 6}, Global_Tag: {name: "Tags", width:8}}
     : {"RiskAndIssue_Key": "ID", "RI_Nm": "R/I Name", "RIType_Cd": "Type", "EPSProject_Nm": "Project Name", "RIIncrement_Num": "Group ID", "EPSProgram_Nm": "Program", "EPSSubprogram_Nm": "Subprogram", "LastUpdateBy_Nm": "Owner", "Fiscal_Year": "FY", "EPSRegion_Cd": "Region", "EPSMarket_Cd": "Market", "EPSFacility_Cd": "Facility", "ImpactLevel_Nm": "Impact", "RIDescription_Txt": "Description", actionplandate: "Action Plan Date", age: "Age", "ActionPlanStatus_Cd": "Action Plan", "ForecastedResolution_Dt": "Forecast Res Date", "ResponseStrategy_Nm": "Response Strategy", "RIOpen_Hours": "Open Duration"};
 
