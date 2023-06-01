@@ -7,6 +7,7 @@ include ("../../sql/project_by_id.php");
 include ("../../sql/ri_filter_vars.php");
 include ("../../sql/ri_filters.php");
 include ("../../sql/ri_prj_assoc_manage.php");
+//include ("../../sql/ri_prj_assoc_from_ri_name.php");
 
 //DECLARE
 $uid = $_GET['uid'];
@@ -169,7 +170,7 @@ function toggle(source2) {
 <div align="center">For:  <?php echo $name; ?></div>
     </br>
 <!--HIDE ADD PROJECTS -->
-<?php if($row_por_count['dacount'] == 0) {?>
+<?php if($row_por_count['dacount'] == 0) { // THIS HAS BEEN DISABLE.  IT SHOULD BE == 0?> 
   <div align="center" class="alert alert-danger" style="padding:20px; font-size:18px; font-color: #000000;">There are no project available to add to this Risk/Issue</div>
 <?php } else {?>
   <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
@@ -273,13 +274,23 @@ function toggle(source2) {
                           <th bgcolor="#EFEFEF">Facility</th>
                       </tr>
                       <tr>
-                          <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" checked disabled></td> <!-- CHECK BOX FOR PROJECT SELECT -->
+                          <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" checked disabled></td> <!-- CHECK BOX FOR PROJECT SELECT -- -->
                           <td bgcolor="#d9edf7"><?php echo $row_projID['PROJ_NM'] ?> [ORIGINATING PROJECT]</td>
                           <td bgcolor="#d9edf7"><?php echo $row_projID['PRGM'] ?></td>
                           <td bgcolor="#d9edf7"><?php echo $row_projID['Region'] ?></td>
                           <td bgcolor="#d9edf7"><?php echo $row_projID['Market'] ?></td>
                           <td bgcolor="#d9edf7"><?php echo $row_projID['Facility'] ?></td>
                       </tr>
+                      <?php while($row_assoc_prj = sqlsrv_fetch_array( $stmt_assoc_prj, SQLSRV_FETCH_ASSOC)) { ?>
+                        <tr>
+                            <td bgcolor="#d9edf7"><input type="checkbox" name="dummy" id="dummy" checked disabled></td> <!-- CHECK BOX FOR PROJECT SELECT -->
+                            <td bgcolor="#d9edf7"><?php echo $row_assoc_prj ['EPSProject_Nm'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_assoc_prj ['EPSProgram_Nm'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_assoc_prj ['EPSRegion_Cd'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_assoc_prj ['EPSMarket_Cd'] ?></td>
+                            <td bgcolor="#d9edf7"><?php echo $row_assoc_prj ['EPSFacility_Cd'] ?></td>
+                        </tr>
+                      <?php } ?>
                       <?php while($row_por = sqlsrv_fetch_array( $stmt_por, SQLSRV_FETCH_ASSOC)) { ?>
                           <tr>
                               <td><input type="checkbox" name="add_proj_select[]" id="add_proj_select" value="<?php echo $row_por['PROJ_NM'];?>"></td> <!-- CHECK BOX FOR PROJECT SELECT -->
