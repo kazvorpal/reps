@@ -341,7 +341,7 @@ const fieldfilter = (ri, test, url) => {
           counter++;
         }
       }
-      return (ispp(mode) && format == "grid") ? (ri.Global_Flg) ? "Global" : "Program" :(counter > 1) ? "Associated" : "Single";
+      return (ispp(mode)) ? (ri.Global_Flg) ? "Global" : "Program" :(counter > 1) ? "Associated" : "Single";
     },
     projectcount: () => {
       let counter = 0;
