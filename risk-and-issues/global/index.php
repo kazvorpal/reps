@@ -354,6 +354,16 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         </div>
       </div>
     </div>
+    <div class="col-md-4" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Tags</h3>
+        </div>
+        <div class="panel-body">
+          <input name="tags" type="text" data-role="tagsinput" id="tags" class="form-control" maxlength="10" on>
+        </div>
+      </div>       
+    </div>
     <div class="col-md-8" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -678,16 +688,6 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
         </div>
         <div class="panel-body">
           <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10">
-        </div>
-      </div>       
-    </div>
-    <div class="col-md-4" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Tags</h3>
-        </div>
-        <div class="panel-body">
-          <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" on>
         </div>
       </div>       
     </div>

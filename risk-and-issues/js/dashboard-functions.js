@@ -239,7 +239,7 @@ const fieldfilter = (ri, test, url) => {
     RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     Global_Tag: () => {
       console.log(typeof ri.Global_Tag)
-      return (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(" | ")
+      return (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(", ")
     },
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {

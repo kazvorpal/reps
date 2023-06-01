@@ -349,7 +349,7 @@ if($unframe == "0") { //NO COLORBOX
     <tr>
       <td>Tags</td>
       <td>
-        <?= $tags ?>
+        <?= $row_glb_prog["Global_Tag"] ?>
     </td>
     </tr>   
   </tbody>
