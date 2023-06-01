@@ -261,7 +261,7 @@ const fieldfilter = (ri, test, url) => {
     },
     RiskAndIssue_Key: () => {
       let oc = (ri.RIActive_Flg == 1) ? `<span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>` : `<span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>`;
-      let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a>` : `${ri["RiskAndIssue_Key"]} ${oc}`;
+      let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a> ${oc}` : `${ri["RiskAndIssue_Key"]} ${oc}`;
       return status;
     },
     grouptype: () => {

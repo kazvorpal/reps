@@ -5,10 +5,7 @@ const mapper = "RiskAndIssue_Key";
 // const key = (mode == "project") ? "EPSProject_Key" : "EPSProject_Key";
 
 const fieldempty = (field) => (document.getElementById(field).value == '');
-const isincluded = (filter, field) => {
-  console.log(filter, field)
-  return ($(filter).val().includes(field));
-}
+const isincluded = (filter, field) => ($(filter).val().includes(field))
 
 const exporter = () => {
     document.workbook.xlsx.writeBuffer().then((buf) => {
