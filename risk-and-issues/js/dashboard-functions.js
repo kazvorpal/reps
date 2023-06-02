@@ -255,7 +255,7 @@ const fieldfilter = (ri, test, url) => {
           return "";
     },
     RiskAndIssue_Key: () => {
-      let oc = (ri.RIActive_Flg == 1) ? "Open" : "Close";
+      let oc = (ri.RIActive_Flg == 1) ? "<br/>Open" : "<br/>Close";
       const color = ri.RIActive_Flg == 1 ? '#080' : '#800';
       return (ispp(mode)) 
         ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a><span title='Status: ${oc}' style='color:${color};font-size:xx-small'>${oc}</span>` 
