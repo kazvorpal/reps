@@ -1,3 +1,8 @@
+
+var debugmode = false;
+const debug = (...params) => (debugmode) && console.log(...params);
+
+
 const sortby = (list, property) => {
     rv = list.sort((a, b) => {
       return ((a[property] > b[property]) ? 1 : ((a[property] < b[property]) ? -1 : 0));

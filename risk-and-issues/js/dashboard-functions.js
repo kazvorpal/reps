@@ -214,6 +214,7 @@ var togglegrid = () => {
 }
 
 const fieldfilter = (ri, test, url) => {
+  const groupcount = () => ridata.reduce((gc, o) => gc + ((ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0), 0);
   // This will end up returning either a function value via fieldswitch, 
   // or else just the built-in value of the field in question, 
   // if there isn't a specific function for it.
@@ -237,10 +238,11 @@ const fieldfilter = (ri, test, url) => {
     PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
     PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A",
     RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
-    Global_Tag: () => {
-      console.log(typeof ri.Global_Tag)
-      return (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(", ")
-    },
+    groupcount: () => groupcount(),
+    grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
+    ForecastedResolution_Dt: () => ri.ForecastedResolution_Dt != undefined ? formatDate(new Date(ri.ForecastedResolution_Dt.date)) : "Unknown",
+    Global_Tag: () => (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" 
+        : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(", "),
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {
             const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
@@ -252,30 +254,12 @@ const fieldfilter = (ri, test, url) => {
         } else
           return "";
     },
-    groupcount: () => {
-      let gc = 0;
-      ridata.forEach(o => {
-        gc += (ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0;
-      })
-      return gc;
-    },
     RiskAndIssue_Key: () => {
-      let oc = (ri.RIActive_Flg == 1) ? `<span title='Status: Open' style='color:#080;font-size:xx-small'>Open</span>` : `<span title='Status: Closed' style='color:#800;font-size:xx-small'>Closed</span>`;
-      let status = (ispp(mode)) ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a> ${oc}` : `${ri["RiskAndIssue_Key"]} ${oc}`;
-      return status;
-    },
-    grouptype: () => {
-      let gc = 0;
-      ridata.forEach(o => {
-        gc += (ri.RIIncrement_Num == o.RIIncrement_Num) ? 1 : 0;
-      })
-      return (gc > 1) ? "Multi" : "Single";
-    },
-    ForecastedResolution_Dt: () => {
-      if (ri.ForecastedResolution_Dt != undefined)
-        return formatDate(new Date(ri.ForecastedResolution_Dt.date));
-      else 
-        return "Unknown";
+      let oc = (ri.RIActive_Flg == 1) ? "Open" : "Close";
+      const color = ri.RIActive_Flg == 1 ? '#080' : '#800';
+      return (ispp(mode)) 
+        ? `<a href='${url}' class='miframe cboxElement'>${ri["RiskAndIssue_Key"]}</a><span title='Status: ${oc}' style='color:${color};font-size:xx-small'>${oc}</span>` 
+        : `${ri["RiskAndIssue_Key"]} <span title='Status: ${oc}' style='color:${color};font-size:xx-small'>${oc}</span>`;
     },
     RIOpen_Hours: () => {
       let d = Math.floor(ri.RIOpen_Hours/24);
