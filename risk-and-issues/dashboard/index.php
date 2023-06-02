@@ -19,12 +19,11 @@
     <?php 
         $mode = (stripos($_SERVER['REQUEST_URI'], "program")) ? "program" : "project";
         include ("../../includes/load.php");
-        include ("../includes/cdns.php");
         include ("../includes/data-unified.php");
-    ?>
+        ?>
 <link rel="stylesheet" title="ri" href="../css/ri.css">
-  </head>
-  <body>
+</head>
+<body>
     <!--LOADER-->
     <div id="loader"></div>
     <div style="display:block;" id="myDiv" class="animate-bottom"><!--change none to block when developing-->
@@ -38,20 +37,22 @@
   <!--menu-->
   <script src="../js/ri.js"></script>
   <script>
-      const finder = (target, objective) => (target.find(o => o.MLMProgram_Nm == objective));
+    const finder = (target, objective) => (target.find(o => o.MLMProgram_Nm == objective));
       
       // const modes = ["project", "program", "portfolio"];
 
-</script>
-  <?php include ("../../includes/menu.php");?>
+    </script>
+  <?php include ("../../includes/menu.php");
+  include ("../includes/cdns.php");
+  ?>
   <section>
     <div class="row" align="center">
       <div style="width:98%">
         <div class="col-lg-12 text-center">
-        <h1 id="title">R&I Dashboard 2.0</h1>
-        <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
-
-      <?php 
+          <h1 id="title">R&I Dashboard 2.0</h1>
+          <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
+          
+          <?php 
         require '../includes/ri-selectors.php';
         ?>
         <div style="width:100%;text-align:center;margin: top m 18px;px">
