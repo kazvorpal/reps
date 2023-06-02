@@ -18,6 +18,7 @@
     <script src="../js/reactfunctions.js"></script>
     <?php 
         $mode = (stripos($_SERVER['REQUEST_URI'], "program")) ? "program" : "project";
+        include ("../includes/cdns.php");
         include ("../../includes/load.php");
         include ("../includes/data-unified.php");
         ?>
@@ -43,7 +44,6 @@
 
     </script>
   <?php include ("../../includes/menu.php");
-  include ("../includes/cdns.php");
   ?>
   <section>
     <div class="row" align="center">
