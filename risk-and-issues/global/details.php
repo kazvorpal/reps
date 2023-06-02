@@ -80,7 +80,14 @@ $name = trim($row_glb_prog['RI_Nm']);
 $RILevel = $row_glb_prog['RILevel_Cd'];
 $RIType = $row_glb_prog['RIType_Cd'];
 $jsonArray = json_decode($row_glb_prog["Global_Tag"]);
-$tags = implode(",", $jsonArray);
+
+$tags = $row_glb_prog["Global_Tag"];
+
+// $tags = "";
+//   if(!empty()){
+//     $tags = implode(",", $jsonArray);
+//   }
+
 $createdFrom  = "";
 
 if(!empty($row_glb_prog['PortfolioType_Key'])) {
@@ -349,7 +356,10 @@ if($unframe == "0") { //NO COLORBOX
     <tr>
       <td>Tags</td>
       <td>
-        <?= $row_glb_prog["Global_Tag"] ?>
+        <?php
+        if(!empty($row_glb_prog["Global_Tag"])){ ?>
+          <p id="tagdisp"></p>
+        <?php } ?>
     </td>
     </tr>   
   </tbody>
@@ -399,4 +409,8 @@ if($unframe == "0") { //NO COLORBOX
   </form>
 </div>
 </body>
+<script>
+  const tags = <?php echo $tags ?>;
+  document.getElementById("tagdisp").innerHTML = tags;
+</script>
 </html>
