@@ -69,7 +69,11 @@ $RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
 $AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
 $RaidLog_Flg = $row_glb_prog['RaidLog_Flg'];
 $jsonArray = json_decode($row_glb_prog["Global_Tag"]);
-$tags = implode(",", $jsonArray);
+
+$tags = "";
+if(!empty($row_glb_prog["Global_Tag"])){
+  $tags = implode(",", $jsonArray);
+}
 $global = 1;
 
 //MAX AND MIN FOR CLOSING DATE
