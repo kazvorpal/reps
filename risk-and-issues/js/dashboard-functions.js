@@ -215,7 +215,6 @@ var togglegrid = () => {
 const fieldfilter = (ri, test, url) => {
   const groupcount = () => ridata.reduce((gc, o) => gc + ((ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0), 0);
   const location = getlocationbykey(ri.EPSProject_Key);
-  const created = 
 
   // This will end up returning either a function value via fieldswitch, 
   // or else just the built-in value of the field in question, 
@@ -227,7 +226,7 @@ const fieldfilter = (ri, test, url) => {
     RIActive_Flg: () => ri.RIActive_Flg ? "Open" : "Closed",
     Created_Ts: () => formatDate(new Date(ri.Created_Ts.date)),
     Last_Update_Ts: () => formatDate(new Date(ri.Last_Update_Ts.date)),
-    RIClosed_Dt: () => new Date(ri.RIClosed_Dt.date) ?? "",
+    RIClosed_Dt: () => (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "",
     RiskRealized_Flg: () => ri.RiskRealized_Flg ? "Y" : "N",
     RaidLog_Flg: () => (ri.RaidLog_Flg) ? "Y" : "N",
     actionplandate: () => (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
