@@ -69,7 +69,7 @@ $RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
 $AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
 $RaidLog_Flg = $row_glb_prog['RaidLog_Flg'];
 $jsonArray = json_decode($row_glb_prog["Global_Tag"]);
-$tags = implode(",", $jsonArray);
+$tags = (is_array($jsonArray) && !empty($jsonArray)) ? implode(",", $jsonArray) : "";
 $global = 1;
 
 //MAX AND MIN FOR CLOSING DATE
@@ -414,6 +414,17 @@ function toggle(source) {
           <input name="Descriptor" type="text" required="required" class="form-control" id="Descriptor" maxlength="30" onChange="updatebox()" value="<?php echo $ScopeDescriptor_Txt ?>" readonly> 
         </div>
       </div>
+    </div>
+    <div class="col-md-3" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Tags</h3>
+        </div>
+        <div class="panel-body">
+        <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" value="<?= $tags ?>" on>
+   <!-- <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10" value="<?php echo $AssociatedCR_Key ?>"> -->
+        </div>
+      </div>       
     </div>
     <div class="col-md-8" align="left">
       <div class="panel panel-default">
@@ -761,17 +772,6 @@ function toggle(source) {
           <input type="date" name="DateClosed" id="DateClosed" class="form-control" min="<?php echo $createDT; ?>" max="<?php echo $closeDateMax; ?>">
         </div>
       </div>
-    </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Tags</h3>
-        </div>
-        <div class="panel-body">
-        <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" value="<?= $tags ?>" on>
-   <!-- <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10" value="<?php echo $AssociatedCR_Key ?>"> -->
-        </div>
-      </div>       
     </div>
   </div>
 </div>
