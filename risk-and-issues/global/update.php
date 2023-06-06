@@ -621,7 +621,7 @@ function toggle(source) {
                     min="<?php echo $closeDateMax ?>"
                     class="form-control" 
                     id="date" 
-                    value="<?= $ForecastedResolution_Dt ?>"
+                    value="<?php if(!empty($ForecastedResolution_Dt)) { $ForecastedResolution_Dt; }  ?>"
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
