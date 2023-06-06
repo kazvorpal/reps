@@ -621,7 +621,7 @@ function toggle(source) {
                     min="<?php echo $closeDateMax ?>"
                     class="form-control" 
                     id="date" 
-                    value="<?php if(!empty($ForecastedResolution_Dt)) { $ForecastedResolution_Dt; }  ?>"
+                    value="<?php echo date_format($ForecastedResolution_Dt,"Y-m-d") ?>"
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -825,7 +825,7 @@ function validateGrp() {
 
   var today = year + "-" + month + "-" + day;
 
-  // document.getElementById('date').value = today;
+   //document.getElementById('date').value = today;
   </script>
   <script>
     // the indy field is commented out, so I'm commenting this out
