@@ -128,6 +128,7 @@ $project_nm ="";
     if($_POST['EstMigrateDate'] != "" && $_POST['EstMigrateDate'] !=  "N/A"){
     $EstMigrateDate = $_POST['EstMigrateDate'];
     }
+
 //echo $EstActiveDate;
 //echo $EstMigrateDate;
     //print_r($_POST);
@@ -394,7 +395,13 @@ if($global == 1) { include ("../includes/menu.php"); }
 
         //START - EMAIL RAID ADMIN
         if($raidLog == 1) {
-            $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com," . $mlmEmails;
+
+            $serverName = $_SERVER['SERVER_NAME'];
+            if ($serverName == "catl0dwas10222.corp.cox.com" || $serverName == "catl0dwas11208.corp.cox.com") {
+                $to = "gilbert.carolino@cox.com, Bao.Vang@cox.com, Alec.Flores@cox.com";
+            } else {
+                $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com," . $mlmEmails;
+            }
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';
 
