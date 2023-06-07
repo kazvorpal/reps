@@ -87,7 +87,7 @@ const filterfunction = (o) => {
       (fieldempty("allsearch")
           || idsearch(o)) && 
       (mode == "project" || ((searchtag == "" || typeof searchtag == "undefined") && fieldempty("tags")) 
-          || tagsearch(o))
+          || (o.Global_Tag && (o.Global_Tag.includes(searchtag) || o.Global_Tag.includes(document.getElementById("tags").value))))
   );
 }
 
@@ -97,10 +97,6 @@ const propsearch = o => {
           return true;
         }
     }
-}
-
-const tagsearch = o => {
-  (o.Global_Tag && (o.Global_Tag.includes(searchtag) || o.Global_Tag.includes(document.getElementById("tags").value)))
 }
 
 const idsearch = o => {
