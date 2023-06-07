@@ -212,6 +212,15 @@ var togglegrid = () => {
   init(mode);
 }
 
+const tagger = (t) => {
+  console.log(searchtag = t);
+  var delay = 100;
+  setTimeout(() => {
+    (ispp(mode) && format != "grid") ? toggleall(false) : "";
+  }, 1000);
+  processfilters();
+}
+
 const fieldfilter = (ri, test, url) => {
   const groupcount = () => ridata.reduce((gc, o) => gc + ((ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0), 0);
   const location = getlocationbykey(ri.EPSProject_Key);
@@ -243,7 +252,7 @@ const fieldfilter = (ri, test, url) => {
     grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
     ForecastedResolution_Dt: () => ri.ForecastedResolution_Dt != undefined ? formatDate(new Date(ri.ForecastedResolution_Dt.date)) : "Unknown",
     Global_Tag: () => (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" 
-        : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(", "),
+        : ri.Global_Tag.map(target => `<a href="#" onclick="tagger('${target}');">${target}</a>`).join(", "),
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {
             const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
