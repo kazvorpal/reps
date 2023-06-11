@@ -224,6 +224,8 @@ const tagger = (t) => {
 const fieldfilter = (ri, test, url) => {
   const groupcount = () => ridata.reduce((gc, o) => gc + ((ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0), 0);
   const location = getlocationbykey(ri.EPSProject_Key);
+  const getobjectdate = (o) => o?.date ? formatDate(new Date(o.date)) : "";
+
 
   // This will end up returning either a function value via fieldswitch, 
   // or else just the built-in value of the field in question, 
@@ -233,22 +235,23 @@ const fieldfilter = (ri, test, url) => {
 
     RiskAndIssue_Key: () => (ispp(mode)) ? `<span style='font-weight:900'>${text}</span>` : ri.RiskAndIssueLog_Key,
     RIActive_Flg: () => ri.RIActive_Flg ? "Open" : "Closed",
-    Created_Ts: () => formatDate(new Date(ri.Created_Ts.date)),
-    Last_Update_Ts: () => formatDate(new Date(ri.Last_Update_Ts.date)),
-    RIClosed_Dt: () => (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "",
+    Created_Ts: () => getobjectdate(ri.Created_Ts),
+    Last_Update_Ts: () => getobjectdate(ri.Last_Update_Ts),
+    RIClosed_Dt: () => getobjectdate(ri.RIClosed_Dt),
     RiskRealized_Flg: () => ri.RiskRealized_Flg ? "Y" : "N",
     RaidLog_Flg: () => (ri.RaidLog_Flg) ? "Y" : "N",
-    actionplandate: () => (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
-    changelogdate: () => (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
+    actionplandate: () => aplist[ri.RiskAndIssue_Key] ? getobjectdate(aplist[ri.RiskAndIssue_Key].LastUpdate) : "",
+    changelogdate: () => loglist[ri.RiskAndIssue_Key] ? getobjectdate(loglist[ri.RiskAndIssue_Key].LastUpdate) : "",
     RIDescription_Txt: () => trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc"),
     monthcreated: () => new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' }),
-    monthclosed: () => (ri.RIClosed_Dt != null) ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "",
+    monthclosed: () => ri.RIClosed_Dt?.date ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "",
     RIIncrement_Num: () => (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "",
     programmanager: () => (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "", 
-    PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
-    PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A",
+    PRJI_Estimated_Act_Ts: () => ri.PRJI_Estimated_Act_Ts ? getDateFromObject(ri.PRJI_Estimated_Act_Ts) : "N/A",
+    PRJI_Estimated_Mig_Ts: () => ri.PRJI_Estimated_Mig_Ts ? getDateFromObject(ri.PRJI_Estimated_Mig_Ts) : "N/A",
     RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     groupcount: () => groupcount(),
+    LastUpdateBy_Nm: () => ri.RI_Owner ?? ri.LastUpdateBy_Nm,
     grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
     ForecastedResolution_Dt: () => ri.ForecastedResolution_Dt != undefined ? formatDate(new Date(ri.ForecastedResolution_Dt.date)) : "Unknown",
     Global_Tag: () => (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" 
