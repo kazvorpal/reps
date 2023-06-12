@@ -1082,10 +1082,13 @@ document.getElementById("dateUnknown").addEventListener("change", function(){
     ['style', ['style']],
     ['font', ['bold', 'underline', 'italic', 'clear']],
     ['fontname', ['fontname', 'fontsize']],
-    ['para', ['ul', 'ol', 'paragraph']]
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['insert', ['link']], // Add hyperlink
+    ['history', ['undo', 'redo']] // Add undo and redo
   ],
   fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '96'], 
 };
+
 
 summercss = {"position": "absolute", "width": "0px", "height": "0px"}
 $(document).ready(function() {

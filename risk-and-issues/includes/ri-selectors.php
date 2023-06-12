@@ -86,8 +86,8 @@ const filterfunction = (o) => {
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))  && 
       (fieldempty("allsearch")
           || idsearch(o)) && 
-      (((searchtag == "" || typeof searchtag == "undefined") || (ispp(mode) & fieldempty("tags"))) 
-       || (o.Global_Tag && (o.Global_Tag.includes(searchtag) || o.Global_Tag.includes(document.getElementById("tags").value))))
+      (mode == "project" || ((searchtag == "" || typeof searchtag == "undefined") && fieldempty("tags")) 
+          || (o.Global_Tag && (o.Global_Tag.includes(searchtag) || o.Global_Tag.includes(document.getElementById("tags").value))))
   );
 }
 

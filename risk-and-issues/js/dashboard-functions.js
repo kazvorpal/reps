@@ -54,7 +54,7 @@ const toggler = (target, o) =>
   const getprogrambyname = (target) =>  rifiltered.find(o => o.MLMProgram_Nm == target);
   const getprogrambykey = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target && (o.MLMProgram_Nm == name || (name == "Portfolio" && o.MLMProgram_Nm == "Portfolio")));
   const getprogrambykeyonly = (target, name) =>  rifiltered.find(o => o && o.RiskAndIssue_Key == target);
-  const getlocationbykey = (key) =>  locationlist.find(o => o.EPSProject_key == key);
+  const getlocationbykey = (key) =>  locationlist.find(o => o.EPSProject_key == key) ?? "";
   
   const textalign = (field) => (rifields[field].align) || "text-center";
   // const textalign = (field) => (field == null || parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
@@ -186,14 +186,13 @@ const trimmer = (target, key, kind) => {
 }
 
 var params = new URLSearchParams(window.location.search);
-var mode = (params.get("mode") == null) ? "project" : params.get("mode");
+var mode = params.get("mode") ?? "project";
 var page = params.get("page");
 var page = (page > 1) ? page : 1;
 var format = params.get("format");
 var prepage = params.get("pagesize");
 var pagesize = (prepage > 0) ? prepage : 8192;
-var textlength = params.get("textlength");
-var textlength = (textlength == null) ? 8192 : textlength;
+var textlength = params.get("textlength") ?? 8192;
 alt = (mode == "project") ? "program" : "project";
 document.title = capitalize(mode) + " R&I Dashboard";
 var sort = "RiskAndIssue_Key";
@@ -213,8 +212,21 @@ var togglegrid = () => {
   init(mode);
 }
 
+const tagger = (t) => {
+  console.log(searchtag = t);
+  var delay = 100;
+  setTimeout(() => {
+    (ispp(mode) && format != "grid") ? toggleall(false) : "";
+  }, 1000);
+  processfilters();
+}
+
 const fieldfilter = (ri, test, url) => {
   const groupcount = () => ridata.reduce((gc, o) => gc + ((ri.RIIncrement_Num == o.RIIncrement_Num && ri.RIActive_Flg == o.RIActive_Flg) ? 1 : 0), 0);
+  const location = getlocationbykey(ri.EPSProject_Key);
+  const getobjectdate = (o) => o?.date ? formatDate(new Date(o.date)) : "";
+
+
   // This will end up returning either a function value via fieldswitch, 
   // or else just the built-in value of the field in question, 
   // if there isn't a specific function for it.
@@ -223,26 +235,27 @@ const fieldfilter = (ri, test, url) => {
 
     RiskAndIssue_Key: () => (ispp(mode)) ? `<span style='font-weight:900'>${text}</span>` : ri.RiskAndIssueLog_Key,
     RIActive_Flg: () => ri.RIActive_Flg ? "Open" : "Closed",
-    Created_Ts: () => formatDate(new Date(ri.Created_Ts.date)),
-    Last_Update_Ts: () => formatDate(new Date(ri.Last_Update_Ts.date)),
-    RIClosed_Dt: () => (ri.RIClosed_Dt != null) ? (new Date(ri.RIClosed_Dt.date)) : "",
+    Created_Ts: () => getobjectdate(ri.Created_Ts),
+    Last_Update_Ts: () => getobjectdate(ri.Last_Update_Ts),
+    RIClosed_Dt: () => getobjectdate(ri.RIClosed_Dt),
     RiskRealized_Flg: () => ri.RiskRealized_Flg ? "Y" : "N",
     RaidLog_Flg: () => (ri.RaidLog_Flg) ? "Y" : "N",
-    actionplandate: () => (aplist[ri.RiskAndIssue_Key]) ? formatDate(new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
-    changelogdate: () => (loglist[ri.RiskAndIssue_Key]) ? formatDate(new Date(loglist[ri.RiskAndIssue_Key].LastUpdate.date)) : "",
+    actionplandate: () => aplist[ri.RiskAndIssue_Key] ? getobjectdate(aplist[ri.RiskAndIssue_Key].LastUpdate) : "",
+    changelogdate: () => loglist[ri.RiskAndIssue_Key] ? getobjectdate(loglist[ri.RiskAndIssue_Key].LastUpdate) : "",
     RIDescription_Txt: () => trimmer(ri.RIDescription_Txt, ri.RiskAndIssue_Key, "desc"),
     monthcreated: () => new Date(ri.Created_Ts.date).toLocaleString('default', { month: 'long' }),
-    monthclosed: () => (ri.RIClosed_Dt != null) ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "",
+    monthclosed: () => ri.RIClosed_Dt?.date ? new Date(ri.Last_Update_Ts.date).toLocaleString('default', { month: 'long' }) : "",
     RIIncrement_Num: () => (ri.RIIncrement_Num) ? ri.RIIncrement_Num : "",
     programmanager: () => (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "", 
-    PRJI_Estimated_Act_Ts: () => (ri.PRJI_Estimated_Act_Ts != null) ? formatDate(new Date(ri.PRJI_Estimated_Act_Ts.date)) : "N/A", 
-    PRJI_Estimated_Mig_Ts: () => (ri.PRJI_Estimated_Mig_Ts != null ) ? formatDate(new Date(ri.PRJI_Estimated_Mig_Ts.date)) : "N/A",
+    PRJI_Estimated_Act_Ts: () => ri.PRJI_Estimated_Act_Ts ? getDateFromObject(ri.PRJI_Estimated_Act_Ts) : "N/A",
+    PRJI_Estimated_Mig_Ts: () => ri.PRJI_Estimated_Mig_Ts ? getDateFromObject(ri.PRJI_Estimated_Mig_Ts) : "N/A",
     RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     groupcount: () => groupcount(),
+    LastUpdateBy_Nm: () => ri.RI_Owner ?? ri.LastUpdateBy_Nm,
     grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
     ForecastedResolution_Dt: () => ri.ForecastedResolution_Dt != undefined ? formatDate(new Date(ri.ForecastedResolution_Dt.date)) : "Unknown",
     Global_Tag: () => (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" 
-        : ri.Global_Tag.map(target => `<a href="#" onclick="searchtag='${target}'; processfilters();">${target}</a>`).join(", "),
+        : ri.Global_Tag.map(target => `<a href="#" onclick="tagger('${target}');">${target}</a>`).join(", "),
     mangerlist: () => {
         if (ri["MLMProgram_Key"]) {
             const manger = mangerlist[ri["Fiscal_Year"] + "-" + ri["MLMProgram_Key"]];
@@ -266,14 +279,8 @@ const fieldfilter = (ri, test, url) => {
       let s = (d == 1) ? " day" : (d === "") ? "" : " days";
       return  `${d}${s}`;
     },
-    market: () => {
-      const m = getlocationbykey(ri.EPSProject_Key);
-      return (m != undefined) ? m.Market_Cd : "";
-    },
-    facility: () => {
-      const f = getlocationbykey(ri.EPSProject_Key);
-      return (f != undefined) ? f.Facility_Cd : "";
-    },
+    market: () => location.Market_Cd,
+    facility: () => location.Facility_Cd,
     EPSRegion_Cd: () => {
       let counter = 0;
       let list = "";

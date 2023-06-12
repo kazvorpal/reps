@@ -69,7 +69,7 @@ $RiskRealized_Flg =  $row_glb_prog['RiskRealized_Flg'];
 $AssociatedCR_Key = $row_glb_prog['AssociatedCR_Key'];
 $RaidLog_Flg = $row_glb_prog['RaidLog_Flg'];
 $jsonArray = json_decode($row_glb_prog["Global_Tag"]);
-$tags = implode(",", $jsonArray);
+$tags = (is_array($jsonArray) && !empty($jsonArray)) ? implode(",", $jsonArray) : "";
 $global = 1;
 
 //MAX AND MIN FOR CLOSING DATE
@@ -415,6 +415,17 @@ function toggle(source) {
         </div>
       </div>
     </div>
+    <div class="col-md-3" align="left">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Tags</h3>
+        </div>
+        <div class="panel-body">
+        <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" value="<?= $tags ?>" on>
+   <!-- <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10" value="<?php echo $AssociatedCR_Key ?>"> -->
+        </div>
+      </div>       
+    </div>
     <div class="col-md-8" align="left">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -610,7 +621,11 @@ function toggle(source) {
                     min="<?php echo $closeDateMax ?>"
                     class="form-control" 
                     id="date" 
-                    value="<?= $ForecastedResolution_Dt ?>"
+                    value="<?php 
+                      if(!empty($ForecastedResolution_Dt)){
+                      echo date_format($ForecastedResolution_Dt,"Y-m-d");
+                      }
+                      ?>"
                     oninvalid="this.setCustomValidity('You must select a date or check Unknown ')"
                     oninput="this.setCustomValidity('')">
           </div>
@@ -762,17 +777,6 @@ function toggle(source) {
         </div>
       </div>
     </div>
-    <div class="col-md-3" align="left">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Tags</h3>
-        </div>
-        <div class="panel-body">
-        <input name="tags" type="text" data-role="tagsinput" id="tags" maxlength="10" value="<?= $tags ?>" on>
-   <!-- <input name="assCRID" type="text" class="form-control" id="assCRID" maxlength="10" value="<?php echo $AssociatedCR_Key ?>"> -->
-        </div>
-      </div>       
-    </div>
   </div>
 </div>
 <!--end container -->
@@ -825,7 +829,7 @@ function validateGrp() {
 
   var today = year + "-" + month + "-" + day;
 
-  // document.getElementById('date').value = today;
+   //document.getElementById('date').value = today;
   </script>
   <script>
     // the indy field is commented out, so I'm commenting this out
