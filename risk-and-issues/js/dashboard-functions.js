@@ -251,7 +251,7 @@ const fieldfilter = (ri, test, url) => {
     PRJI_Estimated_Mig_Ts: () => ri.PRJI_Estimated_Mig_Ts ? getDateFromObject(ri.PRJI_Estimated_Mig_Ts) : "N/A",
     RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     groupcount: () => groupcount(),
-    LastUpdateBy_Nm: () => ri.RI_Owner ?? ri.LastUpdateBy_Nm,
+    LastUpdateBy_Nm: () => (ri.Global_Flg && ri.RI_Owner) ? ri.RI_Owner : ri.LastUpdateBy_Nm,
     grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
     ForecastedResolution_Dt: () => ri.ForecastedResolution_Dt != undefined ? formatDate(new Date(ri.ForecastedResolution_Dt.date)) : "Unknown",
     Global_Tag: () => (!ri.Global_Tag || typeof ri.Global_Tag == "string") ? "" 
