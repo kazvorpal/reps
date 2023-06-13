@@ -265,7 +265,7 @@ $unframe = $_SESSION['unframe'];
         array($changeLogActionVal, SQLSRV_PARAM_IN),
         array($changeLogReason, SQLSRV_PARAM_IN),
         array($ChangeToPIChangeLog, SQLSRV_PARAM_IN),
-        array($tags, SQLSRV_PARAM_IN),
+        //array($tags, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR)
@@ -278,7 +278,7 @@ $unframe = $_SESSION['unframe'];
             //exit();
 
         //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_UpdateRiskandIssues](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
       //EXECUTE PROCEDDURE
     $stmt3 = sqlsrv_query( $data_conn, $tsql_callSP, $params);
