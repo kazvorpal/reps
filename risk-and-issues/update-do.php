@@ -63,7 +63,11 @@ $unframe = $_SESSION['unframe'];
     //ASSC CR KEY NULL IF EMPTY 3.1.2023 
     $asscCRKey = $_POST['assCRID']; 
     $project_nm = $_POST['project_nm'];
-    $tags = $_POST['tags'];
+
+    $tags = "";
+    if(!empty($_POST['tags'])) {
+        $tags = $_POST['tags'];
+    }
 
     $status = 1;
     if($changeLogKey ==3) {
