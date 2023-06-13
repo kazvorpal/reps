@@ -159,6 +159,8 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     <input name="EstMigrateDate" type="hidden" id="EstMigrateDate" value="<?php echo $EstMigrateDate?>">
     <input name="EstActiveDate" type="hidden" id="EstActiveDate" value="<?php echo $EstActiveDate?>">
     <input name="tags" type="hidden" id="tags" value='<?= $tags ?>'>
+    <input name="owner" type="hidden" id="owner" value='<?= $owner ?>'>
+
 
 <?php if($DateClosed != "" && $delete == "") { ?>
   <div class="alert alert-danger">
