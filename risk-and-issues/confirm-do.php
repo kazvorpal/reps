@@ -54,7 +54,11 @@ $project_nm ="";
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 
     $transfer2prgManager = (int)$_POST['transfer2prgManager'];
+
+    $tags = "";
+    if(!empty($_POST['tags'])) {
     $tags = $_POST['tags'];
+    }
 
     $groupID = NULL;
     if($_POST['groupID'] != ""){
@@ -229,7 +233,7 @@ if($global == 1) { include ("../includes/menu.php"); }
         array($PRJILog_Flg, SQLSRV_PARAM_IN),
         array($changeLogActionVal, SQLSRV_PARAM_IN),
         array($changeLogReason, SQLSRV_PARAM_IN),
-        array($tags, SQLSRV_PARAM_IN),
+        //array($tags, SQLSRV_PARAM_IN),
         array(&$SPCode, SQLSRV_PARAM_OUT, SQLSRV_PHPTYPE_INT),
         array(&$SPMessage, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
         array(&$SPBatch_Id, SQLSRV_PARAM_OUT, null, SQLSRV_SQLTYPE_VARCHAR),
@@ -237,7 +241,7 @@ if($global == 1) { include ("../includes/menu.php"); }
         );
 
     //CALL THE PROCEDURE
-        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        $tsql_callSP = "{CALL [RI_MGT].[sp_InsertRiskAndIssue](?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
     // DEBUG CODE
     //echo str_replace("],[","]<br>[", json_encode($params)) ;
