@@ -60,3 +60,13 @@
   .tt-suggestion:hover {
     background-color: #ddd;
   }
+.note-modal .modal-dialog {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 20px);
+    box-shadow: none;
+}
+.modal-content {
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+}

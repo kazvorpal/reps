@@ -378,8 +378,8 @@ const fieldfilter = (ri, test, url) => {
     }, 
     age: () => {
       let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
-      const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24)));
-      let s = (d == 1) ? "&nbsp;day" : (d == "") ? "" : "&nbsp;days";
+      const d = (r == "") ? "" : Math.max(0, (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))));
+      let s = (d == 1) ? "&nbsp;day" : (d === "") ? "" : "&nbsp;days";
       return  `${d}${s}`;
     },
     ActionPlanStatus_Cd: () => {
