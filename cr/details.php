@@ -27,7 +27,7 @@ $sql_cfPor = "SELECT * FROM [PORMgt].[fn_GetListOfPlanChangeForCR]('$fundingKey'
 $stmt_cfPor = sqlsrv_query( $conn_COXProd, $sql_cfPor );
 //$row_cfPor = sqlsrv_fetch_array( $stmt_cfPor, SQLSRV_FETCH_ASSOC);
 //echo $row_cfPor['column_name']
-echo $sql_cfPor;
+//echo $sql_cfPor;
 
 // CHANGE REQUEST FROM CURRENT PLAN (RED) $fundingKey
 $sql_budCapCCR = "SELECT * 
