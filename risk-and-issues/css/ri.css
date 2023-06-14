@@ -285,3 +285,6 @@ body {
 .tt-menu, .tt-open {
   background-color: white !important;
 }
+.modal-content {
+  margin-top: 60px;
+}
