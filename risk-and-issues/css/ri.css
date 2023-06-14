@@ -285,3 +285,34 @@ body {
 .tt-menu, .tt-open {
   background-color: white !important;
 }
+
+.btn-primary {
+  background-color: #337ab7; /* Bootstrap 3 primary color */
+  border-color: #2e6da4; /* Bootstrap 3 primary border color */
+  border-radius: 4px; /* Bootstrap 3 border radius */
+  /* ... any other styles you want to override ... */
+}
+/* Override button styles for multiselect dropdown */
+.btn-group .btn {
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+/* Override caret styles for multiselect dropdown */
+.multiselect.dropdown-toggle::after {
+  border-top: 4px solid;
+  margin-left: 5px;
+  vertical-align: 0;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+/* Override dropdown-menu styles for multiselect dropdown */
+.multiselect-container.dropdown-menu {
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Override checkbox styles for multiselect dropdown */
+.multiselect-container.dropdown-menu input[type="checkbox"] {
+  margin-right: 5px;
+}

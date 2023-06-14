@@ -101,7 +101,8 @@
   var menustats;
   setTimeout(()=>{window.scrollTo(0,0);}, 1000);
   const menuhandler = () => {
-    menustats = window.getComputedStyle(document.getElementById("myDefaultNavbar1"));
+    menustats = window.getComputedStyle(document.getElementById("navbarContent").parentElement);
+    // console.log(menustats)
     mh = (menustats.height == "auto") ? "53px" : menustats.height;
     // console.log(mh);
     document.querySelector("#spacey").style.height = mh;

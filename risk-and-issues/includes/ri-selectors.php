@@ -36,7 +36,8 @@ const jq = `
 
 
         <!-- <h5><?php echo $row_da_count['daCount']?> Risks and Issues Found </h5> -->
-        <form action="" method="post" class="navbar-form navbar-center" id="formfilter">
+        <form action="" method="post" class="navbar-form d-flex justify-content-center" id="formfilter">
+        <!-- <form action="" method="post" class="navbar-form navbar-center" id="formfilter"> -->
           <div class="form-group">
             <div id="filterpanel" class="container-fluid"><div class="row" id="row"></div></div>
 </div>
