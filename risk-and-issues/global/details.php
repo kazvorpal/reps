@@ -34,7 +34,7 @@ $sql_glb_prog = "SELECT* FROM [RI_MGT].[fn_GetListOfAllRiskAndIssue]($status) WH
 $stmt_glb_prog   = sqlsrv_query( $data_conn, $sql_glb_prog ); 
 $row_glb_prog   = sqlsrv_fetch_array( $stmt_glb_prog , SQLSRV_FETCH_ASSOC);
 // $row_glb_prog[''];
-echo $sql_glb_prog;
+//echo $sql_glb_prog;
 
 //DRIVER FROM LOG KEY
 $RiskAndIssueLog_Key = $row_glb_prog['RiskAndIssueLog_Key'];
