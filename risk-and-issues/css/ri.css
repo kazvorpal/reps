@@ -285,6 +285,9 @@ body {
 .tt-menu, .tt-open {
   background-color: white !important;
 }
+.modal-content {
+  margin-top: 60px;
+}
 
 .btn-primary {
   background-color: #337ab7; /* Bootstrap 3 primary color */

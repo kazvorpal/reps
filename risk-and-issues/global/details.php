@@ -73,7 +73,7 @@ $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
 //echo $row_regions['MLMRegion_Cd'];
 
 //DECLARE
-$ri_owner = $row_glb_prog['LastUpdateBy_Nm'];
+$ri_owner = $row_glb_prog['RI_Owner'];
 $global = $row_glb_prog['Global_Flg'];
 $ri_id = $row_glb_prog['RiskAndIssue_Key'];
 $name = trim($row_glb_prog['RI_Nm']);

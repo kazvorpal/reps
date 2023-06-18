@@ -54,7 +54,11 @@ $project_nm ="";
     $description = $_POST['description'];
     $actionPlan = $_POST['actionPlan']; 
     $transfer2prgManager = (int)$_POST['transfer2prgManager'];
+
+    $tags = "";
+    if(!empty($_POST['tags'])) {
     $tags = $_POST['tags'];
+    }
 
     $groupID = NULL;
     if($_POST['groupID'] != ""){

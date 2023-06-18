@@ -510,6 +510,7 @@
     setInterval(colorboxschtuff, 2000);
    
   </script>
+  <div id="lightbox" style="display:none"></div>
   <div id="config-lightbox-container"></div>
   <button id="settingsbutton" style="display:none" onclick="renderLightbox()">Open Lightbox</button>
 

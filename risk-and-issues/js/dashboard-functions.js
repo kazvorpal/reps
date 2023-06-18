@@ -249,7 +249,7 @@ const fieldfilter = (ri, test, url) => {
     programmanager: () => (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "", 
     PRJI_Estimated_Act_Ts: () => ri.PRJI_Estimated_Act_Ts ? getDateFromObject(ri.PRJI_Estimated_Act_Ts) : "N/A",
     PRJI_Estimated_Mig_Ts: () => ri.PRJI_Estimated_Mig_Ts ? getDateFromObject(ri.PRJI_Estimated_Mig_Ts) : "N/A",
-    RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
+    RI_Nm: () => `<a href='${url}' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     groupcount: () => groupcount(),
     LastUpdateBy_Nm: () => (ri.Global_Flg && ri.RI_Owner) ? ri.RI_Owner : ri.LastUpdateBy_Nm,
     grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
@@ -378,8 +378,8 @@ const fieldfilter = (ri, test, url) => {
     }, 
     age: () => {
       let r = (aplist[ri.RiskAndIssue_Key]) ? new Date(aplist[ri.RiskAndIssue_Key].LastUpdate.date) : "";
-      const d = (r == "") ? "" : (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24)));
-      let s = (d == 1) ? "&nbsp;day" : (d == "") ? "" : "&nbsp;days";
+      const d = (r == "") ? "" : Math.max(0, (Math.floor((new Date() - r)/(1000 * 60 * 60 * 24))));
+      let s = (d == 1) ? "&nbsp;day" : (d === "") ? "" : "&nbsp;days";
       return  `${d}${s}`;
     },
     ActionPlanStatus_Cd: () => {
