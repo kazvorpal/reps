@@ -249,7 +249,7 @@ const fieldfilter = (ri, test, url) => {
     programmanager: () => (loglist[ri.RiskAndIssue_Key]) ? ri.LastUpdateBy_Nm  : "", 
     PRJI_Estimated_Act_Ts: () => ri.PRJI_Estimated_Act_Ts ? getDateFromObject(ri.PRJI_Estimated_Act_Ts) : "N/A",
     PRJI_Estimated_Mig_Ts: () => ri.PRJI_Estimated_Mig_Ts ? getDateFromObject(ri.PRJI_Estimated_Mig_Ts) : "N/A",
-    RI_Nm: () => `<a href='${url}' onclickD='details(this);return(false)' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
+    RI_Nm: () => `<a href='${url}' class='miframe cboxElement'>${ri["RI_Nm"]}</a>`,
     groupcount: () => groupcount(),
     LastUpdateBy_Nm: () => (ri.Global_Flg && ri.RI_Owner) ? ri.RI_Owner : ri.LastUpdateBy_Nm,
     grouptype: () => (groupcount() > 1) ? "Multi" : "Single",
