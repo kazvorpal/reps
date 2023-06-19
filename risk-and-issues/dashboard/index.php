@@ -48,9 +48,9 @@
   <section>
     <div class="row" align="center">
       <div style="width:98%">
-        <div class="col-lg-12 text-center">
+        <div class="col-lg-12 text-center" style="padding: 30px">
           <h1 id="title">R&I Dashboard 2.0</h1>
-          <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
+          <div style="display:inline-block;width:20%;text-align:right"><span class="btn btn-primary oldbutton" onclick="exporter()">Export Results</span></div> <div style="display:inline-block;padding:4px;text-align:center;font-size:larger;" id="resultcount"></div> <div id="modebuttons" style="display:inline-block;width:20%;text-align:left"> Switch To: <p><p/><p/></div>
           
           <?php 
         require '../includes/ri-selectors.php';
@@ -93,7 +93,7 @@
 
       const main = document.getElementById("main");
       initexcel();
-      main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default" onclick="togglegrid()" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
+      main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default oldbuttonclear" onclick="togglegrid()" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
       if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
           p = ", Portfolio";
@@ -403,7 +403,7 @@
   var modebutton = (target) => {
       let url = `<a href='/risk-and-issues/dashboard/?mode=${target}&page=${page}' style='color:#fff' onclick='return false';>`;
       let rest = (target == "portfolio") ? "RAID Log" : capitalize(target);
-      return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary ml-1","j": function() {
+      return makeelement({"i": target + "mode", "t": url + rest + "</a>", "e": "div", "c": "btn btn-primary oldbutton ml-1","j": function() {
           console.log("changing mode to " + target);
           init(target, true);
       }})

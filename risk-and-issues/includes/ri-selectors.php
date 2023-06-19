@@ -305,8 +305,8 @@ $(function(){
     Object.entries(selectors).forEach(([key, value]) => {
       makeselect(value, key);
     })
-    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/>&nbsp;<input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary spacer">', c: "filtercol"}));
-    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/>&nbsp;<a href="." onclick="resetform();return false" title="Clear all filters"><span class="btn btn-default">Clear</span></a>', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/>&nbsp;<input name="Go" type="submit" id="Go" form="formfilter" value="Submit" class="btn btn-primary spacer oldbutton">', c: "filtercol"}));
+    document.getElementById("row").appendChild(makeelement({e: "div", t: '&nbsp;<br/>&nbsp;<a href="." onclick="resetform();return false" title="Clear all filters"><span class="btn btn-default oldbuttonclear">Clear</span></a>', c: "filtercol"}));
     
     $('.daterange').daterangepicker({
       autoUpdateInput: false,

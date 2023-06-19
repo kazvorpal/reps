@@ -119,6 +119,7 @@
   padding: 4px;
   font-size: x-small;
   cursor: default;
+  vertical-align: middle !important;
 }
 .arrows {
   color:black;
@@ -318,4 +319,61 @@ body {
 /* Override checkbox styles for multiselect dropdown */
 .multiselect-container.dropdown-menu input[type="checkbox"] {
   margin-right: 5px;
+}
+
+body .btn {
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica,Arial,sans-serif;
+}
+
+.filtercol {
+  display: inline-block !important;
+}
+
+.btn {
+  display: inline-block;
+}
+
+.row {
+  justify-content: center;;
+}
+
+.navbar {
+  padding: 0;
+}
+
+h1 {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 36px;
+}
+
+table th {
+  vertical-align: middle;
+}
+
+.oldbuttonclear {
+  color: rgb(51, 51, 51);
+  border-color: rgb(204, 204, 204); /* Bootstrap 3 primary border color */
+  border-radius: 4px; /* Bootstrap 3 border radius */
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica,Arial,sans-serif
+}
+.oldbutton {
+  color: #fff;
+  background-color: #337ab7; /* Bootstrap 3 primary color */
+  border-color: #2e6da4; /* Bootstrap 3 primary border color */
+  border-radius: 4px; /* Bootstrap 3 border radius */
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica,Arial,sans-serif
+}
+.oldbutton:hover {
+  color: #fff;
+  background-color: #286090; /* Darker shade of primary color */
+  border-color: #204d74; /* Corresponding border color */
+}
+
+.oldbutton:active {
+  color: #fff;
+  background-color: #204d74; /* Even darker for active state */
+  border-color: #122b40; /* Corresponding border color */
 }
