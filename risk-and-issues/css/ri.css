@@ -314,6 +314,7 @@ body {
 .multiselect-container.dropdown-menu {
   padding: 5px;
   border: 1px solid #ccc;
+  font-size: 14px;
 }
 
 /* Override checkbox styles for multiselect dropdown */
@@ -321,10 +322,11 @@ body {
   margin-right: 5px;
 }
 
-body .btn {
+body, .btn {
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica,Arial,sans-serif;
 }
+.dropdown-menu
 
 .filtercol {
   display: inline-block !important;
@@ -381,4 +383,76 @@ table th {
   color: #fff;
   background-color: #204d74; /* Even darker for active state */
   border-color: #122b40; /* Corresponding border color */
+}
+
+/* This rule increases the font-size in the dropdowns */
+.dropdown-menu {
+  font-size: 1rem; /* Change this to the size you want */
+}
+
+/* This rule prevents the options from wrapping */
+.dropdown-menu li > a {
+  white-space: nowrap;
+}
+
+/* Adjust the style of the search input box */
+.dropdown-menu .dropdown-item {
+  font-size: 1rem; /* Change this to the size you want */
+  color: #333; /* Change this to the color you want */
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+}
+.input-group-addon {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #555;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px
+}
+.input-group-btn {
+  position: relative;
+  font-size: 0;
+  white-space: nowrap
+}
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px
 }

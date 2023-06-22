@@ -93,7 +93,7 @@
 
       const main = document.getElementById("main");
       initexcel();
-      main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default oldbuttonclear" onclick="togglegrid()" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
+      main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default oldbuttonclear" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
       if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
           p = ", Portfolio";
@@ -105,6 +105,7 @@
         sa = makeelement({e: "button", v: "", c: "btn btn-default", j: () => {toggleall(openval) }, i: "allbutton", t: "Expand All"});
         bn = makeelement({e: "div", c: "header", t: `${capitalize(mode)} Name (Risks, Issues${p}) `});
         main.appendChild(bn).appendChild(sa);
+        // document.getElementById("gridbutton").click
       } else {
         main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
         var mt = document.getElementById("maintable");
