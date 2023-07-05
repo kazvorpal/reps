@@ -94,6 +94,9 @@
       const main = document.getElementById("main");
       initexcel();
       main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default oldbuttonclear" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
+      document.getElementById("gridbutton").addEventListener("click", () => {
+        togglegrid();
+      });
       if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
           p = ", Portfolio";
@@ -105,18 +108,24 @@
         sa = makeelement({e: "button", v: "", c: "btn btn-default", j: () => {toggleall(openval) }, i: "allbutton", t: "Expand All"});
         bn = makeelement({e: "div", c: "header", t: `${capitalize(mode)} Name (Risks, Issues${p}) `});
         main.appendChild(bn).appendChild(sa);
-        // document.getElementById("gridbutton").click
       } else {
         main.appendChild(makeelement({e: "table", i: "maintable", c: "table"}));
         var mt = document.getElementById("maintable");
         mt.appendChild(makeheader("projects"));
       }
-      for (loop = pagestart; loop < pagestop; loop++ ) {
-          // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
-        if(loop != null && typeof rilist[loop] != "undefined") {
-          (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop], false));
+      rilist.forEach((value, key) => {
+        // excelrow(value, key);
+        let newrow = document.worksheet.addRow(makeexcel(value));
+        if (key > pagestart && key < pagestop && key != null && typeof rilist[key] != "undefined") {
+          (ispp(mode) && format != "grid") ? makerow(rilist[key], listri(rilist[key].MLMProgram_Nm, "Risk").length, listri(rilist[key].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[key], false));
         }
-      }
+      });
+      // for (loop = pagestart; loop < pagestop; loop++ ) {
+      //     // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
+      //   if(loop != null && typeof rilist[loop] != "undefined") {
+      //     (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop], false));
+      //   }
+      // }
       (ispp(mode) && format != "grid") && resultcounter(result);
       pages = Math.ceil(rilist.length/pagesize);
       if (pages > 0 && page > pages) {
@@ -371,7 +380,7 @@
       if (griddy()) 
         type = makeelement(etemp(saferi, ri.RIType_Cd));
       const tridobj = document.getElementById(trid);
-      let newrow = document.worksheet.addRow(makeexcel(ri));
+      // let newrow = document.worksheet.addRow(makeexcel(ri));
       const logValues = [];
       if (!griddy() && arrow != "") {
             if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
@@ -471,7 +480,7 @@
       setdata();
       // console.log("default ridata:", ridata);
       setlists();
-      setTimeout(function(){
+      setTimeout(() => {
         if(modechange) {
           console.log("mode change");
           makefilters();

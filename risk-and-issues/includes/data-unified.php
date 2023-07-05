@@ -22,7 +22,7 @@ PPC;
 
 
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
-  // print '<!--' . $sqlstr . "<br/> -->";
+  // print '<script>console.log("' . $sqlstr . '"></script>';
   ini_set('mssql.charset', 'UTF-8');
   $programquery = sqlsrv_query($data_conn, $sqlstr);
   // print($data_conn);
@@ -41,6 +41,8 @@ PPC;
       if (isset($programrow['Global_Tag']) && is_string($programrow['Global_Tag'])) {
           $programrow['Global_Tag'] = json_decode(stripslashes($programrow['Global_Tag']), true);
       }
+      // print_r($programrow["RiskAndIssue_Key"]);
+      // echo "<br/>";
       $programrows[] = array_map("fixutf8", $programrow);
     }
 

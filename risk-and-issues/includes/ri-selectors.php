@@ -128,6 +128,7 @@ const toggleall = (status) => {
 
 const filtration = (data) => {
   let filtered = data.filter(filterfunction);
+  console.log("filtered", filtered);
   results = (mode == "program") ? filtered 
     : (mode == "portfolio") ? filtered
     : getwholeuniques(filtered, "RiskAndIssue_Key");
