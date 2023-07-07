@@ -94,8 +94,9 @@
       const main = document.getElementById("main");
       initexcel();
       main.innerHTML = (ispp(mode)) ? ` <div width="100%" align="left"><button value="" class="btn btn-default oldbuttonclear" id="gridbutton">${(format == "grid") ? "Accordion Mode" : "Grid Mode"}</a></div>` :  '';
-      document.getElementById("gridbutton").addEventListener("click", () => {
-        togglegrid();
+      let gridButton = document.getElementById("gridbutton");
+      gridButton && gridButton.addEventListener("click", () => {
+          togglegrid();
       });
       if (ispp(mode) && format != "grid") {
         if (mode == "portfolio") {
