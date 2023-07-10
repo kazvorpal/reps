@@ -1,37 +1,46 @@
+
+// Settings
+const maxpages = 2;
+const defaults = {
+  pagesize: 8192,
+  textlength: 8192,
+  mode: "project"
+}
+
 const resultcounter = (results) => {
-    let r = (typeof results == "object") ? results.length : results;
-    (firstload) && r--;
-    const s = (r == 1) ? "" : "s";
-    document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`;
-  }
+  let r = (typeof results == "object") ? results.length : results;
+  (firstload) && r--;
+  const s = (r == 1) ? "" : "s";
+  document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`;
+}
   
-  const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
-      
-  // return a new array with all programs for a (portfolio) risk/issue key
-  const ffpp = (target) => portfolioprograms.filter(o => o.RiskAndIssue_Key == target)
-  
-  const syncportfolio = (target) => {
-    // Add MLMProgram_Key to portfolios, so the same code can run with it as with other programs
-    // Yes, a kluge
-    for (key in target) {
-      if(!target[key].MLMProgram_Nm) {
-        let ps = "";
-        for (lokey in portfolioprograms) {
-          if (portfolioprograms[lokey].RiskAndIssue_Key == target[key].RiskAndIssue_Key) {
-            ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
-          }
-          target[key].MLMProgram_Nm = ps;
+const ispp = (target) => ["program", "portfolio"].some(value => {return value== target});
+    
+// return a new array with all programs for a (portfolio) risk/issue key
+const ffpp = (target) => portfolioprograms.filter(o => o.RiskAndIssue_Key == target)
+
+const syncportfolio = (target) => {
+  // Add MLMProgram_Key to portfolios, so the same code can run with it as with other programs
+  // Yes, a kluge
+  for (key in target) {
+    if(!target[key].MLMProgram_Nm) {
+      let ps = "";
+      for (lokey in portfolioprograms) {
+        if (portfolioprograms[lokey].RiskAndIssue_Key == target[key].RiskAndIssue_Key) {
+          ps += (ps == "") ? portfolioprograms[lokey].RiskAndIssue_Key : ", " + (portfolioprograms[lokey].RiskAndIssue_Key);
         }
-        let pp = ffpp(target[key].RiskAndIssue_Key);
-        if (typeof pp[0] != 'undefined') {
-          target[key].MLMProgram_Nm = pp[0].Program_Nm;
-          target[key].MLMProgram_Key = pp[0].Program_Key;
-        } else if(!target[key].MLMProgram_Nm) 
-          delete target[key];
+        target[key].MLMProgram_Nm = ps;
       }
+      let pp = ffpp(target[key].RiskAndIssue_Key);
+      if (typeof pp[0] != 'undefined') {
+        target[key].MLMProgram_Nm = pp[0].Program_Nm;
+        target[key].MLMProgram_Key = pp[0].Program_Key;
+      } else if(!target[key].MLMProgram_Nm) 
+        delete target[key];
     }
-    return target;
   }
+  return target;
+}
   
   // returns a list of risks or issues for a given program, taking program name and type (risk, issue)
   const listri = (target, type) => 
@@ -186,13 +195,13 @@ const trimmer = (target, key, kind) => {
 }
 
 var params = new URLSearchParams(window.location.search);
-var mode = params.get("mode") ?? "project";
+var mode = params.get("mode") ?? defaults.mode;
 var page = params.get("page");
 var page = (page > 1) ? page : 1;
 var format = params.get("format");
 var prepage = params.get("pagesize");
-var pagesize = (prepage > 0) ? prepage : 8192;
-var textlength = params.get("textlength") ?? 8192;
+var pagesize = (prepage > 0) ? prepage : defaults.pagesize;
+var textlength = params.get("textlength") ?? defaults.textlength;
 alt = (mode == "project") ? "program" : "project";
 document.title = capitalize(mode) + " R&I Dashboard";
 var sort = "RiskAndIssue_Key";

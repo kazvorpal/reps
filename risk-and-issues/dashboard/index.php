@@ -70,6 +70,7 @@
   </section>
   </body>
   <script>
+
     const showPage = () => {
       document.getElementById("loader").style.display = "none";
     //   document.getElementById("myDiv").style.display = "block";
@@ -88,7 +89,6 @@
       window.ricount = [];
       pagestart = (page*pagesize) - pagesize;
       ps = (mode == "project" || format == "grid") ? (page*pagesize) : 100000;
-      maxpages = 2;
       pagestop = (rilist.length < pagesize) ? rilist.length : ps;
 
       const main = document.getElementById("main");
@@ -114,13 +114,17 @@
         var mt = document.getElementById("maintable");
         mt.appendChild(makeheader("projects"));
       }
+      c1 = c2 = 0;
       rilist.forEach((value, key) => {
         // excelrow(value, key);
+        c1++;
         let newrow = document.worksheet.addRow(makeexcel(value));
-        if (key > pagestart && key < pagestop && key != null && typeof rilist[key] != "undefined") {
+        if (key > pagestart-1 && key < pagestop && key != null && typeof rilist[key] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[key], listri(rilist[key].MLMProgram_Nm, "Risk").length, listri(rilist[key].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[key], false));
+          c2++;
         }
       });
+      // console.log({c1}, {c2});
       // for (loop = pagestart; loop < pagestop; loop++ ) {
       //     // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
       //   if(loop != null && typeof rilist[loop] != "undefined") {
