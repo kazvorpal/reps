@@ -9,7 +9,8 @@ const defaults = {
 
 const resultcounter = (results) => {
   let r = (typeof results == "object") ? results.length : results;
-  (firstload) && r--;
+  // console.log(results.length, {results});
+  // (firstload) && r--;
   const s = (r == 1) ? "" : "s";
   document.getElementById("resultcount").innerHTML = `${r} Result${s} Found`;
 }

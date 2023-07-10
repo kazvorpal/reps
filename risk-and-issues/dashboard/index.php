@@ -124,7 +124,7 @@
           c2++;
         }
       });
-      // console.log({c1}, {c2});
+      console.log({c1}, {c2});
       // for (loop = pagestart; loop < pagestop; loop++ ) {
       //     // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
       //   if(loop != null && typeof rilist[loop] != "undefined") {
