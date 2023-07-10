@@ -369,7 +369,8 @@
 								?>
                           <td align="center" bgcolor="<?php echo $proj_clr ?>">
 								<?php if($row_proj_clps['Prj_RiskAndIssue_Cnt'] > 0) { // prject risk and issues?>
-                                <a href="../ri2.php?prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>" class="miframe"><?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?></a>
+								<a href="../ri2.php?prj_name=<?php echo htmlspecialchars($row_proj_clps['PROJ_NM']);?>&count=<?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>&uid=<?php echo $uid_x; ?>&winuser=<?php echo $row_proj_clps['PROJ_OWNR_NM']; ?>&fscl_year=<?php echo $row_proj_clps['FISCL_PLAN_YR']; ?>" class="miframe"><?php echo htmlspecialchars($row_proj_clps['Prj_RiskAndIssue_Cnt']); ?>
+                                
                                 <?php } else { ?>
                                 <?php echo $row_proj_clps['Prj_RiskAndIssue_Cnt']; ?>
                                 <?php } ?>
@@ -377,7 +378,7 @@
 
                           <td align="center" bgcolor="<?php echo $prog_clr ?>">
                           	    <?php if($row_proj_clps['Prg_RiskAndIssue_Cnt'] > 0) { // program risk and issues?>
-                                <a href="../ri2-prg.php?region=<?php echo htmlspecialchars($region_clps_mtch)?>&program=<?php echo htmlspecialchars($program_clps_mtch)?>&fscl_year=<?php echo htmlspecialchars($row_proj_clps['FISCL_PLAN_YR'])?>&count=<?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt'])?>" class="miframe"><?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?></a>
+									<a href="../ri2-prg.php?<?php echo "proj_nm=" . $row_proj_clps['PROJ_NM'] . "&region=" . $region_clps_mtch . "&program=" . $program_clps_mtch . "&fscl_year=" . $row_proj_clps['FISCL_PLAN_YR'] . "&count=" . $row_proj_clps['Prg_RiskAndIssue_Cnt'] . "&uid=" .  $uid_x ; ?>" class="miframe"><?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?></a>
                                 <?php } else { ?>
                                 <?php echo htmlspecialchars($row_proj_clps['Prg_RiskAndIssue_Cnt']); ?>
                                 <?php } ?>
