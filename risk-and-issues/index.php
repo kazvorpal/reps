@@ -59,7 +59,7 @@ include ("../sql/update-time.php");
         </div>
         <div class="panel-body">
         A report containing all <u>Program</u> and <u>Portfolio</u> Risk and Issues.
-          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=portfolio&page=1&pagesize=20"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=portfolio"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@ include ("../sql/update-time.php");
         </div>
         <div class="panel-body">
         A report containing all <u>Program</u> Risk and Issues.<br><br>
-          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=program&page=1&pagesize=20"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=program"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@ include ("../sql/update-time.php");
         </div>
         <div class="panel-body">
         A report containing all <u>Project</u> Risk and Issues. <br><br>
-          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=project&page=1&pagesize=20"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
+          <hr><div align="center"><a href="/risk-and-issues/dashboard/?mode=project"><button type="button" class="btn btn-info">View Dashboard</button></a></div>
         </div>
       </div>
     </div>
