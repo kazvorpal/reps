@@ -177,12 +177,12 @@ $stmt_subprog   = sqlsrv_query( $data_conn, $sql_subprog );
 
 <script language="JavaScript">
   function toggle(source) {
-    checkboxes = document.getElementsByName('Region[]');
+    context = source.closest('table');
+    console.log(context)
+    checkboxes = context.querySelectorAll('[name="Region[]"]');
     for(var i=0, n=checkboxes.length;i<n;i++) {
       checkboxes[i].checked = source.checked;
     }
-    // document.getElementById("Region").checked = false;
-    // document.getElementById("Region").click();
   }
   var user  = <?= json_encode($row_port_user, JSON_PRETTY_PRINT) ?>
   ;
