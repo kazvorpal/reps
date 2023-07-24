@@ -70,123 +70,6 @@ const toggler = (target, o) =>
   // const textalign = (field) => (field == null || parseInt(field)==field || (field.indexOf("details.html") && mode == "program")) ? " text-center" : " text-left";
 
 
-  const initexcel = () => {
-    document.workbook = new ExcelJS.Workbook();
-    document.workbook.creator = "R&I Dashboard Export";
-    document.workbook.lastModifiedBy = "Kaz";
-    document.workbook.created = new Date();
-    const Mode = (mode == "portfolio") ? "Raid Log" : capitalize(mode);
-    document.worksheet = document.workbook.addWorksheet(Mode + ' Report',  {properties:{tabColor:{argb:'3355bb'}, headerFooter: Mode + " Report Spreadsheet", firstFooter: "RePS"}});
-    document.changelog = (mode == "project") ? document.workbook.addWorksheet("Change Log Request", {properties:{tabColor:{argb:'3355bb'}, headerFooter: "Change Log Request", firstFooter: "RePS"}}) : ""; 
-
-    let cols = [];
-    for (field in excelfields) {
-        cols.push({
-            header: excelfields[field],
-            key: field,
-            width: 16,
-            hidden: hiddenfields.includes(field),
-        })
-    }
-    document.worksheet.columns = cols;
-    let logcols = [];
-    for (field in changelog) {
-        logcols.push({
-            header: changelog[field],
-            key: field,
-            width: 16,
-            hidden: hiddenfields.includes(field),
-        })
-    }
-    document.changelog.columns = logcols;
-}
-const processcells = () => {
-  document.worksheet.eachRow(function(row, rowNumber) {
-    if (row._number != 1) {
-      row.eachCell(function(cell, colNumber) {
-          // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
-          cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
-      })
-    }
-  })
-  if (mode == "project") {
-    document.changelog.eachRow(function(row, rowNumber) {
-      if (row._number != 1) {
-        row.eachCell(function(cell, colNumber) {
-          // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
-          cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
-        })
-      }
-    });
-  }
-}
-
-
-const excelrows = () => {
-  document.worksheet.getRow(1).eachCell( function(cell, colNumber){
-    if(cell.value){
-      document.worksheet.getRow(1).height = 42;
-      document.worksheet.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: true, color: {argb: 'FFFFFFFF'}};
-      document.worksheet.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
-      document.worksheet.getRow(1).getCell(colNumber).fill = {
-        type: 'pattern',
-        pattern:'solid',
-        bgColor:{argb:'FF5588FF'},
-        fgColor:{argb: "FF3377AA"},
-        width: "256",
-        height: "256"
-      };
-    }
-  });
-  const borderstyle = "medium";
-  document.worksheet.columns.forEach(column => {
-    column.border = {
-      top: { style: borderstyle },
-      left: { style: borderstyle },
-      bottom: { style: borderstyle },
-      right: { style: borderstyle }
-    };
-  });
-  if (mode == "project") {
-    document.changelog.getRow(1).eachCell( function(cell, colNumber){
-          if(cell.value){
-            document.changelog.getRow(1).height = 42;
-            document.changelog.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: false, color: {argb: 'ff000000'}};
-            document.changelog.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
-            document.changelog.getRow(1).getCell(colNumber).fill = {
-                            type: 'pattern',
-                            pattern:'solid',
-                            bgColor: {argb: "FF3377AA"},
-                            fgColor: {argb: "FFddeeFF"},
-                            width: "256",
-                            height: "256"
-                          };
-          }
-        });
-        document.changelog.columns.forEach(column => {
-          column.border = {
-            top: { style: borderstyle },
-            left: { style: borderstyle },
-            bottom: { style: borderstyle },
-            right: { style: borderstyle }
-          };
-      });
-      document.changelog.insertRow(1, "TEST");
-      document.changelog.mergeCells('A1:M1');
-      document.changelog.getCell('A1').value = "Requestor Section";
-      document.changelog.getCell('A1').font = { name: 'helvetica', family: 4, size: 18, underline: 'none', bold: false, color: {argb: 'ff000000'}};;
-      document.changelog.getCell('A1').alignment = {horizontal: 'center', vertical: 'middle'};
-      document.changelog.getCell('A1').fill = {
-        type: 'pattern',
-        pattern:'solid',
-        bgColor: {argb: "FF3377AA"},
-        fgColor: {argb: "FF22dd66"},
-        width: "256",
-        height: "256"
-      };
-  }
-}
-
 const trimmer = (target, key, kind) => {
   let cleaner = document.createElement("div");
   cleaner.innerHTML = fixEncodingIssues(target);
@@ -402,18 +285,6 @@ const fieldfilter = (ri, test, url) => {
   return fieldswitch[test];
 }
 
-const makeexcel = (ri) => {
-  let rowvalues = [];
-  for (field in excelfields) {
-    (function(test) {
-      let t = striptags((typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)());
-      t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
-      rowvalues.push(t);
-    })(field);
-  }
-  return rowvalues;
-};
-
 const etemp = (n, t) => {
   return {
     e: "th", 
@@ -444,3 +315,152 @@ const fieldprocessor = (ri, url, trri, header, type) => {
 }
 
 const griddy = () => (mode == "project" || format == "grid" );
+
+const logger = (ri) => {
+  const logValues = [];
+  if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
+      for (field in changelog) {
+        (function(test) {
+          t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
+          t = striptags(t);
+          t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
+        logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+      })(field);
+    }
+    let newlog = document.changelog.addRow(logValues);
+  }
+}
+
+
+const makeexcel = (ri) => {
+  let rowvalues = [];
+  for (field in excelfields) {
+    (function(test) {
+      let t = striptags((typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)());
+      t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
+      rowvalues.push(t);
+    })(field);
+  }
+  return rowvalues;
+};
+
+const initexcel = () => {
+  // Set up ExcelJS objects
+  document.workbook = new ExcelJS.Workbook();
+  document.workbook.creator = "R&I Dashboard Export";
+  document.workbook.lastModifiedBy = "Kaz";
+  document.workbook.created = new Date();
+  const Mode = (mode == "portfolio") ? "Raid Log" : capitalize(mode);
+  document.worksheet = document.workbook.addWorksheet(Mode + ' Report',  {properties:{tabColor:{argb:'3355bb'}, headerFooter: Mode + " Report Spreadsheet", firstFooter: "RePS"}});
+  document.changelog = (mode == "project") ? document.workbook.addWorksheet("Change Log Request", {properties:{tabColor:{argb:'3355bb'}, headerFooter: "Change Log Request", firstFooter: "RePS"}}) : ""; 
+
+  let cols = [];
+  for (field in excelfields) {
+      cols.push({
+          header: excelfields[field],
+          key: field,
+          width: 16,
+          hidden: hiddenfields.includes(field),
+      })
+  }
+  document.worksheet.columns = cols;
+  let logcols = [];
+  for (field in changelog) {
+      logcols.push({
+          header: changelog[field],
+          key: field,
+          width: 16,
+          hidden: hiddenfields.includes(field),
+      })
+  }
+  document.changelog.columns = logcols;
+}
+const processcells = () => {
+  // Format all cells
+  console.log("processcells")
+  document.worksheet.eachRow(function(row, rowNumber) {
+    if (row._number != 1) {
+      row.eachCell(function(cell, colNumber) {
+          // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
+          cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
+      })
+    }
+  })
+  if (mode == "project") {
+    document.changelog.eachRow(function(row, rowNumber) {
+      if (row._number != 1) {
+        row.eachCell(function(cell, colNumber) {
+          // let alignment = (cell.value == (cell.value*1)) ? "center" : "left";
+          cell.alignment = {"horizontal": (cell.value == (cell.value*1)) ? "center" : "left"}
+        })
+      }
+    });
+  }
+}
+
+
+const excelrows = () => {
+  document.worksheet.getRow(1).eachCell( function(cell, colNumber) {
+    if(cell.value){
+      document.worksheet.getRow(1).height = 42;
+      document.worksheet.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: true, color: {argb: 'FFFFFFFF'}};
+      document.worksheet.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
+      document.worksheet.getRow(1).getCell(colNumber).fill = {
+        type: 'pattern',
+        pattern:'solid',
+        bgColor:{argb:'FF5588FF'},
+        fgColor:{argb: "FF3377AA"},
+        width: "256",
+        height: "256"
+      };
+    }
+  });
+  const borderstyle = "medium";
+  document.worksheet.columns.forEach(column => {
+    column.border = {
+      top: { style: borderstyle },
+      left: { style: borderstyle },
+      bottom: { style: borderstyle },
+      right: { style: borderstyle }
+    };
+  });
+  if (mode == "project") {
+    document.changelog.getRow(1).eachCell( function(cell, colNumber){
+        if(cell.value){
+          document.changelog.getRow(1).height = 42;
+          document.changelog.getRow(1).getCell(colNumber).font = { name: 'helvetica', family: 4, underline: 'none', bold: false, color: {argb: 'ff000000'}};
+          document.changelog.getRow(1).getCell(colNumber).alignment = {vertical: 'middle', horizontal: 'center'};
+          document.changelog.getRow(1).getCell(colNumber).fill = {
+                          type: 'pattern',
+                          pattern:'solid',
+                          bgColor: {argb: "FF3377AA"},
+                          fgColor: {argb: "FFddeeFF"},
+                          width: "256",
+                          height: "256"
+                        };
+        }
+      });
+      document.changelog.columns.forEach(column => {
+        column.border = {
+          top: { style: borderstyle },
+          left: { style: borderstyle },
+          bottom: { style: borderstyle },
+          right: { style: borderstyle }
+        };
+    });
+    document.changelog.insertRow(1, "TEST");
+    document.changelog.mergeCells('A1:M1');
+    document.changelog.getCell('A1').value = "Requestor Section";
+    document.changelog.getCell('A1').font = { name: 'helvetica', family: 4, size: 18, underline: 'none', bold: false, color: {argb: 'ff000000'}};;
+    document.changelog.getCell('A1').alignment = {horizontal: 'center', vertical: 'middle'};
+    document.changelog.getCell('A1').fill = {
+      type: 'pattern',
+      pattern:'solid',
+      bgColor: {argb: "FF3377AA"},
+      fgColor: {argb: "FF22dd66"},
+      width: "256",
+      height: "256"
+    };
+  }
+}
+

@@ -119,6 +119,8 @@
         // excelrow(value, key);
         c1++;
         let newrow = document.worksheet.addRow(makeexcel(value));
+        console.log({value})
+        logger(value)
         if (key > pagestart-1 && key < pagestop && key != null && typeof rilist[key] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[key], listri(rilist[key].MLMProgram_Nm, "Risk").length, listri(rilist[key].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[key], false));
           c2++;
@@ -386,25 +388,26 @@
         type = makeelement(etemp(saferi, ri.RIType_Cd));
       const tridobj = document.getElementById(trid);
       // let newrow = document.worksheet.addRow(makeexcel(ri));
-      const logValues = [];
+      // const logValues = [];
       if (!griddy() && arrow != "") {
-            if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
-              tridobj.onclick = (e) => {
-                toggler(document.getElementById("projects" + saferi), e.target.children[0]);
-              };
-            }
-        }
-      if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
-        for (field in changelog) {
-          (function(test) {
-            t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
-            t = striptags(t);
-            t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
-          logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
-        })(field);
+          if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
+            tridobj.onclick = (e) => {
+              toggler(document.getElementById("projects" + saferi), e.target.children[0]);
+            };
+          }
       }
-      let newlog = document.changelog.addRow(logValues);
-    }
+      // if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
+      //   for (field in changelog) {
+      //     (function(test) {
+      //       t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
+      //       t = striptags(t);
+      //       t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
+      //       logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
+      //     })(field);
+      //   }
+      //   let newlog = document.changelog.addRow(logValues);
+      // }
+      // logger(ri);
     processcells();
     if (griddy()) {
       return fieldprocessor(ri, url, trri, header, type);
