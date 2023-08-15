@@ -404,7 +404,7 @@ if($global == 1) { include ("../includes/menu.php"); }
             if ($serverName == "catl0dwas10222.corp.cox.com" || $serverName == "catl0dwas11208.corp.cox.com") {
                 $to = "gilbert.carolino@cox.com, Bao.Vang@cox.com, Alec.Flores@cox.com";
             } else {
-                $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com," . $mlmEmails;
+                $to = "CCI-EngineeringPortfolioManagement@cox.com,gilbert.carolino@cox.com, william.drake@cox.com" . $mlmEmails;
             }
             $subject = "New Risk/Issue Flagged for RAID Log";
             $from = 'CCI-EESolutionsTeam@cox.com';

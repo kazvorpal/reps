@@ -70,3 +70,14 @@
     width: 100%;
     box-shadow: 0 5px 15px rgba(0,0,0,.5);
 }
+
+  .field-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 20px; /* spacing between fields */
+  }
+  
+  .field-item {
+    flex: 1 1 auto; /* allows the field to grow and shrink as needed */
+    min-width: 200px; /* minimum width for each field before wrapping */
+  }

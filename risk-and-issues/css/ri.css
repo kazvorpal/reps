@@ -514,3 +514,9 @@ table th {
   background-color: #fff;
   border-color: #ccc
 }
+
+.field-container {
+  display: flex;
+  flex-direction: column; // stack items vertically
+  margin: 10px; // spacing between fields
+}
