@@ -119,8 +119,8 @@
         // excelrow(value, key);
         c1++;
         let newrow = document.worksheet.addRow(makeexcel(value));
-        console.log({value})
-        logger(value)
+        // console.log({value})
+        logger(value);
         if (key > pagestart-1 && key < pagestop && key != null && typeof rilist[key] != "undefined") {
           (ispp(mode) && format != "grid") ? makerow(rilist[key], listri(rilist[key].MLMProgram_Nm, "Risk").length, listri(rilist[key].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[key], false));
           c2++;

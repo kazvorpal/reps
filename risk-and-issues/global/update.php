@@ -335,6 +335,7 @@ function toggle(source) {
           <select name="fiscalYer" id="fiscalYer" class="form-control" disabled>
             <option value="2022" <?php if($Fiscal_Year == "2022") { echo " selected ";} ?>>2022</option>
             <option value="2023" <?php if($Fiscal_Year == "2023") { echo " selected ";} ?>>2023</option>
+            <option value="2024" <?php if($Fiscal_Year == "2024") { echo " selected ";} ?>>2024</option>
           </select>
         </div>
       </div>
@@ -433,18 +434,32 @@ function toggle(source) {
         </div>
         <div class="panel-body">
           <table width="100%" class="checkbox_group required" required>
-          <tr>
-            <td><label for="California"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>> California </label> </td>
-            <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
-            <td><label for="Corporate"><input type="checkbox" name="Region[]" value="1" <?php if(in_array("1", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Corporate </label></td>
-            <td><label for="Northeast"><input type="checkbox" name="Region[]" value="4" <?php if(in_array("4", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Northeast </label></td>
-          </tr>
-          <tr>
-            <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southeast </label> </td>
-            <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southwest </label></td>
-            <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Virginia </label></td>
-            <td><label for="All"><input type="checkbox" name="Region[]" value="0" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
-          </tr>
+            <?php 
+            if ($Fiscal_Year != 2024) { ?>
+              <tr>
+                <td><label for="California"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>> California </label> </td>
+                <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
+                <td><label for="Corporate"><input type="checkbox" name="Region[]" value="1" <?php if(in_array("1", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Corporate </label></td>
+                <td><label for="Northeast"><input type="checkbox" name="Region[]" value="4" <?php if(in_array("4", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Northeast </label></td>
+              </tr>
+              <tr>
+                <td><label for="Southeast"><input type="checkbox" name="Region[]" value="5" <?php if(in_array("5", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southeast </label> </td>
+                <td><label for="Southwest"><input type="checkbox" name="Region[]" value="6" <?php if(in_array("6", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Southwest </label></td>
+                <td><label for="Virginia"><input type="checkbox" name="Region[]" value="7" <?php if(in_array("7", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Virginia </label></td>
+                <td><label for="All"><input type="checkbox" name="Region[]" value="0" onClick="toggle(this)" <?php  if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> All </label></td>
+              </tr>
+            <?php
+            } else {
+              ?>
+              <tr>
+                <td><label for="East"><input type="checkbox" name="Region[]" value="2" <?php if(in_array("2", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; }?>> East </label> </td>
+                <td><label for="Central"><input type="checkbox" name="Region[]" value="3" <?php if(in_array("3", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Central </label></td>
+                <td><label for="Corporate"><input type="checkbox" name="Region[]" value="1" <?php if(in_array("1", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> Corporate </label></td>
+                <td><label for="East"><input type="checkbox" name="Region[]" value="4" <?php if(in_array("4", $RegionArr)) { echo "checked";} if($RILevel_Cd  == "Portfolio") { echo " disabled"; } ?>> West </label></td>
+              </tr>
+            <?php 
+          }
+          ?>
         </table>
         </div>
       </div>

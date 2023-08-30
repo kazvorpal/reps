@@ -357,7 +357,7 @@ $myregions = isset($region) ? implode(',', array_unique(explode(',', $region))) 
     </tr>-->
 <?php if($RIType == "Risk") { ?>
     <tr>
-      <td>Risk Realized</td>
+      <td>Risk Realized?</td>
       <td><?php if($riskRealized == 0) { echo "No";} else { echo "Yes";} ?>
     </td>
     </tr>

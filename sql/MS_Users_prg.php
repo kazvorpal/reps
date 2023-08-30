@@ -41,7 +41,13 @@ $sql_mlm = "DECLARE @mlmu VARCHAR(1000)
 $stmt_mlm  = sqlsrv_query( $data_conn, $sql_mlm);  
 $row_mlm  = sqlsrv_fetch_array( $stmt_mlm, SQLSRV_FETCH_ASSOC);
 
-//echo $sql_mlm ;
-$mlmEmails = $row_mlm['User_Email'] ;
-//exit();
+
+// echo $sql_mlm . '<p>';
+$excluded = ["Robert.Plaskon@cox.com", "Andrea.SuiYuan@cox.com", "Kevin.Lam@cox.com"];
+$mlmEmails = implode(',', array_diff(array_map('trim', explode(',', $row_mlm['User_Email'])), $excluded));
+
+// echo $mlmEmails;
+// exit();
+
+
 ?>

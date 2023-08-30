@@ -87,6 +87,7 @@ $project_nm ="";
     $riskRealized = $_POST['riskRealized'];
 
     $region = NULL; // ONLY FOR PROGRAM
+    // echo "'" . $_POST['assocRegions'] . "'";
     if (!empty($_POST['assocRegions'])){
         $region = $_POST['assocRegions'];
     }
@@ -248,7 +249,7 @@ if($global == 1) { include ("../includes/menu.php"); }
     //echo "<br>" . $raidLog;
     //exit();
 
-   //EXECUTE PROCEDDURE
+   //EXECUTE PROCEDURE
     $stmt3 = sqlsrv_query( $data_conn, $tsql_callSP, $params);
     //$results3 = sqlsrv_execute($stmt3);
     //$row = sqlsrv_fetch_array($stmt3);
@@ -450,7 +451,7 @@ if($global == 1) { include ("../includes/menu.php"); }
                 }
             }
 
-        //END - EMAIL RIAD ADMIN
+        //END - EMAIL RAID ADMIN
 
     } else {
         echo '<br><br><br><h2 align="center">Risk and Issue Error</h2><div align="center">' . $SPCode . ' = ' . $SPMessage . '<br>BatchID = ' . $SPBatch_Id . '</div><br><div align="center">
