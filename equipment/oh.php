@@ -29,6 +29,13 @@
     .popover{
         max-width:800px;
     }
+    .exportheader {
+      font-size:11px; 
+      background-color:#00aaf5; 
+      color:#FFFFFF;
+      font-weight: bold;
+      text-align: center;
+    }
 </style>
 </head>
 <body translate="no" onload="myFunction()" style="margin:0;">
@@ -87,13 +94,14 @@
 </a>
 <!-- End -->
 <!-- Start DataTable-->
-  <table 
+  <table moo="cow" 
     class="table-responsive table-striped" 
     id="table" 
     data-toggle="table" 
     data-search="false" 
     data-filter-control="true" 
     data-show-export="true" 
+    data-export-header="false"
     data-click-to-select="true" 
     data-toolbar=".toolbar" 
     data-pagination="true" 
@@ -106,7 +114,7 @@
     data-buttons-class="primary"
     data-show-refresh="false"
     >
-    <thead style="font-size:11px; background-color:#00aaf5; color:#FFFFFF"">
+    <thead style="font-size:11px; background-color:#00aaf5; color:#FFFFFF">
         <tr>  
             <th data-field="OrderType" data-filter-control="select" data-sortable="true" data-title-tooltip="Order Type - Internal Order or Purchase Order">ORDER TYPE</th>
           	<th data-field="OrderNumber" data-filter-control="select" data-sortable="true"><span data-toggle="tooltip" data-placement="top" title="Order Number - IO or PO Number">ORDER #</span></th>
@@ -175,7 +183,7 @@
             <th data-field="originsourcetype" data-filter-control="select" data-sortable="true"><span data-toggle="tooltip" data-placement="top" title="Source of Origin Type - This is my mapping of Source Org to PDC, AFC, IMM, TR">SOURCE ORG TYP</span></th>
             <th data-field="originsource" data-filter-control="select" data-sortable="true"><span data-toggle="tooltip" data-placement="top" title="Source of Origin - Possible values: AFCs, PDCs, IMM Yorgs, TR Triage sits">SOURCE OF ORG</span></th>
             <th data-field="glcode" data-filter-control="select" data-sortable="true"><span data-toggle="tooltip" data-placement="top" title="GL Code - Accounting GL string (department, account, etc) ">GL CODE</span></th>
-            <th data-field="seperetor"><span class="glyphicon glyphicon-plus" data-title-tooltip="Use grid button above to show more fields."></span></th><!--Leave Empty-->
+            <th data-field="seperator"><span class="glyphicon glyphicon-plus" data-title-tooltip="Use grid button above to show more fields." title="Use grid button above to show more fields."></span></th><!--Leave Empty-->
             <!-- Hidden Fields-->
           <th data-field="GL_Project_Id" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">GL PROJECT ID</th>
           <th data-field="GL_Project_Start_Dt" data-filter-control="select" data-sortable="true" data-visible="false" data-title-tooltip="">GL PROJECT START DATE</th>
@@ -189,6 +197,69 @@
            </tr>
     </thead>
     <tbody style="font-size:11px">
+    <!-- <tr style="display:none" id="exportheaders"><th colspan="60"></th></tr> -->
+    <!-- <tr id="exportheaders" style="display:none">
+      <th class="exportheader">ORDER TYPES</th>
+        <th class="exportheader">ORDER</th>
+      <th class="exportheader">LINE</th>
+      <th class="exportheader">REQUISITION</th>
+      <th class="exportheader">REQUISITION SOURCES</th>
+      <th class="exportheader">WATTS ORDER</th>
+      <th class="exportheader">REQ CREATION DATES</th>
+      <th class="exportheader">REQ APPROVED DATES</th>
+      <th class="exportheader">NEED BY DATES</th>
+      <th class="exportheader">PPM NUMBERS</th>
+      <th class="exportheader">EQUIPMENT IDs</th>
+      <th class="exportheader">EPS PROGRAM</th>
+      <th class="exportheader">EPS PROJECT NAME</th>
+      <th class="exportheader">ORACLE PROJECT #</th>
+      <th class="exportheader">ORACLE LONG PROJECT NAME</th>
+      <th class="exportheader">FACILTIY CODE</th>
+      <th class="exportheader">FACILITY NAME</th>
+      <th class="exportheader">REGION</th>
+      <th class="exportheader">EPS OWNER</th>
+      <th class="exportheader">SCHEDULED SHIP DT</th>
+      <th class="exportheader">WWT SCHEDULED SHIP DATE</th>
+      <th class="exportheader">PICK RELEASE DATE</th>
+      <th class="exportheader">PICK CONFIRM DATE</th>
+      <th class="exportheader">ACTUAL SHIPPED DT</th>
+      <th class="exportheader">WWT SHIPMENT DATE</th>
+      <th class="exportheader">OPEN (Y/N)</th>
+      <th class="exportheader">ORDER STATUS</th>
+      <th class="exportheader">ORDER NOTES</th>
+      <th class="exportheader">ORDER QTY</th>
+      <th class="exportheader">SHIPMENT QTY</th>
+      <th class="exportheader">CANCELLED QTY</th>
+      <th class="exportheader">EXTENDED COST</th>
+      <th class="exportheader">OUTSTANDING AMOUNT</th>
+      <th class="exportheader">BACKORDER QTY</th>
+      <th class="exportheader">READY TO RELEASE QTY</th>
+      <th class="exportheader">PICKED QTY</th>
+      <th class="exportheader">COX PART#</th>
+      <th class="exportheader">ITEM DESCRIPTION</th>
+      <th class="exportheader">VENDOR</th>
+      <th class="exportheader">VENDOR PART #</th>
+      <th class="exportheader">QUOTE #</th>
+      <th class="exportheader">WWT Program</th>
+      <th class="exportheader">PROJECT DESCRIPTION</th>
+      <th class="exportheader">WWT SUBTOTAL</th>
+      <th class="exportheader">COX REQUSITION DATE</th>
+      <th class="exportheader">PROMISE DATE ON SITE</th>
+      <th class="exportheader">COX ORDER STATUS</th>
+      <th class="exportheader">WWT CARRIER NAME</th>
+      <th class="exportheader">WAYBILL #</th>
+      <th class="exportheader">REQUESTER</th>
+      <th class="exportheader">PREPARER</th>
+      <th class="exportheader">OPTIX ID</th>
+      <th class="exportheader">DELIVER TO ADDRESS</th>
+      <th class="exportheader">HELP DESK TICKET#</th>
+      <th class="exportheader">LAST ORACLE UPDATE</th>
+      <th class="exportheader">PDC - SHIP DATE</th>
+      <th class="exportheader">PDC - AFC RECEIPT DT</th>
+      <th class="exportheader">PDC - AVAILABLE PICKUP DATE</th>
+      <th class="exportheader">SOURCE ORG TYP</th>
+      <th class="exportheader">SOURCE OF ORG</th>
+    </tr> -->
     <?php while( $row_eqh = sqlsrv_fetch_array( $stmt_eqh, SQLSRV_FETCH_ASSOC)){?>
     		<tr style="font-size:11px">
             
@@ -291,34 +362,34 @@
   <col width="180">
   <col width="460">
   <tr>
-    <td dir="LTR" width="137">PO    to Vendor Pending</td>
-    <td dir="LTR" width="180">Backordered    / Ready to Release</td>
-    <td dir="LTR" width="460">Material    not at Cox location, vendor purchase order pending</td>
+    <th dir="LTR" width="137">PO    to Vendor Pending</td>
+    <th dir="LTR" width="180">Backordered    / Ready to Release</th>
+    <th dir="LTR" width="460">Material    not at Cox location, vendor purchase order pending</th>
   </tr>
   <tr>
-    <td dir="LTR" width="137">PO to Vendor Created</td>
-    <td dir="LTR" width="180">Backordered / Ready to Release</td>
-    <td dir="LTR" width="460">Material not at Cox location, vendor purchase order created</td>
+    <th dir="LTR" width="137">PO to Vendor Created</th>
+    <th dir="LTR" width="180">Backordered / Ready to Release</th>
+    <th dir="LTR" width="460">Material not at Cox location, vendor purchase order created</th>
   </tr>
   <tr>
-    <td dir="LTR" width="137">Material Available</td>
-    <td dir="LTR" width="180">Backordered / Ready to Release</td>
-    <td dir="LTR" width="460">Material available at Cox location</td>
+    <th dir="LTR" width="137">Material Available</th>
+    <th dir="LTR" width="180">Backordered / Ready to Release</th>
+    <th dir="LTR" width="460">Material available at Cox location</th>
   </tr>
   <tr>
-    <td dir="LTR" width="137">Pick Release to AFC</td>
-    <td dir="LTR" width="180">Release to Warehouse</td>
-    <td dir="LTR" width="460">Order released to AFC for fulfillment</td>
+    <th dir="LTR" width="137">Pick Release to AFC</th>
+    <th dir="LTR" width="180">Release to Warehouse</th>
+    <th dir="LTR" width="460">Order released to AFC for fulfillment</th>
   </tr>
   <tr>
-    <td dir="LTR" width="137">Ready for Pickup</td>
-    <td dir="LTR" width="180">Staged/Pick Confirmed</td>
-    <td dir="LTR" width="460">Order picked at AFC and ready for pickup</td>
+    <th dir="LTR" width="137">Ready for Pickup</th>
+    <th dir="LTR" width="180">Staged/Pick Confirmed</th>
+    <th dir="LTR" width="460">Order picked at AFC and ready for pickup</th>
   </tr>
   <tr>
-    <td dir="LTR" width="137">Completed</td>
-    <td dir="LTR" width="180">Shipped</td>
-    <td dir="LTR" width="460">Order interfaced and picked up or in transit to destination</td>
+    <th dir="LTR" width="137">Completed</th>
+    <th dir="LTR" width="180">Shipped</th>
+    <th dir="LTR" width="460">Order interfaced and picked up or in transit to destination</th>
   </tr>
 </table>
 <br>
@@ -468,10 +539,17 @@ $(function () {
   $('#toolbar').find('select').change(function () {
     $table.bootstrapTable('refreshOptions', {
       exportDataType: $(this).val(),
-       });
-
+    });
+    $("#exportheaders").hide();
   }).trigger('change') ;
 });
+
+// ble('refreshOptions', {
+//       exportDataType: $(this).val(),
+//        });
+
+//   }).trigger('change') ;
+// });
 
 var trBoldBlue = $("table");
 $(trBoldBlue).on("click", "tr", function () {
@@ -502,7 +580,8 @@ $(function(){
 
 //Show Bootstrap Table
   $(function() {
-    $('#table').bootstrapTable()
+    $('#table').bootstrapTable();
+    $("#exportheaders").hide();
   })
 
 
@@ -511,12 +590,182 @@ $(function(){
 	
 	function myFunction() {
 	  myVar = setTimeout(showPage, 1000);
+    // setTimeout(() => {
+      console.log("myfnction")
+      $("#exportheaders").hide();
+    // }, 1000)
 	}
 	
 	function showPage() {
 	  document.getElementById("loader").style.display = "none";
 	  document.getElementById("myDiv").style.display = "block";
 	}
+	function hidePage() {
+	  document.getElementById("loader").style.display = "block";
+	  document.getElementById("myDiv").style.display = "none";
+	}
+	function showspinner() {
+    console.log("showing wait spinner");
+	  document.getElementById("loader").style.display = "block";
+	}
+
+  // $(this).bootstrapTable('refreshOptions', { showHeader: false });
+
+// $("[data-type='excel']").on("click", () => {
+//   console.log("unclick")
+//   setTimeout(() => {
+//     console.log("click")
+//     $("[data-type='excel']").click();
+//   }, 10000);
+//   $("[data-type='excel']").off();
+//   return false;
+// })
+
+
+
+
+  // $('#table').on('export-started.bs.table', function (e, name, type) {
+  //   console.log("runnin...")
+  //   if (type === 'excel' || name === 'MSExcel') {
+  //     $(this).bootstrapTable('refreshOptions', { showHeader: false });
+  //   }
+  // });
+$(function() {
+
+  klugeexport();
+  // setTimeout(() => {
+  //   console.log("Hiding")
+  //   $("#exportheaders").hide();
+  // }, 10000);
+});
+
+klugeexport = () => {
+  $(".export").on("click", () => {
+    console.log("event");
+    $('#table').bootstrapTable('refreshOptions', {
+      showHeader: false
+    });
+    addtempheader();
+    $('.export .dropdown-menu').show();
+    $("body").css("cursor", "auto");
+
+    // Attach click event to Excel button
+    $("[data-type='excel']").on("click", () => {
+      console.log("closing");
+      $('.export .dropdown-menu').hide();
+      $('#table').bootstrapTable('refreshOptions', {
+        showHeader: true
+      });
+      removetempheader();
+      klugeexport();
+    });
+  });
+
+  // Hide dropdown when clicking outside
+  $(document).on("click", (event) => {
+    if (!$(event.target).closest('.export').length) {
+      console.log("click outside export");
+      $('.export .dropdown-menu').hide();
+    }
+  });
+}
+
+// klugeexport(); // Initialize the event handlers
+
+let dropdownStorage = [];  // To store dropdowns
+
+removeDropdowns = () => {
+  const headerrow = $('thead tr').first();
+  
+  headerrow.find('th').each(function(index, th) {
+    const dropdown = $(th).find('select');
+    if (dropdown.length > 0) {
+      dropdownStorage[index] = dropdown.detach();  // detach and store dropdown
+    }
+  });
+}
+
+function restoredropdowns() {
+  const headerrow = $('thead tr').first();
+  
+  headerrow.find('th').each(function(index, th) {
+    if (dropdownStorage[index]) {
+      $(th).append(dropdownStorage[index]);  // append back the dropdown
+    }
+  });
+}
+
+function restoredropdowns() {
+    // Create the tr element
+    const tr = document.createElement('tr');
+    tr.id = "exportheaders";
+    // tr.style.display = "none";
+
+    // Array of header names
+    const headers = [
+        "ORDER TYPES", "ORDER", "LINE", "REQUISITION", "REQUISITION SOURCES",
+        "WATTS ORDER", "REQ CREATION DATES", "REQ APPROVED DATES", "NEED BY DATES",
+        "PPM NUMBERS", "EQUIPMENT IDs", "EPS PROGRAM", "EPS PROJECT NAME",
+        "ORACLE PROJECT #", "ORACLE LONG PROJECT NAME", "FACILTIY CODE",
+        "FACILITY NAME", "REGION", "EPS OWNER", "SCHEDULED SHIP DT",
+        "WWT SCHEDULED SHIP DATE", "PICK RELEASE DATE", "PICK CONFIRM DATE",
+        "ACTUAL SHIPPED DT", "WWT SHIPMENT DATE", "OPEN (Y/N)", "ORDER STATUS",
+        "ORDER NOTES", "ORDER QTY", "SHIPMENT QTY", "CANCELLED QTY", "EXTENDED COST",
+        "OUTSTANDING AMOUNT", "BACKORDER QTY", "READY TO RELEASE QTY", "PICKED QTY",
+        "COX PART#", "ITEM DESCRIPTION", "VENDOR", "VENDOR PART #", "QUOTE #",
+        "WWT Program", "PROJECT DESCRIPTION", "WWT SUBTOTAL", "COX REQUSITION DATE",
+        "PROMISE DATE ON SITE", "COX ORDER STATUS", "WWT CARRIER NAME", "WAYBILL #",
+        "REQUESTER", "PREPARER", "OPTIX ID", "DELIVER TO ADDRESS", "HELP DESK TICKET#",
+        "LAST ORACLE UPDATE", "PDC - SHIP DATE", "PDC - AFC RECEIPT DT",
+        "PDC - AVAILABLE PICKUP DATE", "SOURCE ORG TYP", "SOURCE OF ORG"
+    ];
+
+    // Loop through each header name and create a th element for it
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.className = 'exportheader';
+        th.textContent = header;
+        tr.appendChild(th);
+    });
+
+    return tr;
+}
+
+// To use the function:
+const tempheader  = restoredropdowns();
+
+
+// Function to add the temporary header row
+function addtempheader() {
+    // Get the tbody element within the table with id "table"
+    const tbody = document.querySelector("#table tbody");
+
+    // Create the temporary header row (assuming tempheader is already created)
+    // Make sure you've created tempheader beforehand like so:
+    // let tempheader = document.createElement("tr");
+    // tempheader.id = "tempheader";
+
+    // Insert the temporary header row as the first child of tbody
+    if (tbody.firstChild) {
+        tbody.insertBefore(tempheader, tbody.firstChild);
+    } else {
+        tbody.appendChild(tempheader);
+    }
+}
+
+// Function to remove the temporary header row
+function removetempheader() {
+    // Get the temporary header row by its id
+    const tempheaderrow = document.querySelector("#exportheaders");
+
+    // Remove the temporary header row if it exists
+    if (tempheaderrow) {
+        tempheaderrow.remove();
+    }
+}
+
+
+
 </script>
 </body>
 </html>
