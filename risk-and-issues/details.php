@@ -342,9 +342,26 @@ $link = urlencode($menu_root . "/risk-and-issues/details.php?au=true&rikey=" . $
             <?php 
 $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
 $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
+
+
+$sqlchangelog = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) 
+where RiskAndIssue_Key = " . $ri_id . "
+Order By RiskandIssue_Key DESC";
+
+$querychange = sqlsrv_query($data_conn, $sqlchangelog);
+$rowchangelog = sqlsrv_fetch_array($querychange, SQLSRV_FETCH_ASSOC);
+// $changelog = $rowchangelog["Reason_Txt"];
+// print($sqlchangelog . "<br/>'");
+// print_r($rowchangelog);
+// echo "'";
+$changelogaction = $rowchangelog["RequestAction_Nm"];
+$changelogreason = $rowchangelog["Reason_Txt"];
+$estactdate = $rowchangelog["PRJI_Estimated_Act_Ts"];
+$estmigdate = $rowchangelog["PRJI_Estimated_Mig_Ts"];
+
 ?>
 
-            <a href="mailto:?subject=RISKS AND ISSUES - <?= $name;?>
+            <!-- <a href="mailto:?subject=RISKS AND ISSUES - <?= $name;?>
             &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
             %0D%0AID: <?= $ri_id;?>
             %0D%0AOwner Name: <?= $ri_owner;?>
@@ -362,7 +379,37 @@ $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $ac
             %0D%0AAction Plan: <?= $act?>
             %0D%0ADate Closed: <?php convtimex($dateClosed)?>
             %0D%0ALink: <?= $link;?>"
-            class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+            class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a> -->
+
+
+            <a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
+&body=<?php
+echo urlencode(
+    "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n" .
+    "ID: " . $ri_id . "\n" .
+    "Owner Name: " . $ri_owner . "\n" .
+    "Name: " . $name . "\n" .
+    "Type: " . $RILevel . " " . $RIType . "\n" .
+    "Project: " . $project_nm . "\n" .
+    "Descriptor: " . $descriptor . "\n" .
+    "Description: " . $desc . "\n" .
+    "Driver: " . $Driversx . "\n" .
+    "Impact Area: " . $impactArea2 . "\n" .
+    "Impact Level: " . $impactLevel2 . "\n" .
+    "Response Strategy: " . $responseStrategy2 . "\n" .
+    "Forecasted Resolution Date: " . ((!empty($date) || $date != "") ? convtimex($date) : "Unknown") . "\n" .
+    "Associated Project(s): " . str_replace("<br>", ", ", $assocProject) . "\n" .
+    "Action Plan: " . strip_tags($act) . "\n" .
+    "Date Closed: " . convtimex($dateClosed) . "\n" .
+    "Link: " . urldecode($link) . "\n" .
+    "ChangeLog Action: " . $changelogaction . "\n" .
+    "ChangeLog Reason: " . $changelogreason . "\n" .
+    "Estimated Action: " . $estactdate . "\n" .
+    "Estimated Migration: " . $estmigdate . "\n" 
+    // ($changelog ? "Changelog: " . $changelog : "")
+  );
+?>
+" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
 
             <span style="font-size: 24px;"> | </span> 
 

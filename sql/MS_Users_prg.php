@@ -43,10 +43,11 @@ $row_mlm  = sqlsrv_fetch_array( $stmt_mlm, SQLSRV_FETCH_ASSOC);
 
 
 // echo $sql_mlm . '<p>';
-$excluded = ["Robert.Plaskon@cox.com", "Andrea.SuiYuan@cox.com", "Kevin.Lam@cox.com"];
-$mlmEmails = implode(',', array_diff(array_map('trim', explode(',', $row_mlm['User_Email'])), $excluded));
+$excluded = array_map('strtolower', ["Robert.Plaskon@cox.com", "Andrea.SuiYuan@cox.com", "Kevin.Lam@cox.com"]);
+$mlmEmailsArray = array_map('strtolower', array_map('trim', explode(',', $row_mlm['User_Email'])));
+$mlmEmails = implode(',', array_diff($mlmEmailsArray, $excluded));
 
-// echo $mlmEmails;
+echo $mlmEmails;
 // exit();
 
 

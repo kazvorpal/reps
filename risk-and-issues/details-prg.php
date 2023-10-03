@@ -368,28 +368,33 @@ $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : 
 $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
 ?>
 
-<a href="mailto:?subject=RISKS AND ISSUES - <?php echo $name;?>
-      &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
-      %0D%0AID: <?php echo $ri_id;?>
-      %0D%0AOwner Name: <?php echo $ri_owner;?>
-      %0D%0ARisk/Issue Name: <?php echo $name;?>
-      %0D%0AType: <?php echo $RILevel . " " . $RIType;?>
-      %0D%0AProgram: <?php echo $prog_name;?>
-      %0D%0ARegion(s): <?php echo $eregions;?>
-      %0D%0ADescriptor: <?php echo $descriptor;?>
-      %0D%0ADescription: <?php echo $desc;?>
-      %0D%0ADriver: <?php echo $Driversx;?>
-      %0D%0AImpact Area: <?php echo $impactArea2;?>
-      %0D%0AImpact Level: <?php echo $impactLevel2;?>
-      %0D%0AResponse Strategy: <?php echo $responseStrategy2;?>
-      %0D%0ANotify Portfolio Team: <?php echo $raidLog;?>
-      %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; } ;?>
-      %0D%0AAssociated Project(s): <?php echo str_replace("<br>", ", ", $assocProject);?>
-      %0D%0AAction Plan: <?php echo $act;?>
-      %0D%0ADate Closed: <?php echo $dateClosed;?>
-      %0D%0ALink: <?php echo $link;?>" 
-      class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
-      
+<a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
+&body=<?php
+echo urlencode(
+    "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n" .
+    "ID: " . $ri_id . "\n" .
+    "Owner Name: " . $ri_owner . "\n" .
+    "Name: " . $name . "\n" .
+    "Type: " . $RILevel . " " . $RIType . "\n" .
+    "Program: " . $programs . "\n" .
+    "Region(s): " . $eregions . "\n" .
+    "Descriptor: " . $descriptor . "\n" .
+    "Description: " . $desc . "\n" .
+    "Driver: " . $Driversx . "\n" .
+    "Impact Area: " . $impactArea2 . "\n" .
+    "Impact Level: " . $impactLevel2 . "\n" .
+    "Response Strategy: " . $responseStrategy2 . "\n" .
+    "Forecasted Resolution Date: " . ((!empty($date) || $date != "") ? convtimex($date) : "Unknown") . "\n" .
+    "Transfer to Program Manager: " . $opportunityIndicator . "\n" .
+    "Action Plan: " . strip_tags($act) . "\n" .
+    "Date Closed: " . convtimex($dateClosed) . "\n" .
+    "Link: " . $mailLink . "\n" .
+    ($tags ? "Tags: " . $tags : "") 
+    // ($changelog ? "Changelog: " . $changelog : "")
+  );
+?>
+" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+
     <span style="font-size: 24px;"> | </span>
 
     <?php

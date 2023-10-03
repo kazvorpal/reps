@@ -72,6 +72,36 @@ $row_regions = sqlsrv_fetch_array( $stmt_regions, SQLSRV_FETCH_ASSOC);
 //echo $sql_regions;
 //echo $row_regions['MLMRegion_Cd'];
 
+
+
+// $sqlchangelog = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
+// where [Source] = 'PRJILog' and RiskAndIssue_Key = " . $ri_id . "
+// Order By RiskandIssue_Key DESC";
+
+// $querychange = sqlsrv_query($data_conn, $sqlchangelog);
+// $rowchangelog = sqlsrv_fetch_array($querychange, SQLSRV_FETCH_ASSOC);
+// // $changelog = $rowchangelog["Reason_Txt"];
+// print($sqlchangelog . "<br/>'");
+// print_r($rowchangelog);
+// echo "'";
+
+
+$sqlchangelog = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) 
+where RiskAndIssue_Key = " . $ri_id . "
+Order By RiskandIssue_Key DESC";
+
+$querychange = sqlsrv_query($data_conn, $sqlchangelog);
+$rowchangelog = sqlsrv_fetch_array($querychange, SQLSRV_FETCH_ASSOC);
+// $changelog = $rowchangelog["Reason_Txt"];
+// print($sqlchangelog . "<br/>'");
+// print_r($rowchangelog);
+// echo "'";
+$changelogaction = $rowchangelog["RequestAction_Nm"];
+$changelogreason = $rowchangelog["Reason_Txt"];
+$estactdate = $rowchangelog["PRJI_Estimated_Act_Ts"];
+$estmigdate = $rowchangelog["PRJI_Estimated_Mig_Ts"];
+
+
 //DECLARE
 $ri_owner = $row_glb_prog['RI_Owner'];
 $global = $row_glb_prog['Global_Flg'];
@@ -81,7 +111,7 @@ $RILevel = $row_glb_prog['RILevel_Cd'];
 $RIType = $row_glb_prog['RIType_Cd'];
 $jsonArray = json_decode($row_glb_prog["Global_Tag"]);
 
-$tags = $row_glb_prog["Global_Tag"];
+// $tags = $row_glb_prog["Global_Tag"];
 
 // $tags = "";
 //   if(!empty()){
@@ -116,6 +146,7 @@ $riskProbability = $row_glb_prog['RiskProbability_Nm'];
 $individual = $row_glb_prog['POC_Nm'];
 $internalExternal = $row_glb_prog['POC_Nm'];
 $responseStrategy2 = $row_glb_prog['ResponseStrategy_Nm'];
+$tags = $row_glb_prog['Global_Tag'];
 $date = $row_glb_prog['ForecastedResolution_Dt'];
 $unknown = ""; // IF DATE IS EMPTY
 $transProgMan = $row_glb_prog['TransferredPM_Flg'];
@@ -357,9 +388,9 @@ if($unframe == "0") { //NO COLORBOX
       <td>Tags</td>
       <td>
         <?php
-        if(!empty($row_glb_prog["Global_Tag"])){ ?>
+        if(!empty($tags)){ ?>
           <p id="tagdisp"></p>
-        <?php } ?>
+        <?php echo $tags;} ?>
     </td>
     </tr>   
   </tbody>
@@ -382,34 +413,44 @@ if($unframe == "0") { //NO COLORBOX
 
             ?>
             <a href="../global/update.php?&id=<?= $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
-            <a href="mailto:?subject=RISKS AND ISSUES - <?= $name;?>
-            &body=%0D%0A----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------
-            %0D%0AID: <?= $ri_id;?>
-            %0D%0AOwner Name: <?= $ri_owner;?>
-            %0D%0AName: <?= $name;?>
-            %0D%0AType: <?= $RILevel . " " . $RIType?>
-            %0D%0AProgram: <?= $programs;?>
-            %0D%0ARegion(s): <?= $eregions;?>
-            %0D%0ADescriptor: <?= $descriptor ?>
-            %0D%0ADescription: <?= $desc ?>
-            %0D%0ADriver: <?= $Driversx?>
-            %0D%0AImpact Area: <?= $impactArea2?>
-            %0D%0AImpact Level: <?= $impactLevel2?>
-            %0D%0AResponse Strategy: <?= $responseStrategy2?>
-            %0D%0AForecasted Resolution Date: <?php if(!empty($date) || $date != ""){ echo (convtimex($date)); } else { echo "Unknown"; }?>
-            %0D%0ATransfer to Program Manager: <?= $opportunityIndicator;?>
-            %0D%0AAction Plan: <?= strip_tags($act)?>
-            %0D%0ADate Closed: <?php convtimex($dateClosed)?>
-            %0D%0ALink: <?= $mailLink;?>
-            " 
-            class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
-            <?php// } ?>
-        <?php } ?>
+            <a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
+&body=<?php
+echo urlencode(
+    "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n" .
+    "ID: " . $ri_id . "\n" .
+    "Owner Name: " . $ri_owner . "\n" .
+    "Name: " . $name . "\n" .
+    "Type: " . $RILevel . " " . $RIType . "\n" .
+    "Program: " . $programs . "\n" .
+    "Region(s): " . $eregions . "\n" .
+    "Descriptor: " . $descriptor . "\n" .
+    "Description: " . $desc . "\n" .
+    "Driver: " . $Driversx . "\n" .
+    "Impact Area: " . $impactArea2 . "\n" .
+    "Impact Level: " . $impactLevel2 . "\n" .
+    "Response Strategy: " . $responseStrategy2 . "\n" .
+    "Forecasted Resolution Date: " . ((!empty($date) || $date != "") ? convtimex($date) : "Unknown") . "\n" .
+    "Transfer to Program Manager: " . $opportunityIndicator . "\n" .
+    "Action Plan: " . strip_tags($act) . "\n" .
+    "Date Closed: " . convtimex($dateClosed) . "\n" .
+    "Link: " . urldecode($mailLink) . "\n" .
+    "ChangeLog Action: " . $changelogaction . "\n" .
+    "ChangeLog Reason: " . $changelogreason . "\n" .
+    "Estimated Action: " . $estactdate . "\n" .
+    "Estimated Migration: " . $estmigdate . "\n" .
+    ($tags ? "Tags: " . $tags : "") 
+    // ($changelog ? "Changelog: " . $changelog : "")
+  );
+?>
+" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+<?php// } ?>
+        <?php };  ?>
     </div>
   </form>
 </div>
 </body>
 <script>
+  console.log("<?= $tags?>")
   const tags = <?php echo $tags ?>;
   document.getElementById("tagdisp").innerHTML = tags;
 </script>
