@@ -356,8 +356,8 @@ $rowchangelog = sqlsrv_fetch_array($querychange, SQLSRV_FETCH_ASSOC);
 // echo "'";
 $changelogaction = $rowchangelog["RequestAction_Nm"];
 $changelogreason = $rowchangelog["Reason_Txt"];
-$estactdate = $rowchangelog["PRJI_Estimated_Act_Ts"];
-$estmigdate = $rowchangelog["PRJI_Estimated_Mig_Ts"];
+$estactdate = ($rowchangelog["PRJI_Estimated_Act_Ts"] instanceof DateTime) ? $rowchangelog["PRJI_Estimated_Act_Ts"]->format('Y-m-d H:i:s') : "";
+$estmigdate = ($rowchangelog["PRJI_Estimated_Mig_Ts"] instanceof DateTime) ? $rowchangelog["PRJI_Estimated_Mig_Ts"]->format('Y-m-d H:i:s') : "";
 
 ?>
 
