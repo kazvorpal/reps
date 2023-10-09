@@ -47,7 +47,7 @@ $excluded = array_map('strtolower', ["Robert.Plaskon@cox.com", "Andrea.SuiYuan@c
 $mlmEmailsArray = array_map('strtolower', array_map('trim', explode(',', $row_mlm['User_Email'])));
 $mlmEmails = implode(',', array_diff($mlmEmailsArray, $excluded));
 
-echo $mlmEmails;
+// echo $mlmEmails;
 // exit();
 
 
