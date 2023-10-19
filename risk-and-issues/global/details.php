@@ -413,34 +413,45 @@ if($unframe == "0") { //NO COLORBOX
 
             ?>
             <a href="../global/update.php?&id=<?= $ri_id?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
-            <a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
+            <a href="mailto:?subject=<?= rawurlencode("RISKS AND ISSUES - " . $name); ?>
 &body=<?php
-echo urlencode(
-    "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n" .
-    "ID: " . $ri_id . "\n" .
-    "Owner Name: " . $ri_owner . "\n" .
-    "Name: " . $name . "\n" .
-    "Type: " . $RILevel . " " . $RIType . "\n" .
-    "Program: " . $programs . "\n" .
-    "Region(s): " . $eregions . "\n" .
-    "Descriptor: " . $descriptor . "\n" .
-    "Description: " . $desc . "\n" .
-    "Driver: " . $Driversx . "\n" .
-    "Impact Area: " . $impactArea2 . "\n" .
-    "Impact Level: " . $impactLevel2 . "\n" .
-    "Response Strategy: " . $responseStrategy2 . "\n" .
-    "Forecasted Resolution Date: " . ((!empty($date) || $date != "") ? convtimex($date) : "Unknown") . "\n" .
-    "Transfer to Program Manager: " . $opportunityIndicator . "\n" .
-    "Action Plan: " . strip_tags($act) . "\n" .
-    "Date Closed: " . convtimex($dateClosed) . "\n" .
-    "Link: " . urldecode($mailLink) . "\n" .
-    "ChangeLog Action: " . $changelogaction . "\n" .
-    "ChangeLog Reason: " . $changelogreason . "\n" .
-    "Estimated Action: " . $estactdate . "\n" .
-    "Estimated Migration: " . $estmigdate . "\n" .
-    ($tags ? "Tags: " . $tags : "") 
-    // ($changelog ? "Changelog: " . $changelog : "")
-  );
+$data = [
+    "ID" => $ri_id,
+    "Owner Name" => $ri_owner,
+    "Name" => $name,
+    "Type" => "$RILevel $RIType",
+    "Program" => $programs,
+    "Region(s)" => $eregions,
+    "Descriptor" => $descriptor,
+    "Description" => $desc,
+    "Driver" => $Driversx,
+    "Impact Area" => $impactArea2,
+    "Impact Level" => $impactLevel2,
+    "Response Strategy" => $responseStrategy2,
+    "Forecasted Resolution Date" => (!empty($date) || $date != "") ? convtimex($date) : "Unknown",
+    "Transfer to Program Manager" => $opportunityIndicator,
+    "Action Plan" => strip_tags($act),
+    "Date Closed" => convtimex($dateClosed),
+    "Link" => urldecode($mailLink),
+    "ChangeLog Action" => $changelogaction,
+    "ChangeLog Reason" => $changelogreason,
+    "Estimated Action" => $estactdate,
+    "Estimated Migration" => $estmigdate,
+    "Tags" => $tags
+];
+
+// Filter out empty or null values
+$data = array_filter($data, function($value) {
+    return !empty($value) || $value === "0";  // Adjust this condition based on your specific needs
+});
+
+// Build the string
+$body = "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n";
+foreach ($data as $key => $value) {
+    $body .= "$key: $value\n";
+}
+
+echo rawurlencode($body);
 ?>
 " class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
 <?php// } ?>

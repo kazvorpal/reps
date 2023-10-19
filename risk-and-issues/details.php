@@ -382,34 +382,46 @@ $estmigdate = ($rowchangelog["PRJI_Estimated_Mig_Ts"] instanceof DateTime) ? $ro
             class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a> -->
 
 
-            <a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
+            <a href="mailto:?subject=<?= rawurlencode("RISKS AND ISSUES - " . $name); ?>
 &body=<?php
-echo urlencode(
-    "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n" .
-    "ID: " . $ri_id . "\n" .
-    "Owner Name: " . $ri_owner . "\n" .
-    "Name: " . $name . "\n" .
-    "Type: " . $RILevel . " " . $RIType . "\n" .
-    "Project: " . $project_nm . "\n" .
-    "Descriptor: " . $descriptor . "\n" .
-    "Description: " . $desc . "\n" .
-    "Driver: " . $Driversx . "\n" .
-    "Impact Area: " . $impactArea2 . "\n" .
-    "Impact Level: " . $impactLevel2 . "\n" .
-    "Response Strategy: " . $responseStrategy2 . "\n" .
-    "Forecasted Resolution Date: " . ((!empty($date) || $date != "") ? convtimex($date) : "Unknown") . "\n" .
-    "Associated Project(s): " . str_replace("<br>", ", ", $assocProject) . "\n" .
-    "Action Plan: " . strip_tags($act) . "\n" .
-    "Date Closed: " . convtimex($dateClosed) . "\n" .
-    "Link: " . urldecode($link) . "\n" .
-    "ChangeLog Action: " . $changelogaction . "\n" .
-    "ChangeLog Reason: " . $changelogreason . "\n" .
-    "Estimated Action: " . $estactdate . "\n" .
-    "Estimated Migration: " . $estmigdate . "\n" 
-    // ($changelog ? "Changelog: " . $changelog : "")
-  );
+$data = [
+    "IDs" => $ri_id,
+    "Owner Name" => $ri_owner,
+    "Name" => $name,
+    "Type" => "$RILevel $RIType",
+    "Project" => $project_nm,
+    "Descriptor" => $descriptor,
+    "Description" => $desc,
+    "Driver" => $Driversx,
+    "Impact Area" => $impactArea2,
+    "Impact Level" => $impactLevel2,
+    "Response Strategy" => $responseStrategy2,
+    "Forecasted Resolution Date" => (!empty($date) || $date != "") ? convtimex($date) : "Unknown",
+    "Associated Project(s)" => str_replace("<br>", ", ", $assocProject),
+    "Action Plan" => strip_tags($act),
+    "Date Closed" => convtimex($dateClosed),
+    "Link" => urldecode($link),
+    "ChangeLog Action" => $changelogaction,
+    "ChangeLog Reason" => $changelogreason,
+    "Estimated Action" => $estactdate,
+    "Estimated Migration" => $estmigdate
+];
+
+// Filter out empty or null values
+$data = array_filter($data, function($value) {
+    return !empty($value) || $value === "0";  // Adjust this condition based on your specific needs
+});
+
+// Build the string
+$body = "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n";
+foreach ($data as $key => $value) {
+    $body .= "$key: $value\n";
+}
+
+echo rawurlencode($body);
 ?>
 " class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+
 
             <span style="font-size: 24px;"> | </span> 
 
