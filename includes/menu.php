@@ -29,8 +29,8 @@
       <li><a href="<?php echo $menu_root?>/esp-status-details-index.php">Detailed Phase Report<span class="sr-only">(current)</span></a></li>
       <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">POR<span class="caret"></span><span class="sr-only">(current)</span></a>
       		<ul class="dropdown-menu" role="menu">
-              <li><a href="<?php echo $menu_root?>/por22">2022</a></li>
-              <li><a href="<?php echo $menu_root?>/por23">2023</a></li>
+              <li><a href="<?php echo $menu_root?>/por/?fiscalyear=2023">2023</a></li>
+              <li><a href="<?php echo $menu_root?>/por/?fiscalyear=2024">2024</a></li>
               
 <!--              <li><a href="#">Something else here</a></li>
               <li class="divider"></li>

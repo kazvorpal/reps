@@ -40,6 +40,7 @@ var objectModal = {
  */
 function createGantChart() {
     this.getChartData().then(gantChartData => {
+        gantChartData.splice(0, 1);
         currentFilteredData = gantChartData;
         gridTotalResponseData = gantChartData;
         this.createFilterForTable(gantChartData);
@@ -52,10 +53,8 @@ function createGantChart() {
  * For this case, it is calling the php file and getting the response back.
  * @returns {Promise<>}
  */
- const urlParams = new URLSearchParams(window.location.search);
- const fiscalyear = urlParams.get('fiscalyear') || '2023'; 
 getChartData = async function () {
-    const response = await fetch(`GantChartConnection.php?fiscalyear=${fiscalyear}`);
+    const response = await fetch('GantChartConnection.php');
     return await response.json();
 };
 
@@ -73,16 +72,11 @@ function addFormattedDataToTable(response) {
                 '<td>' + record.Market + '</td>' +
                 '<td>' + record.Facility + '</td>' +
                 '<td>' + record.Program + '</td>' +
-				'<td>' + record.Program_Group + '</td>' +
-				'<td>' + record.Sub_Program + '</td>' +
                 '<td>' + record.Project + '</td>' +
                 '<td>' + record.Equipment_ID + '</td>' +
-                '<td>' + record.KitType_Name + '</td>' +
-                '<td>' + record.Kit_Name + '</td>' +
-                '<td>' + record.toQuantity + '</td>' +
                 '<td>' + record.Shipping_DT + '</td>' +
-                '<td>' + record.Activation_DT + '</td>' +
-                '<td>' + record.Migration_DT + '</td>' +
+                '<td>' + record.Activation_Month + '</td>' +
+                '<td>' + record.Migration_Month + '</td>' +
                 '<td>' + record.CR_ID + '</td>' +
                 '<td>' + record.EPA + '</td>' +
                 getCharHighlightMonth(record) +
@@ -101,7 +95,7 @@ function addFormattedDataToTable(response) {
  * @returns {string}
  */
 function getCharHighlightMonth(record) {
-    const gantWeekRange = getWeeklyDate('10/01/2022', '03/31/2024');
+    const gantWeekRange = getWeeklyDate('10/07/2018', '03/29/2020');
     let finalTd = '';
     gantWeekRange.forEach(eachWeek => {
         finalTd += '<td class=' + getCorrectTdCss(eachWeek, record) + '</td>'
@@ -388,40 +382,6 @@ function removeMask() {
  * https://stackoverflow.com/questions/22317951/export-html-table-data-to-excel-using-javascript-jquery-is-not-working-properl
  * @returns {*}
  */
-// function fnExcelReport() {
-//     let tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
-//     var textRange; var j=0;
-//     tab = document.getElementById('tablestyle'); // id of table
-
-//     for(j = 0 ; j < tab.rows.length ; j++)
-//     {
-//         tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
-//         //tab_text=tab_text+"</tr>";
-//     }
-
-//     tab_text=tab_text+"</table>";
-//     tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-//     tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-//     tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // removes input params
-
-//     var ua = window.navigator.userAgent;
-//     var msie = ua.indexOf("MSIE ");
-
-//     if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-//     {
-//         txtArea1.document.open("txt/html","replace");
-//         txtArea1.document.write(tab_text);
-//         txtArea1.document.close();
-//         txtArea1.focus();
-//         sa=txtArea1.document.execCommand("SaveAs",true,"Thank You.xls");
-//     }
-//     else                 //other browser not tested on IE 11
-//         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
-
-//     return (sa);
-// }
-
-
 function fnExcelReport() {
     let a;
     let tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
@@ -451,7 +411,7 @@ function fnExcelReport() {
                 a.download=document.getElementById("caption").innerText;
             }
             else {
-                a.download = 'por20-data.xls';
+                a.download = 'download';
             }
 
             a.href = link;
@@ -462,6 +422,5 @@ function fnExcelReport() {
         }
     return false;
 }
-
 
 

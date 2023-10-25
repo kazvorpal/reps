@@ -52,8 +52,10 @@ function createGantChart() {
  * For this case, it is calling the php file and getting the response back.
  * @returns {Promise<>}
  */
+ const urlParams = new URLSearchParams(window.location.search);
+ const fiscalyear = urlParams.get('fiscalyear') || '2023'; 
 getChartData = async function () {
-    const response = await fetch('GantChartConnection.php');
+    const response = await fetch(`GantChartConnection.php?fiscalyear=${fiscalyear}`);
     return await response.json();
 };
 

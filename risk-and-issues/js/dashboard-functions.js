@@ -177,18 +177,6 @@ const fieldfilter = (ri, test, url) => {
     MLMRegion_Cd: () => {
       return ridata.filter(rr => rr.RiskAndIssue_Key === ri.RiskAndIssue_Key).map(rr => rr.MLMRegion_Cd).join(", ");
     },
-    // EPSRegion_Cd: () => {
-      // let counter = 0;
-      // let list = "";
-      // for(rr of ridata) {
-      //   if (rr.RI_Nm == ri.RI_Nm) {
-      //     list += rr.EPSRegion_Abb + ", ";
-      //     counter++;
-      //   }
-      // }
-    //   return ri.EPSRegion_Cd;
-    //   return list.slice(0, -2);
-    // },
     regioncount: () => {
       let counter = 0;
       for(r of ridata) {

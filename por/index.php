@@ -2,15 +2,28 @@
 <?php include ("../db_conf.php");?>
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/update-time.php");?>
-
+<?php include ("../sql/pordates.php");?>
+<?php 
+$fiscalyear = $_GET['fiscalyear'] ?? '2023';  
+// PORDate(); ?>
+<!doctype html>
 <html>
-
    <head>
-      <script type="text/javascript" src="GantChartController.js"></script>
+   	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POR <?= $fiscalyear ?></title>
+      <script type="text/javascript" src="GantChartController.js?fiscalyear=<?= $fiscalyear ?>"></script>
       <link rel="stylesheet" href="GrantChartStyle.css">
       <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
       <script type="text/javascript" src="../bootstrap/js/jquery-1.11.2.min.js"></script>
       <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+      <script type="text/javascript">
+function MM_goToURL() { //v3.0
+  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
+  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
+}
+      </script>
    </head>
    
    <body onload="createGantChart()">
@@ -18,7 +31,10 @@
       <?php include ("../includes/menu.php");?>
 
       <!-- Title  -->
-      <div align="center"><h2>Plan of Record 2019</h2></div>
+      <div align="center"><h2>Plan of Record <?= $fiscalyear ?></h2></div>
+      <div align="center">
+POR Version <?php echo $por_pub_date;?> (Includes approved CR's as of <?php echo $por_cr_date;?>) 
+</div>
 
       <!-- Master Container -->
       <div class="main">
@@ -33,11 +49,11 @@
             <br>
                
          <!-- Clear Selection and Download Buttons Container  -->
-            <div class = downloadReset align = "center">
+            <div class="downloadReset" align = "center" >
                <button class="buttons" onclick="onResetFilterClick()">Clear Selection</button>
-               <button class="buttons" onclick="fnExcelReport();"> Download Excel </button>
+               <!--<button class="buttons" onclick="fnExcelReport()"> Download Excel </button>-->
+               <button class="buttons" onClick="MM_goToURL('parent','https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Strat%20Plat%20POR/Forms/AllItems.aspx?id=%2Fteams%2Fengmgmtoffice%2FStrat%20Plat%20POR%2FPOR23&viewid=20101ba1%2D097b%2D4809%2Db6a4%2D8e0a95502ded');return document.MM_returnValue"> Link to Download Excel File </button>
             </div>
-                  
          <!-- Adding Legends and Line Breaks in the beginning and End -->
             <br>
                <div align="center">
@@ -57,127 +73,167 @@
             <div class ="Table-Body-Container" align="center">
                <table width="98%" class="table-bordered table-hover table-striped gant_table" id="tablestyle">
                   <thead>
-                     <tr bgcolor="#00aaf5" class = "gant_table__header" style="font-size:10px; color:white">
+                     <tr bgcolor="#00aaf5" class = "gant_table__header" style="font-size:8px; color:white">
                         <th>Reg</th>
-                        <th >Mrk</th>
-                        <th >Fac</th>
-                        <th width="120" >Program</th>
-                        <th >Project</th>
-                        <th >Equipment ID</th>
-                        <th >Need By Date</th>
-                        <th >Activation<br>
-                        Month</th>
-                        <th >Migration<br>
-                        Month</th>
-                        <th >CR Num</th>
-                        <th >EPA CD</th>
-                        <th colspan="4" width="40"><div align="center">Oct 18</div></th>
-                        <th colspan="4" width="40"><div align="center">Nov 18</div></th>
-                        <th colspan="5" width="40"><div align="center">Dec 18</div></th>
-                        <th colspan="4" width="40"><div align="center">Jan 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Feb 19</div></th>
-                        <th colspan="5" width="40"><div align="center">Mar 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Apr 19</div></th>
-                        <th colspan="4" width="40"><div align="center">May 19</div></th>
-                        <th colspan="5" width="40"><div align="center">Jun 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Jul 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Aug 19</div></th>
-                        <th colspan="5" width="40"><div align="center">Sep 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Oct 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Nov 19</div></th>
-                        <th colspan="5" width="40"><div align="center">Dec 19</div></th>
-                        <th colspan="4" width="40"><div align="center">Jan 20</div></th>
-                        <th colspan="4" width="40"><div align="center">Feb 20</div></th>
-                        <th colspan="5" width="40"><div align="center">Mar 20</div></th>
+                        <th>Mrk</th>
+                        <th>Fac</th>
+                        <th>Program</th>
+                        <th>Prog Group</th>
+                        <th>Subprogram</th>
+                        <th>Project</th>
+                        <th>Equipment ID</th>
+                        <th>Equipment Type</th>
+                        <th>Equipment Name</th>
+                        <th>Qty</th>
+                        <th>Need By Date</th>
+                        <th>Activation Date</th>
+                        <th>Migrate<br>Date</th>
+                        <th>CR Num</th>
+                        <th>EPA CD</th>
+
+                        <th colspan="5" width="30"><div align="center">Oct 22</div></th>
+                        <th colspan="4" width="30"><div align="center">Nov 22</div></th>
+                        <th colspan="4" width="30"><div align="center">Dec 22</div></th>
+                        <th colspan="5" width="30"><div align="center">Jan 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Feb 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Mar 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Apr 23</div></th>
+                        <th colspan="5" width="30"><div align="center">May 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Jun 23</div></th>
+                        <th colspan="5" width="30"><div align="center">Jul 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Aug 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Sep 23</div></th>
+                        <th colspan="5" width="30"><div align="center">Oct 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Nov 23</div></th>
+                        <th colspan="4" width="30"><div align="center">Dec 23</div></th>
+                        <th colspan="5" width="30"><div align="center">Jan 24</div></th>
+                        <th colspan="4" width="30"><div align="center">Feb 24</div></th>
+                        <th colspan="4" width="30"><div align="center">Mar 24</div></th>
                      </tr>
-                     <tr bgcolor="#DCDBDB" class = "gant_table__second_header" style="font-size:9px">
-                        <th colspan="11"></th>
-                           <th width="10" align="center">40</th>
-                           <th width="10" align="center">41</th>
-                           <th width="10" align="center">42</th>
-                           <th width="10" align="center">43</th>
-                           <th width="10" align="center">44</th>
-                           <th width="10" align="center">45</th>
-                           <th width="10" align="center">46</th>
-                           <th width="10" align="center">47</th>
-                              <th width="8" align="center">48</th>
-                              <th width="8" align="center">49</th>
-                              <th width="8" align="center">50</th>
-                              <th width="8" align="center">51</th>
-                              <th width="8" align="center">52</th>
-                           <th width="10" align="center">1</th>
-                           <th width="10" align="center">2</th>
-                           <th width="10" align="center">3</th>
-                           <th width="10" align="center">4</th>
-                           <th width="10" align="center">5</th>
-                           <th width="10" align="center">6</th>
-                           <th width="10" align="center">7</th>
-                           <th width="10" align="center">8</th>
-                           <th width="10" align="center">9</th>
-                              <th width="8" align="center">10</th>
-                              <th width="8" align="center">11</th>
-                              <th width="8" align="center">12</th>
-                              <th width="8" align="center">13</th>
-                           <th width="10" align="center">14</th>
-                           <th width="10" align="center">15</th>
-                           <th width="10" align="center">16</th>
-                           <th width="10" align="center">17</th>
-                           <th width="10" align="center">18</th>
-                           <th width="10" align="center">19</th>
-                           <th width="10" align="center">20</th>
-                           <th width="10" align="center">21</th>
-                              <th width="8" align="center">22</th>
-                              <th width="8" align="center">23</th>
-                              <th width="8" align="center">24</th>
-                              <th width="8" align="center">25</th>
-                              <th width="8" align="center">26</th>
-                           <th width="10" align="center">27</th>
-                           <th width="10" align="center">28</th>
-                           <th width="10" align="center">29</th>
-                           <th width="10" align="center">30</th>
-                           <th width="10" align="center">31</th>
-                           <th width="10" align="center">32</th>
-                           <th width="10" align="center">33</th>
-                           <th width="10" align="center">34</th>
-                              <th width="8" align="center">35</th>
-                              <th width="8" align="center">36</th>
-                              <th width="8" align="center">37</th>
-                              <th width="8" align="center">38</th>
-                              <th width="8" align="center">39</th>
-                           <th width="10" align="center">40</th>
-                           <th width="10" align="center">41</th>
-                           <th width="10" align="center">42</th>
-                           <th width="10" align="center">43</th>
-                           <th width="10" align="center">44</th>
-                           <th width="10" align="center">45</th>
-                           <th width="10" align="center">46</th>
-                              <th width="10" align="center">47</th>
-                              <th width="8" align="center">48</th>
-                              <th width="8" align="center">49</th>
-                              <th width="8" align="center">50</th>
-                              <th width="8" align="center">51</th>
-                              <th width="8" align="center">52</th>
-                           <th width="10" align="center">1</th>
-                           <th width="10" align="center">2</th>
-                           <th width="10" align="center">3</th>
-                           <th width="10" align="center">4</th>
-                           <th width="10" align="center">5</th>
-                           <th width="10" align="center">6</th>
-                           <th width="10" align="center">7</th>
-                           <th width="10" align="center">8</th>
-                              <th width="8" align="center">9</th>
-                              <th width="8" align="center">10</th>
-                              <th width="8" align="center">11</th>
-                              <th width="8" align="center">12</th>
-                              <th width="8" align="center">13</th>
+                     <tr bgcolor="#DCDBDB" class = "gant_table__second_header" style="font-size:5px">
+                        <th colspan="16"></th>
+                           <!--OCTOBER-->
+                           <th width="6" align="center">40</th>
+                           <th width="6" align="center">41</th>
+                           <th width="6" align="center">42</th>
+                           <th width="6" align="center">43</th>
+                           <th width="6" align="center">44</th>
+                           
+                           <!--NOVEMBER-->
+                           <th width="8" align="center">45</th>
+                           <th width="8" align="center">46</th>
+                           <th width="8" align="center">47</th>
+                           <th width="8" align="center">48</th>
+
+                           <!--DECEMBER-->
+                           <th width="8" align="center">49</th>
+                           <th width="8" align="center">50</th>
+                           <th width="8" align="center">51</th>
+                           <th width="8" align="center">52</th>
+
+                           <!--JANUARY 2023-->
+                           <th width="6" align="center">1</th>
+                           <th width="6" align="center">2</th>
+                           <th width="6" align="center">3</th>
+                           <th width="6" align="center">4</th>
+                           <th width="6" align="center">5</th>
+
+                           <!--FEBRUARY-->
+                           <th width="8" align="center">6</th>
+                           <th width="8" align="center">7</th>
+                           <th width="8" align="center">8</th>
+                    	      <th width="6" align="center">9</th>
+
+                           <!--MARCH-->
+                           <th width="8" align="center">10</th>
+                           <th width="8" align="center">11</th>
+                           <th width="8" align="center">12</th>
+                           <th width="8" align="center">13</th>
+
+                           <!--APRIL-->
+                           <th width="8" align="center">14</th>
+                           <th width="8" align="center">15</th>
+                           <th width="8" align="center">16</th>
+                           <th width="8" align="center">17</th>
+                               
+                           <!--MAY-->
+                           <th width="6" align="center">18</th>
+                           <th width="6" align="center">19</th>
+                           <th width="6" align="center">20</th>
+                           <th width="6" align="center">21</th>
+                           <th width="6" align="center">22</th>
+
+                           <!--JUNE-->
+                           <th width="8" align="center">23</th>
+                           <th width="8" align="center">24</th>
+                           <th width="8" align="center">25</th>
+                           <th width="8" align="center">26</th>
+
+                            <!--JULY-->
+                           <th width="6" align="center">27</th>
+                           <th width="6" align="center">28</th>
+                           <th width="6" align="center">29</th>
+                           <th width="6" align="center">30</th>
+                           <th width="6" align="center">31</th>
+
+                           <!--AUGUST-->
+                           <th width="8" align="center">32</th>
+                           <th width="8" align="center">33</th>
+                           <th width="8" align="center">34</th>
+                           <th width="8" align="center">35</th>
+
+                           <!--SEPTEMBER-->
+                           <th width="8" align="center">36</th>
+                           <th width="8" align="center">37</th>
+                           <th width="8" align="center">38</th>
+                           <th width="8" align="center">39</th>
+
+                           <!--OCTOBER-->
+                           <th width="6" align="center">40</th>
+                           <th width="6" align="center">41</th>
+                           <th width="6" align="center">42</th>
+                           <th width="6" align="center">43</th>
+                           <th width="6" align="center">44</th>
+
+                           <!--NOVEMBER-->
+                           <th width="8" align="center">45</th>
+                           <th width="8" align="center">46</th>
+                           <th width="8" align="center">47</th>
+                           <th width="8" align="center">48</th>
+
+                           <!--DECEMBER-->
+                           <th width="8" align="center">49</th>
+                           <th width="8" align="center">50</th>
+                           <th width="8" align="center">51</th>
+                           <th width="8" align="center">52</th>
+
+                           <!--JANUARY 2024-->
+                           <th width="6" align="center">1</th>
+                           <th width="6" align="center">2</th>
+                           <th width="6" align="center">3</th>
+                           <th width="6" align="center">4</th>
+                           <th width="6" align="center">5</th>
+
+                           <!--FEBRUARY-->
+                           <th width="8" align="center">6</th>
+                           <th width="8" align="center">7</th>
+                           <th width="8" align="center">8</th>
+                           <th width="8" align="center">9</th>
+
+                           <!--MARCH-->
+                           <th width="8" align="center">10</th>
+                           <th width="8" align="center">11</th>
+                           <th width="8" align="center">12</th>
+                           <th width="8" align="center">13</th>
                      </tr>
                   </thead>
                   
                   <!-- Output from JSON  -->
-                  <tbody id="gridTableContainer" style="font-size:9px"></tbody>
+                  <tbody id="gridTableContainer" style="font-size:7px"></tbody>
 
                </table>
             </div>
       </div>
+     <!-- <script src="../js/bootstrap-3.3.4.js" type="text/javascript"></script> -->
    </body>
 </html>

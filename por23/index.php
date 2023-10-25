@@ -3,14 +3,17 @@
 <?php include ("../data/emo_data.php");?>
 <?php include ("../sql/update-time.php");?>
 <?php include ("../sql/pordates.php");?>
+<?php 
+$fiscalyear = $_GET['fiscalyear'] ?? '2023';  
+// PORDate(); ?>
 <!doctype html>
 <html>
    <head>
    	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POR 2023</title>
-      <script type="text/javascript" src="GantChartController.js"></script>
+    <title>POR <?= $fiscalyear ?></title>
+      <script type="text/javascript" src="GantChartController.js?fiscalyear=<?= $fiscalyear ?>"></script>
       <link rel="stylesheet" href="GrantChartStyle.css">
       <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css">
       <script type="text/javascript" src="../bootstrap/js/jquery-1.11.2.min.js"></script>
@@ -28,9 +31,8 @@ function MM_goToURL() { //v3.0
       <?php include ("../includes/menu.php");?>
 
       <!-- Title  -->
-      <div align="center"><h2>Plan of Record 2023</h2></div>
+      <div align="center"><h2>Plan of Record <?= $fiscalyear ?></h2></div>
       <div align="center">
-<?php // PORDate(); ?>
 POR Version <?php echo $por_pub_date;?> (Includes approved CR's as of <?php echo $por_cr_date;?>) 
 </div>
 
@@ -52,7 +54,6 @@ POR Version <?php echo $por_pub_date;?> (Includes approved CR's as of <?php echo
                <!--<button class="buttons" onclick="fnExcelReport()"> Download Excel </button>-->
                <button class="buttons" onClick="MM_goToURL('parent','https://coxcomminc.sharepoint.com/teams/engmgmtoffice/Strat%20Plat%20POR/Forms/AllItems.aspx?id=%2Fteams%2Fengmgmtoffice%2FStrat%20Plat%20POR%2FPOR23&viewid=20101ba1%2D097b%2D4809%2Db6a4%2D8e0a95502ded');return document.MM_returnValue"> Link to Download Excel File </button>
             </div>
-                  
          <!-- Adding Legends and Line Breaks in the beginning and End -->
             <br>
                <div align="center">

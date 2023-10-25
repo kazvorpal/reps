@@ -20,7 +20,9 @@ const sortby = (list, property) => {
   const makedate = (dateobject) => dateobject.getFullYear() + "-" + (dateobject.getMonth()+1) + "-" + dateobject.getDate();
   
   
-  const makeelement = (o) => {
+  const makeelement = (options = {}) => {
+    const defaults = { a: "", c: "", d: "", e: "", i: "", j: undefined, l: [], m: "", n: "", s: "", t: "", v: "", w: "", y: "", href: undefined, style: undefined };
+    const o = Object.assign({}, defaults, options);
 
     // o is an (o)bject with these optional properties:
     // o.a is title text, sorta like (a)lt text
@@ -60,19 +62,25 @@ const sortby = (list, property) => {
     } else {
       // console.log(["radio", "checkbox"].includes[o.e])
       t = document.createElement(o.e);
-      t.id = (typeof o.i == "undefined") ? "" : o.i;
-      t.name = (typeof o.n == "undefined") ? "" : o.n + "[]";
-      t.className = (typeof o.c == "undefined") ? "" : o.c;
-      t.innerHTML = (typeof o.t == "undefined") ? "" : o.t;
-      t.colSpan = (typeof o.s == "undefined") ? "" : o.s;
-      t.title = (typeof o.a == "undefined") ? "" : o.a;
-      t.type = (typeof o.a == "undefined") ? "" : o.y;
-      if (typeof o.w != "undefined" && o.w != "") {
+      Object.assign(t, {
+        id: o.i,
+        name: o.n + "[]",
+        className: o.c,
+        innerHTML: o.t,
+        colSpan: o.s,
+        multiple: o.m,
+        value: o.v,
+        selected: o.d,
+        onclick: o.j,
+        href: o.href,
+        style: o.style
+      });
+
+      t.title = o.a;
+      t.type = o.y;
+      if (o.w != "") {
         t.width =  o.w + "%";
       }
-      t.multiple = (typeof o.m == "undefined") ? "" : o.m;
-      t.value = (typeof o.v == "undefined") ? "" : o.v;
-      t.selected = (typeof o.d == "undefined") ? "" : o.d;
       if (typeof o.j != "undefined") {
         t.onclick = o.j;
       }
@@ -133,21 +141,11 @@ const makestringdate = (dateobject) => {
     return "";
 }
 
-
-
 const betweendate = (dates, tween) => {
   let s = splitdate(dates);
-  let m = new Date(tween)
-  let first = new Date(s[0]);
-  let middle = new Date(m.setDate(m.getDate()));
-  let last = new Date(s[1]);
-  if ((middle >= first && middle <= last)) {
-    // console.log (first + ":" + middle + ":" + last);
-  }
-  r = ((middle >= first && middle <= last));
+  r = ((middle >= new Date(s[0]) && middle <= new Date(s[1])));
   return r;
 }  
-
 
 // get start and end date from a date range set via Bootstrap date range picker
 const ranger = (daterange) => ({

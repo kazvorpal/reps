@@ -24,6 +24,7 @@ $conn = sqlsrv_connect( $serverName, $connectionInfo);
 //     echo "Connection could not be established.<br />";
 //     die( print_r( sqlsrv_errors(), true));
 // }
+$fiscalyear = $_GET['fiscalyear'] ?? '2023';  
 
 // SSMS Query
 $sql = "SELECT 
@@ -57,7 +58,7 @@ ELSE 'Non CRs'  END as CRR
 ,COALESCE (FORMAT (ToActivation_Dt, 'MMM yyyy', 'en-US'), '') AS Activation_Month
 ,COALESCE (FORMAT (ToMigration_Dt, 'MMM yyyy', 'en-US'), '') AS Migration_Month
 FROM  [MatVw].[POR]
-WHERE Fiscal_Year = 2023
+WHERE Fiscal_Year = $fiscalyear
 ORDER by ToActivation_Dt ASC,  SubCR_Id DESC";
 header('Content-Type: application/json');
 
@@ -67,10 +68,11 @@ if( $stmt === false) {
     die( print_r( sqlsrv_errors(), true) );
 }
 while( $row_test = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
-     $json_array[] = $row_test;
+    $json_array[] = $row_test;
     //  print_r($row_test);
-     //  echo $row_test['PROJ_ID'].", ".$row_test['PROJ_NM']."<br />";
+    //  echo $row_test['PROJ_ID'].", ".$row_test['PROJ_NM']."<br />";
 }
 // sqlsrv_free_stmt( $stmt);
 print(json_encode(utf8ize($json_array)));
+// echo $sSQL;
 ?>

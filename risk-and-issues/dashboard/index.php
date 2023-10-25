@@ -79,9 +79,7 @@
 
     const populate = (rilist) => {
       console.log("rilist", rilist);
-      // rilist.forEach(o => console.log(typeof o[sort], o[sort], o, sort));
       portfoliocount = 0;
-
       rilist = (ispp(mode) && format != "grid") ? risort(rilist, "MLMProgram_Nm") : rilist;
       
       resultcounter(rilist);
@@ -127,12 +125,6 @@
         }
       });
       console.log({c1}, {c2});
-      // for (loop = pagestart; loop < pagestop; loop++ ) {
-      //     // This loop creates the programs/portfolios (makerow) or projects (createrow), based on the  mode. 
-      //   if(loop != null && typeof rilist[loop] != "undefined") {
-      //     (ispp(mode) && format != "grid") ? makerow(rilist[loop], listri(rilist[loop].MLMProgram_Nm, "Risk").length, listri(rilist[loop].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[loop], false));
-      //   }
-      // }
       (ispp(mode) && format != "grid") && resultcounter(result);
       pages = Math.ceil(rilist.length/pagesize);
       if (pages > 0 && page > pages) {
@@ -171,8 +163,6 @@
       if (typeof target == null) {
         return false;
       }
-      // console.log("makerow: ");
-      // console.log(target);
       if (target.MLMProgram_Nm == null || target.MLMProgram_Nm == "null" || (risks == 0 && issues == 0)) return false;
       const safename = makesafe(target.MLMProgram_Nm);
       const item = makeelement({"e": "div", "i": "item" + safename, "c": "toppleat accordion-item"});
@@ -293,73 +283,53 @@
       return ((format == "grid" || mode == "project") && !(key in fieldmap));
     }
 
-    const makeheader = (name, type) => {
-      
-      // Make the header for Grids
-        const sortthisstring = "click here to sort by this field";
-        const safename = makesafe(name);
-        const trri = makeelement({"e": "tr", "i": type + safename, "t": "", "c":"p-1<?= $headerposition ?>"});
-        if (ispp(mode)) {
-          let namefield = (format == "grid") ? "R/I Name" : type;
-          let cells = ["Risk/Issue"];
-          rowcolor = 1;
-          Object.entries(rifields).forEach(([key, value]) => {
-            let direction = b1 = b2 = "";
-            if (sort == key) {
-              direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-              b1 = sortable(key) ? "<u>" : "";
-              b2 = sortable(key) ? "</u>" : "";
-            }
-            const c = sortable(key) ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-            const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
-            trri.appendChild(makeelement({"e": "th", "t": b1 + value.name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
-                sortcol(key, this)
-            }}));
-            cells.push(rifields[key].name);
-            if (rifields[key].name == "ID") {
-              if (sort == "RI_Nm") {
-                direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                b1 = sortable(key) ? "<u>" : "";
-                b2 = sortable(key) ? "</u>" : "";
-              } else direction = b1 = b2 = "";
-              const c = sortable("RI_Nm") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-              trri.appendChild(makeelement({"e": "th", "t": b1 + namefield + b2 + direction, "c": "p-1 text-center titles align-middle" + c, "w": "12", a: sortthisstring, "j": function() {
-                sortcol("RI_Nm", this)
-              }}));
-              if (sortable(key)) {
-                if (sort == "RIType_Cd") {
-                  direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                  b1 = sortable(key) ? "<u>" : "";
-                  b2 = sortable(key) ? "</u>" : "";
-                } else direction = b1 = b2 = "";
-                const c = sortable("RIType_Cd") ? " active" : (type == "Risk" || format == "grid") ? "  " : " issueheader ";
-                trri.appendChild(makeelement({"e": "th", "t": b1 + "Type" + b2 + direction, "c": "text-center titles align-middle typecolumn " + c, "w": "12", a: sortthisstring, "j": function() {
-                  sortcol("RIType_Cd", this)
-                }}));
-              }
-            }
-          })
-        } else {
-            let cells = [];
-            Object.entries(rifields).forEach(([key, value]) => {
-              let direction = b1 = b2 = "";
-              if (sort == key) {
-                direction = sortable(key) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
-                b1 = sortable(key) ? "<u>" : "";
-                b2 = sortable(key) ? "</u>" : "";
-            }
-            let name = (typeof value == "object") ? value.name : value;
-            let c = sortable(key) ? " active" : "";
-            const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
-            trri.appendChild(makeelement({"e": "td", "t": b1 + name + b2 + direction, "c": "p-1 titles align-middle" + c, a: title, "j": function() {
-              sortcol(key, this)
-            }}));
-            cells.push(value);
-          })
-        }
-        excelrows();
-        return trri;
+    const createHeaderCell = (key, name, title, sortFunction) => {
+  return makeelement({
+    "e": "th",
+    "t": name,
+    "c": `p-1 titles align-middle${sortable(key) ? " active" : ""}`,
+    "a": title,
+    "j": function() { sortFunction(key, this); }
+  });
+};
+
+const addSortableInfo = (name, sort, reverse) => {
+  let direction = sortable(sort) ? (!reverse) ? "&nbsp;↓" : "&nbsp;↑" : "";
+  let b1 = sortable(sort) ? "<u>" : "";
+  let b2 = sortable(sort) ? "</u>" : "";
+  return `${b1}${name}${b2}${direction}`;
+};
+
+const makeheader = (name, type) => {
+  const sortthisstring = "click here to sort by this field";
+  const safename = makesafe(name);
+  const trri = makeelement({"e": "tr", "i": `${type}${safename}`, "t": "", "c": `p-1<?= $headerposition ?>`});
+
+  const isPPMode = ispp(mode);
+  rowcolor = 1;
+
+  Object.entries(rifields).forEach(([key, value]) => {
+    let cellName = (typeof value === "object") ? value.name : value;
+    cellName = addSortableInfo(cellName, sort, reverse);
+
+    const title = sortable(key) ? sortthisstring : "Sorry, sorting by this column is not yet supported";
+    trri.appendChild(createHeaderCell(key, cellName, title, sortcol));
+
+    if (isPPMode && rifields[key].name === "ID") {
+      let namefield = (format === "grid") ? "R/I Name" : type;
+      let direction = addSortableInfo(namefield, "RI_Nm", reverse);
+      trri.appendChild(createHeaderCell("RI_Nm", direction, sortthisstring, sortcol));
+
+      if (sortable(key)) {
+        direction = addSortableInfo("Type", "RIType_Cd", reverse);
+        trri.appendChild(createHeaderCell("RIType_Cd", direction, sortthisstring, sortcol));
+      }
     }
+  });
+
+  excelrows();
+  return trri;
+};
 
     const createrow = (ri, type) => {
       // Create a risk or issue row
@@ -387,8 +357,6 @@
       if (griddy()) 
         type = makeelement(etemp(saferi, ri.RIType_Cd));
       const tridobj = document.getElementById(trid);
-      // let newrow = document.worksheet.addRow(makeexcel(ri));
-      // const logValues = [];
       if (!griddy() && arrow != "") {
           if (mode == "program") {  // Disable Portfolio associated programs, remove to re-enable for a future feature
             tridobj.onclick = (e) => {
@@ -396,18 +364,6 @@
             };
           }
       }
-      // if (mode == "project" && ri.RIType_Cd == "Issue" && (!isempty(ri.RequestedAction_Nm) || !isempty(ri.Reason_Txt))) {
-      //   for (field in changelog) {
-      //     (function(test) {
-      //       t = (typeof fieldfilter(ri, test) != "function") ? ri[test] : fieldfilter(ri, test)();
-      //       t = striptags(t);
-      //       t = (test == "RiskAndIssue_Key") ? t.replace(/Open|Closed/g, '') : t;
-      //       logValues.push((typeof t == "string" && t.indexOf("a href") == 1) ? t.substring((t.indexOf(">")+1), (t.indexOf("</a>"))) : t);
-      //     })(field);
-      //   }
-      //   let newlog = document.changelog.addRow(logValues);
-      // }
-      // logger(ri);
     processcells();
     if (griddy()) {
       return fieldprocessor(ri, url, trri, header, type);
