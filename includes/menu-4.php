@@ -37,8 +37,8 @@
                 POR
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="<?php echo $menu_root ?>/por22">2022</a>
-                <a class="dropdown-item" href="<?php echo $menu_root ?>/por23">2023</a>
+              <li><a href="<?php echo $menu_root?>/por/?fiscalyear=2023">2023</a></li>
+              <li><a href="<?php echo $menu_root?>/por/?fiscalyear=2024">2024</a></li>
               </div>
             </li>
             <li class="nav-item dropdown">

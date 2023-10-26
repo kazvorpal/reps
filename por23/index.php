@@ -19,10 +19,10 @@ $fiscalyear = $_GET['fiscalyear'] ?? '2023';
       <script type="text/javascript" src="../bootstrap/js/jquery-1.11.2.min.js"></script>
       <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
       <script type="text/javascript">
-function MM_goToURL() { //v3.0
-  var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
-  for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
-}
+         function MM_goToURL() { //v3.0
+         var i, args=MM_goToURL.arguments; document.MM_returnValue = false;
+         for (i=0; i<(args.length-1); i+=2) eval(args[i]+".location='"+args[i+1]+"'");
+         }
       </script>
    </head>
    

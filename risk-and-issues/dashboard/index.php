@@ -249,7 +249,7 @@
                   tr.appendChild(makeelement({e: "td", t: txt, c: "p4 datacell align-middle"}));
               }
               document.getElementById("table" + saferi).appendChild(tr);
-              p.push(project.EPSProject_Key);
+              // p.push(project.EPSProject_Key);
           }
         } else {
             let empty = document.createTextNode("No Associated Projects");

@@ -48,8 +48,14 @@ const jq = `
 var searchtag;
 const filterfunction = (o) => {
   return (
+      ((fieldempty("owner") 
+          || isincluded('#owner', o.LastUpdateBy_Nm))) &&
       (fieldempty("fiscal_year") 
           || $('#fiscal_year').val().some(s => s == o.Fiscal_Year)) &&
+      ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (fieldempty("pStatus") && o.RIActive_Flg == '1') 
+      || ($("#pStatus").val() != null && isincluded("#pStatus", o.RIActive_Flg.toString()))) &&
+      (fieldempty("allsearch")
+          || idsearch(o)) && 
       (fieldempty("risk_issue") || isincluded('#risk_issue', o.RIType_Cd)) &&
       ((["project"].includes(mode)) 
           || fieldempty("category") 
@@ -59,10 +65,6 @@ const filterfunction = (o) => {
       (["program", "project"].includes(mode)
           || fieldempty("level")
           || ($('#level').val().includes(o.RILevel_Cd))) &&
-      ((fieldempty("owner") 
-          || isincluded('#owner', o.LastUpdateBy_Nm))) &&
-      ((document.getElementById("pStatus").value == null && o.RIActive_Flg == '1') || (fieldempty("pStatus") && o.RIActive_Flg == '1') 
-          || ($("#pStatus").val() != null && isincluded("#pStatus", o.RIActive_Flg.toString()))) &&
       (document.getElementById("program") == null 
           || fieldempty("program") 
           || isincluded('#program', o.MLMProgram_Nm) || isincluded('#program', o.EPSProgram_Nm)) && 
@@ -85,8 +87,6 @@ const filterfunction = (o) => {
           || (isincluded('#facility', o.Facility_Cd) || isincluded('#facility', o.EPSFacility_Cd)))) &&
       ((fieldempty("dateranger") 
           || (o.ForecastedResolution_Dt != null && betweendate($('#dateranger').val(), o.ForecastedResolution_Dt.date))))  && 
-      (fieldempty("allsearch")
-          || idsearch(o)) && 
       (mode == "project" || ((searchtag == "" || typeof searchtag == "undefined") && fieldempty("tags")) 
           || (o.Global_Tag && (o.Global_Tag.includes(searchtag) || o.Global_Tag.includes(document.getElementById("tags").value))))
   );
