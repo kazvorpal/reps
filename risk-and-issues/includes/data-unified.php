@@ -20,7 +20,8 @@ INNER JOIN CTE_LastInactiveRILogs b on b.RILogs = a.RiskAndIssueLog_Key
 PPC;
 
 
-
+  $mt = [];
+  $mt["Start"] = microtime(true);
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'";
   // print '<script>console.log("' . $sqlstr . '"></script>';
   ini_set('mssql.charset', 'UTF-8');
@@ -39,13 +40,14 @@ PPC;
     $count = 1;
     while($programrow = sqlsrv_fetch_array($programquery, SQLSRV_FETCH_ASSOC)) {
       if (isset($programrow['Global_Tag']) && is_string($programrow['Global_Tag'])) {
-          $programrow['Global_Tag'] = json_decode(stripslashes($programrow['Global_Tag']), true);
+        $programrow['Global_Tag'] = json_decode(stripslashes($programrow['Global_Tag']), true);
       }
       // print_r($programrow["RiskAndIssue_Key"]);
       // echo "<br/>";
       $programrows[] = array_map("fixutf8", $programrow);
     }
-
+    $mt[] = microtime(true);
+    
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'program'";
     ini_set('mssql.charset', 'UTF-8');
     $closedprogram = sqlsrv_query($data_conn, $sqlstr);
@@ -64,6 +66,7 @@ PPC;
         $closedprogramrows[] = array_map("fixutf8", $row);
       }
     }
+    $mt[] = microtime(true);
     $p4plist = array();
     foreach ($programrows as $row)  {
       if($row["MLMProgramRI_Key"] != '') {
@@ -95,6 +98,7 @@ PPC;
         $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
       }
     }
+    $mt["test"] = microtime(true);
     $sublist = array();
     foreach ($programrows as $row)  {
       // if($row["MLMProgramRI_Key"] != '') {
@@ -124,43 +128,45 @@ PPC;
           }
         }
         $sublist[$row["RiskAndIssue_Key"]] = $subrows;
-      // }
+        // }
+      }
     }
-  }
-  
+    $mt[] = microtime(true);
+    
+    
 
-
-  $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')";
+    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')";
   ini_set('mssql.charset', 'UTF-8');
   $portfolioquery = sqlsrv_query($data_conn, $sqlstr);
   
   if($portfolioquery === false) {
       if(($error = sqlsrv_errors()) != null) {
-          foreach($error as $errors) {
-              echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-              echo "code: ".$error[ 'code']."<br />";
-              echo "message: ".$error[ 'message']."<br />";
+        foreach($error as $errors) {
+          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+          echo "code: ".$error[ 'code']."<br />";
+          echo "message: ".$error[ 'message']."<br />";
           }
-      }
+        }
   }  else {
-      $portfoliorows = array();
+    $portfoliorows = array();
   
-      while($portfoliorow = sqlsrv_fetch_array($portfolioquery, SQLSRV_FETCH_ASSOC)) {
+    while($portfoliorow = sqlsrv_fetch_array($portfolioquery, SQLSRV_FETCH_ASSOC)) {
           $portfoliorow = array_map("fixutf8", $portfoliorow);
           
           // If Global_Tag is set and is a JSON string, decode it into a PHP array
           if (isset($portfoliorow['Global_Tag']) && is_string($portfoliorow['Global_Tag'])) {
-              $portfoliorow['Global_Tag'] = json_decode(stripslashes($portfoliorow['Global_Tag']), true);
+            $portfoliorow['Global_Tag'] = json_decode(stripslashes($portfoliorow['Global_Tag']), true);
           }
           
           $portfoliorows[] = $portfoliorow;
-      }
-
-  
-  $portfolioout = json_encode($portfoliorows);
-    $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio')";
-    // echo $sqlstr;
-    ini_set('mssql.charset', 'UTF-8');
+        }
+        $mt[] = microtime(true);
+        
+        
+        $portfolioout = json_encode($portfoliorows);
+        $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio')";
+        // echo $sqlstr;
+        ini_set('mssql.charset', 'UTF-8');
     $closedportfolio = sqlsrv_query($data_conn, $sqlstr);
     if($closedportfolio === false) {
       if(($error = sqlsrv_errors()) != null) {
@@ -176,10 +182,11 @@ PPC;
       while($row = sqlsrv_fetch_array($closedportfolio, SQLSRV_FETCH_ASSOC)) {
         if (isset($row['Global_Tag']) && is_string($row['Global_Tag'])) {
             $row['Global_Tag'] = json_decode(stripslashes($row['Global_Tag']), true);
-        }
+          }
     $closedportfoliorows[] = array_map("fixutf8", $row);
-      }
+  }
     }
+    $mt[] = microtime(true);
     foreach ($portfoliorows as $row)  {
       // if($row["MLMProgramRI_Key"] != '') {
         // echo "IN";
@@ -208,27 +215,28 @@ PPC;
           }
         }
         $sublist[$row["RiskAndIssue_Key"]] = $subrows;
-      // }
-    }
-    $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
-    ini_set('mssql.charset', 'UTF-8');
-    $portfolioprograms = sqlsrv_query($data_conn, $portfolioprogramsstr);
-    if($portfolioprograms === false) {
-      if(($error = sqlsrv_errors()) != null) {
-        foreach($errors as $error) {
-          echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-          echo "code: ".$error[ 'code']."<br />";
-          echo "message: ".$error[ 'message']."<br />";
-        }
+        // }
       }
-    } else {
-      $portfolioprogramsrows = array();
+      $mt[] = microtime(true);
+      $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
+      ini_set('mssql.charset', 'UTF-8');
+      $portfolioprograms = sqlsrv_query($data_conn, $portfolioprogramsstr);
+      if($portfolioprograms === false) {
+        if(($error = sqlsrv_errors()) != null) {
+          foreach($errors as $error) {
+            echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
+            echo "code: ".$error[ 'code']."<br />";
+            echo "message: ".$error[ 'message']."<br />";
+          }
+        }
+      } else {
+        $portfolioprogramsrows = array();
       $count = 1;
       while($row = sqlsrv_fetch_array($portfolioprograms, SQLSRV_FETCH_ASSOC)) {
         $portfolioprogramsrows[] = array_map("fixutf8", $row);
       }
     }
-     // portfolio programs, closed
+    // portfolio programs, closed
     ini_set('mssql.charset', 'UTF-8');
     $portfolioprogramsclosed = sqlsrv_query($data_conn, $sqlportfolioprogramsclosed);
     if($portfolioprogramsclosed === false) {
@@ -247,7 +255,8 @@ PPC;
       }
     }
   }
-
+  
+  $mt[] = microtime(true);
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'project'";
   print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
@@ -267,7 +276,8 @@ PPC;
     while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
       $rows[] = array_map("fixutf8", $row);
     }
-        
+    
+    $mt[] = microtime(true);
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'project'";
     print '<!--' . $sqlstr . "<br/>-->";
     ini_set('mssql.charset', 'UTF-8');
@@ -287,7 +297,8 @@ PPC;
         $closedrows[] = array_map("fixutf8", $row);
       }
     }
-
+    
+    $mt[] = microtime(true);
     $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(-1)";
     // print '<!--' . $sqlstr . "<br/> -->";
     $locationquery = sqlsrv_query($data_conn, $sqlstr);
@@ -306,9 +317,10 @@ PPC;
         $locationrows[] = array_map("fixutf8", $locationrow);
       }
     }
-
-
-
+    
+    
+    
+    $mt[] = microtime(true);
     $mangerlist = array();
     foreach ($rows as $row)  {
       if($row["MLMProgramRI_Key"] != '') {
@@ -335,6 +347,7 @@ PPC;
       }
     }
     
+    $mt[] = microtime(true);
     $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(1)";
     $driverquery = sqlsrv_query($data_conn, $sqlstr);
     if($driverquery === false) {
@@ -353,7 +366,8 @@ PPC;
         // $driverrows[] = array_map("fixutf8", $driverrow);
       }
     }
-      // Get Drivers
+    $mt[] = microtime(true);
+    // Get Drivers
     $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(0)";
     // print '<!--' . $sqlstr . "<br/> -->";
     $driverquery = sqlsrv_query($data_conn, $sqlstr);
@@ -371,7 +385,8 @@ PPC;
         $driverrows[$driverrow["RiskAndIssueLog_Key"]] = array_map("fixutf8", $driverrow);
       }
     }
-
+    
+    $mt[] = microtime(true);
     // Action Plan Data
     $sqlap = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'ACTNPlan'
@@ -395,7 +410,8 @@ PPC;
         $aprows[$aprow["RiskAndIssue_Key"]] = array_map("fixutf8", $aprow);
       }
     }
-      // Change Log Data
+    $mt[] = microtime(true);
+    // Change Log Data
     $sqllog = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'PRJILog'
     Order By RiskandIssue_Key DESC";
@@ -418,7 +434,21 @@ PPC;
         $logrows[$logrow["RiskAndIssue_Key"]] = array_map("fixutf8", $logrow);
       }
     }
+    
+    $mt[] = microtime(true);
+    $prevKey = "Start";
+    foreach ($mt as $key => $time) {
+      if ($key === "Start") continue;  // Skip the initial time
   
+      $interval_time = $time - $mt[$prevKey];
+      $total_time = $time - $mt["Start"];
+      
+      echo "Key: " . $key . "<br/>";
+      echo "<b>" . $interval_time . "</b><br/>";
+      echo "<i>" . $total_time . "</i><br/><br/>";
+      
+      $prevKey = $key;  // Update the previous key for the next iteration
+  }
 
     $logout = json_encode($logrows);
     $apout = json_encode($aprows);
