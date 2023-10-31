@@ -46,7 +46,7 @@ PPC;
       // echo "<br/>";
       $programrows[] = array_map("fixutf8", $programrow);
     }
-    $mt["fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'program'"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'program'";
     ini_set('mssql.charset', 'UTF-8');
@@ -66,7 +66,7 @@ PPC;
         $closedprogramrows[] = array_map("fixutf8", $row);
       }
     }
-    $mt["fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'program'"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     $p4plist = array();
     foreach ($programrows as $row)  {
       if($row["MLMProgramRI_Key"] != '') {
@@ -98,7 +98,7 @@ PPC;
         $p4plist[$row["RiskAndIssue_Key"]."-".$row["MLMProgramRI_Key"]] = $p4prows;
       }
     }
-    $mt["fn_GetListOfAssociatedProjectsForProgramRIKey"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     $sublist = array();
     foreach ($programrows as $row)  {
       // if($row["MLMProgramRI_Key"] != '') {
@@ -131,7 +131,7 @@ PPC;
         // }
       }
     }
-    $mt["fn_GetListSubProgramsforRIKey"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     
     
 
@@ -160,7 +160,7 @@ PPC;
           
           $portfoliorows[] = $portfoliorow;
         }
-        $mt["fn_GetListOfAllRiskAndIssue(1) where riLevel_cd in ('portfolio')"] = microtime(true);
+        $mt[$sqlstr] = microtime(true);
         
         
         $portfolioout = json_encode($portfoliorows);
@@ -186,7 +186,7 @@ PPC;
     $closedportfoliorows[] = array_map("fixutf8", $row);
   }
     }
-    $mt["fn_GetListOfAllRiskAndIssue(0) where riLevel_cd in ('portfolio')"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     foreach ($portfoliorows as $row)  {
       // if($row["MLMProgramRI_Key"] != '') {
         // echo "IN";
@@ -217,7 +217,7 @@ PPC;
         $sublist[$row["RiskAndIssue_Key"]] = $subrows;
         // }
       }
-      $mt["select * from  RI_Mgt.fn_GetListSubProgramsforRIKey("] = microtime(true);
+      $mt[$sqlstr] = microtime(true);
       $portfolioprogramsstr = "select * from [RI_MGT].[fn_GetListOfProgramsForPortfolioRI_Key] (-1)";
       ini_set('mssql.charset', 'UTF-8');
       $portfolioprograms = sqlsrv_query($data_conn, $portfolioprogramsstr);
@@ -256,7 +256,7 @@ PPC;
     }
   }
   
-  $mt["portfolioprogramsclosedrows"] = microtime(true);
+  $mt[$sqlstr] = microtime(true);
   $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'project'";
   print '<!--' . $sqlstr . "<br/> -->";
   ini_set('mssql.charset', 'UTF-8');
@@ -274,10 +274,10 @@ PPC;
     $rows = array();
     $count = 1;
     while($row = sqlsrv_fetch_array($riquery, SQLSRV_FETCH_ASSOC)) {
-      $rows["fn_GetListOfAllRiskAndIssue(1) where riLevel_cd = 'project'"] = array_map("fixutf8", $row);
+      $rows[] = array_map("fixutf8", $row);
     }
     
-    $mt[] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     $sqlstr = "select * from RI_MGT.fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'project'";
     print '<!--' . $sqlstr . "<br/>-->";
     ini_set('mssql.charset', 'UTF-8');
@@ -298,7 +298,7 @@ PPC;
       }
     }
     
-    $mt["fn_GetListOfAllRiskAndIssue(0) where riLevel_cd = 'project'"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     $sqlstr = "select * from RI_MGT.fn_GetListOfLocationsForEPSProject(-1)";
     // print '<!--' . $sqlstr . "<br/> -->";
     $locationquery = sqlsrv_query($data_conn, $sqlstr);
@@ -320,7 +320,7 @@ PPC;
     
     
     
-    $mt["fn_GetListOfLocationsForEPSProject(-1)"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     $mangerlist = array();
     foreach ($rows as $row)  {
       if($row["MLMProgramRI_Key"] != '') {
@@ -347,7 +347,7 @@ PPC;
       }
     }
     
-    $mt["fn_GetListOfOwnersInfoForProgram"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(1)";
     $driverquery = sqlsrv_query($data_conn, $sqlstr);
     if($driverquery === false) {
@@ -366,7 +366,7 @@ PPC;
         // $driverrows[] = array_map("fixutf8", $driverrow);
       }
     }
-    $mt["fn_GetListOfDriversForriLogKey"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     // Get Drivers
     $sqlstr = "select * from RI_MGT.fn_GetListOfDriversForriLogKey(0)";
     // print '<!--' . $sqlstr . "<br/> -->";
@@ -386,7 +386,7 @@ PPC;
       }
     }
     
-    $mt["fn_GetListOfDriversForriLogKey(0)"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     // Action Plan Data
     $sqlap = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'ACTNPlan'
@@ -410,7 +410,7 @@ PPC;
         $aprows[$aprow["RiskAndIssue_Key"]] = array_map("fixutf8", $aprow);
       }
     }
-    $mt["fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
     // Change Log Data
     $sqllog = "select * from RI_Mgt.fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs()
     where [Source] = 'PRJILog'
@@ -435,7 +435,7 @@ PPC;
       }
     }
     
-    $mt["fn_GetListOfLastUpDtForActionPlanAndPIChangeLogs"] = microtime(true);
+    $mt[$sqlstr] = microtime(true);
   //   $prevKey = "Start";
   //   foreach ($mt as $key => $time) {
   //     if ($key === "Start") continue;  // Skip the initial time
@@ -469,7 +469,7 @@ function echo_bars($mt) {
         // Calculate the bar length
         $bar_length = intval(log1p($interval_time) / $max_log_time * 50);  // 50 units long bar for max time
 
-        echo "Key: " . $key . "<br/>";
+        echo "Key:<br/> " . $key . "<br/>";
         echo "<b>" . $interval_time . "</b><br/>";
         echo str_repeat("=", $bar_length) . "<br/>";  // ASCII bar
         echo "<i>" . $total_time . "</i><br/><br/>";

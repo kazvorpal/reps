@@ -33,7 +33,7 @@ if($_SERVER["HTTPS"] != "on")
 // Time conversion sql to php
 
 	function  convtimex($tx) {
-		if (is_null($tx)) {
+		if (is_null($tx)|| !($tx instanceof DateTime)) {
 			echo '---';
 		} else { 
 			$timex = date_format($tx, 'm-d-Y');

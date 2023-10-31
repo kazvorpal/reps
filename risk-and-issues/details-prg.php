@@ -346,66 +346,74 @@ $link = urlencode($menu_root . "/risk-and-issues/details-prg.php?au=true&rikey="
 </table>
 <div align="center"> 
 <?php if($alias == $authUser){ ?> 
-<?php if($RIType == "Risk") { $formType = "program-risk-update.php";} else {$formType = "program-issue-update.php";} ?>
-<?php if($popup == "false"){?>
-    <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
-    <?php } ?>
-<?php if($lock == "no")  {?>  
-<?php if($status == 1){ ?>
-  <?php $eregions = str_replace("<br>", ",", $regionx)?>
-    <a href="<?php echo $formType ?>?formName=<?php echo $formName?>&action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
-        while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
-        }
-        ?>&regions=<?php 
-        while ($row_risk_issue_regions_up  = sqlsrv_fetch_array($stmt_risk_issue_regions_up , SQLSRV_FETCH_ASSOC)) {
-        echo $row_risk_issue_regions_up['MLMRegion_Cd'] . ',';
-        }
-        ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
+  <?php 
+  $formType = ($RIType == "Risk") ? "program-risk-update.php" : "program-issue-update.php";
+   ?>
+  <?php if($popup == "false"){?>
+      <a href="javascript:void(0);" onclick="javascript:history.go(-1)" class="btn btn-primary"><span class="glyphicon glyphicon-step-backward"></span> Back </a>
+      <?php } ?>
+  <?php if($lock == "no")  {?>  
+    <?php if($status == 1){ ?>
+      <?php $eregions = str_replace("<br>", ",", $regionx)?>
+        <a href="<?php echo $formType ?>?formName=<?php echo $formName?>&action=update&status=1&ri_level=prg&assoc_prj=<?php echo $assocProjectcomma; ?>&fscl_year=<?php echo $fscl_year?>&name=<?php echo $name?>&ri_type=<?php echo $RIType ?>&rikey=<?php echo $RiskAndIssue_Key?>&progRIkey=<?php echo $progRIkey;?>&progkey=<?php echo $programKey;?>&progname=<?php echo $prog_name ?>&projname=<?php echo $proj_name;?>&uid=<?php echo $uid ;?>&drivertime=<?php 
+            while ($row_risk_issue_drivers_up  = sqlsrv_fetch_array($stmt_risk_issue_drivers_up , SQLSRV_FETCH_ASSOC)) {
+            echo $row_risk_issue_drivers_up ['Driver_Nm'] . ',';
+            }
+            ?>&regions=<?php 
+            while ($row_risk_issue_regions_up  = sqlsrv_fetch_array($stmt_risk_issue_regions_up , SQLSRV_FETCH_ASSOC)) {
+            echo $row_risk_issue_regions_up['MLMRegion_Cd'] . ',';
+            }
+            ?>"  class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update </a>
 
-<?php 
-$desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
-$act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
-?>
+        <?php 
+        $desc = (strlen($description) > 100) ? substr($description, 0, 100) . "[...]" : $description;
+        $act = (strlen($actionPlan) > 100) ? substr($actionPlan, 0, 100) . "[...]" : $actionPlan;
+        $fields = [
+          "ID" => $ri_id ?? null,
+          "Owner Name" => $ri_owner ?? null,
+          "Name" => $name ?? null,
+          "Type" => $RILevel . " " . $RIType ?? null,
+          "Program" => $programs ?? null,
+          "Region(s)" => $eregions ?? null,
+          "Descriptor" => $descriptor ?? null,
+          "Description" => $desc ?? null,
+          "Driver" => $Driversx ?? null,
+          "Impact Area" => $impactArea2 ?? null,
+          "Impact Level" => $impactLevel2 ?? null,
+          "Response Strategy" => $responseStrategy2 ?? null,
+          "Forecasted Resolution Date" => !empty($date) || $date != "" ? convtimex($date) : null,
+          "Transfer to Program Manager" => $opportunityIndicator ?? null,
+          "Action Plan" => strip_tags($act) ?? null,
+          "Date Closed" => convtimex($dateClosed) ?? null,
+          "Link" => $mailLink ?? null,
+          "Tags" => $tags ?? null  // This one is optional
+        ];
+                ?>
 
-<a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
-&body=<?php
-echo urlencode(
-    "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n" .
-    "ID: " . $ri_id . "\n" .
-    "Owner Name: " . $ri_owner . "\n" .
-    "Name: " . $name . "\n" .
-    "Type: " . $RILevel . " " . $RIType . "\n" .
-    "Program: " . $programs . "\n" .
-    "Region(s): " . $eregions . "\n" .
-    "Descriptor: " . $descriptor . "\n" .
-    "Description: " . $desc . "\n" .
-    "Driver: " . $Driversx . "\n" .
-    "Impact Area: " . $impactArea2 . "\n" .
-    "Impact Level: " . $impactLevel2 . "\n" .
-    "Response Strategy: " . $responseStrategy2 . "\n" .
-    "Forecasted Resolution Date: " . ((!empty($date) || $date != "") ? convtimex($date) : "Unknown") . "\n" .
-    "Transfer to Program Manager: " . $opportunityIndicator . "\n" .
-    "Action Plan: " . strip_tags($act) . "\n" .
-    "Date Closed: " . convtimex($dateClosed) . "\n" .
-    "Link: " . $mailLink . "\n" .
-    ($tags ? "Tags: " . $tags : "") 
-    // ($changelog ? "Changelog: " . $changelog : "")
-  );
-?>
-" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
+        <a href="mailto:?subject=<?= urlencode("RISKS AND ISSUES - " . $name); ?>
+        &body=<?php
 
-    <span style="font-size: 24px;"> | </span>
+$output = "----------------------------------------RISKS AND ISSUES DETAILS ----------------------------------------\n";
+foreach ($fields as $label => $value) {
+  if (isset($value)) {
+      $output .= "$label: $value\n";
+  }
+}
+echo urlencode($output);
+      ?>
+        " class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Email </a>
 
-    <?php
-    $assocProjLink = "includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=" . $prog_name . "&prg_nm=" . $prog_name . "&progRIKey=" . $progRIkey . "&fiscal_year=" . $fscl_year . "&name=" . $row_risk_issue['RI_Nm'] . "&proj_name=" . $proj_name . "&ri_type=" . $row_risk_issue['RIType_Cd'] . "&rikey=" . $row_risk_issue['RiskAndIssue_Key'] . "&status=1&uid=" . $uid;
-    ?>
+          <span style="font-size: 24px;"> | </span>
 
-    <a href="<?php echo $assocProjLink ?>"><span class="btn btn-primary">+/- Assoc. Projects</span></a>
+          <?php
+          $assocProjLink = "includes/associated_prj_manage_prg.php?action=update&ri_level=prg&program=" . $prog_name . "&prg_nm=" . $prog_name . "&progRIKey=" . $progRIkey . "&fiscal_year=" . $fscl_year . "&name=" . $row_risk_issue['RI_Nm'] . "&proj_name=" . $proj_name . "&ri_type=" . $row_risk_issue['RIType_Cd'] . "&rikey=" . $row_risk_issue['RiskAndIssue_Key'] . "&status=1&uid=" . $uid;
+          ?>
 
-    </div>
-    <?php } ?>
-    <?php } ?>
+          <a href="<?php echo $assocProjLink ?>"><span class="btn btn-primary">+/- Assoc. Projects</span></a>
+
+          </div>
+        <?php } ?>
+      <?php } ?>
     <?php } ?>
 </div>
 </form>
