@@ -165,7 +165,7 @@ $(function(){
     })
   }
 
-  projectfull.forEach(o => {
+  projects.forEach(o => {
     if(!subp.includes(o.EPSSubprogram_Nm)) {
       subp.push(o.EPSSubprogram_Nm);
     }

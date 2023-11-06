@@ -77,17 +77,17 @@
     }
     rifiltered = filtration(ridata);
 
-    const populate = (rilist) => {
-      console.log("rilist", rilist);
+    const populate = (ricurrent) => {
+      console.log("ricurrent", ricurrent);
       portfoliocount = 0;
-      rilist = (ispp(mode) && format != "grid") ? risort(rilist, "MLMProgram_Nm") : rilist;
+      ricurrent = (ispp(mode) && format != "grid") ? risort(ricurrent, "MLMProgram_Nm") : ricurrent;
       
-      resultcounter(rilist);
+      resultcounter(ricurrent);
       result = 0;
       window.ricount = [];
       pagestart = (page*pagesize) - pagesize;
       ps = (mode == "project" || format == "grid") ? (page*pagesize) : 100000;
-      pagestop = (rilist.length < pagesize) ? rilist.length : ps;
+      pagestop = (ricurrent.length < pagesize) ? ricurrent.length : ps;
 
       const main = document.getElementById("main");
       initexcel();
@@ -113,20 +113,20 @@
         mt.appendChild(makeheader("projects"));
       }
       c1 = c2 = 0;
-      rilist.forEach((value, key) => {
+      ricurrent.forEach((value, key) => {
         // excelrow(value, key);
         c1++;
         let newrow = document.worksheet.addRow(makeexcel(value));
         // console.log({value})
         logger(value);
-        if (key > pagestart-1 && key < pagestop && key != null && typeof rilist[key] != "undefined") {
-          (ispp(mode) && format != "grid") ? makerow(rilist[key], listri(rilist[key].MLMProgram_Nm, "Risk").length, listri(rilist[key].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(rilist[key], false));
+        if (key > pagestart-1 && key < pagestop && key != null && typeof ricurrent[key] != "undefined") {
+          (ispp(mode) && format != "grid") ? makerow(ricurrent[key], listri(ricurrent[key].MLMProgram_Nm, "Risk").length, listri(ricurrent[key].MLMProgram_Nm, "Issue").length) : mt.appendChild(createrow(ricurrent[key], false));
           c2++;
         }
       });
       console.log({c1}, {c2});
       (ispp(mode) && format != "grid") && resultcounter(result);
-      pages = Math.ceil(rilist.length/pagesize);
+      pages = Math.ceil(ricurrent.length/pagesize);
       if (pages > 0 && page > pages) {
         page = 1;
         let url = new URL(window.location);

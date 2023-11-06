@@ -91,9 +91,9 @@ document.title = capitalize(mode) + " R&I Dashboard";
 var sort = "RiskAndIssue_Key";
 var reverse = false;
 const uniques = () => (mode == "program") 
-  ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
-  : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(d1, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
-  : getwholeuniques(d1, "RiskAndIssue_Key");
+  ? removenullproperty(getwholeuniques(getwholeuniques(ridata, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+  : (mode == "portfolio") ? removenullproperty(getwholeuniques(getwholeuniques(ridata, "RiskAndIssue_Key"), "MLMProgram_Nm"), "MLMProgram_Nm") 
+  : getwholeuniques(ridata, "RiskAndIssue_Key");
 
   const modes = ["project", "program", "portfolio"];
 var togglegrid = () => {
